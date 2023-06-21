@@ -4,10 +4,10 @@ const path = require('path')
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
-
+const NodePolyfillPlugin = require('node-polyfill-webpack-plugin')
 const CompressionPlugin = require('compression-webpack-plugin')
 
-const name = process.env.VUE_APP_TITLE || '若依管理系统' // 网页标题
+const name = process.env.VUE_APP_TITLE || '智慧派出所' // 网页标题
 
 const port = process.env.port || process.env.npm_config_port || 80 // 端口
 
@@ -41,8 +41,7 @@ module.exports = {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
       }
-    },
-    disableHostCheck: true
+    }
   },
   css: {
     loaderOptions: {
@@ -66,7 +65,8 @@ module.exports = {
         filename: '[path].gz[query]',   // 压缩后的文件名
         algorithm: 'gzip',              // 使用gzip压缩
         minRatio: 0.8                   // 压缩率小于1才会压缩
-      })
+      }),
+      new NodePolyfillPlugin()
     ],
   },
   chainWebpack(config) {
