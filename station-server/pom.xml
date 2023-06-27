@@ -149,19 +149,26 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <!-- 系统模块-->
+            <dependency>
+                <groupId>com.jingyu</groupId>
+                <artifactId>sps-generator</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
             <!-- 通用工具-->
             <dependency>
                 <groupId>com.jingyu</groupId>
                 <artifactId>sps-common</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
     <modules>
         <module>sps-admin</module>
         <module>sps-common</module>
+        <module>sps-generator</module>
         <module>sps-framework</module>
         <module>sps-system</module>
     </modules>

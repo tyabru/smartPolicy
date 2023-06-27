@@ -48,7 +48,11 @@
             <groupId>com.jingyu</groupId>
             <artifactId>sps-framework</artifactId>
         </dependency>
-
+        <!-- 代码生成-->
+        <dependency>
+            <groupId>com.jingyu</groupId>
+            <artifactId>sps-generator</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -6,6 +6,9 @@
 @import './btn.scss';
 
 body {
+  --page-background-color: rgb(242,243,245);
+  --page-panel-background-color: #fff;
+  --table-header-background-color: rgb(242,243,245);
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
@@ -180,3 +183,5 @@ aside {
     margin-bottom: 10px;
   }
 }
+
+
