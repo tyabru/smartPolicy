@@ -135,16 +135,16 @@ export const dynamicRoutes = [
     ]
   },
   {
-    path: '/monitor/job-log',
+    path: '/tool/gen-edit',
     component: Layout,
     hidden: true,
-    permissions: ['monitor:job:list'],
+    permissions: ['tool:gen:list'],
     children: [
       {
-        path: 'index/:jobId(\\d+)',
-        component: () => import('@/views/monitor/job/log'),
+        path: 'index/:tableId(\\d+)',
+        component: () => import('@/views/tool/gen/editTable.vue'),
         name: 'JobLog',
-        meta: { title: '调度日志', activeMenu: '/monitor/job' }
+        meta: { title: '表单编辑', activeMenu: '/tool/gen' }
       }
     ]
   }
