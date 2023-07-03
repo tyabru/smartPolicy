@@ -1,6 +1,9 @@
 package com.jingyu.framework.config;
 
+import com.jingyu.framework.qunfang.QFsecurity.pwd.PhoneNumberPwdAuthenticationProvider;
+import com.jingyu.framework.qunfang.QFsecurity.sms.SmsCodeAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -22,7 +25,7 @@ import com.jingyu.framework.security.handle.LogoutSuccessHandlerImpl;
 
 /**
  * spring security配置
- * 
+ *
  * @author ruoyi
  */
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -32,8 +35,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      * 自定义用户认证逻辑
      */
     @Autowired
+    @Qualifier("userDetailsService")
     private UserDetailsService userDetailsService;
-    
+
+
+    @Autowired
+    @Qualifier("userDetailsBySMSCode")
+    private UserDetailsService smsUserDetailService;
+
+    @Autowired
+    @Qualifier("userDetailsByPhoneNumberPwd")
+    private UserDetailsService phoneNumberPwdUserDetailService;
     /**
      * 认证失败处理类
      */
@@ -51,7 +63,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      */
     @Autowired
     private JwtAuthenticationTokenFilter authenticationTokenFilter;
-    
+
     /**
      * 跨域过滤器
      */
@@ -111,7 +123,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 // 过滤请求
                 .authorizeRequests()
                 // 对于登录login 注册register 验证码captchaImage 允许匿名访问
-                .antMatchers("/login", "/register", "/captchaImage").permitAll()
+                .antMatchers("/login", "/register", "/captchaImage","/qf/SMSCode","/qf/register","/qf/login").permitAll()
                 // 静态资源，可匿名访问
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
                 .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()
@@ -143,6 +155,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception
     {
+        auth.authenticationProvider(new SmsCodeAuthenticationProvider(smsUserDetailService));
+        auth.authenticationProvider(new PhoneNumberPwdAuthenticationProvider(phoneNumberPwdUserDetailService));
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 }
