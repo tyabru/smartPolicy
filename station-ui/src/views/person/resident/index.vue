@@ -106,32 +106,5 @@ export default {
 </script>
 
 <style scoped lang="scss">
-  .container {
-    overflow: auto;
-    padding: 10px;
-    background-color: var(--page-background-color);
-    min-height: var(--page-content-min-height);
 
-    .panel {
-      padding: 10px;
-      border-radius: 3px;
-      background-color: var(--page-panel-background-color);
-
-      & ::v-deep .el-table {
-        min-height: 400px;
-      }
-    }
-
-    .table-btn {
-      margin-bottom: 10px;
-    }
-    .sticky-bottom-div {
-      background-color: #1ab394;
-
-      position: sticky;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-    }
-  }
 </style>
