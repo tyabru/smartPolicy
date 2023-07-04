@@ -2,6 +2,7 @@ package com.jingyu.qunfangqunzhi.service.impl;
 
 import java.util.List;
 
+import com.jingyu.common.annotation.DataScope;
 import com.jingyu.common.utils.DateUtils;
 import com.jingyu.qunfangqunzhi.domain.CommonUser;
 import com.jingyu.qunfangqunzhi.mapper.CommonUsersMapper;
@@ -40,6 +41,7 @@ public class CommonUsersServiceImpl implements ICommonUsersService
      * @return 普通用户信息
      */
     @Override
+    @DataScope(deptAlias = "c")
     public List<CommonUser> selectCommonUsersList(CommonUser commonUser)
     {
         return commonUsersMapper.selectCommonUsersList(commonUser);

@@ -23,5 +23,11 @@
             <groupId>com.jingyu</groupId>
             <artifactId>sps-common</artifactId>
         </dependency>
+        <!-- huTool-->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>5.8.16</version>
+        </dependency>
     </dependencies>
 </project>

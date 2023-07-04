@@ -7,9 +7,21 @@ public class CommonUserConstants {
 
     public enum CommonUserType{
         //普通用户
-        COMMON_PERSON,
+        COMMON_PERSON("0"),
         //网格员
-        WANGGEYUAN,
+        WANGGEYUAN("1"),
+        //网格员长
+        WANGGEYUANZHANG("2");
+
+        private final String value;
+
+        CommonUserType(String value){
+            this.value = value;
+        }
+
+        public String getValue(){
+            return this.value;
+        }
     }
 
     public enum CommonUserStatus{

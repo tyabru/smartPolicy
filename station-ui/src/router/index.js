@@ -147,7 +147,22 @@ export const dynamicRoutes = [
         meta: { title: '表单编辑', activeMenu: '/tool/gen' }
       }
     ]
-  }
+  },
+  //
+  {
+    path: '/qunfangqunzhi/threatManage',
+    component: Layout,
+    hidden: true,
+    permissions: ['qunfangqunzhi:threatmanagement:query'],
+    children: [
+      {
+        path: 'detail/:id(\\d+)',
+        component: () => import('@/views/qunfangqunzhi/threatmanagement/threatDetail'),
+        name: 'threatDetail',
+        meta: { title: '事件详情', activeMenu: '/qunfangqunzhi/threatmanagement' }
+      }
+    ]
+  },
 ]
 
 // 防止连续点击多次路由报错

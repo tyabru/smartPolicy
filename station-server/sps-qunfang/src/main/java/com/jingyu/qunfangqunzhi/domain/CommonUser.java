@@ -23,11 +23,12 @@ public class CommonUser extends BaseEntity
 
     /** 所属辖区id */
     @Excel(name = "所属辖区id")
-    private Long areaId;
+    private Long deptId;
 
     /** 用户账号 */
     @Excel(name = "用户账号")
     private String userName;
+
 
     /** 用户昵称 */
     @Excel(name = "用户昵称")
@@ -90,15 +91,7 @@ public class CommonUser extends BaseEntity
     {
         return userId;
     }
-    public void setAreaId(Long areaId)
-    {
-        this.areaId = areaId;
-    }
 
-    public Long getAreaId()
-    {
-        return areaId;
-    }
     public void setUserName(String userName)
     {
         this.userName = userName;
@@ -225,12 +218,19 @@ public class CommonUser extends BaseEntity
     {
         return loginDate;
     }
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("userId", getUserId())
-            .append("areaId", getAreaId())
+            .append("deptId", getDeptId())
             .append("userName", getUserName())
             .append("realName", getRealName())
             .append("userType", getUserType())

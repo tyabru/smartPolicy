@@ -6,7 +6,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="CommonUser" id="CommonUsersResult">
         <result property="userId"    column="user_id"    />
-        <result property="areaId"    column="area_id"    />
+        <result property="deptId"    column="dept_id"    />
         <result property="userName"    column="user_name"    />
         <result property="realName"    column="real_name"    />
         <result property="userType"    column="user_type"    />
@@ -29,13 +29,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCommonUsersVo">
-        select user_id, area_id, user_name, real_name, user_type, email, id_number, phonenumber, home_address, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time, remark from common_users
+        select user_id, dept_id, user_name, real_name, user_type, email, id_number, phonenumber, home_address, sex, avatar, password, status, del_flag, login_ip, login_date, create_by, create_time, update_by, update_time, remark from common_users c
     </sql>
 
     <select id="selectCommonUsersList" parameterType="CommonUser" resultMap="CommonUsersResult">
         <include refid="selectCommonUsersVo"/>
-        <where>
-            <if test="areaId != null "> and area_id = #{areaId}</if>
+            where c.del_flag = '0'
             <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
             <if test="realName != null  and realName != ''"> and real_name like concat('%', #{realName}, '%')</if>
             <if test="userType != null  and userType != ''"> and user_type = #{userType}</if>
@@ -49,7 +48,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="loginIp != null  and loginIp != ''"> and login_ip = #{loginIp}</if>
             <if test="loginDate != null "> and login_date = #{loginDate}</if>
-        </where>
+            <if test="deptId != null and deptId != 0">
+                AND (c.dept_id = #{deptId} OR c.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE find_in_set(#{deptId}, ancestors) ))
+            </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
     </select>
 
     <select id="selectCommonUsersByUserId" parameterType="Long" resultMap="CommonUsersResult">
@@ -66,7 +69,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertCommonUsers" parameterType="CommonUser" useGeneratedKeys="true" keyProperty="userId">
         insert into common_users
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="areaId != null">area_id,</if>
+            <if test="deptId != null">dept_id,</if>
             <if test="userName != null and userName != ''">user_name,</if>
             <if test="realName != null and realName != ''">real_name,</if>
             <if test="userType != null">user_type,</if>
@@ -88,7 +91,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="areaId != null">#{areaId},</if>
+            <if test="deptId != null">#{deptId},</if>
             <if test="userName != null and userName != ''">#{userName},</if>
             <if test="realName != null and realName != ''">#{realName},</if>
             <if test="userType != null">#{userType},</if>
@@ -114,7 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateCommonUsers" parameterType="CommonUser">
         update common_users
         <trim prefix="SET" suffixOverrides=",">
-            <if test="areaId != null">area_id = #{areaId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
             <if test="userName != null and userName != ''">user_name = #{userName},</if>
             <if test="realName != null and realName != ''">real_name = #{realName},</if>
             <if test="userType != null">user_type = #{userType},</if>
