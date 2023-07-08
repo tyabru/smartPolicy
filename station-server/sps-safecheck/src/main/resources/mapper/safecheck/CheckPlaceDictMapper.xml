@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.safecheck.mapper.CheckPlaceDictMapper">
+
+    <resultMap type="CheckPlaceDict" id="CheckPlaceDictResult">
+        <result property="id"    column="id"    />
+        <result property="placeName"    column="place_name"    />
+        <result property="checkItems"    column="check_items"    />
+        <result property="rectifyNoticeTemplateParams"    column="rectify_notice_template_params"    />
+    </resultMap>
+
+    <sql id="selectCheckPlaceDictVo">
+        select id, place_name, check_items, rectify_notice_template_params from check_place_dict
+    </sql>
+
+    <select id="selectCheckPlaceDictList" parameterType="CheckPlaceDict" resultMap="CheckPlaceDictResult">
+        <include refid="selectCheckPlaceDictVo"/>
+        <where>
+            <if test="placeName != null ">  and place_name = #{placeName}</if>
+            <if test="checkItems != null  and checkItems != ''"> and check_items = #{checkItems}</if>
+            <if test="rectifyNoticeTemplateParams != null  and rectifyNoticeTemplateParams != ''"> and rectify_notice_template_params = #{rectifyNoticeTemplateParams}</if>
+        </where>
+    </select>
+
+    <select id="selectCheckPlaceDictById" parameterType="Long" resultMap="CheckPlaceDictResult">
+        <include refid="selectCheckPlaceDictVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCheckPlaceDict" parameterType="CheckPlaceDict" useGeneratedKeys="true" keyProperty="id">
+        insert into check_place_dict
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="placeName != null">place_name,</if>
+            <if test="checkItems != null">check_items,</if>
+            <if test="rectifyNoticeTemplateParams != null">rectify_notice_template_params,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="placeName != null">#{placeName},</if>
+            <if test="checkItems != null">#{checkItems},</if>
+            <if test="rectifyNoticeTemplateParams != null">#{rectifyNoticeTemplateParams},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCheckPlaceDict" parameterType="CheckPlaceDict">
+        update check_place_dict
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="placeName != null">place_name = #{placeName},</if>
+            <if test="checkItems != null">check_items = #{checkItems},</if>
+            <if test="rectifyNoticeTemplateParams != null">rectify_notice_template_params = #{rectifyNoticeTemplateParams},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCheckPlaceDictById" parameterType="Long">
+        delete from check_place_dict where id = #{id}
+    </delete>
+
+    <delete id="deleteCheckPlaceDictByIds" parameterType="String">
+        delete from check_place_dict where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
