@@ -20,7 +20,6 @@
           />
         </el-select>
       </el-form-item>
-
       <el-form-item label="上传时间">
         <el-date-picker
           v-model="daterangeUploadTime"
@@ -99,12 +98,16 @@
     <el-table v-loading="loading" :data="threatmanagementList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="事件编号"  width="100" align="center" prop="id" />
-      <el-table-column label="事件类别" align="center" prop="eventType" />
+      <el-table-column label="事件类别" align="center" prop="eventType" >
+        <template slot-scope="scope">
+          <span>{{getTypeLabel(scope.row.eventType)}}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="事件概述" align="center" prop="eventSummarize" />-
       <el-table-column label="联系人姓名" align="center" prop="contactPersonName" />
       <el-table-column label="联系电话" align="center" prop="contactPhone" />
       <el-table-column label="发生地点" align="center" prop="address" />
       <el-table-column label="发生时间" align="center" prop="occurTime" width="180">
-
       </el-table-column>
       <el-table-column label="上传时间" align="center" prop="uploadTime" width="180">
 
@@ -174,7 +177,6 @@
           <el-date-picker clearable
             v-model="form.occurTime"
             type="datetime"
-
             placeholder="请选择发生时间">
           </el-date-picker>
         </el-form-item>
@@ -261,7 +263,7 @@ import { listThreatmanagement, getThreatmanagement, delThreatmanagement, addThre
 
 export default {
   name: "Threatmanagement",
-  dicts: ['event_status'],
+  dicts: ['event_status','event_type'],
   data() {
     return {
       // 遮罩层
@@ -467,9 +469,17 @@ export default {
       }, `threatmanagement_${new Date().getTime()}.xlsx`)
     },
 
-    //获取标签内容
+    //获取状态标签内容
     getStatusLabel(val){
       for(let dict of this.dict.type.event_status){
+        if(dict.value == val){
+          return dict.label;
+        }
+      }
+    },
+    ////获取类别标签内容
+    getTypeLabel(val){
+      for(let dict of this.dict.type.event_type){
         if(dict.value == val){
           return dict.label;
         }

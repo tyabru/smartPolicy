@@ -4,6 +4,7 @@ import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jingyu.common.annotation.Excel;
 import com.jingyu.common.core.domain.BaseEntity;
+import com.jingyu.common.core.domain.entity.SysDept;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -77,10 +78,26 @@ public class CommonUser extends BaseEntity
     @Excel(name = "最后登录IP")
     private String loginIp;
 
+
+    /**
+     * 部门信息
+     */
+    private SysDept dept;
+
     /** 最后登录时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "最后登录时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss", type = Excel.Type.EXPORT)
     private Date loginDate;
+
+    private CommonUsersApplication usersApplication;
+
+    public CommonUsersApplication getUsersApplication() {
+        return usersApplication;
+    }
+
+    public void setUsersApplication(CommonUsersApplication usersApplication) {
+        this.usersApplication = usersApplication;
+    }
 
     public void setUserId(Long userId)
     {
@@ -225,6 +242,14 @@ public class CommonUser extends BaseEntity
     public void setDeptId(Long deptId) {
         this.deptId = deptId;
     }
+    public SysDept getDept() {
+        return dept;
+    }
+
+    public void setDept(SysDept dept) {
+        this.dept = dept;
+    }
+
 
     @Override
     public String toString() {
@@ -250,6 +275,7 @@ public class CommonUser extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
+            .append(("application"),getUsersApplication())
             .toString();
     }
 }

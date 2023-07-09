@@ -39,9 +39,25 @@ public class CommonUserConstants {
 
     }
 
+    //登陆类型
     public enum LoginType{
         PASSWORD,
         SMSCODE,
+    }
+
+    public enum CommonUserApplicationStatus{
+        WAITING("0"),
+        ACCEPT("1"),
+        REJECT("2");
+
+        private final String value;
+        CommonUserApplicationStatus(String value){
+            this.value = value;
+        }
+        public String getValue(){
+            return this.value;
+        }
+
     }
 
     public static final String REGISTER = "普通用户注册";

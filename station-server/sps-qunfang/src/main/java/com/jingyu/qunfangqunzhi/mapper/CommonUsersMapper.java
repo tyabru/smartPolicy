@@ -63,4 +63,5 @@ public interface CommonUsersMapper
 
 
     public CommonUser selectCommonUsersByPhoneNumber(String phoneNumber);
+
 }

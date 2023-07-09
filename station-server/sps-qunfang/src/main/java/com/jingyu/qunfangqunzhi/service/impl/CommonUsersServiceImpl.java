@@ -4,11 +4,16 @@ import java.util.List;
 
 import com.jingyu.common.annotation.DataScope;
 import com.jingyu.common.utils.DateUtils;
+import com.jingyu.qunfangqunzhi.constant.CommonUserConstants;
+import com.jingyu.qunfangqunzhi.constant.QFConstants;
 import com.jingyu.qunfangqunzhi.domain.CommonUser;
+import com.jingyu.qunfangqunzhi.domain.CommonUsersApplication;
+import com.jingyu.qunfangqunzhi.mapper.CommonUsersApplicationMapper;
 import com.jingyu.qunfangqunzhi.mapper.CommonUsersMapper;
 import com.jingyu.qunfangqunzhi.service.ICommonUsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 普通用户信息Service业务层处理
@@ -21,6 +26,9 @@ public class CommonUsersServiceImpl implements ICommonUsersService
 {
     @Autowired
     private CommonUsersMapper commonUsersMapper;
+
+    @Autowired
+    private CommonUsersApplicationMapper applicationMapper;
 
     /**
      * 查询普通用户信息
@@ -100,5 +108,15 @@ public class CommonUsersServiceImpl implements ICommonUsersService
     @Override
     public CommonUser selectCommonUserByPhoneNumber(String phoneNumber) {
         return commonUsersMapper.selectCommonUsersByPhoneNumber(phoneNumber);
+    }
+
+    @Override
+    @Transactional
+    public void handleUserApplication(CommonUser commonUser, Long applicationId) {
+        updateCommonUsers(commonUser);
+        CommonUsersApplication application = new CommonUsersApplication();
+        application.setId(applicationId);
+        application.setStatus(CommonUserConstants.CommonUserApplicationStatus.ACCEPT.getValue());
+        applicationMapper.updateCommonUsersApplication(application);
     }
 }

@@ -5,38 +5,76 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="540f7ce3-5314-4a9c-858a-b74c3d254e25" name="Changes" comment="部分数据权限初步探明">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/Maven__cn_hutool_hutool_all_5_8_16.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/src/main/java/com/jingyu/web/controller/qunfangqunzhi/EventInfoController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/src/main/java/com/jingyu/web/controller/qunfangqunzhi/EventUserAllocatedController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/EventInfo.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/EventUserAllocated.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/CommonUserMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/EventInfoMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/EventUserAllocatedMapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/IEventInfoService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/IEventUserAllocatedService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/impl/EventInfoServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/impl/EventUserAllocatedServiceImpl.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/util/MyIdUtil.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/EventInfoMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/EventUserAllocatedMapper.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-ui/src/api/qunfangqunzhi/CommonUsers.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-ui/src/api/qunfangqunzhi/allocated.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-ui/src/api/qunfangqunzhi/threatmanagement.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/CommonUsers/index.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/threatmanagement/index.vue" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/threatmanagement/threatDetail.vue" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/META-INF/spring-devtools.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/application-dev.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/application-druid.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/application-prod.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/banner.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/i18n/messages.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/mybatis/mybatis-config.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/generator.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/mapper/generator/GenTableColumnMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/mapper/generator/GenTableMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/controller.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/domain.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/mapper.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/service.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/serviceImpl.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/sub-domain.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/js/api.js.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/sql/sql.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/vue/index-tree.vue.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/vue/index.vue.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/vue/v3/index-tree.vue.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/vue/v3/index.vue.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/vue/v3/readme.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/xml/mapper.xml.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/controller/CommonUsersApplicationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/CommonUsersApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/CommonUsersApplicationMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/ICommonUsersApplicationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/impl/CommonUsersApplicationServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/CommonUsersApplicationMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/target/classes/mapper/qunfangqunzhi/CommonUsersApplicationMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/target/classes/mapper/qunfangqunzhi/CommonUsersMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/target/classes/mapper/qunfangqunzhi/EventInfoMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/target/classes/mapper/qunfangqunzhi/EventUserAllocatedMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysConfigMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysDeptMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysDictDataMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysDictTypeMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysLogininforMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysMenuMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysNoticeMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysOperLogMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysPostMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysRoleDeptMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysRoleMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysRoleMenuMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysUserMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysUserPostMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysUserRoleMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-ui/src/api/qunfangqunzhi/applicationManage.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/station-server/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/station-server/sps-admin/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-admin/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/station-server/sps-admin/src/main/java/com/jingyu/web/controller/qunfangqunzhi/CommonUsersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-admin/src/main/java/com/jingyu/web/controller/qunfangqunzhi/CommonUsersController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/constant/CommonUserConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/constant/CommonUserConstants.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/CommonUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/CommonUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/EventInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/EventInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/CommonUserMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/CommonUsersMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/CommonUsersMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/ICommonUsersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/ICommonUsersService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/impl/CommonUsersServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/impl/CommonUsersServiceImpl.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/CommonUsersMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/CommonUsersMapper.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/station-ui/src/router/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/router/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/EventInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/EventInfoMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/src/api/qunfangqunzhi/CommonUsers.js" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/api/qunfangqunzhi/CommonUsers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/CommonUsers/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/CommonUsers/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/threatmanagement/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/threatmanagement/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/threatmanagement/threatDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/threatmanagement/threatDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/src/views/system/user/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/views/system/user/index.vue" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,7 +109,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -80,8 +118,8 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-qunfang\src\main\resources\mapper\qunfangqunzhi" />
       <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-qunfang\src\main\java\com\jingyu" />
+      <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-qunfang\src\main\resources\mapper\qunfangqunzhi" />
       <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-qunfang\src\main\java\com\jingyu\qunfangqunzhi" />
       <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-admin\src\main\java\com\jingyu\web\controller\qunfangqunzhi" />
       <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-qunfang\src\main\java\com\jingyu\qunfangqunzhi\controller" />
@@ -127,9 +165,20 @@
       <workItem from="1688377330575" duration="4097000" />
       <workItem from="1688381480252" duration="3456000" />
       <workItem from="1688389316772" duration="441000" />
-      <workItem from="1688432320461" duration="15138000" />
+      <workItem from="1688432320461" duration="15153000" />
+      <workItem from="1688525819766" duration="12046000" />
+      <workItem from="1688605885746" duration="6981000" />
+      <workItem from="1688694283461" duration="19142000" />
+      <workItem from="1688872418345" duration="2969000" />
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="部分数据权限初步探明">
+      <created>1688479265589</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1688479265589</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,6 +220,15 @@
             <option name="WATCH_EXIT" value="false" />
           </properties>
           <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/station-server/sps-system/src/main/java/com/jingyu/system/service/ISysUserService.java</url>
+          <line>104</line>
+          <properties class="com.jingyu.system.service.ISysUserService" method="checkUserDataScope">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="3" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

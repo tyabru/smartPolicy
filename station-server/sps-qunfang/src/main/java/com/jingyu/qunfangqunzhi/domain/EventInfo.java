@@ -10,7 +10,7 @@ import com.jingyu.common.core.domain.BaseEntity;
 
 /**
  * 上报事件管理对象 event_info
- * 
+ *
  * @author jingyu
  * @date 2023-07-03
  */
@@ -50,8 +50,8 @@ public class EventInfo extends BaseEntity
     private String eventDescription;
 
     /** 发生时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "发生时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "发生时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date occurTime;
 
     /** 照片地址 */
@@ -71,136 +71,147 @@ public class EventInfo extends BaseEntity
     private String reply;
 
     /** 事件上传时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "事件上传时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "事件上传时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date uploadTime;
+
+
+    /**
+     * 事件概述
+     */
+    private String eventSummarize;
+
+
+    //备注
+    private String remark;
+
 
     /** $table.subTable.functionName信息 */
     private List<EventUserAllocated> eventUserAllocatedList;
 
-    public void setId(Long id) 
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setUploadUserId(Long uploadUserId) 
+    public void setUploadUserId(Long uploadUserId)
     {
         this.uploadUserId = uploadUserId;
     }
 
-    public Long getUploadUserId() 
+    public Long getUploadUserId()
     {
         return uploadUserId;
     }
-    public void setEventType(String eventType) 
+    public void setEventType(String eventType)
     {
         this.eventType = eventType;
     }
 
-    public String getEventType() 
+    public String getEventType()
     {
         return eventType;
     }
-    public void setContactPersonName(String contactPersonName) 
+    public void setContactPersonName(String contactPersonName)
     {
         this.contactPersonName = contactPersonName;
     }
 
-    public String getContactPersonName() 
+    public String getContactPersonName()
     {
         return contactPersonName;
     }
-    public void setContactPhone(String contactPhone) 
+    public void setContactPhone(String contactPhone)
     {
         this.contactPhone = contactPhone;
     }
 
-    public String getContactPhone() 
+    public String getContactPhone()
     {
         return contactPhone;
     }
-    public void setAddress(String address) 
+    public void setAddress(String address)
     {
         this.address = address;
     }
 
-    public String getAddress() 
+    public String getAddress()
     {
         return address;
     }
-    public void setAddressData(String addressData) 
+    public void setAddressData(String addressData)
     {
         this.addressData = addressData;
     }
 
-    public String getAddressData() 
+    public String getAddressData()
     {
         return addressData;
     }
-    public void setEventDescription(String eventDescription) 
+    public void setEventDescription(String eventDescription)
     {
         this.eventDescription = eventDescription;
     }
 
-    public String getEventDescription() 
+    public String getEventDescription()
     {
         return eventDescription;
     }
-    public void setOccurTime(Date occurTime) 
+    public void setOccurTime(Date occurTime)
     {
         this.occurTime = occurTime;
     }
 
-    public Date getOccurTime() 
+    public Date getOccurTime()
     {
         return occurTime;
     }
-    public void setPhotoUrl(String photoUrl) 
+    public void setPhotoUrl(String photoUrl)
     {
         this.photoUrl = photoUrl;
     }
 
-    public String getPhotoUrl() 
+    public String getPhotoUrl()
     {
         return photoUrl;
     }
-    public void setVideoUrl(String videoUrl) 
+    public void setVideoUrl(String videoUrl)
     {
         this.videoUrl = videoUrl;
     }
 
-    public String getVideoUrl() 
+    public String getVideoUrl()
     {
         return videoUrl;
     }
-    public void setStatus(String status) 
+    public void setStatus(String status)
     {
         this.status = status;
     }
 
-    public String getStatus() 
+    public String getStatus()
     {
         return status;
     }
-    public void setReply(String reply) 
+    public void setReply(String reply)
     {
         this.reply = reply;
     }
 
-    public String getReply() 
+    public String getReply()
     {
         return reply;
     }
-    public void setUploadTime(Date uploadTime) 
+    public void setUploadTime(Date uploadTime)
     {
         this.uploadTime = uploadTime;
     }
 
-    public Date getUploadTime() 
+    public Date getUploadTime()
     {
         return uploadTime;
     }
@@ -213,6 +224,24 @@ public class EventInfo extends BaseEntity
     public void setEventUserAllocatedList(List<EventUserAllocated> eventUserAllocatedList)
     {
         this.eventUserAllocatedList = eventUserAllocatedList;
+    }
+
+    public String getEventSummarize() {
+        return eventSummarize;
+    }
+
+    public void setEventSummarize(String eventSummarize) {
+        this.eventSummarize = eventSummarize;
+    }
+
+    @Override
+    public String getRemark() {
+        return remark;
+    }
+
+    @Override
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
 
     @Override

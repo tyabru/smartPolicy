@@ -1,204 +1,274 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属辖区id" prop="deptId">
-        <el-input
-          v-model="queryParams.deptId"
-          placeholder="请输入所属辖区id"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="用户账号" prop="userName">
-        <el-input
-          v-model="queryParams.userName"
-          placeholder="请输入用户账号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="用户昵称" prop="realName">
-        <el-input
-          v-model="queryParams.realName"
-          placeholder="请输入用户昵称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="用户邮箱" prop="email">
-        <el-input
-          v-model="queryParams.email"
-          placeholder="请输入用户邮箱"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="身份证号" prop="idNumber">
-        <el-input
-          v-model="queryParams.idNumber"
-          placeholder="请输入身份证号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="手机号码" prop="phonenumber">
-        <el-input
-          v-model="queryParams.phonenumber"
-          placeholder="请输入手机号码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="家庭住址" prop="homeAddress">
-        <el-input
-          v-model="queryParams.homeAddress"
-          placeholder="请输入家庭住址"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="头像地址" prop="avatar">
-        <el-input
-          v-model="queryParams.avatar"
-          placeholder="请输入头像地址"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="密码" prop="password">
-        <el-input
-          v-model="queryParams.password"
-          placeholder="请输入密码"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="最后登录IP" prop="loginIp">
-        <el-input
-          v-model="queryParams.loginIp"
-          placeholder="请输入最后登录IP"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="最后登录时间" prop="loginDate">
-        <el-date-picker clearable
-          v-model="queryParams.loginDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择最后登录时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <el-row>
+      <!--部门数据-->
+      <el-col :span="4" :xs="24">
+        <div class="head-container">
+          <el-input
+            v-model="deptName"
+            placeholder="请输入辖区名称"
+            clearable
+            size="small"
+            prefix-icon="el-icon-search"
+            style="margin-bottom: 20px"
+          />
+        </div>
+        <div class="head-container">
+          <el-tree
+            :data="deptOptions"
+            :props="defaultProps"
+            :expand-on-click-node="false"
+            :filter-node-method="filterNode"
+            ref="tree"
+            node-key="id"
+            default-expand-all
+            highlight-current
+            @node-click="handleNodeClick"
+          />
+          <el-tree
+            :data="commonUserOptions"
+            :props="defaultProps"
+            :expand-on-click-node="false"
+            ref="tree"
+            node-key="id"
+            default-expand-all
+            highlight-current
+            @node-click="handleCommonUserNodeClick"
+          />
+        </div>
+      </el-col>
+      <el-col :span="20" :xs="24">
+        <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+          <el-form-item label="用户账号" prop="userName">
+            <el-input
+              v-model="queryParams.userName"
+              placeholder="请输入用户账号"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="用户昵称" prop="realName">
+            <el-input
+              v-model="queryParams.realName"
+              placeholder="请输入用户昵称"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="用户邮箱" prop="email">
+            <el-input
+              v-model="queryParams.email"
+              placeholder="请输入用户邮箱"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="身份证号" prop="idNumber">
+            <el-input
+              v-model="queryParams.idNumber"
+              placeholder="请输入身份证号"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['qunfangqunzhi:CommonUsers:add']"
-        >新增</el-button>
+          <el-form-item label="手机号码" prop="phonenumber">
+            <el-input
+              v-model="queryParams.phonenumber"
+              placeholder="请输入手机号码"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="家庭住址" prop="homeAddress">
+            <el-input
+              v-model="queryParams.homeAddress"
+              placeholder="请输入家庭住址"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="头像地址" prop="avatar">
+            <el-input
+              v-model="queryParams.avatar"
+              placeholder="请输入头像地址"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="密码" prop="password">
+            <el-input
+              v-model="queryParams.password"
+              placeholder="请输入密码"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="最后登录IP" prop="loginIp">
+            <el-input
+              v-model="queryParams.loginIp"
+              placeholder="请输入最后登录IP"
+              clearable
+              @keyup.enter.native="handleQuery"
+            />
+          </el-form-item>
+          <el-form-item label="最后登录时间" prop="loginDate">
+            <el-date-picker clearable
+                            v-model="queryParams.loginDate"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            placeholder="请选择最后登录时间">
+            </el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+        </el-form>
+
+        <el-row :gutter="10" class="mb8">
+          <el-col :span="1.5">
+            <el-button
+              type="primary"
+              plain
+              icon="el-icon-plus"
+              size="mini"
+              @click="handleAdd"
+              v-hasPermi="['qunfangqunzhi:CommonUsers:add']"
+            >新增</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="success"
+              plain
+              icon="el-icon-edit"
+              size="mini"
+              :disabled="single"
+              @click="handleUpdate"
+              v-hasPermi="['qunfangqunzhi:CommonUsers:edit']"
+            >修改</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="danger"
+              plain
+              icon="el-icon-delete"
+              size="mini"
+              :disabled="multiple"
+              @click="handleDelete"
+              v-hasPermi="['qunfangqunzhi:CommonUsers:remove']"
+            >删除</el-button>
+          </el-col>
+          <el-col :span="1.5">
+            <el-button
+              type="warning"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleExport"
+              v-hasPermi="['qunfangqunzhi:CommonUsers:export']"
+            >导出</el-button>
+          </el-col>
+          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+        </el-row>
+
+        <el-table v-loading="loading" :data="CommonUsersList" @selection-change="handleSelectionChange">
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="用户编号" align="center" prop="userId" />
+          <el-table-column label="真实姓名" align="center" prop="realName" />
+          <el-table-column label="所属辖区" align="center" prop="dept.deptName" />
+          <el-table-column label="用户类型" align="center" prop="userType" >
+            <template slot-scope="scope">
+              <span>{{getUserTypeLabel(scope.row.userType)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="手机号码" align="center" prop="phonenumber" />
+          <el-table-column label="家庭住址" align="center" prop="homeAddress" />
+          <el-table-column label="用户性别" align="center" prop="sex" >
+            <template slot-scope="scope">
+              <span>{{getUserSexLabel(scope.row.sex)}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column label="帐号状态" align="center" prop="status">
+            <template slot-scope="scope">
+              <el-switch
+                v-model="scope.row.status"
+                active-value="0"
+                inactive-value="1"
+                @change="handleStatusChange(scope.row)"
+              ></el-switch>
+            </template>
+          </el-table-column>
+
+
+          <el-table-column label="备注" align="center" prop="remark" />
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-zoom-in"
+                @click="handleDetail(scope.row)"
+                v-hasPermi="['qunfangqunzhi:CommonUsers:query']"
+              >详情</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-edit"
+                @click="handleUpdate(scope.row)"
+                v-hasPermi="['qunfangqunzhi:CommonUsers:edit']"
+              >修改</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                icon="el-icon-delete"
+                @click="handleDelete(scope.row)"
+                v-hasPermi="['qunfangqunzhi:CommonUsers:remove']"
+              >删除</el-button>
+              <el-button
+                size="mini"
+                type="text"
+                v-if="scope.row.usersApplication!=null"
+                icon="el-icon-delete"
+                @click="handleApplication(scope.row)"
+                v-hasPermi="['qunfangqunzhi:CommonUsers:remove']"
+              >查看申请信息</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <pagination
+          v-show="total>0"
+          :total="total"
+          :page.sync="queryParams.pageNum"
+          :limit.sync="queryParams.pageSize"
+          @pagination="getList"
+        />
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['qunfangqunzhi:CommonUsers:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['qunfangqunzhi:CommonUsers:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['qunfangqunzhi:CommonUsers:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+
+
     </el-row>
 
-    <el-table v-loading="loading" :data="CommonUsersList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="用户ID" align="center" prop="userId" />
-      <el-table-column label="所属辖区id" align="center" prop="deptId" />
-      <el-table-column label="用户账号" align="center" prop="userName" />
-      <el-table-column label="用户昵称" align="center" prop="realName" />
-      <el-table-column label="用户类型" align="center" prop="userType" />
-      <el-table-column label="用户邮箱" align="center" prop="email" />
-      <el-table-column label="身份证号" align="center" prop="idNumber" />
-      <el-table-column label="手机号码" align="center" prop="phonenumber" />
-      <el-table-column label="家庭住址" align="center" prop="homeAddress" />
-      <el-table-column label="用户性别" align="center" prop="sex" />
-      <el-table-column label="头像地址" align="center" prop="avatar" />
-      <el-table-column label="密码" align="center" prop="password" />
-      <el-table-column label="帐号状态" align="center" prop="status" />
-      <el-table-column label="最后登录IP" align="center" prop="loginIp" />
-      <el-table-column label="最后登录时间" align="center" prop="loginDate" width="180">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.loginDate, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['qunfangqunzhi:CommonUsers:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['qunfangqunzhi:CommonUsers:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
 
     <!-- 添加或修改普通用户信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所属辖区id" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入所属辖区id" />
-        </el-form-item>
         <el-form-item label="用户账号" prop="userName">
           <el-input v-model="form.userName" placeholder="请输入用户账号" />
+        </el-form-item>
+        <el-form-item label="归属部门" prop="deptId">
+          <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择归属部门" />
+        </el-form-item>
+        <el-form-item label="角色类型">
+          <el-select v-model="form.userType"  clearable placeholder="请选择角色">
+            <el-option
+              v-for="item in this.dict.type.common_user_type"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="用户昵称" prop="realName">
           <el-input v-model="form.realName" placeholder="请输入用户昵称" />
@@ -244,14 +314,77 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 详情-->>
+    <el-dialog :title="title3" :visible.sync="open3"  width="500px" append-to-body>
+      <el-form ref="form" :model="form" disabled label-width="80px">
+        <el-form-item label="用户邮箱" prop="email">
+          <el-input v-model="form.email"  />
+        </el-form-item>
+        <el-form-item label="身份证号" prop="idNumber">
+          <el-input v-model="form.idNumber" />
+        </el-form-item>
+        <el-form-item label="头像地址" prop="avatar">
+          <el-input v-model="form.avatar"/>
+        </el-form-item>
+        <el-form-item label="最后登录IP" prop="loginIp">
+          <el-input v-model="form.loginIp" />
+        </el-form-item>
+        <el-form-item label="最后登录时间" prop="loginDate">
+          <el-date-picker clearable
+                          v-model="form.loginDate"
+                          type="date"
+                          value-format="yyyy-MM-dd"
+          >
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
+    <!-- 申请信息（ -->
+    <el-dialog :title="title2" :visible.sync="open2" width="500px" append-to-body>
+      <el-form ref="form"  label-width="80px" >
+        <el-form-item label="申请描述">
+          <el-input type="textarea" v-model="form2.description" />
+        </el-form-item>
+        <el-form-item label="归属部门" prop="deptId">
+          <treeselect v-model="form2.deptId" :options="deptOptions" :show-count="true" placeholder="请选择归属部门" />
+        </el-form-item>
+        <el-form-item label="角色类型">
+          <el-select v-model="form2.userType"  clearable placeholder="请选择角色">
+            <el-option
+              v-for="item in this.dict.type.common_user_type"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="acceptApplication">确定</el-button>
+        <el-button @click="rejectApplication">忽略</el-button>
+        <el-button @click="cancel">关闭</el-button>
+      </div>
+    </el-dialog>
+
   </div>
 </template>
 
 <script>
-import { listCommonUsers, getCommonUsers, delCommonUsers, addCommonUsers, updateCommonUsers } from "@/api/qunfangqunzhi/CommonUsers";
+import { listCommonUsers, getCommonUsers, delCommonUsers, addCommonUsers, updateCommonUsers,uploadApplication,changeCommonUserStatus} from "@/api/qunfangqunzhi/CommonUsers";
+import {deptTreeSelect} from "@/api/system/user";
+import {getApplicationManage} from  "@/api/qunfangqunzhi/applicationManage"
+import Treeselect from "@riophae/vue-treeselect";
+import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "CommonUsers",
+  components: { Treeselect },
+  dicts:['common_user_type','sys_user_sex'],
   data() {
     return {
       // 遮罩层
@@ -298,11 +431,48 @@ export default {
         userName: [
           { required: true, message: "用户账号不能为空", trigger: "blur" }
         ],
-      }
+      },
+      // 部门名称
+      deptName: undefined,
+      // 部门树选项
+      deptOptions: undefined,
+      // 普通用户树
+      commonUserOptions:[{id: -1, label: "普通群众"}],
+      defaultProps: {
+        children: "children",
+        label: "label"
+      },
+      //网格员申请框参数
+      title2:"网格员申请信息",
+      open2:false,
+      form2:{
+
+      },
+      //申请id
+      applicationId:null,
+      //接受或者拒绝
+      flag:null,
+      //申请界面需要提交的用户
+      updateUser:{
+        userId:null,
+        deptId:null,
+        userType:null
+      },
+      title3:"详情信息",
+      open3:false,
+
     };
   },
   created() {
+    this.getDeptTree();
     this.getList();
+  },
+
+  watch: {
+    // 根据名称筛选部门树
+    deptName(val) {
+      this.$refs.tree.filter(val);
+    }
   },
   methods: {
     /** 查询普通用户信息列表 */
@@ -317,6 +487,7 @@ export default {
     // 取消按钮
     cancel() {
       this.open = false;
+      this.open2 = false;
       this.reset();
     },
     // 表单重置
@@ -344,8 +515,14 @@ export default {
         updateTime: null,
         remark: null
       };
+      this.form2={
+
+      };
+      this.resetForm("form2");
       this.resetForm("form");
     },
+
+
     /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -413,7 +590,107 @@ export default {
       this.download('qunfangqunzhi/CommonUsers/export', {
         ...this.queryParams
       }, `CommonUsers_${new Date().getTime()}.xlsx`)
-    }
+    },
+
+    // 筛选节点
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
+    // 节点单击事件
+    handleNodeClick(data) {
+      this.queryParams.deptId = data.id;
+      this.queryParams.userType = null;
+      this.handleQuery();
+    },
+    //群众树节点点击事件
+    handleCommonUserNodeClick(){
+      this.queryParams.deptId = null;
+      this.queryParams.userType = '0';
+      this.handleQuery();
+    },
+    /** 查询部门下拉树结构 */
+    getDeptTree() {
+      deptTreeSelect().then(response => {
+        this.deptOptions = response.data;
+      });
+    },
+    /** 处理网格员申请点击界面 **/
+    async handleApplication(row){
+      await getApplicationManage(row.usersApplication.id).then(res=>{
+        this.form2 = res.data;
+      })
+      this.open2 = true;
+      this.applicationId = row.usersApplication.id;
+      this.form2.userId = row.userId;
+      this.form2.deptId = row.deptId;
+      this.form2.userType = row.userType;
+      this.form2 = {...this.form2};
+
+
+    },
+    /**上传批准审核员申请请求**/
+    acceptApplication(){
+      if((this.form2.deptId == null || this.form2.deptId == "" )|| (this.form2.userType==null||this.form2.userType=="")){
+        this.$alert("请确定辖区以及用户类型");
+      }else{
+        uploadApplication(this.form2,this.applicationId,true).then(res=>{
+          this.$message(res.msg);
+          this.open2 = false;
+          this.reset()
+          this.getList();
+        })
+      }
+    },
+    /** 拒绝申请请求 **/
+    rejectApplication(){
+      uploadApplication(null,this.applicationId,false).then(res=>{
+        this.$message(res.msg);
+        this.open2 = false;
+        this.reset()
+        this.getList();
+      })
+    },
+    /** 详情按钮操作 */
+    handleDetail(row) {
+      this.reset();
+      const userId = row.userId
+      getCommonUsers(userId).then(response => {
+        this.form = response.data;
+        this.open3 = true;
+      });
+    },
+    //获取下用户类型标签内容
+    getUserTypeLabel(val){
+      for(let dict of this.dict.type.common_user_type){
+        if(dict.value == val){
+          return dict.label;
+        }
+      }
+    },
+    //获取用户信息性别标签
+    getUserSexLabel(val){
+      for(let dict of this.dict.type.sys_user_sex){
+        if(dict.value == val){
+          return dict.label;
+        }
+      }
+    },
+    // 用户状态修改
+    handleStatusChange(row) {
+      let text = row.status === "0" ? "启用" : "停用";
+      this.$modal.confirm('确认要"' + text + '""' + row.userName + '"用户吗？').then(function() {
+        return changeCommonUserStatus(row.userId, row.status);
+      }).then(() => {
+        this.$modal.msgSuccess(text + "成功");
+      }).catch(function() {
+        row.status = row.status === "0" ? "1" : "0";
+      });
+    },
   }
 };
 </script>
+<style scoped>
+
+
+</style>

@@ -63,4 +63,8 @@ public interface ICommonUsersService
 
 
     public CommonUser selectCommonUserByPhoneNumber(String phoneNumber);
+
+
+    public void handleUserApplication(CommonUser commonUser,Long applicationId);
+
 }

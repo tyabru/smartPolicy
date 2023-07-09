@@ -2,29 +2,32 @@
   <div class="app-container">
     <el-form ref="form" :model="form" label-width="120px">
       <el-form-item label="提交用户id" prop="uploadUserId">
-        <el-tag :hit="true" type="info" class="my_tag">{{ form.uploadUserId }}</el-tag>
+        <el-input v-model="form.uploadUserId"  readonly></el-input>
       </el-form-item>
       <el-form-item label="联系人姓名" prop="contactPersonName">
-        <el-tag :hit="true" type="info" class="my_tag">{{ form.contactPersonName }}</el-tag>
+        <el-input v-model="form.contactPersonName"  readonly></el-input>
       </el-form-item>
       <el-form-item label="联系电话" prop="contactPhone">
-        <el-tag :hit="true" type="info" class="my_tag">{{ form.contactPhone }}</el-tag>
+        <el-input v-model="form.contactPhone"  readonly></el-input>
       </el-form-item>
       <el-form-item label="事件地址" prop="address">
-        <el-tag :hit="true" type="info" class="my_tag">{{ form.address }}</el-tag>
+        <el-input v-model=" form.address"  readonly></el-input>
       </el-form-item>
-      <!--      <el-form-item label="发生地址经纬度信息" prop="addressData">-->
-      <!--        <el-input v-model="form.addressData" placeholder="请输入发生地址经纬度信息" />-->
-      <!--      </el-form-item>-->
+      <el-form-item label="事件概要" prop="eventDescription">
+        <el-input v-model=" form.eventSummarize"   readonly></el-input>
+      </el-form-item>
       <el-form-item label="事件详情" prop="eventDescription">
-        <el-tag :hit="true" type="info" class="my_tag">{{ form.eventDescription }}</el-tag>
+        <el-input v-model="form.eventDescription"  type="textarea"  readonly></el-input>
       </el-form-item>
       <el-form-item label="发生时间" prop="occurTime">
-        <el-tag :hit="true" type="info" class="my_tag">{{ form.occurTime }}</el-tag>
-
+        <el-input v-model=" form.occurTime" readonly></el-input>
       </el-form-item>
-      <el-form-item label="上传时间" prop="occurTime">
-        <el-tag :hit="true" type="info" class="my_tag">{{ form.uploadTime }}</el-tag>
+      <el-form-item label="上传时间" prop="uploadTime">
+        <el-input v-model=" form.uploadTime"  readonly></el-input>
+      </el-form-item>
+
+      <el-form-item v-if="this.photoUrls &&this.photoUrls.length!==0" label="图片说明" prop="photoUrls">
+        <el-image v-for="url in photoUrls" :src="url" style="width: 300px; height: 180px" :preview-src-list="[url]"/>
       </el-form-item>
       <!--      <el-form-item label="照片地址" prop="photoUrl">-->
       <!--        <el-input v-model="form.photoUrl" placeholder="请输入照片地址" />-->
@@ -32,12 +35,17 @@
       <!--      <el-form-item label="视频地址" prop="videoUrl">-->
       <!--        <el-input v-model="form.videoUrl" placeholder="请输入视频地址" />-->
       <!--      </el-form-item>-->
-
-      <el-form-item v-if="form.reply!=null" label="反馈信息" prop="reply">
-        <el-tag :hit="true" type="info" class="my_tag">{{ form.reply }}</el-tag>
+      <el-form-item v-if="this.videoUrl && this.videoUrl!==''"   label="视频信息" prop="videoUrl" style="width: 600px; ">
+        <vue-aliplayer-v2
+          :source="this.videoUrl"
+          ref="VueAliplayerV2"
+        />
       </el-form-item>
       <el-form-item v-if="form.reply!=null" label="反馈信息" prop="reply">
-        <el-tag :hit="true" type="info" class="my_tag">{{ form.reply }}</el-tag>
+        <el-input v-model="form.reply " readonly></el-input>
+      </el-form-item>
+      <el-form-item  v-if="form.remark!=null" label="备注" prop="reply">
+        <el-input v-model="form.remark " readonly></el-input>
       </el-form-item>
 
 
@@ -126,7 +134,6 @@
           </el-col>
           <!--用户数据-->
           <el-col :span="20" :xs="24">
-
             <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="50" align="center"/>
               <el-table-column label="用户编号" align="center" key="userId" prop="userId"/>
@@ -161,13 +168,16 @@
   import { addAllocated, updateAllocated, downloadEventAllocated } from '@/api/qunfangqunzhi/allocated'
   import { deptTreeSelect } from '@/api/system/user'
   import {listGridStuff} from  "@/api/qunfangqunzhi/CommonUsers"
+  import VueAliplayerV2 from "vue-aliplayer-v2";
 
   export default {
     name: 'threatDetail',
     dicts:['threat_allocate_status'],
+    components: {
+        VueAliplayerV2
+    },
     data() {
       return {
-
         form: {},
         id: null,
         eventUserAllocatedList: null,
@@ -192,7 +202,9 @@
         total: null,
         loading: false,
         //用户ID组
-        userIds: null
+        userIds: null,
+        photoUrls:[],
+        videoUrl:null,
       }
     },
     created() {
@@ -211,7 +223,18 @@
         getThreatmanagement(this.id).then(response => {
           console.log(response.data);
           this.form = response.data
-          this.eventUserAllocatedList = response.data.eventUserAllocatedList
+          this.eventUserAllocatedList = response.data.eventUserAllocatedList;
+          if(response.data.photoUrl  && response.data.photoUrl !== ""){
+              let str = response.data.photoUrl;
+              let strings = str.split(",");
+               this.photoUrls= strings.map((string)=>{
+                return process.env.VUE_APP_BASE_API +string;
+              })
+              console.log(this.photoUrls)
+          }
+          if(response.data.videoUrl && response.data.videoUrl!==""){
+            this.videoUrl = process.env.VUE_APP_BASE_API +response.data.videoUrl;
+          }
         })
       },
       rowEventUserAllocatedIndex({ row, rowIndex }) {
@@ -292,7 +315,8 @@
           resultPhotoUrl: null,
           resultVideoUrl: null,
           status: null,
-          allocateUserId: null
+          allocateUserId: null,
+          eventSummarize: null
         }
         this.resetForm('form')
       },
@@ -328,7 +352,19 @@
             return dict.label;
           }
         }
-      }
+      },
+      play() {
+        this.$refs.VueAliplayerV2.play();
+      },
+
+      pause() {
+        this.$refs.VueAliplayerV2.pause();
+      },
+
+      replay() {
+        this.$refs.VueAliplayerV2.replay();
+      },
+
 
     }
 
@@ -339,7 +375,6 @@
   .my_tag {
     width: 100%;
     color: black;
-
 
   }
 

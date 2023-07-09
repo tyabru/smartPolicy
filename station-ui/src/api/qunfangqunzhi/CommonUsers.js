@@ -26,6 +26,20 @@ export function addCommonUsers(data) {
   })
 }
 
+
+// 处理网格员申请
+export function uploadApplication(data,applicationId,flag) {
+  return request({
+    url: '/qf/commonUsers/handleApplication',
+    method: 'post',
+    data: data,
+    params:{
+      applicationId,
+      flag
+    }
+  })
+}
+
 // 修改普通用户信息
 export function updateCommonUsers(data) {
   return request({
@@ -35,6 +49,18 @@ export function updateCommonUsers(data) {
   })
 }
 
+// 用户状态修改
+export function changeCommonUserStatus(userId, status) {
+  const data = {
+    userId,
+    status
+  }
+  return request({
+    url: '/qf/commonUsers/changeStatus',
+    method: 'put',
+    data: data
+  })
+}
 // 删除普通用户信息
 export function delCommonUsers(userId) {
   return request({
