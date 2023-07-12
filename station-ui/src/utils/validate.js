@@ -81,3 +81,10 @@ export function isArray(arg) {
   }
   return Array.isArray(arg)
 }
+
+export function validPhoneNumber(phone) {
+  if(!phone || phone.length < 1) {
+    return false
+  }
+
+}

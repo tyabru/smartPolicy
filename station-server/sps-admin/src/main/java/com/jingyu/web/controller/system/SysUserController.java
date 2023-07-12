@@ -1,20 +1,18 @@
 package com.jingyu.web.controller.system;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
+
+import com.jingyu.common.core.domain.model.LoginUser;
+import lombok.val;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.jingyu.common.annotation.Log;
 import com.jingyu.common.core.controller.BaseController;
@@ -31,6 +29,8 @@ import com.jingyu.system.service.ISysDeptService;
 import com.jingyu.system.service.ISysPostService;
 import com.jingyu.system.service.ISysRoleService;
 import com.jingyu.system.service.ISysUserService;
+
+import static com.jingyu.common.constant.DeptConstants.POLICE_COMMUNITY_AREA;
 
 /**
  * 用户信息
@@ -247,5 +247,13 @@ public class SysUserController extends BaseController
     public AjaxResult deptTree(SysDept dept)
     {
         return success(deptService.selectDeptTreeList(dept));
+    }
+
+    @PreAuthorize("@ss.hasPermi('system:user:list')")
+    @GetMapping("/queryPcsPoliceUser")
+    public AjaxResult queryPoliceUserByDeptId(@RequestParam("deptId") Long deptId) {
+        SysUser sysUser = new SysUser();
+        sysUser.setDeptId(deptId);
+        return AjaxResult.success(userService.selectUserList(sysUser));
     }
 }

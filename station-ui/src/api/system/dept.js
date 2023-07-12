@@ -50,3 +50,19 @@ export function delDept(deptId) {
     method: 'delete'
   })
 }
+
+export function selectCommunityByDeptId() {
+  return request({
+    url: `/system/dept/selectCommunityByDeptId`,
+    method: 'get'
+  })
+}
+
+/** 根据部门id和上级部门类型确定一个上级部门
+ * */
+export function queryBelongDeptByTypeAndId(deptId, deptType) {
+  return request({
+    url: `/system/dept/${deptId}/parent/${deptType}`,
+    method: 'get'
+  })
+}

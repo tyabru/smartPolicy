@@ -5,7 +5,9 @@ export default {
         needPaging: true,
         axiosRequest: null
       },
+      loading: false,
       total: 0,
+      showSearch: true,
       pageSizes: [10, 20, 30, 40, 50, 100],
       tableData: [],
       queryParams: {
@@ -20,6 +22,7 @@ export default {
       handleResponse = () => {}) {
       this.axiosRequest = requestApi;
       this.handleResponse = handleResponse;
+      this.changeLoading(true)
       requestApi(this.queryParams).then((response) => {
         if (response.rows || response.data) {
           this.setTableData(response.rows || response.data)
@@ -30,6 +33,8 @@ export default {
         if (typeof handleResponse === 'function') {
           handleResponse(response)
         }
+      }).finally(() => {
+        this.changeLoading(false)
       })
     },
     setTableData(tableData) {
@@ -37,7 +42,23 @@ export default {
       this.total = this.tableData.length
     },
     queryChanged() {
-      this.queryTableData(this.axiosRequest, this.handleResponse);
+      if(!this.axiosRequest || !this.handleResponse) {
+        return
+      }
+      this.initTableData(this.axiosRequest, this.handleResponse);
+    },
+    changeLoading(loading) {
+      this.loading =
+        typeof loading !== 'undefined' && loading !== null?
+          loading:
+          !this.loading;
+    },
+    confirm(massage, callback = () => {}, cancelCallback = () => {}) {
+      this.$confirm(massage, "操作确认", {}).then(r => {
+        callback();
+      }).catch(() => {
+        cancelCallback();
+      })
     }
 
   }

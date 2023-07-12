@@ -21,6 +21,10 @@
             <groupId>com.jingyu</groupId>
             <artifactId>sps-common</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

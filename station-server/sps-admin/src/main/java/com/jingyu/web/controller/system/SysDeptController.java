@@ -1,6 +1,9 @@
 package com.jingyu.web.controller.system;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import com.jingyu.common.core.domain.model.LoginUser;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -66,6 +69,27 @@ public class SysDeptController extends BaseController
     {
         deptService.checkDeptDataScope(deptId);
         return success(deptService.selectDeptById(deptId));
+    }
+
+    @PreAuthorize("@ss.hasPermi('system:dept:query')")
+    @GetMapping(value = "/selectCommunityByDeptId")
+    public AjaxResult selectCommunityByDeptId()
+    {
+        LoginUser loginUser = getLoginUser();
+        Long deptId = loginUser.getDeptId();
+        if(deptId == null) {
+            return AjaxResult.success(new ArrayList<>());
+        }
+        return AjaxResult.success(deptService.selectCommunityByDeptId(deptId));
+    }
+
+    @GetMapping("{deptId}/parent/{deptType}")
+    public AjaxResult queryBelongDeptByTypeAndId(@PathVariable("deptId") Long deptId,
+                                                 @PathVariable("deptType") String deptType) {
+        if(StringUtils.isEmpty(deptType) || deptId == null) {
+            return AjaxResult.success(null);
+        }
+        return AjaxResult.success(deptService.queryBelongDeptByTypeAndId(deptId, deptType));
     }
 
     /**

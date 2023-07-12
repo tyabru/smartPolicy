@@ -57,4 +57,17 @@ public interface ISysDictDataService
      * @return 结果
      */
     public int updateDictData(SysDictData dictData);
+
+    /**
+     * 根据条件分页查询字典数据
+     * 如果没有【dictType】这个字典则抛出异常
+     * 如果没有【key】这个字典键值对则添加进数据库{ value: key, label: label}
+     *
+     * @param dictType 字典类型
+     * @param key 字典的键值
+     * @param defaultTypeLabel 如果字典不存在时，新增字典时用到的字典名称
+     * @param label 如果字典不存在时，新增用到的label
+     * @return 字典数据集合信息
+     */
+    void checkDictIsExists(String dictType, String key, String defaultTypeLabel, String label);
 }

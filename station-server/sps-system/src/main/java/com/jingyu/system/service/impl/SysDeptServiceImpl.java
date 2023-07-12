@@ -3,7 +3,12 @@ package com.jingyu.system.service.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import org.apache.commons.collections4.ListUtils;
+import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jingyu.common.annotation.DataScope;
@@ -20,6 +25,9 @@ import com.jingyu.common.utils.spring.SpringUtils;
 import com.jingyu.system.mapper.SysDeptMapper;
 import com.jingyu.system.mapper.SysRoleMapper;
 import com.jingyu.system.service.ISysDeptService;
+import org.springframework.transaction.annotation.Transactional;
+
+import static com.jingyu.common.constant.DeptConstants.*;
 
 /**
  * 部门管理 服务实现
@@ -112,6 +120,31 @@ public class SysDeptServiceImpl implements ISysDeptService
     {
         SysRole role = roleMapper.selectRoleById(roleId);
         return deptMapper.selectDeptListByRoleId(roleId, role.isDeptCheckStrictly());
+    }
+
+    @Override
+    public List<TreeSelect> selectDeptTreeByDeptId(Long deptId,
+                                                Function<List<SysDept>, List<SysDept>> filter) {
+        SysDept dept = deptMapper.selectDeptById(deptId);
+        if(dept == null) {
+            return new ArrayList<>();
+        }
+        List<SysDept> deptList = deptMapper.selectDeptTreeByAncestors(dept.getAncestors()+","+deptId);
+        deptList.add(dept);
+        if(filter != null) {
+            deptList = filter.apply(deptList);
+        }
+        return buildDeptTreeSelect(deptList);
+    }
+
+    @Override
+    public List<TreeSelect> selectCommunityByDeptId(Long deptId) {
+        return selectDeptTreeByDeptId(deptId, itemList -> itemList.stream().filter(dept -> {
+            String deptType = dept.getDeptType();
+            return StringUtils.isNotEmpty(deptType)
+                    && !deptType.startsWith(POLICE_CASE_HANDLER)
+                    && !deptType.startsWith(POLICE_COMMAND);
+        }).collect(Collectors.toList()));
     }
 
     /**
@@ -228,6 +261,7 @@ public class SysDeptServiceImpl implements ISysDeptService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateDept(SysDept dept)
     {
         SysDept newParentDept = deptMapper.selectDeptById(dept.getParentId());
@@ -334,5 +368,15 @@ public class SysDeptServiceImpl implements ISysDeptService
     private boolean hasChild(List<SysDept> list, SysDept t)
     {
         return getChildList(list, t).size() > 0;
+    }
+
+    @Override
+    public SysDept queryBelongDeptByTypeAndId(Long deptId, String deptType) {
+        return deptMapper.queryBelongDeptByTypeAndId(deptId, deptType);
+    }
+
+    @Override
+    public String queryChildIdsByTypeAndDeptId(Long deptId, String deptType) {
+        return deptMapper.queryChildIdsByTypeAndDeptId(deptId, deptType);
     }
 }

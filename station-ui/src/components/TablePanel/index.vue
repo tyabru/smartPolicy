@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-loading="loading">
     <el-row class="panel">
       <search-form-bar :class="{ 'search-bar': true, 'hidden': !showSearch }">
         <slot name="search-form"></slot>
@@ -22,6 +22,11 @@
 <script>
   export default {
     props: {
+      loading: {
+        default() {
+          return false
+        }
+      },
       showSearch: {
         default() {
           return true

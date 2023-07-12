@@ -21,6 +21,8 @@ import DictTag from '@/components/DictTag'
 import SearchBar from '@/components/SearchBar/index.vue'
 
 import CardHeader from '@/components/CardHeader/index.vue'
+
+import SeCommunity from '@/components/CustomSelect/SeCommunity.vue'
 /** 全局的公用组件在这里导入
  *
  * */
@@ -36,6 +38,7 @@ const install = function(Vue) {
   Vue.component('ImagePreview', ImagePreview)
   Vue.component('SearchFormBar', SearchBar);
   Vue.component('CardHeader', CardHeader)
+  Vue.component('SeCommunity', SeCommunity)
 
   // 全局方法挂载
   Vue.prototype.getDicts = getDicts
