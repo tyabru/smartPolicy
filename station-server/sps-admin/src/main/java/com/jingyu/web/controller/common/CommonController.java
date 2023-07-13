@@ -73,12 +73,16 @@ public class CommonController
      * 通用上传请求（单个）
      */
     @PostMapping("/upload")
-    public AjaxResult uploadFile(MultipartFile file) throws Exception
+    public AjaxResult uploadFile(HttpServletRequest request, MultipartFile file) throws Exception
     {
         try
         {
+            String header = request.getHeader("file-dir-custom");
             // 上传文件路径
             String filePath = RuoYiConfig.getUploadPath();
+            if(StringUtils.isNotEmpty(header)) {
+                filePath = RuoYiConfig.getCustomPath(filePath);
+            }
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
             String url = serverConfig.getUrl() + fileName;
@@ -99,12 +103,18 @@ public class CommonController
      * 通用上传请求（多个）
      */
     @PostMapping("/uploads")
-    public AjaxResult uploadFiles(List<MultipartFile> files) throws Exception
+    public AjaxResult uploadFiles(HttpServletRequest request, List<MultipartFile> files) throws Exception
     {
         try
         {
+            // 此header应该是一个文件夹的名称
+            String header = request.getHeader("file-dir-custom");
             // 上传文件路径
             String filePath = RuoYiConfig.getUploadPath();
+            if(StringUtils.isNotEmpty(header)) {
+                filePath = RuoYiConfig.getCustomPath(filePath);
+            }
+
             List<String> urls = new ArrayList<String>();
             List<String> fileNames = new ArrayList<String>();
             List<String> newFileNames = new ArrayList<String>();

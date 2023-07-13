@@ -79,8 +79,8 @@ public class CommunityServiceImpl implements ICommunityService
         if(i > 0) {
             String ids = community.getDescIds();
             if(StringUtils.isNotEmpty(ids)) {
-                int[] idArr = Arrays.stream(ids.split(",")).mapToInt(Integer::parseInt).toArray();
-                for (int id : idArr) {
+                long[] idArr = Arrays.stream(ids.split(",")).mapToLong(Long::parseLong).toArray();
+                for (long id : idArr) {
                     descService.updateCommunityId(id, community.getId());
                 }
             }

@@ -59,7 +59,12 @@ export default {
       }).catch(() => {
         cancelCallback();
       })
-    }
+    },
+    resetQuery() {
+      this.queryParams.pageNum = 1
+      this.resetForm("queryForm");
+      this.queryChanged();
+    },
 
   }
 }

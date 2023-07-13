@@ -1,7 +1,7 @@
 <template>
   <table-panel :show-search="showSearch" :loading="loading">
     <template #search-form>
-      <el-form size="mini" :model="queryParams" label-width="100px" inline>
+      <el-form size="mini" ref="queryForm" :model="queryParams" label-width="100px" inline>
         <el-row>
           <el-col :span="6">
             <el-form-item label="派出所名称">
@@ -37,7 +37,7 @@
     </template>
     <template #search-form-btn>
       <el-button size="mini" type="primary" @click="queryChanged">查询</el-button>
-      <el-button size="mini" type="info">重置</el-button>
+      <el-button size="mini" type="info" @click="resetQuery">重置</el-button>
     </template>
     <template #btn>
       <el-button size="mini" type="primary" @click="goToEditPage">新增</el-button>
@@ -78,7 +78,6 @@ import tableListMixins from '@/mixins/tableListMixins.js'
     mixins: [ tableListMixins ],
     data() {
       return {
-        showSearch: true
       }
     },
     created() {

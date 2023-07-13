@@ -20,7 +20,7 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="区域类型" prop="type">
+            <el-form-item label="单位类型" prop="type">
               <el-select v-model="form.type" clearable class="width-100Rate">
                 <el-option :value="0" label="小区" />
                 <el-option :value="1" label="村" />
@@ -28,63 +28,65 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="防范措施" prop="preventiveMeasures">
-              <el-select v-model="form.preventiveMeasures" class="width-100Rate">
-                <el-option :value="0" label="人防" />
-                <el-option :value="1" label="物防" />
-                <el-option :value="2" label="技防" />
+            <el-form-item label="类型细分" prop="type">
+              <el-select v-model="form.type" clearable class="width-100Rate">
+                <el-option :value="0" label="小区" />
+                <el-option :value="1" label="村" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="所属派出所" prop="pcsName">
-              <el-input v-model="form.detail.pcsName" readonly/>
+              <el-input v-model="form.pcsName" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="小区（村）名称" prop="name">
-              <el-input v-model="form.name" />
+            <el-form-item label="单位名称" prop="companyName">
+              <el-input v-model="form.companyName" placeholder="请输入单位名称" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="小区（村）编码" prop="code">
-              <el-input v-model="form.code" />
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="24" :lg="12">
-            <el-form-item label="小区（村）地址" prop="address">
-              <el-input v-model="form.address" />
+            <el-form-item label="单位编码" prop="address">
+              <el-input v-model="form.companyCode" placeholder="请输入单位编码" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="是否为安全小区" prop="isSafeArea">
-              <el-select  v-model="form.isSafeArea"  class="width-100Rate">
-                <el-option :value="0" label="是" />
-                <el-option :value="1" label="否" />
-              </el-select>
+            <el-form-item label="联系电话" prop="phone">
+              <el-input v-model="form.phone" placeholder="请输入联系电话" />
+            </el-form-item>
+          </el-col>
+
+          <el-col :xs="24" :sm="24" :lg="6">
+            <el-form-item label="注册地址" prop="address">
+              <el-input v-model="form.address" placeholder="请输入注册地址" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="命名机关"
-                          :rules="[{required: form.isSafeArea ===0,
-                            message: '当小区为安全小区时，该字段必填' }]"
-                          prop="namingOrgan">
-              <el-input v-model="form.namingOrgan" />
+            <el-form-item label="营业执照号" prop="tradeCode"
+                :rules="[{required: !form.organizationCode && !form.creditCode,
+                  message: '执照号、机构代码、信用代码三选一' }]">
+              <el-input v-model="form.tradeCode" placeholder="请输入营业执照号" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="命名时间" :rules="[{required: form.isSafeArea ===0,
-                            message: '当小区为安全小区时，该字段必填' }]" prop="namingTime">
-              <el-date-picker v-model="form.namingTime" type="date" class="width-100Rate"
-                placeholder="选择日期">
-              </el-date-picker>
+            <el-form-item label="组织机构代码" prop="organizationCode"
+                :rules="[{required: !form.tradeCode && !form.creditCode,
+                  message: '执照号、机构代码、信用代码三选一' }]">
+              <el-input v-model="form.organizationCode" placeholder="请输入组织机构代码" />
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="24" :lg="6">
+            <el-form-item label="统一信用代码" prop="creditCode"
+                :rules="[{required: !form.tradeCode && !form.organizationCode,
+                  message: '执照号、机构代码、信用代码三选一' }]">
+              <el-input v-model="form.creditCode" placeholder="请输入统一信用代码" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="负责民警" prop="police">
-              <el-select v-model="form.detail.police"
+              <el-select v-model="form.police"
                          @change="policeChange"
                          class="width-100Rate">
                 <el-option v-for="item in policeList"
@@ -93,56 +95,69 @@
               </el-select>
             </el-form-item>
           </el-col>
+
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="总面积" prop="fullArea">
-              <el-input-number :min="0" controls-position="right" class="width-100Rate"
-                               v-model="form.detail.fullArea"/>
+            <el-form-item label="负责人姓名" prop="headMaster">
+              <el-input v-model="form.headMaster" placeholder="请输入负责人姓名" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="楼栋数" prop="buildingCount">
-              <el-input-number :min="0" controls-position="right"
-                               v-model="form.detail.buildingCount" class="width-100Rate" />
+            <el-form-item label="负责人联系方式" prop="contactPhone"
+              :rules="[{required: form.headMaster && form.headMaster.length > 0,
+                message: '在填写负责人后，联系电话为必填项。'}]">
+              <el-input v-model="form.contactPhone" placeholder="请输入负责人联系方式" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="负责人姓名" prop="police">
-              <el-input v-model="form.detail.headMaster" />
+            <el-form-item label="负责人证件类型" prop="identityCode"
+              :rules="[{required: form.headMaster && form.headMaster.length > 0,
+                message: '在填写负责人后，证件类型为必填项。'}]">
+              <el-input v-model="form.identityCode" placeholder="请输入负责人证件号码" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="负责人联系电话" prop="police">
-              <el-input v-model="form.detail.masterPhone" />
+            <el-form-item label="负责人证件号码" prop="identityCode"
+              :rules="[{required: form.headMaster && form.headMaster.length > 0,
+                message: '在填写负责人后，证件号码为必填项。'}]">
+              <el-input v-model="form.identityCode" placeholder="请输入负责人证件号码" />
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="24" :lg="6">
+            <el-form-item label="创建日期" prop="registrationTime">
+              <el-date-picker clearable style="width: 100%"
+                              v-model="form.registrationTime"
+                              type="date"
+                              value-format="yyyy-MM-dd"
+                              placeholder="请选择创建日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="24" :lg="6">
+            <el-form-item label="电子邮箱" prop="email">
+              <el-input v-model="form.email" placeholder="请输入电子邮箱" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="经度" prop="longitude">
               <el-input-number :min="0" controls-position="right" class="width-100Rate"
-                               v-model="form.detail.longitude" />
+                               v-model="form.longitude" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="纬度" prop="latitude">
               <el-input-number :min="0" controls-position="right" class="width-100Rate"
-                               v-model="form.detail.latitude" />
+                               v-model="form.latitude" />
             </el-form-item>
           </el-col>
         </el-row>
       </el-row>
       <el-row class="">
-
-        <div class="split-container" style="min-height: 450px">
-          <div class="form-panel-item basic-info left-aside">
-            <h4 class="title-h4">小区（村）附件上传</h4>
-            <upload-group ref="uploadTool" group-type="community" group-type-label="小区（村）相关文件"
-                    :default-list="form.fileList" @file-changed="fileChanged"></upload-group>
-          </div>
-          <div class="form-panel-item basic-info main-content">
-            <h4 class="title-h4">地图划分</h4>
-          </div>
+        <div class="form-panel-item basic-info">
+          <h4 class="title-h4">单位附件上传</h4>
+          <upload-group ref="uploadTool" group-type="company" group-type-label="单位信息相关文件"
+                        :default-list="form.fileList" @file-changed="fileChanged"></upload-group>
         </div>
       </el-row>
-
       <el-row class="footer" style="text-align: right">
         <el-button type="primary" @click="submitForm(true)">保存</el-button>
         <el-button type="primary" @click="submitForm(false)">保存并关闭</el-button>
@@ -154,11 +169,10 @@
 <script>
 import { Decrypt } from '@/utils/Aescrypt'
 import UploadGroup from '@/components/UploadGroup/index.vue'
-import { deleteByFileId, getDescListByVillageId, uploadFileDesc } from '@/api/community/communityFile'
-import { addCommunity, getCommunity, updateCommunity } from '@/api/community/community'
+import { deleteByFileId, getDescListByCompanyId, uploadFileDesc } from '@/api/community/companyFile.js'
+import { addCompany, getCompany, updateCompany } from '@/api/community/company'
 import { queryBelongDeptByTypeAndId, selectCommunityByDeptId } from '@/api/system/dept'
 import { queryPcsPoliceUser } from '@/api/system/user'
-import { update } from 'script-ext-html-webpack-plugin/lib/elements'
 export default {
   name: 'edit-form',
   components: { UploadGroup },
@@ -166,7 +180,7 @@ export default {
     return {
       form: {
         id: null,
-        detail: {},
+        companyCode: '1111111111111111111111',
         fileList: []
       },
       /** 级联选择器选择的值 */
@@ -175,12 +189,7 @@ export default {
       communityList: [],
       policeList: [],
       rules: {
-        community: [ { required: true, message: '所属社区为必填项，不能为空！', trigger: 'blur'} ],
-        type: [ { required: true, message: '区域类型为必填项，不能为空！'} ],
-        name: [ { required: true, message: '小区地址为必填项，不能为空！'} ],
-        code: [ { required: true, message: '小区编码为必填项，不能为空！'},
-          { min: 21, max: 21, message: '小区编码长度为21为长度的编码。'}],
-        preventiveMeasures: [ { required: true, message: '防范措施为必填项，不能为空！'} ],
+        communityId: [ { required: true, message: '所属社区为必填项，不能为空！', trigger: 'blur'} ],
       }
     }
   },
@@ -212,16 +221,16 @@ export default {
       this.loadCommunityList();
     },
     getFormById(id) {
-      getCommunity(id).then(response => {
+      getCompany(id).then(response => {
         if(response.code === 200 && response.data) {
           this.form = {...response.data}
-          this.form.detail.police = parseInt(this.form.detail.police)
+          this.form.police = parseInt(this.form.police)
           this.parseCommunityValue(this.form.communityObj)
         } else {
           this.$message.error("获取表单数据失败！")
         }
       })
-      getDescListByVillageId(id).then(response => {
+      getDescListByCompanyId(id).then(response => {
         if(response.code === 200 && response.data) {
           this.form.fileList = response.data
         } else {
@@ -236,7 +245,7 @@ export default {
           this.communityList = response.data;
           if(this.communityList.length === 1
             && this.communityList[0].deptType === communityType) {
-            this.form.community = this.communityList[0].deptId
+            this.form.communityId = this.communityList[0].deptId
           }
         }
       })
@@ -250,8 +259,8 @@ export default {
       } else {
         this.formLoad = true
       }
-      if(this.form.detail.longitude && this.form.detail.latitude) {
-        this.form.detail.centerPoint = this.form.detail.longitude+','+this.form.detail.latitude;
+      if(this.form.longitude && this.form.latitude) {
+        this.form.centerPoint = this.form.longitude+','+this.form.latitude;
       }
       const isUpdate = this.form.id && this.form.id != null;
       this.$refs['editForm'].validate(async validate => {
@@ -265,9 +274,9 @@ export default {
               this.form.descIds = ids.join(',');
               let response;
               if(isUpdate) {
-                response = await updateCommunity(this.form)
+                response = await updateCompany(this.form)
               } else {
-                response = await addCommunity(this.form)
+                response = await addCompany(this.form)
               }
               if(response && response.code === 200) {
                 this.$message.success("保存成功");
@@ -352,34 +361,31 @@ export default {
       return list
     },
     communityChange(value) {
-      this.form.community = value[value.length -1]
-      queryBelongDeptByTypeAndId(this.form.community, '101').then(response => {
+      this.form.communityId = value[value.length -1]
+      queryBelongDeptByTypeAndId(this.form.communityId, '101').then(response => {
         if(response.code === 200 && response.data) {
-          if(!this.form.detail) {
-            this.form.detail = {}
-          }
-          this.form.detail.pcsId = response.data.deptId;
-          this.form.detail.pcsName = response.data.deptName;
+          this.form.pcsId = response.data.deptId;
+          this.form.pcsName = response.data.deptName;
           this.queryPoliceById();
         }
       });
     },
     queryPoliceById() {
-      if(!this.form.detail.pcsId) {
+      if(!this.form.pcsId) {
         return
       }
-      queryPcsPoliceUser(this.form.detail.pcsId).then(response => {
+      queryPcsPoliceUser(this.form.pcsId).then(response => {
         if(response.code === 200 && response.data) {
           this.policeList = response.data
-          this.policeChange(this.form.detail.police)
+          this.policeChange(this.form.police)
         }
       })
     },
     policeChange(item) {
       const filter =this.policeList.filter(aa => aa.userId === item);
       if(filter && filter.length > 0) {
-        this.form.detail.policeName = filter[0].nickName;
-        this.form.detail.policePhone = filter[0].phonenumber;
+        this.form.policeName = filter[0].nickName;
+        this.form.policePhone = filter[0].phonenumber;
       }
     },
     clearFormData() {

@@ -57,7 +57,7 @@ public interface CommunityDescMapper {
      */
     public int deleteSqCommunityDescByIds(Long[] ids);
 
-    void updateCommunityId(@Param("id") int id,@Param("communityId") Long communityId);
+    void updateCommunityId(@Param("id") long id,@Param("communityId") Long communityId);
 
     void deleteByCommunityId(Long id);
 }

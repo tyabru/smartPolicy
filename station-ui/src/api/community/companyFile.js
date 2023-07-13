@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function uploadFileDesc(data) {
   return request({
-    url: '/community/desc/uploadFile',
+    url: '/company/desc/uploadFile',
     method: 'post',
     params: { repeat: true },
     data: data
@@ -11,7 +11,7 @@ export function uploadFileDesc(data) {
 
 export function deleteByFileId(fileId, onlyNotDefined = 0) {
   return request({
-    url: '/community/desc/'+fileId,
+    url: '/company/desc/'+fileId,
     headers: {
       'only-not-defined': onlyNotDefined
     },
@@ -19,16 +19,9 @@ export function deleteByFileId(fileId, onlyNotDefined = 0) {
   })
 }
 
-export function getDescListByVillageId(villageId) {
+export function getDescListByCompanyId(companyId) {
   return request({
-    url: `/community/desc/${villageId}/list`,
-    method: 'get'
-  })
-}
-
-export function getDescListByCompanyId(villageId) {
-  return request({
-    url: `/community/desc/${villageId}/list`,
+    url: `/company/desc/${companyId}/list`,
     method: 'get'
   })
 }

@@ -56,7 +56,7 @@ public interface ICommunityDescService {
      */
     public int deleteCommunityDescById(Long id, boolean onlyNotDefined);
 
-    void updateCommunityId(int id, Long communityId);
+    void updateCommunityId(long id, Long communityId);
 
     void deleteByCommunityId(Long id);
 }

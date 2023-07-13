@@ -71,8 +71,7 @@ public class CommunityDescServiceImpl implements ICommunityDescService {
             if(file == null || file.isEmpty()) {
                 throw new BaseException("上传文件为空！");
             }
-            FileUploadUtils.assertAllowed(file, null);
-            fileUrl = FileUploadUtils.upload(file);
+            fileUrl = FileUploadUtils.upload(RuoYiConfig.getCustomPath("community"), file);
             communityDesc.setFileUrl(fileUrl);
             dictDataService.checkDictIsExists(
                     group_type_dict_key,
@@ -110,8 +109,7 @@ public class CommunityDescServiceImpl implements ICommunityDescService {
             if(file == null || file.isEmpty()) {
                 throw new BaseException("上传文件为空！");
             }
-            FileUploadUtils.assertAllowed(file, null);
-            fileUrl = FileUploadUtils.upload(file);
+            fileUrl = FileUploadUtils.upload(RuoYiConfig.getCustomPath("community"), file);
             communityDesc.setFileUrl(fileUrl);
             dictDataService.checkDictIsExists(
                     group_type_dict_key,
@@ -159,7 +157,7 @@ public class CommunityDescServiceImpl implements ICommunityDescService {
     }
 
     @Override
-    public void updateCommunityId(int id, Long communityId) {
+    public void updateCommunityId(long id, Long communityId) {
         communityDescMapper.updateCommunityId(id, communityId);
     }
 
