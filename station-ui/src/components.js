@@ -45,7 +45,7 @@ const install = function(Vue) {
   Vue.component('SeCommunity', SeCommunity)
   /* 单位下拉选择框 */
   Vue.component('SeCompany', SeCompany)
-  /* 社区部门下拉选择框 名字起的太相似了 */
+  /* 社区部门下拉选择框  */
   Vue.component('SeCommunityDept', SeCommunityDept)
 
   // 全局方法挂载
