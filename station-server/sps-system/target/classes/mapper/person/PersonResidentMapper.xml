@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.person.mapper.PersonResidentMapper">
+    
+    <resultMap type="PersonResident" id="PersonResidentResult">
+        <result property="id"    column="id"    />
+        <result property="bm"    column="bm"    />
+        <result property="xqId"    column="xq_id"    />
+        <result property="name"    column="name"    />
+        <result property="certNo"    column="cert_no"    />
+        <result property="phone"    column="phone"    />
+        <result property="address"    column="address"    />
+        <result property="metaAddrId"    column="meta_addr_id"    />
+        <result property="identity"    column="identity"    />
+        <result property="nativePlace"    column="native_place"    />
+        <result property="livingDate"    column="living_date"    />
+        <result property="faceImgUrl"    column="face_img_url"    />
+        <result property="features"    column="features"    />
+        <result property="company"    column="company"    />
+        <result property="career"    column="career"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="isImportant"    column="is_important"    />
+        <result property="attentionLevel"    column="attention_level"    />
+        <result property="sourcePlatform"    column="source_platform"    />
+    </resultMap>
+
+    <sql id="selectPersonResidentVo">
+        select id, bm, xq_id, name, cert_no, phone, address, meta_addr_id, identity, native_place, living_date, face_img_url, features, company, career, create_by, create_time, update_time, update_by, is_important, attention_level, source_platform from sq_person_resident
+    </sql>
+
+    <select id="selectPersonResidentList" parameterType="PersonResident" resultMap="PersonResidentResult">
+        <include refid="selectPersonResidentVo"/>
+        <where>  
+            <if test="bm != null  and bm != ''"> and bm = #{bm}</if>
+            <if test="xqId != null "> and xq_id = #{xqId}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="certNo != null  and certNo != ''"> and cert_no = #{certNo}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="metaAddrId != null  and metaAddrId != ''"> and meta_addr_id = #{metaAddrId}</if>
+            <if test="identity != null "> and identity = #{identity}</if>
+            <if test="nativePlace != null  and nativePlace != ''"> and native_place = #{nativePlace}</if>
+            <if test="livingDate != null "> and living_date = #{livingDate}</if>
+            <if test="faceImgUrl != null  and faceImgUrl != ''"> and face_img_url = #{faceImgUrl}</if>
+            <if test="features != null  and features != ''"> and features = #{features}</if>
+            <if test="company != null  and company != ''"> and company = #{company}</if>
+            <if test="career != null  and career != ''"> and career = #{career}</if>
+            <if test="isImportant != null "> and is_important = #{isImportant}</if>
+            <if test="attentionLevel != null  and attentionLevel != ''"> and attention_level = #{attentionLevel}</if>
+            <if test="sourcePlatform != null  and sourcePlatform != ''"> and source_platform = #{sourcePlatform}</if>
+        </where>
+    </select>
+    
+    <select id="selectPersonResidentById" parameterType="Long" resultMap="PersonResidentResult">
+        <include refid="selectPersonResidentVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPersonResident" parameterType="PersonResident">
+        insert into sq_person_resident
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="bm != null and bm != ''">bm,</if>
+            <if test="xqId != null">xq_id,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="certNo != null and certNo != ''">cert_no,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="metaAddrId != null and metaAddrId != ''">meta_addr_id,</if>
+            <if test="identity != null">identity,</if>
+            <if test="nativePlace != null">native_place,</if>
+            <if test="livingDate != null">living_date,</if>
+            <if test="faceImgUrl != null">face_img_url,</if>
+            <if test="features != null">features,</if>
+            <if test="company != null">company,</if>
+            <if test="career != null">career,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="isImportant != null">is_important,</if>
+            <if test="attentionLevel != null">attention_level,</if>
+            <if test="sourcePlatform != null">source_platform,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="bm != null and bm != ''">#{bm},</if>
+            <if test="xqId != null">#{xqId},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="certNo != null and certNo != ''">#{certNo},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="metaAddrId != null and metaAddrId != ''">#{metaAddrId},</if>
+            <if test="identity != null">#{identity},</if>
+            <if test="nativePlace != null">#{nativePlace},</if>
+            <if test="livingDate != null">#{livingDate},</if>
+            <if test="faceImgUrl != null">#{faceImgUrl},</if>
+            <if test="features != null">#{features},</if>
+            <if test="company != null">#{company},</if>
+            <if test="career != null">#{career},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="isImportant != null">#{isImportant},</if>
+            <if test="attentionLevel != null">#{attentionLevel},</if>
+            <if test="sourcePlatform != null">#{sourcePlatform},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePersonResident" parameterType="PersonResident">
+        update sq_person_resident
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bm != null and bm != ''">bm = #{bm},</if>
+            <if test="xqId != null">xq_id = #{xqId},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="certNo != null and certNo != ''">cert_no = #{certNo},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="metaAddrId != null and metaAddrId != ''">meta_addr_id = #{metaAddrId},</if>
+            <if test="identity != null">identity = #{identity},</if>
+            <if test="nativePlace != null">native_place = #{nativePlace},</if>
+            <if test="livingDate != null">living_date = #{livingDate},</if>
+            <if test="faceImgUrl != null">face_img_url = #{faceImgUrl},</if>
+            <if test="features != null">features = #{features},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="career != null">career = #{career},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="isImportant != null">is_important = #{isImportant},</if>
+            <if test="attentionLevel != null">attention_level = #{attentionLevel},</if>
+            <if test="sourcePlatform != null">source_platform = #{sourcePlatform},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePersonResidentById" parameterType="Long">
+        delete from sq_person_resident where id = #{id}
+    </delete>
+
+    <delete id="deletePersonResidentByIds" parameterType="String">
+        delete from sq_person_resident where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

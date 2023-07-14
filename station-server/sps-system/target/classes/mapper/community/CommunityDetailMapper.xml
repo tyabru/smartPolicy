@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.community.mapper.CommunityDetailMapper">
+    
+    <resultMap type="CommunityDetail" id="CommunityDetailResult">
+        <result property="id"    column="id"    />
+        <result property="communityId"    column="community_id"    />
+        <result property="villageId"    column="village_id"    />
+        <result property="villageCode"    column="village_code"    />
+        <result property="fullArea"    column="full_area"    />
+        <result property="centerPoint"    column="center_point"    />
+        <result property="xqRegion"    column="xq_region"    />
+        <result property="buildingCount"    column="building_count"    />
+        <result property="person"    column="person"    />
+        <result property="resident"    column="resident"    />
+        <result property="important"    column="important"    />
+        <result property="headMaster"    column="head_master"    />
+        <result property="masterPhone"    column="master_phone"    />
+        <result property="police"    column="police"    />
+        <result property="policePhone"    column="police_phone"    />
+        <result property="policeName"    column="police_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateBy"    column="update_by"    />
+    </resultMap>
+
+    <sql id="selectCommunityDetailVo">
+        select id, community_id, village_id, village_code, full_area, center_point, xq_region, building_count, person, resident, important, head_master, master_phone, police, police_phone, police_name, create_time, update_time, create_by, update_by from sq_community_detail
+    </sql>
+
+    <select id="selectCommunityDetailList" parameterType="CommunityDetail" resultMap="CommunityDetailResult">
+        <include refid="selectCommunityDetailVo"/>
+        <where>  
+            <if test="communityId != null "> and community_id = #{communityId}</if>
+            <if test="villageId != null "> and village_id = #{villageId}</if>
+            <if test="villageCode != null  and villageCode != ''"> and village_code = #{villageCode}</if>
+            <if test="fullArea != null "> and full_area = #{fullArea}</if>
+            <if test="centerPoint != null  and centerPoint != ''"> and center_point = #{centerPoint}</if>
+            <if test="xqRegion != null  and xqRegion != ''"> and xq_region = #{xqRegion}</if>
+            <if test="buildingCount != null "> and building_count = #{buildingCount}</if>
+            <if test="person != null "> and person = #{person}</if>
+            <if test="resident != null "> and resident = #{resident}</if>
+            <if test="important != null "> and important = #{important}</if>
+            <if test="headMaster != null  and headMaster != ''"> and head_master = #{headMaster}</if>
+            <if test="masterPhone != null  and masterPhone != ''"> and master_phone = #{masterPhone}</if>
+            <if test="police != null  and police != ''"> and police = #{police}</if>
+            <if test="policePhone != null  and policePhone != ''"> and police_phone = #{policePhone}</if>
+            <if test="policeName != null  and policeName != ''"> and police_name like concat('%', #{policeName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectCommunityDetailById" parameterType="Long" resultMap="CommunityDetailResult">
+        <include refid="selectCommunityDetailVo"/>
+        where id = #{id}
+    </select>
+    <select id="selectByVillageId" resultMap="CommunityDetailResult">
+        <include refid="selectCommunityDetailVo"/>
+        where village_id = #{villageId} limit 1
+    </select>
+
+    <insert id="insertCommunityDetail" parameterType="CommunityDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into sq_community_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="communityId != null">community_id,</if>
+            <if test="villageId != null">village_id,</if>
+            <if test="villageCode != null">village_code,</if>
+            <if test="fullArea != null">full_area,</if>
+            <if test="centerPoint != null">center_point,</if>
+            <if test="xqRegion != null">xq_region,</if>
+            <if test="buildingCount != null">building_count,</if>
+            <if test="person != null">person,</if>
+            <if test="resident != null">resident,</if>
+            <if test="important != null">important,</if>
+            <if test="headMaster != null">head_master,</if>
+            <if test="masterPhone != null">master_phone,</if>
+            <if test="police != null">police,</if>
+            <if test="policePhone != null">police_phone,</if>
+            <if test="policeName != null">police_name,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateBy != null">update_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="communityId != null">#{communityId},</if>
+            <if test="villageId != null">#{villageId},</if>
+            <if test="villageCode != null">#{villageCode},</if>
+            <if test="fullArea != null">#{fullArea},</if>
+            <if test="centerPoint != null">#{centerPoint},</if>
+            <if test="xqRegion != null">#{xqRegion},</if>
+            <if test="buildingCount != null">#{buildingCount},</if>
+            <if test="person != null">#{person},</if>
+            <if test="resident != null">#{resident},</if>
+            <if test="important != null">#{important},</if>
+            <if test="headMaster != null">#{headMaster},</if>
+            <if test="masterPhone != null">#{masterPhone},</if>
+            <if test="police != null">#{police},</if>
+            <if test="policePhone != null">#{policePhone},</if>
+            <if test="policeName != null">#{policeName},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCommunityDetail" parameterType="CommunityDetail">
+        update sq_community_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="communityId != null">community_id = #{communityId},</if>
+            <if test="villageId != null">village_id = #{villageId},</if>
+            <if test="villageCode != null">village_code = #{villageCode},</if>
+            <if test="fullArea != null">full_area = #{fullArea},</if>
+            <if test="centerPoint != null">center_point = #{centerPoint},</if>
+            <if test="xqRegion != null">xq_region = #{xqRegion},</if>
+            <if test="buildingCount != null">building_count = #{buildingCount},</if>
+            <if test="person != null">person = #{person},</if>
+            <if test="resident != null">resident = #{resident},</if>
+            <if test="important != null">important = #{important},</if>
+            <if test="headMaster != null">head_master = #{headMaster},</if>
+            <if test="masterPhone != null">master_phone = #{masterPhone},</if>
+            <if test="police != null">police = #{police},</if>
+            <if test="policePhone != null">police_phone = #{policePhone},</if>
+            <if test="policeName != null">police_name = #{policeName},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityDetailById" parameterType="Long">
+        delete from sq_community_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityDetailByIds" parameterType="String">
+        delete from sq_community_detail where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="deleteByVillageId">
+        delete from sq_community_detail where village_id = #{id}
+    </delete>
+</mapper>
