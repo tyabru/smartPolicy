@@ -91,7 +91,7 @@ public class Company extends BaseEntity
     @Excel(name = "证件号码类型")
     private String identityType;
 
-    private String point;
+    private String centerPoint;
 
     private Long police;
 

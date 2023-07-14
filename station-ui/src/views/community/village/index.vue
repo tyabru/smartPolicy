@@ -4,13 +4,13 @@
       <el-form size="mini" ref="queryForm" :model="queryParams" label-width="100px" inline>
         <el-row>
           <el-col :span="6">
-            <el-form-item label="派出所名称">
-              <el-input v-model="queryParams.input" clearable></el-input>
+            <el-form-item label="社区" class="width-100Rate">
+              <se-community-dept v-model="queryParams.community" style="width: 193px" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
             <el-form-item label="小区名称">
-              <el-input v-model="queryParams.name" clearable></el-input>
+              <se-community v-model="queryParams.id" style="width: 193px" />
             </el-form-item>
           </el-col>
           <el-col :span="6">
@@ -29,7 +29,10 @@
           </el-col>
           <el-col :span="6">
             <el-form-item label="是否安全小区">
-              <el-input v-model="queryParams.isSafeArea" clearable></el-input>
+              <el-select  v-model="queryParams.isSafeArea"  class="width-100Rate">
+                <el-option :value="0" label="是" />
+                <el-option :value="1" label="否" />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -91,7 +94,7 @@ import tableListMixins from '@/mixins/tableListMixins.js'
           title = `修改[ ${row.name} ]信息`;
           params['sq_pk'] = Encrypt(JSON.stringify({id: row.id | 'unknown'}));
         }
-        this.$tab.openPage(title, '/community/page/info-edit', params);
+        this.$tab.openPage(title, '/community/village/info-edit', params);
       },
       deleteVillage(item) {
         const _that = this;

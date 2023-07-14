@@ -11,27 +11,14 @@
         <el-row>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="所属社区" prop="community">
-              <el-cascader v-model="community"
-                :options="sqList"
-                :props="{ expandTrigger: 'hover', value: 'id' }"
-                :show-all-levels="false"
-                @change="communityChange"
-                clearable class="width-100Rate"></el-cascader>
+              <se-community-dept ref="scdSelect" v-model="form.communityId" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="单位类型" prop="type">
               <el-select v-model="form.type" clearable class="width-100Rate">
-                <el-option :value="0" label="小区" />
-                <el-option :value="1" label="村" />
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="类型细分" prop="type">
-              <el-select v-model="form.type" clearable class="width-100Rate">
-                <el-option :value="0" label="小区" />
-                <el-option :value="1" label="村" />
+                <el-option v-for="item in dict.type['place_list']"
+                           :key="item.value" :value="item.value" :label="item.label" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -40,8 +27,16 @@
               <el-input v-model="form.pcsName" readonly/>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
+          <el-col :xs="24" :sm="24" :lg="6">
+            <el-form-item label="创建日期" prop="registrationTime">
+              <el-date-picker clearable style="width: 100%"
+                              v-model="form.registrationTime"
+                              type="date"
+                              value-format="yyyy-MM-dd"
+                              placeholder="请选择创建日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="单位名称" prop="companyName">
               <el-input v-model="form.companyName" placeholder="请输入单位名称" />
@@ -123,16 +118,6 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="创建日期" prop="registrationTime">
-              <el-date-picker clearable style="width: 100%"
-                              v-model="form.registrationTime"
-                              type="date"
-                              value-format="yyyy-MM-dd"
-                              placeholder="请选择创建日期">
-              </el-date-picker>
-            </el-form-item>
-          </el-col>
-          <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="电子邮箱" prop="email">
               <el-input v-model="form.email" placeholder="请输入电子邮箱" />
             </el-form-item>
@@ -175,6 +160,7 @@ import { queryBelongDeptByTypeAndId, selectCommunityByDeptId } from '@/api/syste
 import { queryPcsPoliceUser } from '@/api/system/user'
 export default {
   name: 'edit-form',
+  dicts: ['place_list'],
   components: { UploadGroup },
   data() {
     return {
@@ -183,22 +169,23 @@ export default {
         companyCode: '1111111111111111111111',
         fileList: []
       },
-      /** 级联选择器选择的值 */
-      community: [],
-      /** 社区可选择选项 */
-      communityList: [],
       policeList: [],
       rules: {
         communityId: [ { required: true, message: '所属社区为必填项，不能为空！', trigger: 'blur'} ],
       }
     }
   },
-  computed: {
-    sqList() {
-      if(!this.communityList || this.communityList.length < 1) {
-        return []
+  watch: {
+    'form.communityId'(newVal) {
+      if(newVal) {
+        this.communityChange(newVal)
       } else {
-        return this.filterCommunityList(this.communityList);
+        this.form.detail.pcsId = null;
+        this.form.detail.pcsName = null;
+        this.form.detail.police = null
+        this.form.detail.policeName = null
+        this.form.detail.policePhone = null
+        this.form.detail.policePhone = null
       }
     }
   },
@@ -217,15 +204,20 @@ export default {
         }
         this.getFormById(this.form.id);
       }
-      // 查询当前角色能看到的所有社区
-      this.loadCommunityList();
     },
     getFormById(id) {
       getCompany(id).then(response => {
         if(response.code === 200 && response.data) {
           this.form = {...response.data}
           this.form.police = parseInt(this.form.police)
-          this.parseCommunityValue(this.form.communityObj)
+          if(this.form.communityObj) {
+            this.$refs['scdSelect']?.querySearch(this.form.communityObj.deptName);
+          }
+          if(this.form.centerPoint && this.form.centerPoint.split(',').length > 1) {
+            const s = this.form.centerPoint.split(',')
+            this.form.longitude = s[0]
+            this.form.latitude = s[1]
+          }
         } else {
           this.$message.error("获取表单数据失败！")
         }
@@ -235,18 +227,6 @@ export default {
           this.form.fileList = response.data
         } else {
           this.$message.error("获取文件列表失败！")
-        }
-      })
-    },
-    loadCommunityList() {
-      const communityType = '1010201';
-      selectCommunityByDeptId().then(response => {
-        if(response.code === 200 && response.data) {
-          this.communityList = response.data;
-          if(this.communityList.length === 1
-            && this.communityList[0].deptType === communityType) {
-            this.form.communityId = this.communityList[0].deptId
-          }
         }
       })
     },
@@ -350,18 +330,7 @@ export default {
     closePage() {
       this.$tab.closePage()
     },
-    filterCommunityList(list) {
-      list.forEach(item => {
-        if(item.children && item.children.length > 0) {
-          item.children = this.filterCommunityList(item.children)
-        } else if( item.deptType !== '1010201'){
-          item.disabled = true
-        }
-      })
-      return list
-    },
     communityChange(value) {
-      this.form.communityId = value[value.length -1]
       queryBelongDeptByTypeAndId(this.form.communityId, '101').then(response => {
         if(response.code === 200 && response.data) {
           this.form.pcsId = response.data.deptId;
@@ -389,22 +358,17 @@ export default {
       }
     },
     clearFormData() {
-      this.form = {
-        id: null,
-        detail: {},
-        fileList: []
-      };
-      this.$refs['uploadTool'].clearFiles();
-    },
-    parseCommunityValue(obj) {
-      if(obj.ancestors) {
-        const arr =
-          obj.ancestors.replace('0,', '').split(',').map(item=>parseInt(item));
-        arr.push(obj.deptId);
-        this.community = arr
-        this.communityChange(arr)
+      if(this.form.id) {
+        this.loadFormData()
+      } else {
+        this.form = {
+          id: null,
+          detail: {},
+          fileList: []
+        };
+        this.$refs['uploadTool'].clearFiles();
       }
-    }
+    },
   }
 }
 </script>
@@ -427,7 +391,7 @@ export default {
     }
 
     .split-container {
-      --aside-width: 450px;
+      --aside-width: 550px;
     }
 
     .footer {

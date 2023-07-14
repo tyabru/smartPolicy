@@ -11,12 +11,7 @@
         <el-row>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="所属社区" prop="community">
-              <el-cascader v-model="community"
-                :options="sqList"
-                :props="{ expandTrigger: 'hover', value: 'id' }"
-                :show-all-levels="false"
-                @change="communityChange"
-                clearable class="width-100Rate"></el-cascader>
+              <se-community-dept ref="scdSelect" v-model="form.community" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
@@ -156,9 +151,8 @@ import { Decrypt } from '@/utils/Aescrypt'
 import UploadGroup from '@/components/UploadGroup/index.vue'
 import { deleteByFileId, getDescListByVillageId, uploadFileDesc } from '@/api/community/communityFile'
 import { addCommunity, getCommunity, updateCommunity } from '@/api/community/community'
-import { queryBelongDeptByTypeAndId, selectCommunityByDeptId } from '@/api/system/dept'
+import { queryBelongDeptByTypeAndId } from '@/api/system/dept'
 import { queryPcsPoliceUser } from '@/api/system/user'
-import { update } from 'script-ext-html-webpack-plugin/lib/elements'
 export default {
   name: 'edit-form',
   components: { UploadGroup },
@@ -169,10 +163,6 @@ export default {
         detail: {},
         fileList: []
       },
-      /** 级联选择器选择的值 */
-      community: [],
-      /** 社区可选择选项 */
-      communityList: [],
       policeList: [],
       rules: {
         community: [ { required: true, message: '所属社区为必填项，不能为空！', trigger: 'blur'} ],
@@ -184,12 +174,17 @@ export default {
       }
     }
   },
-  computed: {
-    sqList() {
-      if(!this.communityList || this.communityList.length < 1) {
-        return []
+  watch: {
+    'form.community'(newVal) {
+      if(newVal) {
+        this.communityChange(newVal)
       } else {
-        return this.filterCommunityList(this.communityList);
+        this.form.detail.pcsId = null;
+        this.form.detail.pcsName = null;
+        this.form.detail.police = null
+        this.form.detail.policeName = null
+        this.form.detail.policePhone = null
+        this.form.detail.policePhone = null
       }
     }
   },
@@ -208,15 +203,15 @@ export default {
         }
         this.getFormById(this.form.id);
       }
-      // 查询当前角色能看到的所有社区
-      this.loadCommunityList();
     },
     getFormById(id) {
       getCommunity(id).then(response => {
         if(response.code === 200 && response.data) {
           this.form = {...response.data}
           this.form.detail.police = parseInt(this.form.detail.police)
-          this.parseCommunityValue(this.form.communityObj)
+          if(this.form.communityObj) {
+            this.$refs['scdSelect']?.querySearch(this.form.communityObj.deptName);
+          }
         } else {
           this.$message.error("获取表单数据失败！")
         }
@@ -226,18 +221,6 @@ export default {
           this.form.fileList = response.data
         } else {
           this.$message.error("获取文件列表失败！")
-        }
-      })
-    },
-    loadCommunityList() {
-      const communityType = '1010201';
-      selectCommunityByDeptId().then(response => {
-        if(response.code === 200 && response.data) {
-          this.communityList = response.data;
-          if(this.communityList.length === 1
-            && this.communityList[0].deptType === communityType) {
-            this.form.community = this.communityList[0].deptId
-          }
         }
       })
     },
@@ -251,7 +234,7 @@ export default {
         this.formLoad = true
       }
       if(this.form.detail.longitude && this.form.detail.latitude) {
-        this.form.detail.centerPoint = this.form.detail.longitude+','+this.form.detail.latitude;
+        this.form.detail.point = this.form.detail.longitude+','+this.form.detail.latitude;
       }
       const isUpdate = this.form.id && this.form.id != null;
       this.$refs['editForm'].validate(async validate => {
@@ -341,19 +324,8 @@ export default {
     closePage() {
       this.$tab.closePage()
     },
-    filterCommunityList(list) {
-      list.forEach(item => {
-        if(item.children && item.children.length > 0) {
-          item.children = this.filterCommunityList(item.children)
-        } else if( item.deptType !== '1010201'){
-          item.disabled = true
-        }
-      })
-      return list
-    },
     communityChange(value) {
-      this.form.community = value[value.length -1]
-      queryBelongDeptByTypeAndId(this.form.community, '101').then(response => {
+      queryBelongDeptByTypeAndId(value, '101').then(response => {
         if(response.code === 200 && response.data) {
           if(!this.form.detail) {
             this.form.detail = {}
@@ -383,20 +355,15 @@ export default {
       }
     },
     clearFormData() {
-      this.form = {
-        id: null,
-        detail: {},
-        fileList: []
-      };
-      this.$refs['uploadTool'].clearFiles();
-    },
-    parseCommunityValue(obj) {
-      if(obj.ancestors) {
-        const arr =
-          obj.ancestors.replace('0,', '').split(',').map(item=>parseInt(item));
-        arr.push(obj.deptId);
-        this.community = arr
-        this.communityChange(arr)
+      if(this.form.id) {
+        this.loadFormData()
+      } else {
+        this.form = {
+          id: null,
+          detail: {},
+          fileList: []
+        };
+        this.$refs['uploadTool'].clearFiles();
       }
     }
   }

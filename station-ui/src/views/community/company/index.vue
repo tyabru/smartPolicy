@@ -1,49 +1,51 @@
 <template>
   <table-panel :show-search="showSearch" :loading="loading">
     <template #search-form>
-      <el-form :model="queryParams" ref="queryForm"  :inline="true" label-width="100px">
-        <el-form-item label="单位编码" prop="companyCode">
-          <el-input v-model="queryParams.companyCode"
-            placeholder="请输入单位编码"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="单位名称" prop="companyName">
-          <el-input
-            v-model="queryParams.companyName"
-            placeholder="请输入单位名称"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="联系电话" prop="phone">
-          <el-input
-            v-model="queryParams.phone"
-            placeholder="请输入联系电话"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="营业执照号" prop="tradeCode">
-          <el-input
-            v-model="queryParams.tradeCode"
-            placeholder="请输入营业执照号"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="组织机构代码" prop="organizationCode">
-          <el-input
-            v-model="queryParams.organizationCode"
-            placeholder="请输入组织机构代码"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="信用编号" prop="creditCode">
-          <el-input
-            v-model="queryParams.creditCode"
-            placeholder="请输入信用编号"
-            clearable
-          />
-        </el-form-item>
-
+      <el-form :model="queryParams" ref="queryForm" inline label-width="100px">
+        <el-row>
+          <el-col  :span="6" :xs="24">
+            <el-form-item label="单位编码" prop="companyCode" class="width-100Rate">
+              <el-input v-model="queryParams.companyCode" placeholder="请输入单位编码"
+                        clearable />
+            </el-form-item>
+          </el-col>
+          <el-col  :span="6" :xs="24">
+            <el-form-item label="单位名称" prop="companyName" class="width-100Rate">
+              <el-input v-model="queryParams.companyName" placeholder="请输入单位名称"
+                        clearable />
+            </el-form-item>
+          </el-col>
+          <el-col  :span="6" :xs="24">
+            <el-form-item  label="联系电话" prop="phone" class="width-100Rate">
+              <el-input v-model="queryParams.phone" placeholder="请输入联系电话"
+                        clearable />
+            </el-form-item>
+          </el-col>
+          <el-col  :span="6" :xs="24">
+            <el-form-item  label="营业执照号" prop="tradeCode" class="width-100Rate">
+              <el-input v-model="queryParams.tradeCode" placeholder="请输入营业执照号"
+                        clearable />
+            </el-form-item>
+          </el-col>
+          <el-col  :span="6" :xs="24">
+            <el-form-item label="组织机构代码" prop="organizationCode" class="width-100Rate">
+              <el-input
+                v-model="queryParams.organizationCode"
+                placeholder="请输入组织机构代码"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+          <el-col  :span="6" :xs="24">
+            <el-form-item label="信用编号" prop="creditCode" class="width-100Rate">
+              <el-input
+                v-model="queryParams.creditCode"
+                placeholder="请输入信用编号"
+                clearable
+              />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
     </template>
     <template #search-form-btn>
@@ -61,21 +63,23 @@
     </template>
     <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="所属社区" align="center" prop="communityId" />
+      <el-table-column label="所属社区" align="center" prop="communityObj.deptName" />
       <el-table-column label="单位编码" align="center" prop="companyCode" />
       <el-table-column label="单位名称" align="center" prop="companyName" />
-      <el-table-column label="单位类型" align="center" prop="type" />
+      <el-table-column label="单位类型" align="center" prop="type">
+        <template v-slot="{ row }">
+          <dict-tag  :value="row.type" :options="dict.type['place_list']" />
+        </template>
+      </el-table-column>
       <el-table-column label="联系电话" align="center" prop="phone" />
       <el-table-column label="注册地址" align="center" prop="address" />
       <el-table-column label="负责人姓名" align="center" prop="headMaster" />
-      <el-table-column label="负责人联系方式" align="center" prop="contactPhone" />
+      <el-table-column label="相关文件" align="center" prop="fileCount" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
+          <el-button size="mini" type="text"
             icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
+            @click="goToEditPage(scope.row)"
             v-hasPermi="['community:company:edit']"
           >修改</el-button>
           <el-button size="mini" type="text"
@@ -88,29 +92,6 @@
     <pagination
       :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
       :pageSizes="pageSizes" @pagination="queryChanged" #page></pagination>
-
-    <!-- 添加或修改单位基本信息对话框 -->
-<!--    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>-->
-<!--      <el-form ref="form" :model="form" :rules="rules" label-width="80px">-->
-<!--        <el-form-item label="单位编码" prop="companyCode">-->
-<!--          <el-input v-model="form.companyCode" placeholder="请输入单位编码" />-->
-<!--        </el-form-item>-->
-
-
-
-
-
-
-
-
-
-
-<!--      </el-form>-->
-<!--      <div slot="footer" class="dialog-footer">-->
-<!--        <el-button type="primary" @click="submitForm">确 定</el-button>-->
-<!--        <el-button @click="cancel">取 消</el-button>-->
-<!--      </div>-->
-<!--    </el-dialog>-->
   </table-panel>
 </template>
 
@@ -119,9 +100,9 @@ import { listCompany, delCompany } from "@/api/community/company";
 import TablePanel from '@/components/TablePanel/index.vue'
 import tableListMixins from '@/mixins/tableListMixins.js'
 import { Encrypt } from '@/utils/Aescrypt'
-
 export default {
   name: "Company",
+  dicts: ['place_list'],
   components: { TablePanel },
   mixins: [ tableListMixins ],
   data() {
@@ -145,7 +126,7 @@ export default {
       let title = "新增单位信息"
       const params = { }
       if(row && row.id) {
-        title = `修改[ ${row.name} ]信息`;
+        title = `修改[ ${row.companyName} ]信息`;
         params['sq_pk'] = Encrypt(JSON.stringify({id: row.id | 'unknown'}));
       }
       this.$tab.openPage(title, '/community/page/company-edit', params);

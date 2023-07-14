@@ -1,11 +1,12 @@
 <script>
 import { listCommunity } from '@/api/community/community'
 import * as _ from 'lodash'
+import { listCommunityDept, listDept } from '@/api/system/dept'
 export default {
-  name: 'SeCommunity',
+  name: 'SeCommunityDept',
   props: {
     value: [String, Number],
-    customClass: String,
+    customClass: String
   },
   data() {
     return {
@@ -15,15 +16,24 @@ export default {
       selection: {}
     }
   },
+  watch: {
+    value: {
+      handler(newVal) {
+        this.selectItem = newVal
+      },
+      immediate: true
+    }
+  },
   methods: {
     querySearch: _.debounce(function(queryString) {
       if(!queryString || queryString.length < 1) {
         this.options = []
       } else {
         this.loading = true;
-        listCommunity({ name: queryString }).then(({ code, rows = [] }) => {
+        listCommunityDept({ deptName: queryString }).then(({ code, data = [] }) => {
           if(code === 200) {
-            this.options = rows
+            this.options = data
+            console.log(this.options)
           }
         }).finally(() => {
           this.loading = false
@@ -31,7 +41,8 @@ export default {
       }
     }, 700),
     handleSelect(item) {
-      const filter = this.options.filter(i => i.id === item)
+      console.log(this.selectItem)
+      const filter = this.options.filter(i => i.deptId === item)
       this.$emit('input', item);
       this.$emit('change', item, filter && filter.length > 0? filter[0]: null);
     }
@@ -47,17 +58,17 @@ export default {
     remote
     clearable
     :class="[ customClass ]"
-    placeholder="请输入小区名称"
+    placeholder="请输入社区名称"
     :remote-method="querySearch"
     :loading="loading"
     @change="handleSelect">
     <el-option
       v-for="item in options"
-      :key="item.id"
-      :label="item.name"
-      :value="item.id">
+      :key="item.deptId"
+      :label="item.deptName"
+      :value="item.deptId">
     </el-option>
-    <i class="el-icon-edit" slot="prefix"></i>
+    <i class="el-icon-edit" slot="prefix" style="padding-left: 5px"></i>
   </el-select>
 </template>
 

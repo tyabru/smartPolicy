@@ -3,6 +3,7 @@ package com.jingyu.web.controller.system;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.jingyu.common.constant.DeptConstants;
 import com.jingyu.common.core.domain.model.LoginUser;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +45,17 @@ public class SysDeptController extends BaseController
     @GetMapping("/list")
     public AjaxResult list(SysDept dept)
     {
+        List<SysDept> depts = deptService.selectDeptList(dept);
+        return success(depts);
+    }
+    @PreAuthorize("@ss.hasPermi('system:dept:list')")
+    @GetMapping("/listCommunityDept")
+    public AjaxResult listCommunityDept(SysDept dept)
+    {
+        if(dept == null) {
+            dept = new SysDept();
+        }
+        dept.setDeptType(DeptConstants.POLICE_COMMUNITY_AREA);
         List<SysDept> depts = deptService.selectDeptList(dept);
         return success(depts);
     }

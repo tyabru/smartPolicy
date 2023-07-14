@@ -1,6 +1,7 @@
 <script>
 import { checkDictIsExists, getDicts } from '@/api/system/dict/data'
 import { addType } from '@/api/system/dict/type'
+import { download } from '@/api/tool/file'
 
 export default {
   name: 'index',
@@ -24,7 +25,9 @@ export default {
       fileChangeFlag: -1,
       fileList: [],
       dictType: null,
-      groupOptions: []
+      groupOptions: [],
+      selection: [],
+      downloadVisible: true,
     }
   },
   watch: {
@@ -117,6 +120,20 @@ export default {
         this.fileList.splice(scope.$index, 1)
       }
       this.$emit('file-changed', this.fileList, this.titleGroup)
+    },
+    selectionChange(selection) {
+      this.selection = selection;
+      if(selection.length > 0) {
+        this.downloadVisible = false
+      }
+    },
+    downloadSelection() {
+      this.selection.forEach(item => {
+        if(item.fileUrl) {
+          download(item.fileUrl, item.fileDesc)
+        }
+      })
+
     }
   }
 }
@@ -124,12 +141,21 @@ export default {
 
 <template>
   <div>
-    <el-button @click="changeUploadModelStatus" style="margin-bottom: 10px">点击上传</el-button>
-    <el-table :data="fileListTab" height="350px">
+    <el-button type="primary" @click="changeUploadModelStatus" style="margin-bottom: 10px">点击上传</el-button>
+    <el-button type="info" @click="downloadSelection" :disabled="downloadVisible"
+               style="margin-bottom: 10px">选择下载</el-button>
+    <el-table :data="fileListTab" height="350px" @selection-change="selectionChange">
+      <el-table-column type="selection" :selectable="(row) => row.id" />
       <el-table-column label="文件类别" prop="groupTitle"  width="110px"
                        show-overflow-tooltip></el-table-column>
       <el-table-column label="文件名称" prop="fileDesc"
                        show-overflow-tooltip></el-table-column>
+      <el-table-column label="状态">
+        <template v-slot="{row}">
+          <el-tag v-if="row.id" type="success">已上传</el-tag>
+          <el-tag v-else type="danger">未上传</el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="60px">
         <template v-slot="scope">
           <el-button type="text" @click="removeFile(scope)"><span class="text-danger">删除</span></el-button>

@@ -1,8 +1,8 @@
 <script>
-import { listCommunity } from '@/api/community/community'
 import * as _ from 'lodash'
+import { listCompany } from '@/api/community/company'
 export default {
-  name: 'SeCommunity',
+  name: 'SeCompany',
   props: {
     value: [String, Number],
     customClass: String,
@@ -21,7 +21,7 @@ export default {
         this.options = []
       } else {
         this.loading = true;
-        listCommunity({ name: queryString }).then(({ code, rows = [] }) => {
+        listCompany({ companyName: queryString }).then(({ code, rows = [] }) => {
           if(code === 200) {
             this.options = rows
           }
@@ -54,7 +54,7 @@ export default {
     <el-option
       v-for="item in options"
       :key="item.id"
-      :label="item.name"
+      :label="item.companyName"
       :value="item.id">
     </el-option>
     <i class="el-icon-edit" slot="prefix"></i>

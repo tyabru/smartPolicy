@@ -21,7 +21,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="contactPhone"    column="contact_phone"    />
         <result property="identityCode"    column="identity_code"    />
         <result property="identityType"    column="identity_type"    />
-        <result property="point"    column="point"    />
+        <result property="centerPoint"    column="center_point"    />
         <result property="police"    column="police"    />
         <result property="policeName"    column="police_name"    />
         <result property="policePhone"    column="police_phone"    />
@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="fileCount"    column="fileCount"  />
-        <association property="communityObj" column="community"
+        <association property="communityObj" column="community_id"
                      select="com.jingyu.system.mapper.SysDeptMapper.selectDeptById" />
     </resultMap>
 
@@ -38,9 +38,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select id, community_id, company_code, company_name, type, phone, email, address,
                registration_time, trade_code, organization_code, credit_code, head_master,
                contact_phone, identity_code, identity_type, create_by, create_time, update_by, update_time,
-               police, police_name, police_phone, point,
-               (select count(0) from sq_community_desc where community_id = s.id) fileCount
-        from sq_company
+               police, police_name, police_phone, center_point,
+               (select count(0) from sq_company_desc where company_id = s.id) fileCount
+        from sq_company s
     </sql>
 
     <select id="selectCompanyList" parameterType="Company" resultMap="CompanyResult">
@@ -96,7 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactPhone != null">contact_phone,</if>
             <if test="identityCode != null">identity_code,</if>
             <if test="identityType != null">identity_type,</if>
-            <if test="point != null">point,</if>
+            <if test="centerPoint != null and centerPoint != ''">center_point,</if>
             <if test="police != null">police,</if>
             <if test="policeName != null and policeName != ''">police_name,</if>
             <if test="policePhone != null">police_phone,</if>
@@ -121,7 +121,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactPhone != null">#{contactPhone},</if>
             <if test="identityCode != null">#{identityCode},</if>
             <if test="identityType != null">#{identityType},</if>
-            <if test="point != null">#{point},</if>
+            <if test="centerPoint != null and centerPoint != ''">#{centerPoint},</if>
             <if test="police != null">#{police},</if>
             <if test="policeName != null and policeName != ''">#{policeName},</if>
             <if test="policePhone != null">#{policePhone},</if>
@@ -150,7 +150,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="contactPhone != null">contact_phone = #{contactPhone},</if>
             <if test="identityCode != null">identity_code = #{identityCode},</if>
             <if test="identityType != null">identity_type = #{identityType},</if>
-            <if test="point != null">point = #{point},</if>
+            <if test="centerPoint != null and centerPoint != ''">center_point = #{centerPoint},</if>
             <if test="police != null">police = #{police},</if>
             <if test="policeName != null and policeName != ''">police_name = #{policeName},</if>
             <if test="policePhone != null">police_phone = #{policePhone},</if>

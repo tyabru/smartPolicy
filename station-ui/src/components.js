@@ -23,6 +23,9 @@ import SearchBar from '@/components/SearchBar/index.vue'
 import CardHeader from '@/components/CardHeader/index.vue'
 
 import SeCommunity from '@/components/CustomSelect/SeCommunity.vue'
+import SeCompany from '@/components/CustomSelect/SeCompany.vue'
+import SeCommunityDept from '@/components/CustomSelect/SeCommunityDept.vue'
+
 /** 全局的公用组件在这里导入
  *
  * */
@@ -38,7 +41,12 @@ const install = function(Vue) {
   Vue.component('ImagePreview', ImagePreview)
   Vue.component('SearchFormBar', SearchBar);
   Vue.component('CardHeader', CardHeader)
+  /* 小区（村）下拉选择框 */
   Vue.component('SeCommunity', SeCommunity)
+  /* 单位下拉选择框 */
+  Vue.component('SeCompany', SeCompany)
+  /* 社区部门下拉选择框 名字起的太相似了 */
+  Vue.component('SeCommunityDept', SeCommunityDept)
 
   // 全局方法挂载
   Vue.prototype.getDicts = getDicts
