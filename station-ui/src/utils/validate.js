@@ -88,3 +88,32 @@ export function validPhoneNumber(phone) {
   }
 
 }
+
+export function validIdCodeByType(code, type = 'CN_CARD') {
+  if(type === 'CN_CARD') {
+    return validCnIdentity(code);
+  } else if(type === 'PASS_PORT') {
+    return validPassport(code);
+  } else {
+    console.warn("未知验证身份号码里类型【type】：" + type);
+    return false
+  }
+}
+
+export function validCnIdentity(identityCode) {
+  if(!identityCode || identityCode.length < 1) {
+    return false
+  }
+  const pattern = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+  return pattern.test(identityCode);
+}
+
+export function validPassport(passport) {
+  if(!passport || passport.length < 1) {
+    return false
+  }
+  // TODO 护照验证规则
+  // const pattern = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
+  // return pattern.test(identityCode);
+  return true
+}

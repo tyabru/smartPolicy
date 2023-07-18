@@ -1,62 +1,52 @@
 <template>
-  <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="mini" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="所属小区" prop="communityId">
-        <el-input
-          v-model="queryParams.communityId"
-          placeholder="请输入所属小区"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="人员姓名" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入人员姓名"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="身份证号" prop="certNo">
-        <el-input
-          v-model="queryParams.certNo"
-          placeholder="请输入身份证号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="手机号" prop="phone">
-        <el-input
-          v-model="queryParams.phone"
-          placeholder="请输入手机号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="临时工" prop="isTemp">
-        <el-input
-          v-model="queryParams.isTemp"
-          placeholder="请输入是否是临时工"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="是否离职" prop="isLeaving">
-        <el-input
-          v-model="queryParams.isLeaving"
-          placeholder="请输入是否离职"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+  <table-panel :show-search="showSearch" :loading="loading">
+    <template #search-form>
+      <el-form :model="queryParams" ref="queryForm" size="mini" :inline="true" v-show="showSearch" label-width="100px">
+        <el-form-item label="所属小区" prop="communityId">
+          <se-community v-model="queryParams.communityId" style="width: 193px;" />
+        </el-form-item>
+        <el-form-item label="人员姓名" prop="name">
+          <el-input v-model="queryParams.name" placeholder="请输入人员姓名" clearable />
+        </el-form-item>
+        <el-form-item label="身份证号" prop="certNo">
+          <el-input
+            class="width-100Rate"
+            v-model="queryParams.certNo"
+            placeholder="请输入身份证号"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="手机号" prop="phone">
+          <el-input
+            class="width-100Rate"
+            v-model="queryParams.phone"
+            placeholder="请输入手机号"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="是否临时工" prop="isTemp">
+          <el-select v-model="queryParams.isTemp" class="width-100Rate" placeholder="请输入是否是临时工" >
+            <el-option v-for="item in dict.type['sys_yes_no']"
+                       :key="item.value"
+                       :value="item.value"
+                       :label="item.label"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否离职" prop="isLeaving">
+          <el-select v-model="queryParams.isLeaving" class="width-100Rate" placeholder="请输入是否离职" >
+            <el-option v-for="item in dict.type['sys_yes_no']"
+                       :key="item.value"
+                       :value="item.value"
+                       :label="item.label"/>
+          </el-select>
+        </el-form-item>
+      </el-form>
+    </template>
+    <template #search-form-btn>
+      <el-button type="primary" icon="el-icon-search" size="mini" @click="queryChanged">搜索</el-button>
+      <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+    </template>
+    <template #btn>
         <el-button
           type="primary"
           plain
@@ -65,8 +55,6 @@
           @click="handleAdd"
           v-hasPermi="['wuye:wuye:add']"
         >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -76,8 +64,6 @@
           @click="handleUpdate"
           v-hasPermi="['wuye:wuye:edit']"
         >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
         <el-button
           type="danger"
           plain
@@ -87,8 +73,6 @@
           @click="handleDelete"
           v-hasPermi="['wuye:wuye:remove']"
         >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
         <el-button
           type="warning"
           plain
@@ -97,20 +81,31 @@
           @click="handleExport"
           v-hasPermi="['wuye:wuye:export']"
         >导出</el-button>
-      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+    </template>
 
-    <el-table v-loading="loading" :data="wuyeList" @selection-change="handleSelectionChange">
+    <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="所属小区" align="center" prop="communityId" />
+      <el-table-column label="所属小区" align="center" prop="community.name" />
       <el-table-column label="工作类型" align="center" prop="workType" />
       <el-table-column label="人员姓名" align="center" prop="name" />
       <el-table-column label="手机号" align="center" prop="phone" />
-      <el-table-column label="是否是临时工" align="center" prop="isTemp" />
-      <el-table-column label="籍贯" align="center" prop="nativePlace" />
-      <el-table-column label="是否离职" align="center" prop="isLeaving" />
-      <el-table-column label="开始工作时间" align="center" prop="startTime" width="180" />
+      <el-table-column label="人脸图片" align="center" prop="faceImgUrl">
+        <template v-slot="{row}">
+          <image-preview :src="row.faceImgUrl" width="68px" height="98px" />
+        </template>
+      </el-table-column>
+      <el-table-column label="是否临时工" align="center" prop="isTemp" >
+        <template v-slot="{row}">
+          <dict-tag :options="dict.type['sys_yes_no']" :value="row.isTemp" />
+        </template>
+      </el-table-column>
+      <el-table-column label="是否离职" align="center" prop="isLeaving" >
+        <template v-slot="{row}">
+          <dict-tag :options="dict.type['sys_yes_no']" :value="row.isLeaving" />
+        </template>
+      </el-table-column>
+      <el-table-column label="入职时间" align="center" prop="startTime" width="180" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -131,19 +126,22 @@
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total>0" :total="total"
-      :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+    <pagination
+      :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
+      :pageSizes="pageSizes" @pagination="queryChanged" #page></pagination>
 
     <!-- 添加或修改物业信息管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="所属小区" prop="communityId">
-          <se-community v-model="form.communityId" style="width: 100%" />
+          <se-community v-model="form.communityId"
+                        :default-label="communityName" style="width: 100%" />
         </el-form-item>
         <el-form-item label="工作单位" prop="company">
           <el-input v-model="form.company" placeholder="请输入工作单位" />
+        </el-form-item>
+        <el-form-item label="工作职位" prop="company">
+          <el-input v-model="form.workType" placeholder="请输入工作职位类型" />
         </el-form-item>
         <el-form-item label="人员姓名" prop="name">
           <el-input v-model="form.name" placeholder="请输入人员姓名" />
@@ -169,12 +167,24 @@
           </el-date-picker>
         </el-form-item>
         <el-form-item label="是否是临时工" prop="isTemp">
-          <el-input v-model="form.isTemp" placeholder="请输入是否是临时工" />
+          <el-select v-model="form.isTemp" class="width-100Rate" placeholder="请输入是否是临时工" >
+            <el-option v-for="item in dict.type['sys_yes_no']"
+                       :key="item.value"
+                       :value="item.value"
+                       :label="item.label"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="是否离职" prop="isLeaving">
-          <el-input v-model="form.isLeaving" placeholder="请输入是否离职" />
+          <el-select v-model="form.isLeaving" class="width-100Rate" placeholder="请输入是否离职" >
+            <el-option v-for="item in dict.type['sys_yes_no']"
+                       :key="item.value"
+                       :value="item.value"
+                       :label="item.label"/>
+          </el-select>
         </el-form-item>
-        <el-form-item label="离职时间" prop="endTime">
+        <el-form-item v-show="form.isLeaving === 'Y'"
+                      label="离职时间"
+                      :rules="[{required: form.isLeaving === 'Y', message: '已离职员工离职时间为必填！' }]">
           <el-date-picker clearable class="width-100Rate"
                           v-model="form.endTime"
                           type="date"
@@ -182,57 +192,33 @@
                           placeholder="请选择工作结束时间/离职时间">
           </el-date-picker>
         </el-form-item>
+        <el-form-item label="人脸图片地址" prop="faceImgUrl">
+          <image-upload v-model="form.faceImgUrl"/>
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
-  </div>
+  </table-panel>
 </template>
 
 <script>
 import { listWuye, getWuye, delWuye, addWuye, updateWuye } from "@/api/community/wuye";
-
+import TablePanel from '@/components/TablePanel/index.vue'
+import tableListMixins from '@/mixins/tableListMixins.js'
 export default {
   name: "Wuye",
+  dicts: ['sys_yes_no'],
+  components: { TablePanel },
+  mixins: [tableListMixins],
   data() {
     return {
-      // 遮罩层
-      loading: true,
-      // 选中数组
-      ids: [],
-      // 非单个禁用
-      single: true,
-      // 非多个禁用
-      multiple: true,
-      // 显示搜索条件
-      showSearch: true,
-      // 总条数
-      total: 0,
-      // 物业信息管理表格数据
-      wuyeList: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
       open: false,
-      // 查询参数
-      queryParams: {
-        pageNum: 1,
-        pageSize: 10,
-        communityId: null,
-        company: null,
-        workType: null,
-        name: null,
-        certNo: null,
-        phone: null,
-        address: null,
-        nativePlace: null,
-        startTime: null,
-        isTemp: null,
-        endTime: null,
-        isLeaving: null,
-      },
       // 表单参数
       form: {},
       // 表单校验
@@ -267,18 +253,18 @@ export default {
       }
     };
   },
+  computed: {
+    communityName() {
+      return this.form.community?.name
+    }
+  },
   created() {
     this.getList();
   },
   methods: {
     /** 查询物业信息管理列表 */
     getList() {
-      this.loading = true;
-      listWuye(this.queryParams).then(response => {
-        this.wuyeList = response.rows;
-        this.total = response.total;
-        this.loading = false;
-      });
+      this.initTableData(listWuye)
     },
     // 取消按钮
     cancel() {
@@ -287,42 +273,8 @@ export default {
     },
     // 表单重置
     reset() {
-      this.form = {
-        id: null,
-        communityId: null,
-        company: null,
-        workType: null,
-        name: null,
-        certNo: null,
-        phone: null,
-        address: null,
-        nativePlace: null,
-        startTime: null,
-        isTemp: null,
-        endTime: null,
-        isLeaving: null,
-        createTime: null,
-        createBy: null,
-        updateTime: null,
-        updateBy: null
-      };
+      this.form = {};
       this.resetForm("form");
-    },
-    /** 搜索按钮操作 */
-    handleQuery() {
-      this.queryParams.pageNum = 1;
-      this.getList();
-    },
-    /** 重置按钮操作 */
-    resetQuery() {
-      this.resetForm("queryForm");
-      this.handleQuery();
-    },
-    // 多选框选中数据
-    handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
     },
     /** 新增按钮操作 */
     handleAdd() {

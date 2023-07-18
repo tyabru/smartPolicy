@@ -6,6 +6,7 @@ export default {
   props: {
     value: [String, Number],
     customClass: String,
+    defaultLabel: String
   },
   data() {
     return {
@@ -13,6 +14,19 @@ export default {
       options: [],
       selectItem: null,
       selection: {}
+    }
+  },
+  watch: {
+    value: {
+      handler(newVal) {
+        this.selectItem = newVal
+      },
+      immediate: true
+    }
+  },
+  mounted() {
+    if(this.defaultLabel) {
+      this.querySearch(this.defaultLabel)
     }
   },
   methods: {

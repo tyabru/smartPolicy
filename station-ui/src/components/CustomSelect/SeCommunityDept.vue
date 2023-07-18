@@ -6,7 +6,8 @@ export default {
   name: 'SeCommunityDept',
   props: {
     value: [String, Number],
-    customClass: String
+    customClass: String,
+    defaultLabel: String
   },
   data() {
     return {
@@ -24,6 +25,11 @@ export default {
       immediate: true
     }
   },
+  mounted() {
+    if(this.defaultLabel) {
+      this.querySearch(this.defaultLabel)
+    }
+  },
   methods: {
     querySearch: _.debounce(function(queryString) {
       if(!queryString || queryString.length < 1) {
@@ -33,7 +39,6 @@ export default {
         listCommunityDept({ deptName: queryString }).then(({ code, data = [] }) => {
           if(code === 200) {
             this.options = data
-            console.log(this.options)
           }
         }).finally(() => {
           this.loading = false
@@ -41,7 +46,6 @@ export default {
       }
     }, 700),
     handleSelect(item) {
-      console.log(this.selectItem)
       const filter = this.options.filter(i => i.deptId === item)
       this.$emit('input', item);
       this.$emit('change', item, filter && filter.length > 0? filter[0]: null);
