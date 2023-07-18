@@ -1,16 +1,236 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="540f7ce3-5314-4a9c-858a-b74c3d254e25" name="Changes" comment="部分数据权限初步探明">
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/META-INF/spring-devtools.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/application-dev.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/application-druid.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/application-prod.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/application.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/banner.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/i18n/messages.properties" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/logback.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-admin/target/classes/mybatis/mybatis-config.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/generator.yml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/mapper/generator/GenTableColumnMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/mapper/generator/GenTableMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/controller.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/domain.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/mapper.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/service.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/serviceImpl.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/java/sub-domain.java.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/js/api.js.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/sql/sql.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/vue/index-tree.vue.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/vue/index.vue.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/vue/v3/index-tree.vue.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/vue/v3/index.vue.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/vue/v3/readme.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-generator/target/classes/vm/xml/mapper.xml.vm" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/controller/CommonUsersApplicationController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/CommonUsersApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/CommonUsersApplicationMapper.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/ICommonUsersApplicationService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/impl/CommonUsersApplicationServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/CommonUsersApplicationMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/target/classes/mapper/qunfangqunzhi/CommonUsersApplicationMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/target/classes/mapper/qunfangqunzhi/CommonUsersMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/target/classes/mapper/qunfangqunzhi/EventInfoMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-qunfang/target/classes/mapper/qunfangqunzhi/EventUserAllocatedMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysConfigMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysDeptMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysDictDataMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysDictTypeMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysLogininforMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysMenuMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysNoticeMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysOperLogMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysPostMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysRoleDeptMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysRoleMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysRoleMenuMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysUserMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysUserPostMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-server/sps-system/target/classes/mapper/system/SysUserRoleMapper.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/station-ui/src/api/qunfangqunzhi/applicationManage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-admin/src/main/java/com/jingyu/web/controller/qunfangqunzhi/CommonUsersController.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-admin/src/main/java/com/jingyu/web/controller/qunfangqunzhi/CommonUsersController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/constant/CommonUserConstants.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/constant/CommonUserConstants.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/CommonUser.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/CommonUser.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/EventInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/domain/EventInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/CommonUserMapper.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/CommonUsersMapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/mapper/CommonUsersMapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/ICommonUsersService.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/ICommonUsersService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/impl/CommonUsersServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/impl/CommonUsersServiceImpl.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/CommonUsersMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/CommonUsersMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/EventInfoMapper.xml" beforeDir="false" afterPath="$PROJECT_DIR$/station-server/sps-qunfang/src/main/resources/mapper/qunfangqunzhi/EventInfoMapper.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/public/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/src/api/qunfangqunzhi/CommonUsers.js" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/api/qunfangqunzhi/CommonUsers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/CommonUsers/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/CommonUsers/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/threatmanagement/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/threatmanagement/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/threatmanagement/threatDetail.vue" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/views/qunfangqunzhi/threatmanagement/threatDetail.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/station-ui/src/views/system/user/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/station-ui/src/views/system/user/index.vue" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RESET_MODE" value="HARD" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
-        <option name="localRepository" value="D:\data\maven" />
+        <option name="localRepository" value="D:\IntelliJ IDEA 2021.3\MavenRoom" />
         <option name="showDialogWithAdvancedSettings" value="true" />
-        <option name="userSettingsFile" value="D:\app\apache-maven-3.8.2\apache-maven\src\conf\settings.xml" />
+        <option name="userSettingsFile" value="D:\IntelliJ IDEA 2021.3\plugins\maven\lib\maven3\conf\settings.xml" />
       </MavenGeneralSettings>
     </option>
   </component>
+  <component name="ProjectId" id="2S3ZfbiZ7X5sRnNo7QLglRaZ2ui" />
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="D:/workspace/wnzhpt" />
-    <property name="settings.editor.selected.configurable" value="profiler.jvm" />
+    <property name="RequestMappingsPanelOrder0" value="0" />
+    <property name="RequestMappingsPanelOrder1" value="1" />
+    <property name="RequestMappingsPanelWidth0" value="75" />
+    <property name="RequestMappingsPanelWidth1" value="75" />
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-qunfang\src\main\java\com\jingyu" />
+      <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-qunfang\src\main\resources\mapper\qunfangqunzhi" />
+      <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-qunfang\src\main\java\com\jingyu\qunfangqunzhi" />
+      <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-admin\src\main\java\com\jingyu\web\controller\qunfangqunzhi" />
+      <recent name="D:\IntelliJ IDEA 2021.3\projects\smart-police-station\station-server\sps-qunfang\src\main\java\com\jingyu\qunfangqunzhi\controller" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="sps-common" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="sps-common" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PoliceStationApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot">
+      <module name="sps-admin" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.jingyu.PoliceStationApplication" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task id="LOCAL-00001" summary="11">
+      <created>1688376398327</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1688376398327</updated>
+    </task>
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="540f7ce3-5314-4a9c-858a-b74c3d254e25" name="Changes" comment="" />
+      <created>1688377329028</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1688377329028</updated>
+      <workItem from="1688377330575" duration="4097000" />
+      <workItem from="1688381480252" duration="3456000" />
+      <workItem from="1688389316772" duration="441000" />
+      <workItem from="1688432320461" duration="15153000" />
+      <workItem from="1688525819766" duration="12046000" />
+      <workItem from="1688605885746" duration="6981000" />
+      <workItem from="1688694283461" duration="19142000" />
+      <workItem from="1688872418345" duration="2969000" />
+    </task>
+    <task id="LOCAL-00002" summary="部分数据权限初步探明">
+      <created>1688479265589</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1688479265589</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="11" />
+    <MESSAGE value="部分数据权限初步探明" />
+    <option name="LAST_COMMIT_MESSAGE" value="部分数据权限初步探明" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/ICommonUsersService.java</url>
+          <line>21</line>
+          <properties class="com.jingyu.qunfangqunzhi.service.ICommonUsersService" method="selectCommonUsersByUserId">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/station-server/sps-qunfang/src/main/java/com/jingyu/qunfangqunzhi/service/ICommonUsersService.java</url>
+          <line>29</line>
+          <properties class="com.jingyu.qunfangqunzhi.service.ICommonUsersService" method="selectCommonUsersList">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-method">
+          <url>file://$PROJECT_DIR$/station-server/sps-system/src/main/java/com/jingyu/system/service/ISysUserService.java</url>
+          <line>104</line>
+          <properties class="com.jingyu.system.service.ISysUserService" method="checkUserDataScope">
+            <option name="EMULATED" value="true" />
+            <option name="WATCH_EXIT" value="false" />
+          </properties>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

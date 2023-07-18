@@ -58,6 +58,11 @@
             <groupId>com.jingyu</groupId>
             <artifactId>sps-system</artifactId>
         </dependency>
+        <!--群防模块-->
+        <dependency>
+            <groupId>com.jingyu</groupId>
+            <artifactId>sps-qunfang</artifactId>
+        </dependency>
 
     </dependencies>
 

@@ -47,3 +47,5 @@ nbdist/
 !*/build/*.xml
 
 !*/target/
+
+/sps-admin/target/

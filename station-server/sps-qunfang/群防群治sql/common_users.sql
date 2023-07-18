@@ -1,0 +1,59 @@
+/*
+ Navicat Premium Data Transfer
+
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 80018
+ Source Host           : localhost:3306
+ Source Schema         : sq_database
+
+ Target Server Type    : MySQL
+ Target Server Version : 80018
+ File Encoding         : 65001
+
+ Date: 18/07/2023 16:55:39
+*/
+
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- ----------------------------
+-- Table structure for common_users
+-- ----------------------------
+DROP TABLE IF EXISTS `common_users`;
+CREATE TABLE `common_users`  (
+  `user_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户ID',
+  `dept_id` bigint(20) NOT NULL COMMENT '所属辖区id',
+  `user_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '用户账号',
+  `real_name` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '用户真实姓名',
+  `user_type` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '00' COMMENT '用户类型（00系统用户）',
+  `email` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '用户邮箱',
+  `id_number` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '身份证号',
+  `phonenumber` varchar(11) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '手机号码',
+  `home_address` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '家庭住址',
+  `sex` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '用户性别（0男 1女 2未知）',
+  `avatar` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '头像地址',
+  `password` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '密码',
+  `status` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '帐号状态（0正常 1停用）',
+  `del_flag` char(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '删除标志（0代表存在 2代表删除）',
+  `login_ip` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '最后登录IP',
+  `login_date` datetime NULL DEFAULT NULL COMMENT '最后登录时间',
+  `create_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NULL DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`user_id`, `user_name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '普通用户信息表' ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of common_users
+-- ----------------------------
+INSERT INTO `common_users` VALUES (102, 100, '152121212121', 'tatata', '1', '12123123', NULL, '15823698458', '', '0', '/profile/upload/2023/07/13/OIP-C_20230713092734A001.jpg', '$2a$10$kKmYxRWlvKaYsTlkw9fviuW9ONc7nwX4MNrpx7xxn370/o9fHdljG', '0', '0', '', NULL, '', '2023-07-02 16:26:14', 'admin', '2023-07-13 17:51:51', NULL);
+INSERT INTO `common_users` VALUES (103, 218, '15253', '45', '2', '524254', NULL, '', NULL, '0', '', '', '0', '0', '', NULL, '', '2023-07-04 21:02:30', '', '2023-07-04 21:05:03', NULL);
+INSERT INTO `common_users` VALUES (104, 100, '752785270', '4545', '2', '453435', NULL, '', NULL, '0', '', '', '0', '0', '', NULL, '', '2023-07-04 21:06:01', '', '2023-07-06 16:57:36', NULL);
+INSERT INTO `common_users` VALUES (105, 0, '25424', '马云', '0', '', '245', '25424', NULL, '0', '', '', '0', '0', '', NULL, '', '2023-07-13 17:32:05', '', NULL, NULL);
+INSERT INTO `common_users` VALUES (106, 0, '15212', '666', '0', '', '452', '15212', '1521', '0', '/profile/upload/2023/07/13/吴京_20230713173344A001.png', '', '0', '0', '', NULL, '', '2023-07-13 17:34:02', '', '2023-07-13 18:02:28', NULL);
+INSERT INTO `common_users` VALUES (107, 0, '425', '3643', '0', '', '24', '425', '14544', '0', '', '', '0', '0', '', NULL, '', '2023-07-13 17:39:53', '', NULL, NULL);
+
+SET FOREIGN_KEY_CHECKS = 1;
