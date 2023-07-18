@@ -167,25 +167,27 @@ export default {
   dicts: ['place_list'],
   components: { UploadGroup },
   data() {
-    const validIdCodeByType = (rule, value, callback) => {
-
-      if(value==''||value==undefined||value==null){
-        callback("validIdCodeByType");
-      }else {
-        if()
+    const validIdCode = (rule, value, callback) => {
+      const isRequired = this.form.headMaster && this.form.headMaster.length > 0
+      if(isRequired && !value && value.length < 1){
+        callback("填写负责人后，身份证号为必填项！");
+      }else if(value && !validIdCodeByType(value, this.form.identityType)){
+        callback("身份证号不符合验证规则！");
+      } else {
+        callback()
       }
     }
     return {
       form: {
         id: null,
+        identityType: 'CN_CARD',
         fileList: []
       },
       policeList: [],
       rules: {
         communityId: [ { required: true, message: '所属社区为必填项，不能为空！', trigger: 'blur'} ],
         identityCode: [
-          { validator: validIdCodeByType, message: '身份证格式不正确', trigger: "blur"
-          }
+          { validator: validIdCode, trigger: "blur" }
         ],
       }
     }

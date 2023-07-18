@@ -70,5 +70,6 @@ nbdist/
 !*/build/*.html
 !*/build/*.xml
 
-!*/target/
+*/target/
 station-server/sps-system/target
+station-server/sps-safecheck/target/
