@@ -3,12 +3,15 @@ package com.jingyu.framework.web.service;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import com.jingyu.system.service.ISysMenuService;
+import com.jingyu.system.service.ISysRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.jingyu.common.core.domain.entity.SysRole;
 import com.jingyu.common.core.domain.entity.SysUser;
-import com.jingyu.system.service.ISysMenuService;
-import com.jingyu.system.service.ISysRoleService;
+
+import javax.annotation.Resource;
 
 /**
  * 用户权限处理
@@ -18,10 +21,10 @@ import com.jingyu.system.service.ISysRoleService;
 @Component
 public class SysPermissionService
 {
-    @Autowired
+    @Resource(name = "sysRoleServiceImpl")
     private ISysRoleService roleService;
 
-    @Autowired
+    @Resource(name = "sysMenuServiceImpl")
     private ISysMenuService menuService;
 
     /**

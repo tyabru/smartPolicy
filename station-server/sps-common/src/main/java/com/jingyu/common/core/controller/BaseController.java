@@ -3,6 +3,8 @@ package com.jingyu.common.core.controller;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
 import java.util.List;
+
+import com.jingyu.common.utils.encryption_decryption.SensitiveNewsHander;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
@@ -85,6 +87,9 @@ public class BaseController
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(HttpStatus.SUCCESS);
         rspData.setMsg("查询成功");
+        for (Object object : list) {
+            SensitiveNewsHander.parseRequestParams(object);
+        }
         rspData.setRows(list);
         rspData.setTotal(new PageInfo(list).getTotal());
         return rspData;
@@ -158,6 +163,33 @@ public class BaseController
     protected AjaxResult toAjax(boolean result)
     {
         return result ? success() : error();
+    }
+
+    /**
+     * 响应返回结果
+     *
+     * @param list
+     * @return 操作结果
+     */
+    protected List<?> toAjaxEncrypt(List<?> list)
+    {
+        for (Object o : list) {
+            SensitiveNewsHander.parseRequestParams(o);
+        }
+        return list;
+    }
+
+    /**
+     * 响应返回结果
+     *
+     * @param object
+     * @return 操作结果
+     */
+    protected AjaxResult toAjax(Object object)
+    {
+        //敏感信息加密
+        SensitiveNewsHander.parseRequestParams(object);
+        return AjaxResult.success(object);
     }
 
     /**
