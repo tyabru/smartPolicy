@@ -47,3 +47,6 @@ nbdist/
 !*/build/*.xml
 
 !*/target/
+/sps-admin/target/
+/sps-common/target/
+/sps-framework/target/
