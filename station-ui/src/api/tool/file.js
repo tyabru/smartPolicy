@@ -24,3 +24,17 @@ export const download = (resource, filename = formatDate(new Date())) => {
     }
   })
 }
+
+// export const deleteFileByResource = (resource) => {
+//   if(!resource || resource.length < 1) {
+//     return new Promise(resolve => {resolve()})
+//   } else {
+//     return request({
+//       url: '/common/download/resource',
+//       method: 'get',
+//       params: {
+//         resource: resource
+//       }
+//     })
+//   }
+// }

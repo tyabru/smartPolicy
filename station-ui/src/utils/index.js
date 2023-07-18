@@ -1,4 +1,5 @@
 import { parseTime } from './ruoyi'
+import setting from '../settings'
 
 /**
  * 表格时间格式化
@@ -339,6 +340,16 @@ export function makeMap(str, expectsLowerCase) {
   return expectsLowerCase
     ? val => map[val.toLowerCase()]
     : val => map[val]
+}
+
+export function getImgUrl(name){
+  if(!name) {
+    console.log("照片名称非法！name="+name)
+    return
+  }
+  let api = process.env.VUE_APP_BASE_API;
+  const url = `${api}${setting.photoUrlPrefix}${name}`
+  return url;
 }
 
 export const exportDefault = 'export default '

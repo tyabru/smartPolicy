@@ -1,6 +1,9 @@
 package com.jingyu.framework.manager.factory;
 
 import java.util.TimerTask;
+
+import com.jingyu.system.service.ISysLogininforService;
+import com.jingyu.system.service.ISysOperLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.jingyu.common.constant.Constants;
@@ -12,8 +15,6 @@ import com.jingyu.common.utils.ip.IpUtils;
 import com.jingyu.common.utils.spring.SpringUtils;
 import com.jingyu.system.domain.SysLogininfor;
 import com.jingyu.system.domain.SysOperLog;
-import com.jingyu.system.service.ISysLogininforService;
-import com.jingyu.system.service.ISysOperLogService;
 import eu.bitwalker.useragentutils.UserAgent;
 
 /**

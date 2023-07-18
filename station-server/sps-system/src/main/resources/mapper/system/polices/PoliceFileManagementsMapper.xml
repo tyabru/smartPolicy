@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.polices.mapper.PoliceFileManagementsMapper">
+    
+    <resultMap type="PoliceFileManagements" id="PoliceFileManagementsResult">
+        <result property="id"    column="id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="folderName"    column="folder_name"    />
+        <result property="fileDescription"    column="file_description"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleteTime"    column="delete_time"    />
+        <result property="operateTime"    column="operate_time"    />
+        <result property="operateName"    column="operate_name"    />
+        <result property="operateType"    column="operate_type"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectPoliceFileManagementsVo">
+        select id, file_name, file_path, folder_name, file_description, create_time, update_time, delete_time, operate_time, dept_id,
+          operate_name, operate_type, remark
+        from police_file_managements
+    </sql>
+
+    <select id="selectPoliceFileManagementsList" parameterType="PoliceFileManagements" resultMap="PoliceFileManagementsResult">
+        <include refid="selectPoliceFileManagementsVo"/>
+        <where>
+            AND operate_type != 2
+            <if test="fileName != null  and fileName != ''"> and instr(file_name,#{fileName})</if>
+            <if test="filePath != null  and filePath != ''"> and instr(file_path,#{filePath})</if>
+            <if test="folderName != null  and folderName != ''"> and instr(folder_name,#{folderName})</if>
+            <if test="fileDescription != null  and fileDescription != ''"> and instr(file_description,#{fileDescription})</if>
+            <if test="deptId != null "> and instr(dept_id,#{deptId})</if>
+            <if test="deleteTime != null "> and delete_time = #{deleteTime}</if>
+            <if test="operateTime != null "> and operate_time = #{operateTime}</if>
+            <if test="operateName != null  and operateName != ''"> and instr(operate_name,#{operateName})</if>
+            <if test="operateType != null "> and operate_type = #{operateType}</if>
+        </where>
+        ORDER BY operate_time DESC
+    </select>
+    
+    <select id="selectPoliceFileManagementsById" parameterType="Long" resultMap="PoliceFileManagementsResult">
+        <include refid="selectPoliceFileManagementsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPoliceFileManagements" parameterType="PoliceFileManagements" useGeneratedKeys="true" keyProperty="id">
+        insert into police_file_managements
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">file_name,</if>
+            <if test="filePath != null">file_path,</if>
+            <if test="folderName != null  and folderName != ''">folder_name,</if>
+            <if test="fileDescription != null">file_description,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deleteTime != null">delete_time,</if>
+            <if test="operateName != null">operate_name,</if>
+            <if test="remark != null">remark,</if>
+            create_time,
+            operate_time,
+            operate_type
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null">#{fileName},</if>
+            <if test="filePath != null">#{filePath},</if>
+            <if test="folderName != null  and folderName != ''">#{folderName},</if>
+            <if test="fileDescription != null">#{fileDescription},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deleteTime != null">#{deleteTime},</if>
+            <if test="operateName != null">#{operateName},</if>
+            <if test="remark != null">#{remark},</if>
+            NOW(),
+            NOW(),
+            0
+         </trim>
+    </insert>
+
+    <update id="updatePoliceFileManagements" parameterType="PoliceFileManagements">
+        update police_file_managements
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null">file_name = #{fileName},</if>
+            <if test="filePath != null">file_path = #{filePath},</if>
+            <if test="folderName != null  and folderName != ''">folder_name = #{folderName},</if>
+            <if test="fileDescription != null">file_description = #{fileDescription},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+            <if test="operateTime != null">operate_time = #{operateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            operate_time = NOW(),
+            update_time = NOW(),
+            operate_type = 1
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePoliceFileManagementsById" parameterType="Long">
+        update police_file_managements set operate_type = 2, delete_time = NOW(), operate_time = NOW() where id = #{id}
+    </delete>
+
+    <delete id="deletePoliceFileManagementsByIds" parameterType="String">
+        update police_file_managements set operate_type = 2, delete_time = NOW(), operate_time = NOW() where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

@@ -82,6 +82,31 @@ export function isArray(arg) {
   return Array.isArray(arg)
 }
 
+//检验身份证号码
+export function validPpliceIdCard (rule, value, callback)  {
+  if(value && value.includes("**")) {
+    callback();
+  }
+  if(!value || value === '') {
+    callback()
+  }else {
+    //自定义校验身份证rule
+    const arr = [7, 9, 10, 5, 8, 4, 2, 1, 6, 3, 7, 9, 10, 5, 8, 4, 2];
+    const drr = ["1", "0", "X", "9", "8", "7", "6", "5", "4", "3", "2"];
+    let sum = 0;
+    for (let i = 0; i < 17; i++) {
+      const b = parseInt(value.charAt(i));
+      sum += b * arr[i];
+    }
+    const c = sum % 11;
+    if (drr[c] != value.charAt(value.length - 1)) {
+      callback(new Error("身份证不合规范"));
+    } else {
+      callback();
+    }
+  }
+}
+
 export function validPhoneNumber(phone) {
   if(!phone || phone.length < 1) {
     return false

@@ -117,16 +117,28 @@
 
 <script>
 import { addResident, updateResident } from "@/api/person/resident";
+import { validIdCodeByType } from '@/utils/validate'
 
 export default {
   name: "Resident",
   dicts: ['sys_yes_no', 'important_level', 'family_member_relationship'],
   data() {
+    const validIdCode = (rule, value, callback) => {
+      if(!value && value.length < 1){
+        callback("身份证号为必填项！");
+      }else if(value && !validIdCodeByType(value, this.form.certType)){
+        callback("身份证号不符合验证规则！");
+      } else {
+        callback()
+      }
+    }
     return {
       // 遮罩层
       loading: true,
       // 表单参数
-      form: {},
+      form: {
+        certType: 'CN_CARD'
+      },
       // 表单校验
       rules: {
         bm: [
@@ -143,10 +155,7 @@ export default {
         ],
         certNo: [
           { required: true, message: "身份证号不能为空", trigger: "blur" },
-          { pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
-            message: '身份证格式不正确',
-            trigger: "blur"
-          }
+          { validator: validIdCode, trigger: 'blur' }
         ],
         phone: [
           { required: true, message: "联系方式不能为空", trigger: "blur" },
@@ -178,19 +187,23 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          // if (this.form.id != null) {
-          //   updateResident(this.form).then(response => {
-          //     this.$modal.msgSuccess("修改成功");
-          //     this.open = false;
-          //     this.getList();
-          //   });
-          // } else {
-          //   addResident(this.form).then(response => {
-          //     this.$modal.msgSuccess("新增成功");
-          //     this.open = false;
-          //     this.getList();
-          //   });
-          // }
+          if (this.form.id != null) {
+            updateResident(this.form).then(response => {
+              this.$modal.msgSuccess("修改成功");
+              this.open = false;
+              this.getList();
+            });
+          } else {
+            addResident(this.form).then(response => {
+              this.$modal.msgSuccess("新增成功");
+              this.open = false;
+              this.getList();
+            }).finally(response => {
+              if(this.form.faceImgUrl) {
+                deleteByFileId
+              }
+            });
+          }
         }
       });
     }
