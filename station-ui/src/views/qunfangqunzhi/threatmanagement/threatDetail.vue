@@ -52,10 +52,7 @@
       <el-divider content-position="center">处理信息</el-divider>
       <el-row :gutter="10" class="mb8">
         <el-col :span="1.5">
-          <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddEventUserAllocated">添加</el-button>
-        </el-col>
-        <el-col :span="1.5">
-          <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteEventUserAllocated">删除
+          <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteEventUserAllocated">批量取消
           </el-button>
         </el-col>
         <el-col :span="1.5">
@@ -66,37 +63,34 @@
                 @selection-change="handleEventUserAllocatedSelectionChange" ref="eventUserAllocated"
       >
         <el-table-column type="selection" width="55" align="center"/>
-        <el-table-column label="分配userid" align="center" prop="userId"/>
-        <el-table-column label="事件id" align="center" prop="eventId"/>
-        <el-table-column label="事件调查详情" align="center" prop="eventDetail"/>
-        <el-table-column label="图片上传路径" align="center" prop="photoUrl"/>
-        <el-table-column label="视频上传路径" align="center" prop="videoUrl"/>
-        <el-table-column label="事件结果" align="center" prop="eventResult"/>
-        <el-table-column label="结果照片地址" align="center" prop="resultPhotoUrl"/>
-        <el-table-column label="结果视频地址" align="center" prop="resultVideoUrl"/>
+        <el-table-column label="处理人员编号" align="center" prop="userId"/>
+        <el-table-column label="检查时间" align="center" prop="inspectDateTime"/>
+        <el-table-column label="整改意见" align="center" prop="rectifyOpinion"/>
+        <el-table-column label="整改结果" align="center" prop="rectifyResult"/>
         <el-table-column label="事件处理状态" align="center" prop="status">
           <template slot-scope="scope">
             <span>{{getStatusLabel(scope.row.status)}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="分配这件事用户的id" align="center" prop="allocateUserId"/>
+        <el-table-column label="下发用户编号" align="center" prop="allocateUserId"/>
+        <el-table-column label="下发用户类型" align="center" prop="allocatedUserType"/>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button
               size="mini"
               type="text"
-              icon="el-icon-edit"
-              @click="handleUpdate(scope.row)"
-              v-hasPermi="['threat:allocated:edit']"
-            >修改
+              icon="el-icon-zoom-in"
+              @click="handleAllocateDetail(scope.row.id)"
+              v-hasPermi="['threat:allocated:query']"
+            >详情
             </el-button>
             <el-button
               size="mini"
               type="text"
               icon="el-icon-delete"
-              @click="handleDelete(scope.row)"
+              @click="handleCancel(scope.row.id)"
               v-hasPermi="['threat:allocated:remove']"
-            >删除
+            >取消
             </el-button>
           </template>
         </el-table-column>
@@ -160,12 +154,58 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+
+    <el-dialog :title="allocatedTitle" :visible.sync="allpcatedFormOpen" v-if="allpcatedFormOpen" width="1200px" append-to-body >
+      <el-form ref="form" :model="allocatedForm" label-width="120px">
+        <el-form-item label="网格员编号">
+          <el-input v-model="allocatedForm.userId"  readonly></el-input>
+        </el-form-item>
+        <el-form-item label="网格员账号">
+          <el-input v-model="allocatedForm.params.userName"  readonly></el-input>
+        </el-form-item>
+        <el-form-item label="网格员姓名">
+          <el-input v-model="allocatedForm.params.realName"  readonly></el-input>
+        </el-form-item>
+        <el-form-item label="事件编号">
+          <el-input v-model="allocatedForm.eventId"  readonly></el-input>
+        </el-form-item>
+        <el-form-item label="检查时间">
+          <el-input v-model="allocatedForm.inspectDatetime"  readonly></el-input>
+        </el-form-item>
+        <el-form-item label="检查位置">
+          <el-input v-model="allocatedForm.inspectLocation"  readonly></el-input>
+        </el-form-item>
+        <el-form-item label="检查细节">
+          <el-input v-model="allocatedForm.inspectDetail"  type="textarea" readonly></el-input>
+        </el-form-item >
+        <el-form-item label="存在问题">
+          <el-input v-model="allocatedForm.existProblem"   type="textarea" readonly></el-input>
+        </el-form-item >
+        <el-form-item label="整改意见">
+          <el-input v-model="allocatedForm.rectifyOpinion" type="textarea"  readonly></el-input>
+        </el-form-item >
+        <el-form-item label="整改结果">
+          <el-input v-model="allocatedForm.rectifyResult"  type="textarea" readonly></el-input>
+        </el-form-item >
+        <el-form-item v-if="this.photoUrls &&this.photoUrls.length!==0" label="图片说明" prop="photoUrls">
+          <el-image v-for="url in photoUrls" :src="url" style="width: 300px; height: 180px" :preview-src-list="[url]"/>
+        </el-form-item>
+        <el-form-item v-if="this.videoUrl && this.videoUrl!==''"   label="视频信息" prop="videoUrl" style="width: 600px; ">
+          <vue-aliplayer-v2
+            :source="this.videoUrl"
+            ref="VueAliplayerV2"
+          />
+        </el-form-item>
+      </el-form>
+
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import { getThreatmanagement } from '@/api/qunfangqunzhi/threatmanagement'
-  import { addAllocated, updateAllocated, downloadEventAllocated } from '@/api/qunfangqunzhi/allocated'
+  import { addAllocated, updateAllocated, downloadEventAllocated,cancelEventAllocated,getAllocated} from '@/api/qunfangqunzhi/allocated'
   import { deptTreeSelect } from '@/api/system/user'
   import {listGridStuff} from  "@/api/qunfangqunzhi/CommonUsers"
   import VueAliplayerV2 from "vue-aliplayer-v2";
@@ -205,6 +245,11 @@
         userIds: null,
         photoUrls:[],
         videoUrl:null,
+
+        //下发情况详细表单
+        allocatedForm:{},
+        allpcatedFormOpen:false,
+        allocatedTitle:"处理详情"
       }
     },
     created() {
@@ -221,16 +266,18 @@
     methods: {
       getDetail() {
         getThreatmanagement(this.id).then(response => {
-          console.log(response.data);
           this.form = response.data
-          this.eventUserAllocatedList = response.data.eventUserAllocatedList;
+          if(response.data.eventUserAllocatedList != null){
+            this.eventUserAllocatedList = response.data.eventUserAllocatedList;
+          }
+
           if(response.data.photoUrl  && response.data.photoUrl !== ""){
               let str = response.data.photoUrl;
               let strings = str.split(",");
                this.photoUrls= strings.map((string)=>{
                 return process.env.VUE_APP_BASE_API +string;
               })
-              console.log(this.photoUrls)
+
           }
           if(response.data.videoUrl && response.data.videoUrl!==""){
             this.videoUrl = process.env.VUE_APP_BASE_API +response.data.videoUrl;
@@ -240,33 +287,31 @@
       rowEventUserAllocatedIndex({ row, rowIndex }) {
         row.index = rowIndex + 1
       },
-      handleAddEventUserAllocated() {
-        let obj = {}
-        obj.userId = ''
-        obj.eventDetail = ''
-        obj.photoUrl = ''
-        obj.videoUrl = ''
-        obj.eventResult = ''
-        obj.resultPhotoUrl = ''
-        obj.resultVideoUrl = ''
-        obj.status = ''
-        obj.allocateUserId = ''
-        this.eventUserAllocatedList.push(obj)
-      },
+
       /** 复选框选中数据 */
       handleEventUserAllocatedSelectionChange(selection) {
-        this.checkedEventUserAllocated = selection.map(item => item.index)
+        this.checkedEventUserAllocated = selection.map(item => {
+          if (item.status !=="3"){
+            return item.id;
+          }
+
+        })
       },
-      /**删除事件分配 */
+      /**批量取消下发数据 */
       handleDeleteEventUserAllocated() {
-        if (this.checkedEventUserAllocated.length == 0) {
-          this.$modal.msgError('请先选择要删除的${subTable.functionName}数据')
+        if (!this.checkedEventUserAllocated||this.checkedEventUserAllocated.length=== 0) {
+          this.$modal.msgError('请先选择要取消的数据')
         } else {
-          const eventUserAllocatedList = this.eventUserAllocatedList
-          const checkedEventUserAllocated = this.checkedEventUserAllocated
-          this.eventUserAllocatedList = eventUserAllocatedList.filter(function(item) {
-            return checkedEventUserAllocated.indexOf(item.index) == -1
-          })
+          this.$confirm("确定要取消下发事件吗？",'提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(()=>{
+            cancelEventAllocated(this.checkedEventUserAllocated).then(res=>{
+              this.$modal.msg("取消成功!");
+              this.getDetail();
+            })
+          }).catch(() => {})
         }
       },
       /** 查询部门下拉树结构 */
@@ -287,6 +332,7 @@
           downloadEventAllocated(this.userIds, this.id).then(response => {
             this.$message(response.msg)
             this.getList()
+            this.getDetail()
           })
         } else {
           this.$alert('下发用户选择不能为空')
@@ -353,19 +399,26 @@
           }
         }
       },
-      play() {
-        this.$refs.VueAliplayerV2.play();
+      //单个取消
+      handleCancel(id){
+        this.$confirm("确定要取消下发事件吗？",'提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          cancelEventAllocated(id).then(res=>{
+            this.$modal.msg("取消成功!");
+            this.getDetail();
+          })
+        }).catch(() => {})
+
       },
-
-      pause() {
-        this.$refs.VueAliplayerV2.pause();
-      },
-
-      replay() {
-        this.$refs.VueAliplayerV2.replay();
-      },
-
-
+      handleAllocateDetail(id){
+        this.allpcatedFormOpen = true;
+        getAllocated(id).then(res=>{
+          this.allocatedForm = res.data;
+        })
+      }
     }
 
   }

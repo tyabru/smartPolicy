@@ -102,4 +102,7 @@ public class EventInfoController extends BaseController
     {
         return toAjax(eventInfoService.deleteEventInfoByIds(ids));
     }
+
+
+
 }

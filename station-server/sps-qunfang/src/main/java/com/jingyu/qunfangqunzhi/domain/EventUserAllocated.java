@@ -9,7 +9,7 @@ import com.jingyu.common.core.domain.BaseEntity;
 
 /**
  * ${subTable.functionName}对象 event_user_allocated
- * 
+ *
  * @author jingyu
  * @date 2023-07-03
  */
@@ -45,7 +45,7 @@ public class EventUserAllocated extends BaseEntity
     private String inspectLocation;
 
     /** 检查日期时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "检查日期时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date inspectDatetime;
 
@@ -73,129 +73,129 @@ public class EventUserAllocated extends BaseEntity
     @Excel(name = "分配任务用户的id")
     private Long allocateUserId;
 
-    public void setId(Long id) 
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setUserId(Long userId) 
+    public void setUserId(Long userId)
     {
         this.userId = userId;
     }
 
-    public Long getUserId() 
+    public Long getUserId()
     {
         return userId;
     }
-    public void setEventId(Long eventId) 
+    public void setEventId(Long eventId)
     {
         this.eventId = eventId;
     }
 
-    public Long getEventId() 
+    public Long getEventId()
     {
         return eventId;
     }
-    public void setInspectDetail(String inspectDetail) 
+    public void setInspectDetail(String inspectDetail)
     {
         this.inspectDetail = inspectDetail;
     }
 
-    public String getInspectDetail() 
+    public String getInspectDetail()
     {
         return inspectDetail;
     }
-    public void setRectifyOpinion(String rectifyOpinion) 
+    public void setRectifyOpinion(String rectifyOpinion)
     {
         this.rectifyOpinion = rectifyOpinion;
     }
 
-    public String getRectifyOpinion() 
+    public String getRectifyOpinion()
     {
         return rectifyOpinion;
     }
-    public void setRectifyResult(String rectifyResult) 
+    public void setRectifyResult(String rectifyResult)
     {
         this.rectifyResult = rectifyResult;
     }
 
-    public String getRectifyResult() 
+    public String getRectifyResult()
     {
         return rectifyResult;
     }
-    public void setInspectLocation(String inspectLocation) 
+    public void setInspectLocation(String inspectLocation)
     {
         this.inspectLocation = inspectLocation;
     }
 
-    public String getInspectLocation() 
+    public String getInspectLocation()
     {
         return inspectLocation;
     }
-    public void setInspectDatetime(Date inspectDatetime) 
+    public void setInspectDatetime(Date inspectDatetime)
     {
         this.inspectDatetime = inspectDatetime;
     }
 
-    public Date getInspectDatetime() 
+    public Date getInspectDatetime()
     {
         return inspectDatetime;
     }
-    public void setExistProblem(String existProblem) 
+    public void setExistProblem(String existProblem)
     {
         this.existProblem = existProblem;
     }
 
-    public String getExistProblem() 
+    public String getExistProblem()
     {
         return existProblem;
     }
-    public void setPhotoUrl(String photoUrl) 
+    public void setPhotoUrl(String photoUrl)
     {
         this.photoUrl = photoUrl;
     }
 
-    public String getPhotoUrl() 
+    public String getPhotoUrl()
     {
         return photoUrl;
     }
-    public void setVideoUrl(String videoUrl) 
+    public void setVideoUrl(String videoUrl)
     {
         this.videoUrl = videoUrl;
     }
 
-    public String getVideoUrl() 
+    public String getVideoUrl()
     {
         return videoUrl;
     }
-    public void setStatus(String status) 
+    public void setStatus(String status)
     {
         this.status = status;
     }
 
-    public String getStatus() 
+    public String getStatus()
     {
         return status;
     }
-    public void setAllocatedUserType(String allocatedUserType) 
+    public void setAllocatedUserType(String allocatedUserType)
     {
         this.allocatedUserType = allocatedUserType;
     }
 
-    public String getAllocatedUserType() 
+    public String getAllocatedUserType()
     {
         return allocatedUserType;
     }
-    public void setAllocateUserId(Long allocateUserId) 
+    public void setAllocateUserId(Long allocateUserId)
     {
         this.allocateUserId = allocateUserId;
     }
 
-    public Long getAllocateUserId() 
+    public Long getAllocateUserId()
     {
         return allocateUserId;
     }

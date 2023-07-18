@@ -89,7 +89,9 @@ public class CommonUsersController extends BaseController
                 iterator.remove();
             }
         }
-        return getDataTable(list);
+        TableDataInfo dataTable = getDataTable(list);
+        dataTable.setTotal(list.size());
+        return dataTable;
     }
 
 

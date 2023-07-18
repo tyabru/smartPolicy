@@ -2,7 +2,9 @@ package com.jingyu.qunfangqunzhi.service.impl;
 
 import java.util.List;
 
+import com.jingyu.qunfangqunzhi.domain.CommonUser;
 import com.jingyu.qunfangqunzhi.domain.EventInfo;
+import com.jingyu.qunfangqunzhi.mapper.CommonUsersMapper;
 import com.jingyu.qunfangqunzhi.mapper.EventInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class EventUserAllocatedServiceImpl implements IEventUserAllocatedService
     @Autowired
     private EventInfoMapper eventInfoMapper;
 
+    @Autowired
+    private CommonUsersMapper usersMapper;
+
     /**
      * 查询事件分配
      *
@@ -34,6 +39,7 @@ public class EventUserAllocatedServiceImpl implements IEventUserAllocatedService
     @Override
     public EventUserAllocated selectEventUserAllocatedById(Long id)
     {
+
         return eventUserAllocatedMapper.selectEventUserAllocatedById(id);
     }
 

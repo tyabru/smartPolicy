@@ -57,4 +57,52 @@ public class QFConstants {
      * 短信内容有效期 300s
      */
     public static final int CODE_CONTENT_TIME_LIMIT = 60*5;
+
+    /**
+     * 事件下发人员类型
+     */
+    public enum AllocateUserType{
+        SYSTEM_USER("管理员"),
+        COMMON_USER("网格员长");
+        private final String value;
+        AllocateUserType(String value){
+            this.value = value;
+        }
+        public String getValue(){
+            return this.value;
+        }
+    }
+
+    /**
+     *  下发事件处置状态
+     */
+    public enum AllocatedEventStatus{
+        UNCONFIRMED("0"),
+        CONFIRMED("1"),
+        CANCELED("2"),
+        COMPLETED("3");
+        private final String value;
+        AllocatedEventStatus(String value){
+            this.value = value;
+        }
+        public String getValue(){
+            return this.value;
+        }
+    }
+
+    /**
+     *  事件处置状态
+     */
+    public enum EventStatus{
+        UNCONFIRMED("0"),
+        CONFIRMED("1"),
+        COMPLETED("2");
+        private final String value;
+        EventStatus(String value){
+            this.value = value;
+        }
+        public String getValue(){
+            return this.value;
+        }
+    }
 }

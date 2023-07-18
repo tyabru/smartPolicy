@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.jingyu.common.annotation.DataScope;
 import com.jingyu.common.utils.DateUtils;
+import com.jingyu.common.utils.StringUtils;
 import com.jingyu.qunfangqunzhi.constant.CommonUserConstants;
 import com.jingyu.qunfangqunzhi.constant.QFConstants;
 import com.jingyu.qunfangqunzhi.domain.CommonUser;
@@ -65,6 +66,12 @@ public class CommonUsersServiceImpl implements ICommonUsersService
     public int insertCommonUsers(CommonUser commonUser)
     {
         commonUser.setCreateTime(DateUtils.getNowDate());
+        if(StringUtils.isNull(commonUser.getDeptId())){
+            commonUser.setDeptId(0L);
+        }
+        if(StringUtils.isNull(commonUser.getUserName())){
+            commonUser.setUserName(commonUser.getPhonenumber());
+        }
         return commonUsersMapper.insertCommonUsers(commonUser);
     }
 

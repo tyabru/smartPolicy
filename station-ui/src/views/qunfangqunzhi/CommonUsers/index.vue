@@ -39,6 +39,18 @@
       </el-col>
       <el-col :span="20" :xs="24">
         <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+          <el-form-item label="用户类型" prop="userType">
+            <el-select v-model="queryParams.userType"  @keyup.enter.native="handleQuery"  clearable placeholder="请选择用户类型">
+              <el-option
+                v-for="item in this.dict.type.common_user_type"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+          </el-form-item>
+
           <el-form-item label="用户账号" prop="userName">
             <el-input
               v-model="queryParams.userName"
@@ -47,31 +59,14 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="用户昵称" prop="realName">
+          <el-form-item label="真实姓名" prop="realName">
             <el-input
               v-model="queryParams.realName"
-              placeholder="请输入用户昵称"
+              placeholder="请输入用户姓名"
               clearable
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="用户邮箱" prop="email">
-            <el-input
-              v-model="queryParams.email"
-              placeholder="请输入用户邮箱"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="身份证号" prop="idNumber">
-            <el-input
-              v-model="queryParams.idNumber"
-              placeholder="请输入身份证号"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-
           <el-form-item label="手机号码" prop="phonenumber">
             <el-input
               v-model="queryParams.phonenumber"
@@ -80,51 +75,11 @@
               @keyup.enter.native="handleQuery"
             />
           </el-form-item>
-          <el-form-item label="家庭住址" prop="homeAddress">
-            <el-input
-              v-model="queryParams.homeAddress"
-              placeholder="请输入家庭住址"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="头像地址" prop="avatar">
-            <el-input
-              v-model="queryParams.avatar"
-              placeholder="请输入头像地址"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="密码" prop="password">
-            <el-input
-              v-model="queryParams.password"
-              placeholder="请输入密码"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="最后登录IP" prop="loginIp">
-            <el-input
-              v-model="queryParams.loginIp"
-              placeholder="请输入最后登录IP"
-              clearable
-              @keyup.enter.native="handleQuery"
-            />
-          </el-form-item>
-          <el-form-item label="最后登录时间" prop="loginDate">
-            <el-date-picker clearable
-                            v-model="queryParams.loginDate"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="请选择最后登录时间">
-            </el-date-picker>
-          </el-form-item>
           <el-form-item>
             <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
             <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
           </el-form-item>
-        </el-form>
+       </el-form>
 
         <el-row :gutter="10" class="mb8">
           <el-col :span="1.5">
@@ -169,12 +124,12 @@
               v-hasPermi="['qunfangqunzhi:CommonUsers:export']"
             >导出</el-button>
           </el-col>
-          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+          <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"> </right-toolbar>
         </el-row>
 
         <el-table v-loading="loading" :data="CommonUsersList" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55" align="center" />
-          <el-table-column label="用户编号" align="center" prop="userId" />
+          <el-table-column label="账号" align="center" prop="userName" />
           <el-table-column label="真实姓名" align="center" prop="realName" />
           <el-table-column label="所属辖区" align="center" prop="dept.deptName" />
           <el-table-column label="用户类型" align="center" prop="userType" >
@@ -199,8 +154,6 @@
               ></el-switch>
             </template>
           </el-table-column>
-
-
           <el-table-column label="备注" align="center" prop="remark" />
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
@@ -250,17 +203,11 @@
     </el-row>
 
 
-    <!-- 添加或修改普通用户信息对话框 -->
+<!--  对话框-->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="用户账号" prop="userName">
-          <el-input v-model="form.userName" placeholder="请输入用户账号" />
-        </el-form-item>
-        <el-form-item label="归属部门" prop="deptId">
-          <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择归属部门" />
-        </el-form-item>
-        <el-form-item label="角色类型">
-          <el-select v-model="form.userType"  clearable placeholder="请选择角色">
+        <el-form-item label="角色类型" prop="userType">
+          <el-select v-model="form.userType"  @change="changeUserType"  clearable placeholder="请选择角色">
             <el-option
               v-for="item in this.dict.type.common_user_type"
               :key="item.value"
@@ -270,11 +217,25 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="用户昵称" prop="realName">
+        <el-form-item label="归属部门" prop="deptId" v-if="!deptDisabled">
+          <treeselect v-model="form.deptId" :options="deptOptions" :disabled="deptDisabled" :show-count="true" placeholder="请选择归属部门" />
+        </el-form-item>
+        <el-form-item label="用户账号" prop="userName">
+          <el-input v-model="form.userName" placeholder="请输入用户账号" />
+        </el-form-item>
+        <el-form-item label="用户姓名" prop="realName">
           <el-input v-model="form.realName" placeholder="请输入用户昵称" />
         </el-form-item>
-        <el-form-item label="用户邮箱" prop="email">
-          <el-input v-model="form.email" placeholder="请输入用户邮箱" />
+        <el-form-item label="性别" prop="realName">
+          <el-select v-model="form.sex" placeholder="请选择用户性别" >
+            <el-option
+              v-for="item in this.dict.type.sys_user_sex"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
         </el-form-item>
         <el-form-item label="身份证号" prop="idNumber">
           <el-input v-model="form.idNumber" placeholder="请输入身份证号" />
@@ -285,26 +246,35 @@
         <el-form-item label="家庭住址" prop="homeAddress">
           <el-input v-model="form.homeAddress" placeholder="请输入家庭住址" />
         </el-form-item>
-        <el-form-item label="头像地址" prop="avatar">
-          <el-input v-model="form.avatar" placeholder="请输入头像地址" />
+        <el-form-item label="照片" prop="avatar">
+          <el-upload
+            accept=".jpg,.jpeg,.png"
+            class="avatar-uploader"
+            :action="uploadImgUrl"
+            :on-preview="handlePictureCardPreview"
+            :on-remove="this.uploadFile = null"
+            :before-upload="handleBeforeUpload"
+            :on-success="handleUploadSuccess"
+            :headers="headers"
+            :show-file-list="false"
+            >
+            <img v-if="imgUrl" :src="imgUrl" class="avatar">
+            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+          </el-upload>
+          请上传
+          <span v-if="fileSize"> 大小不超过 <b style="color: #f56c6c">{{ fileSize }}MB</b> </span>
+          <span v-if="fileType"> 格式为 <b style="color: #f56c6c">jpg,jpeg,png</b> </span>
+          的文件
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password" placeholder="请输入密码" />
+        <el-form-item label="账户状态" prop="status">
+          <el-switch
+            v-model="form.status"
+            active-value="0"
+            inactive-value="1"
+          >
+          </el-switch>
         </el-form-item>
-        <el-form-item label="删除标志" prop="delFlag">
-          <el-input v-model="form.delFlag" placeholder="请输入删除标志" />
-        </el-form-item>
-        <el-form-item label="最后登录IP" prop="loginIp">
-          <el-input v-model="form.loginIp" placeholder="请输入最后登录IP" />
-        </el-form-item>
-        <el-form-item label="最后登录时间" prop="loginDate">
-          <el-date-picker clearable
-            v-model="form.loginDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择最后登录时间">
-          </el-date-picker>
-        </el-form-item>
+
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -315,17 +285,24 @@
       </div>
     </el-dialog>
 
-    <!-- 详情-->>
+    <!-- 详情-->
     <el-dialog :title="title3" :visible.sync="open3"  width="500px" append-to-body>
-      <el-form ref="form" :model="form" disabled label-width="80px">
+      <el-form ref="form" :model="form" disabled label-width="100px">
         <el-form-item label="用户邮箱" prop="email">
           <el-input v-model="form.email"  />
         </el-form-item>
         <el-form-item label="身份证号" prop="idNumber">
           <el-input v-model="form.idNumber" />
         </el-form-item>
-        <el-form-item label="头像地址" prop="avatar">
-          <el-input v-model="form.avatar"/>
+        <el-form-item label="照片" prop="avatar">
+          <el-image
+            v-if="this.imgUrl"
+            style="width: 300px; height: 300px"
+            :src="imgUrl"
+            :fit="fit"
+            :preview-src-list="[imgUrl]">
+          </el-image>
+          <span v-show="!this.imgUrl" style="color: red">暂无照片</span>
         </el-form-item>
         <el-form-item label="最后登录IP" prop="loginIp">
           <el-input v-model="form.loginIp" />
@@ -340,11 +317,10 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" @click="closeDetailForm">确 定</el-button>
       </div>
     </el-dialog>
-    <!-- 申请信息（ -->
+<!--     申请信息-->
     <el-dialog :title="title2" :visible.sync="open2" width="500px" append-to-body>
       <el-form ref="form"  label-width="80px" >
         <el-form-item label="申请描述">
@@ -371,6 +347,8 @@
       </div>
     </el-dialog>
 
+
+
   </div>
 </template>
 
@@ -380,6 +358,7 @@ import {deptTreeSelect} from "@/api/system/user";
 import {getApplicationManage} from  "@/api/qunfangqunzhi/applicationManage"
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import {getToken} from "@/utils/auth";
 
 export default {
   name: "CommonUsers",
@@ -423,14 +402,22 @@ export default {
         status: null,
         loginIp: null,
         loginDate: null,
+        dialogImageUrl: "",
+        dialogVisible: false,
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
-        userName: [
-          { required: true, message: "用户账号不能为空", trigger: "blur" }
+        deptId: [
+          { required: true, message: "辖区选项不能为空", trigger: "change" }
         ],
+        userType:[
+          {required: true, message: "用户类型不能为空", trigger: "change"}
+        ],
+        userName:[
+          {required: true, message: "用户账号不能为空", trigger: "change"}
+        ]
       },
       // 部门名称
       deptName: undefined,
@@ -460,6 +447,20 @@ export default {
       },
       title3:"详情信息",
       open3:false,
+      //上传照片地址
+      uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload",
+      uploadFile:null,
+      // 上传文件类型, 例如['png', 'jpg', 'jpeg']
+      fileType:["png", "jpg", "jpeg"],
+      headers: {
+        Authorization: "Bearer " + getToken(),
+      },
+      imgUrl:null,
+      // 上传图片大小限制(MB)
+      fileSize:5,
+      deptDisabled:false,
+      // 查看更多信息中的图片地址
+
 
     };
   },
@@ -520,6 +521,7 @@ export default {
       };
       this.resetForm("form2");
       this.resetForm("form");
+      this.imgUrl = null;
     },
 
 
@@ -553,12 +555,34 @@ export default {
         this.form = response.data;
         this.open = true;
         this.title = "修改普通用户信息";
+        if(this.form.avatar){
+          this.imgUrl = process.env.VUE_APP_BASE_API + this.form.avatar
+        }
+        if(this.form.userType == 0){
+          this.deptDisabled = true;
+        }else{
+          //网格员辖区还未设置
+          if(this.form.deptId == 0){
+            this.form.deptId = null;
+          }
+        }
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+
+          if(this.form.userType == 0 && this.form.deptId != 0 ){
+            this.$alert("普通用户不存在辖区选项");
+            return;
+          }
+          if(this.form.userType != 0 && (this.form.deptId == 0||this.form.deptId == null) ){
+            this.$alert("");
+            return;
+          }
+
+          //修改
           if (this.form.userId != null) {
             updateCommonUsers(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
@@ -578,7 +602,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const userIds = row.userId || this.ids;
-      this.$modal.confirm('是否确认删除普通用户信息编号为"' + userIds + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除选中用户账号？').then(function() {
         return delCommonUsers(userIds);
       }).then(() => {
         this.getList();
@@ -658,6 +682,7 @@ export default {
       getCommonUsers(userId).then(response => {
         this.form = response.data;
         this.open3 = true;
+        this.imgUrl = this.form.avatar?process.env.VUE_APP_BASE_API + this.form.avatar:null
       });
     },
     //获取下用户类型标签内容
@@ -687,10 +712,92 @@ export default {
         row.status = row.status === "0" ? "1" : "0";
       });
     },
+    // 上传成功回调
+    handleUploadSuccess(res, file) {
+      if (res.code === 200) {
+        this.$modal.closeLoading();
+        this.imgUrl = process.env.VUE_APP_BASE_API+res.fileName;
+        this.form.avatar = res.fileName;
+      } else {
+        this.$modal.closeLoading();
+        this.$modal.msgError(res.msg);
+        // this.$refs.imageUpload.handleRemove(file);
+        // this.uploadedSuccessfully();
+      }
+    },
+    // 预览
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url;
+      this.dialogVisible = true;
+    },
+    // 上传前loading加载
+    handleBeforeUpload(file) {
+      let isImg = false;
+      if (this.fileType.length) {
+        let fileExtension = "";
+        if (file.name.lastIndexOf(".") > -1) {
+          fileExtension = file.name.slice(file.name.lastIndexOf(".") + 1);
+        }
+        isImg = this.fileType.some(type => {
+          if (file.type.indexOf(type) > -1) return true;
+          if (fileExtension && fileExtension.indexOf(type) > -1) return true;
+          return false;
+        });
+      } else {
+        isImg = file.type.indexOf("image") > -1;
+      }
+
+      if (!isImg) {
+        this.$modal.msgError(`文件格式不正确, 请上传${this.fileType.join("/")}图片格式文件!`);
+        return false;
+      }
+      if (this.fileSize) {
+        const isLt = file.size / 1024 / 1024 < this.fileSize;
+        if (!isLt) {
+          this.$modal.msgError(`上传头像图片大小不能超过 ${this.fileSize} MB!`);
+          return false;
+        }
+      }
+      this.$modal.loading("正在上传图片，请稍候...");
+    },
+    changeUserType(val){
+      if(val == 0){
+        this.form.deptId = 0;
+        this.deptDisabled = true;
+      }else{
+        this.form.deptId = null;
+        this.deptDisabled = false;
+      }
+    },
+    closeDetailForm(){
+      this.open3 = false;
+      this.reset();
+    }
   }
 };
 </script>
 <style scoped>
-
-
+.avatar-uploader .el-upload {
+  border: 1px dashed #d9d9d9;
+  border-radius: 6px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.avatar-uploader .el-upload:hover {
+  border-color: #409EFF;
+}
+.avatar-uploader-icon {
+  font-size: 28px;
+  color: #8c939d;
+  width: 178px;
+  height: 178px;
+  line-height: 178px;
+  text-align: center;
+}
+.avatar {
+  width: 178px;
+  height: 178px;
+  display: block;
+}
 </style>

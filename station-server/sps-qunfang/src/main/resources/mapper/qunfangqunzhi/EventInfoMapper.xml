@@ -71,7 +71,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select a.id, a.upload_user_id, a.event_type, a.contact_person_name, a.contact_phone, a.address, a.address_data, a.event_description, a.occur_time, a.photo_url, a.video_url, a.status, a.reply, a.upload_time,a.event_summarize, a.remark,
  b.id as sub_id, b.user_id as sub_user_id, b.event_id as sub_event_id, b.inspect_detail as sub_inspect_detail, b.rectify_opinion as sub_rectify_opinion, b.rectify_result as sub_rectify_result, b.inspect_location as sub_inspect_location, b.inspect_datetime as sub_inspect_datetime, b.exist_problem as sub_exist_problem, b.photo_url as sub_photo_url, b.video_url as sub_video_url, b.status as sub_status, b.allocated_user_type as sub_allocated_user_type, b.allocate_user_id as sub_allocate_user_id
         from event_info a
-        left join event_user_allocated b on b.event_id = a.id
+        left join event_user_allocated b on b.event_id = a.id and b.status != "2"
         where a.id = #{id}
     </select>
 

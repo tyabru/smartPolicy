@@ -52,6 +52,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectCommonUsersList" parameterType="CommonUser" resultMap="CommonUsersResult">
         <include refid="selectCommonUsersVo"/>
             where c.del_flag = '0'
+            <if test="userId != null and userId !='' ">and user_id = #{userId}  </if>
             <if test="userName != null  and userName != ''"> and user_name like concat('%', #{userName}, '%')</if>
             <if test="realName != null  and realName != ''"> and real_name like concat('%', #{realName}, '%')</if>
             <if test="userType != null  and userType != ''"> and user_type = #{userType}</if>
@@ -159,11 +160,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteCommonUsersByUserId" parameterType="Long">
-        delete from common_users where user_id = #{userId}
+        update common_users set delete_flag = "2" where user_id = #{userId}
     </delete>
 
     <delete id="deleteCommonUsersByUserIds" parameterType="String">
-        delete from common_users where user_id in
+        update common_users set delete_flag = "2"  where user_id in
         <foreach item="userId" collection="array" open="(" separator="," close=")">
             #{userId}
         </foreach>

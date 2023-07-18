@@ -24,6 +24,14 @@ export function downloadEventAllocated(userIds,eventId) {
   })
 }
 
+
+//取消下发
+export function cancelEventAllocated(ids) {
+  return request({
+    url: '/qf/allocated/cancelEvent/'+ids,
+    method: 'get'
+  })
+}
 // 新增下发事件
 export function addAllocated(data) {
   return request({
@@ -32,6 +40,8 @@ export function addAllocated(data) {
     data: data
   })
 }
+
+
 
 // 修改下发事件
 export function updateAllocated(data) {

@@ -6,6 +6,12 @@ import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
 import com.jingyu.common.utils.SecurityUtils;
+import com.jingyu.qunfangqunzhi.constant.CommonUserConstants;
+import com.jingyu.qunfangqunzhi.constant.QFConstants;
+import com.jingyu.qunfangqunzhi.domain.CommonUser;
+import com.jingyu.qunfangqunzhi.domain.EventInfo;
+import com.jingyu.qunfangqunzhi.service.ICommonUsersService;
+import com.jingyu.qunfangqunzhi.service.IEventInfoService;
 import com.jingyu.qunfangqunzhi.service.IEventUserAllocatedService;
 import com.jingyu.qunfangqunzhi.util.MyIdUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -40,6 +46,12 @@ public class EventUserAllocatedController extends BaseController
     @Autowired
     private IEventUserAllocatedService eventUserAllocatedService;
 
+    @Autowired
+    private IEventInfoService eventInfoService;
+
+    @Autowired
+    private ICommonUsersService usersService;
+
     /**
      * 查询事件分配列表
      */
@@ -72,11 +84,22 @@ public class EventUserAllocatedController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return success(eventUserAllocatedService.selectEventUserAllocatedById(id));
+        EventUserAllocated eventUserAllocated = eventUserAllocatedService.selectEventUserAllocatedById(id);
+        Long userId = eventUserAllocated.getUserId();
+        CommonUser commonUser = usersService.selectCommonUsersByUserId(userId);
+        eventUserAllocated.getParams().put("userName", commonUser.getUserName());
+        eventUserAllocated.getParams().put("realName", commonUser.getRealName());
+
+        return success(eventUserAllocated);
     }
 
 
-
+    /**
+     * 下发事件
+     * @param userIds
+     * @param eventId
+     * @return
+     */
     @GetMapping("/downloadEvent/{userIds}/{eventId}")
     public AjaxResult downloadEvent(@PathVariable("userIds") Long[] userIds ,@PathVariable("eventId")Long eventId){
         Date date = new Date();
@@ -88,10 +111,32 @@ public class EventUserAllocatedController extends BaseController
             eventUserAllocated.setId(MyIdUtil.getRandomId());
             eventUserAllocated.setEventId(eventId);
             eventUserAllocated.setStatus("0");
+            eventUserAllocated.setAllocatedUserType(QFConstants.AllocateUserType.SYSTEM_USER.getValue());
             list.add(eventUserAllocated);
         }
+
         eventUserAllocatedService.insertBatchEventUserAllocated(list);
+        EventInfo eventInfo = new EventInfo();
+        eventInfo.setId(eventId);
+        eventInfo.setStatus(QFConstants.EventStatus.CONFIRMED.getValue());
         return AjaxResult.success("下发事件成功");
+    }
+
+
+    /**
+     * 取消下发事件
+     * @return
+     */
+    @GetMapping("/cancelEvent/{ids}")
+    public AjaxResult cancelEvent(@PathVariable("ids") Long[] ids){
+        for(Long id : ids){
+            EventUserAllocated alterAllocated = new EventUserAllocated();
+            alterAllocated.setId(id);
+            alterAllocated.setStatus(QFConstants.AllocatedEventStatus.CANCELED.getValue());
+            System.out.println(alterAllocated);
+            eventUserAllocatedService.updateEventUserAllocated(alterAllocated);
+        }
+        return AjaxResult.success("取消成功");
 
     }
 
