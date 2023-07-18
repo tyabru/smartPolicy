@@ -50,3 +50,6 @@ nbdist/
 /sps-admin/target/
 /sps-common/target/
 /sps-framework/target/
+/sps-generator/target/
+/sps-safecheck/target/
+/sps-system/target/
