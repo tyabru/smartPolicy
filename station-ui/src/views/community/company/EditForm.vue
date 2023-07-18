@@ -16,7 +16,7 @@
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="单位类型" prop="type">
-              <el-select v-model="form.type" clearable class="width-100Rate">
+              <el-select v-model="form.type" clearable class="width-100Rate" @change="createCompanyCode">
                 <el-option v-for="item in dict.type['place_list']"
                            :key="item.value" :value="item.value" :label="item.label" />
               </el-select>
@@ -29,7 +29,7 @@
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="创建日期" prop="registrationTime">
-              <el-date-picker clearable style="width: 100%"
+              <el-date-picker clearable style="width: 100%" @change="createCompanyCode"
                               v-model="form.registrationTime"
                               type="date"
                               value-format="yyyy-MM-dd"
@@ -104,16 +104,17 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="负责人证件类型" prop="identityCode"
-              :rules="[{required: form.headMaster && form.headMaster.length > 0,
-                message: '在填写负责人后，证件类型为必填项。'}]">
-              <el-input v-model="form.identityCode" placeholder="请输入负责人证件号码" />
+            <el-form-item label="证件类型" prop="identityType"
+                          :required="form.headMaster && form.headMaster.length > 0" >
+              <el-select v-model="form.identityType" class="width-100Rate" placeholder="请输入身份证件类型">
+                <el-option value="CN_CARD" label="中国身份证"></el-option>
+                <el-option value="PASS_PORT" label="护照"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="负责人证件号码" prop="identityCode"
-              :rules="[{required: form.headMaster && form.headMaster.length > 0,
-                message: '在填写负责人后，证件号码为必填项。'}]">
+                          :required="form.headMaster && form.headMaster.length > 0" >
               <el-input v-model="form.identityCode" placeholder="请输入负责人证件号码" />
             </el-form-item>
           </el-col>
@@ -156,22 +157,36 @@ import { Decrypt } from '@/utils/Aescrypt'
 import UploadGroup from '@/components/UploadGroup/index.vue'
 import { deleteByFileId, getDescListByCompanyId, uploadFileDesc } from '@/api/community/companyFile.js'
 import { addCompany, getCompany, updateCompany } from '@/api/community/company'
-import { queryBelongDeptByTypeAndId, selectCommunityByDeptId } from '@/api/system/dept'
+import { queryBelongDeptByTypeAndId } from '@/api/system/dept'
 import { queryPcsPoliceUser } from '@/api/system/user'
+import { fixedString } from '@/utils'
+import { formatDateByPattern } from '@/utils'
+import { validIdCodeByType } from '@/utils/validate'
 export default {
   name: 'edit-form',
   dicts: ['place_list'],
   components: { UploadGroup },
   data() {
+    const validIdCodeByType = (rule, value, callback) => {
+
+      if(value==''||value==undefined||value==null){
+        callback("validIdCodeByType");
+      }else {
+        if()
+      }
+    }
     return {
       form: {
         id: null,
-        companyCode: '1111111111111111111111',
         fileList: []
       },
       policeList: [],
       rules: {
         communityId: [ { required: true, message: '所属社区为必填项，不能为空！', trigger: 'blur'} ],
+        identityCode: [
+          { validator: validIdCodeByType, message: '身份证格式不正确', trigger: "blur"
+          }
+        ],
       }
     }
   },
@@ -203,6 +218,16 @@ export default {
           throw e;
         }
         this.getFormById(this.form.id);
+      }
+    },
+    createCompanyCode() {
+      if(this.form.type && this.form.registrationTime) {
+        const date = new Date(this.form.registrationTime);
+        const time = new Date().getTime() + '';
+        const code = '61' + fixedString(this.form.type, 2)
+          + formatDateByPattern(date, 'yyyyMMdd')
+          + time.substring(time.length - 9);
+        this.$set(this.form, 'companyCode', code)
       }
     },
     getFormById(id) {

@@ -64,7 +64,7 @@
     <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="所属社区" align="center" prop="communityObj.deptName" />
-      <el-table-column label="单位编码" align="center" prop="companyCode" />
+      <el-table-column label="单位编码" align="center" prop="companyCode" width="180px" />
       <el-table-column label="单位名称" align="center" prop="companyName" />
       <el-table-column label="单位类型" align="center" prop="type">
         <template v-slot="{ row }">
@@ -129,7 +129,7 @@ export default {
         title = `修改[ ${row.companyName} ]信息`;
         params['sq_pk'] = Encrypt(JSON.stringify({id: row.id | 'unknown'}));
       }
-      this.$tab.openPage(title, '/community/page/company-edit', params);
+      this.$tab.openPage(title, '/community/company/info-edit', params);
     },
     /** 删除按钮操作 */
     handleDelete(row) {

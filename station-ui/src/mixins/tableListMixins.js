@@ -2,11 +2,18 @@ export default {
   data() {
     return {
       config: {
+        idPropName: 'id',
         needPaging: true,
         axiosRequest: null
       },
       loading: false,
       total: 0,
+      // 选中数组
+      ids: [],
+      // 非单个禁用
+      single: true,
+      // 非多个禁用
+      multiple: true,
       showSearch: true,
       pageSizes: [10, 20, 30, 40, 50, 100],
       tableData: [],
@@ -45,6 +52,7 @@ export default {
       if(!this.axiosRequest || !this.handleResponse) {
         return
       }
+      this.queryParams.pageNum = 1;
       this.initTableData(this.axiosRequest, this.handleResponse);
     },
     changeLoading(loading) {
@@ -65,6 +73,10 @@ export default {
       this.resetForm("queryForm");
       this.queryChanged();
     },
-
+    handleSelectionChange(selection) {
+      this.ids = selection.map(item => item[this.config.idPropName])
+      this.single = selection.length!==1
+      this.multiple = !selection.length
+    },
   }
 }

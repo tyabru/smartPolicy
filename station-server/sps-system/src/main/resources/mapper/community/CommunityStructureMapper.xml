@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.community.mapper.CommunityStructureMapper">
+    
+    <resultMap type="CommunityStructure" id="CommunityStructureResult">
+        <result property="id"    column="id"    />
+        <result property="communityId"    column="community_id"    />
+        <result property="communityCode"    column="community_code"    />
+        <result property="communityName"    column="community_name"    />
+        <result property="metaAddrId"    column="meta_addr_id"    />
+        <result property="fullAddress"    column="full_address"    />
+        <result property="metaLevel"    column="meta_level"    />
+        <result property="parentId"    column="parent_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="shortName"    column="short_name"    />
+        <result property="region"    column="region"    />
+        <result property="regionName"    column="region_name"    />
+    </resultMap>
+
+    <sql id="selectCommunityStructureVo">
+        select id, community_id, community_code, community_name, meta_addr_id, full_address, meta_level, parent_id, dept_id, short_name, region, region_name from sq_community_structure
+    </sql>
+
+    <select id="selectCommunityStructureList" parameterType="CommunityStructure" resultMap="CommunityStructureResult">
+        <include refid="selectCommunityStructureVo"/>
+        <where>  
+            <if test="communityId != null "> and community_id = #{communityId}</if>
+            <if test="communityCode != null  and communityCode != ''"> and community_code = #{communityCode}</if>
+            <if test="communityName != null  and communityName != ''"> and community_name like concat('%', #{communityName}, '%')</if>
+            <if test="metaAddrId != null  and metaAddrId != ''"> and meta_addr_id = #{metaAddrId}</if>
+            <if test="fullAddress != null  and fullAddress != ''"> and full_address = #{fullAddress}</if>
+            <if test="metaLevel != null "> and meta_level = #{metaLevel}</if>
+            <if test="parentId != null "> and parent_id = #{parentId}</if>
+            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
+            <if test="shortName != null  and shortName != ''"> and short_name like concat('%', #{shortName}, '%')</if>
+            <if test="region != null  and region != ''"> and region = #{region}</if>
+            <if test="regionName != null  and regionName != ''"> and region_name like concat('%', #{regionName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectCommunityStructureById" parameterType="Long" resultMap="CommunityStructureResult">
+        <include refid="selectCommunityStructureVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCommunityStructure" parameterType="CommunityStructure" useGeneratedKeys="true" keyProperty="id">
+        insert into sq_community_structure
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="communityId != null">community_id,</if>
+            <if test="communityCode != null and communityCode != ''">community_code,</if>
+            <if test="communityName != null">community_name,</if>
+            <if test="metaAddrId != null">meta_addr_id,</if>
+            <if test="fullAddress != null">full_address,</if>
+            <if test="metaLevel != null">meta_level,</if>
+            <if test="parentId != null">parent_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="shortName != null">short_name,</if>
+            <if test="region != null">region,</if>
+            <if test="regionName != null">region_name,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="communityId != null">#{communityId},</if>
+            <if test="communityCode != null and communityCode != ''">#{communityCode},</if>
+            <if test="communityName != null">#{communityName},</if>
+            <if test="metaAddrId != null">#{metaAddrId},</if>
+            <if test="fullAddress != null">#{fullAddress},</if>
+            <if test="metaLevel != null">#{metaLevel},</if>
+            <if test="parentId != null">#{parentId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="shortName != null">#{shortName},</if>
+            <if test="region != null">#{region},</if>
+            <if test="regionName != null">#{regionName},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCommunityStructure" parameterType="CommunityStructure">
+        update sq_community_structure
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="communityId != null">community_id = #{communityId},</if>
+            <if test="communityCode != null and communityCode != ''">community_code = #{communityCode},</if>
+            <if test="communityName != null">community_name = #{communityName},</if>
+            <if test="metaAddrId != null">meta_addr_id = #{metaAddrId},</if>
+            <if test="fullAddress != null">full_address = #{fullAddress},</if>
+            <if test="metaLevel != null">meta_level = #{metaLevel},</if>
+            <if test="parentId != null">parent_id = #{parentId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="shortName != null">short_name = #{shortName},</if>
+            <if test="region != null">region = #{region},</if>
+            <if test="regionName != null">region_name = #{regionName},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityStructureById" parameterType="Long">
+        delete from sq_community_structure where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityStructureByIds" parameterType="String">
+        delete from sq_community_structure where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

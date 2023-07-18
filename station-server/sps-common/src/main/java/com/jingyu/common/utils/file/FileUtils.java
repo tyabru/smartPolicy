@@ -11,6 +11,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import com.jingyu.common.constant.Constants;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import com.jingyu.common.config.RuoYiConfig;
@@ -119,6 +121,11 @@ public class FileUtils
             flag = file.delete();
         }
         return flag;
+    }
+
+    public static boolean deleteFileByProfileUrl(String profileUrl) {
+        String downloadPath = RuoYiConfig.getProfile() + StringUtils.substringAfter(profileUrl, Constants.RESOURCE_PREFIX);
+        return deleteFile(downloadPath);
     }
 
     /**

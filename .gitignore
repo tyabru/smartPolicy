@@ -71,3 +71,4 @@ nbdist/
 !*/build/*.xml
 
 !*/target/
+station-server/sps-system/target

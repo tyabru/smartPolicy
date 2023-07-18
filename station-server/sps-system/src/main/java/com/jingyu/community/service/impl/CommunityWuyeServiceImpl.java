@@ -1,12 +1,18 @@
 package com.jingyu.community.service.impl;
 
 import java.util.List;
+
+import com.jingyu.common.config.RuoYiConfig;
 import com.jingyu.common.utils.DateUtils;
+import com.jingyu.common.utils.SecurityUtils;
+import com.jingyu.common.utils.StringUtils;
+import com.jingyu.common.utils.file.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jingyu.community.mapper.CommunityWuyeMapper;
 import com.jingyu.community.domain.CommunityWuye;
 import com.jingyu.community.service.ICommunityWuyeService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 物业信息管理Service业务层处理
@@ -53,8 +59,16 @@ public class CommunityWuyeServiceImpl implements ICommunityWuyeService
     @Override
     public int insertCommunityWuye(CommunityWuye communityWuye)
     {
-        communityWuye.setCreateTime(DateUtils.getNowDate());
-        return communityWuyeMapper.insertCommunityWuye(communityWuye);
+        try {
+            communityWuye.setCreateBy(SecurityUtils.getUsername());
+            communityWuye.setCreateTime(DateUtils.getNowDate());
+            return communityWuyeMapper.insertCommunityWuye(communityWuye);
+        } catch (Exception e) {
+            if(StringUtils.isNotEmpty(communityWuye.getFaceImgUrl())){
+                FileUtils.deleteFileByProfileUrl(communityWuye.getFaceImgUrl());
+            }
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -66,8 +80,26 @@ public class CommunityWuyeServiceImpl implements ICommunityWuyeService
     @Override
     public int updateCommunityWuye(CommunityWuye communityWuye)
     {
-        communityWuye.setUpdateTime(DateUtils.getNowDate());
-        return communityWuyeMapper.updateCommunityWuye(communityWuye);
+        try {
+            communityWuye.setUpdateTime(DateUtils.getNowDate());
+            communityWuye.setUpdateBy(SecurityUtils.getUsername());
+            if(StringUtils.isNotEmpty(communityWuye.getFaceImgUrl())){
+                CommunityWuye old = selectCommunityWuyeById(communityWuye.getId());
+                if(!communityWuye.getFaceImgUrl().equals(old.getFaceImgUrl())) {
+                    FileUtils.deleteFileByProfileUrl(old.getFaceImgUrl());
+                }
+            }
+            return communityWuyeMapper.updateCommunityWuye(communityWuye);
+        } catch (Exception e) {
+            if(StringUtils.isNotEmpty(communityWuye.getFaceImgUrl())){
+                CommunityWuye old = selectCommunityWuyeById(communityWuye.getId());
+                if(!communityWuye.getFaceImgUrl().equals(old.getFaceImgUrl())) {
+                    FileUtils.deleteFileByProfileUrl(communityWuye.getFaceImgUrl());
+                }
+            }
+            throw new RuntimeException(e);
+        }
+
     }
 
     /**
@@ -77,9 +109,14 @@ public class CommunityWuyeServiceImpl implements ICommunityWuyeService
      * @return 结果
      */
     @Override
+    @Transactional
     public int deleteCommunityWuyeByIds(Long[] ids)
     {
-        return communityWuyeMapper.deleteCommunityWuyeByIds(ids);
+        int i = 0;
+        for (Long id : ids) {
+            i += deleteCommunityWuyeById(id);
+        }
+        return i;
     }
 
     /**
@@ -91,6 +128,10 @@ public class CommunityWuyeServiceImpl implements ICommunityWuyeService
     @Override
     public int deleteCommunityWuyeById(Long id)
     {
+        CommunityWuye wuye = selectCommunityWuyeById(id);
+        if(StringUtils.isNotEmpty(wuye.getFaceImgUrl())) {
+            FileUtils.deleteFileByProfileUrl(wuye.getFaceImgUrl());
+        }
         return communityWuyeMapper.deleteCommunityWuyeById(id);
     }
 }

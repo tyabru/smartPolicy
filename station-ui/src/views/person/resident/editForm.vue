@@ -4,7 +4,7 @@
       <el-row>
         <el-col :span="12">
           <el-form-item label="所属小区" prop="xqId">
-            <se-community v-model="form.xqId" />
+            <se-community v-model="form.xqId" class="width-100Rate" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -84,7 +84,7 @@
                 v-for="dict in dict.type.sys_yes_no"
                 :key="dict.value"
                 :label="dict.label"
-                :value="parseInt(dict.value)"
+                :value="dict.value"
               ></el-option>
             </el-select>
           </el-form-item>
@@ -142,7 +142,11 @@ export default {
           { required: true, message: "身份证件类型不能为空", trigger: "blur" }
         ],
         certNo: [
-          { required: true, message: "身份证号不能为空", trigger: "blur" }
+          { required: true, message: "身份证号不能为空", trigger: "blur" },
+          { pattern: /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/,
+            message: '身份证格式不正确',
+            trigger: "blur"
+          }
         ],
         phone: [
           { required: true, message: "联系方式不能为空", trigger: "blur" },

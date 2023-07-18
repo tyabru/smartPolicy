@@ -17,6 +17,16 @@ export function formatDate(cellValue) {
 }
 
 /**
+ * 根据模板字符串格式化时间
+ */
+export function formatDateByPattern(cellValue, pattern) {
+  if (cellValue == null || cellValue == "") return "";
+  const date = new Date(cellValue)
+  const { formatDate:fDate } = require('element-ui/src/utils/date-util')
+  return fDate(date, pattern);
+}
+
+/**
  * @param {number} time
  * @param {string} option
  * @returns {string}
@@ -399,3 +409,13 @@ export function isNumberStr(str) {
   return /^[+-]?(0|([1-9]\d*))(\.\d+)?$/g.test(str)
 }
 
+export function fixedString(str, length = 1, n = '0') {
+  if(!str || str.length >= length) {
+    return str;
+  } else {
+    while (str.length < length) {
+      str = n + str
+    }
+    return str
+  }
+}

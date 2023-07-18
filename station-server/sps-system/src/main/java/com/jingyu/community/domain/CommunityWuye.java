@@ -2,6 +2,8 @@ package com.jingyu.community.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
@@ -13,6 +15,8 @@ import com.jingyu.common.core.domain.BaseEntity;
  * @author jingyu
  * @date 2023-07-14
  */
+@EqualsAndHashCode(callSuper = false)
+@Data
 public class CommunityWuye extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -23,6 +27,8 @@ public class CommunityWuye extends BaseEntity
     /** 所属小区 */
     @Excel(name = "所属小区")
     private Long communityId;
+
+    private Community community;
 
     /** 工作单位 */
     @Excel(name = "工作单位")
@@ -70,144 +76,7 @@ public class CommunityWuye extends BaseEntity
     @Excel(name = "是否离职")
     private String isLeaving;
 
-    public void setId(Long id) 
-    {
-        this.id = id;
-    }
+    @Excel(name = "人脸图片地址")
+    private String faceImgUrl;
 
-    public Long getId() 
-    {
-        return id;
-    }
-    public void setCommunityId(Long communityId) 
-    {
-        this.communityId = communityId;
-    }
-
-    public Long getCommunityId() 
-    {
-        return communityId;
-    }
-    public void setCompany(String company) 
-    {
-        this.company = company;
-    }
-
-    public String getCompany() 
-    {
-        return company;
-    }
-    public void setWorkType(String workType) 
-    {
-        this.workType = workType;
-    }
-
-    public String getWorkType() 
-    {
-        return workType;
-    }
-    public void setName(String name) 
-    {
-        this.name = name;
-    }
-
-    public String getName() 
-    {
-        return name;
-    }
-    public void setCertNo(String certNo) 
-    {
-        this.certNo = certNo;
-    }
-
-    public String getCertNo() 
-    {
-        return certNo;
-    }
-    public void setPhone(String phone) 
-    {
-        this.phone = phone;
-    }
-
-    public String getPhone() 
-    {
-        return phone;
-    }
-    public void setAddress(String address) 
-    {
-        this.address = address;
-    }
-
-    public String getAddress() 
-    {
-        return address;
-    }
-    public void setNativePlace(String nativePlace) 
-    {
-        this.nativePlace = nativePlace;
-    }
-
-    public String getNativePlace() 
-    {
-        return nativePlace;
-    }
-    public void setStartTime(Date startTime) 
-    {
-        this.startTime = startTime;
-    }
-
-    public Date getStartTime() 
-    {
-        return startTime;
-    }
-    public void setIsTemp(String isTemp) 
-    {
-        this.isTemp = isTemp;
-    }
-
-    public String getIsTemp() 
-    {
-        return isTemp;
-    }
-    public void setEndTime(Date endTime) 
-    {
-        this.endTime = endTime;
-    }
-
-    public Date getEndTime() 
-    {
-        return endTime;
-    }
-    public void setIsLeaving(String isLeaving) 
-    {
-        this.isLeaving = isLeaving;
-    }
-
-    public String getIsLeaving() 
-    {
-        return isLeaving;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("communityId", getCommunityId())
-            .append("company", getCompany())
-            .append("workType", getWorkType())
-            .append("name", getName())
-            .append("certNo", getCertNo())
-            .append("phone", getPhone())
-            .append("address", getAddress())
-            .append("nativePlace", getNativePlace())
-            .append("startTime", getStartTime())
-            .append("isTemp", getIsTemp())
-            .append("endTime", getEndTime())
-            .append("isLeaving", getIsLeaving())
-            .append("createTime", getCreateTime())
-            .append("createBy", getCreateBy())
-            .append("updateTime", getUpdateTime())
-            .append("updateBy", getUpdateBy())
-            .toString();
-    }
 }
