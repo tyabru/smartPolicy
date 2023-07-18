@@ -134,6 +134,8 @@ CREATE TABLE `check_rectify_result_review_record`  (
   `finish_date` datetime NOT NULL COMMENT '完成时间',
   `rectify_notice_photo` blob NOT NULL COMMENT '整改通知书签字照片',
   `rectify_result_site_photo` blob NOT NULL COMMENT '整改结果现场照片',
+  `review_status` enum('0','1','2') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '审核状态（0：待审核1：审核通过2：审核不通过）',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '整改结果审核记录表' ROW_FORMAT = Dynamic;
 
@@ -173,9 +175,11 @@ CREATE TABLE `check_danger_record`  (
   `place_id` int(11) NOT NULL COMMENT '场所',
   `check_date` datetime NOT NULL COMMENT '检查日期',
   `checked_unit_director` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '被检查单位负责人',
+  `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
   `check_person` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '检查人员',
   `check_item_results` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '检查项填写结果',
   `other_safty_danger` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '其他安全隐患',
+  `check_result` blob NULL COMMENT '检查记录表签名文件',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '安全隐患检查记录表' ROW_FORMAT = Dynamic;
 
@@ -266,11 +270,13 @@ CREATE TABLE `check_rectify_notice_distribute_record`  (
   `check_date` datetime NOT NULL COMMENT '检查日期',
   `checked_unit_director` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '被检查单位负责人',
   `checked_unit_director_acccout_number` bigint(20) NOT NULL COMMENT '被检查人账号',
+  `phone_number` bigint(20) NULL DEFAULT NULL COMMENT '被检查人电话号码',
   `check_police` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '责任民警',
   `check_safty_danger` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '问题隐患',
   `rectify_measure` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '整改措施',
   `finish_date` datetime NOT NULL COMMENT '完成时间',
-  `status` enum('正常','超期') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '正常' COMMENT '状态',
+  `finish_status` enum('0','1') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '完成状态(0:正常1：超期）',
+  `notice_status` enum('0','1') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '短信提醒状态（0:未提醒1：已提醒）',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '整改通知书下发记录表' ROW_FORMAT = Dynamic;
 
