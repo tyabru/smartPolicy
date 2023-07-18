@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.safecheck.mapper.CheckRectifyResultReviewRecordMapper">
+    
+    <resultMap type="CheckRectifyResultReviewRecord" id="CheckRectifyResultReviewRecordResult">
+        <result property="id"    column="id"    />
+        <result property="chectedUnit"    column="chected_unit"    />
+        <result property="placeId"    column="place_id"    />
+        <result property="checkDate"    column="check_date"    />
+        <result property="checkedUnitDirector"    column="checked_unit_director"    />
+        <result property="checkedUnitDirectorAcccoutNumber"    column="checked_unit_director_acccout_number"    />
+        <result property="checkPolice"    column="check_police"    />
+        <result property="checkSaftyDanger"    column="check_safty_danger"    />
+        <result property="rectifyMeasure"    column="rectify_measure"    />
+        <result property="finishDate"    column="finish_date"    />
+        <result property="rectifyNoticePhoto"    column="rectify_notice_photo"    />
+        <result property="rectifyResultSitePhoto"    column="rectify_result_site_photo"    />
+    </resultMap>
+
+    <sql id="selectCheckRectifyResultReviewRecordVo">
+        select id, chected_unit, place_id, check_date, checked_unit_director, checked_unit_director_acccout_number, check_police, check_safty_danger, rectify_measure, finish_date, rectify_notice_photo, rectify_result_site_photo from check_rectify_result_review_record
+    </sql>
+
+    <select id="selectCheckRectifyResultReviewRecordList" parameterType="CheckRectifyResultReviewRecord" resultMap="CheckRectifyResultReviewRecordResult">
+        <include refid="selectCheckRectifyResultReviewRecordVo"/>
+        <where>  
+            <if test="chectedUnit != null  and chectedUnit != ''"> and chected_unit = #{chectedUnit}</if>
+            <if test="checkDate != null "> and check_date = #{checkDate}</if>
+            <if test="checkedUnitDirector != null  and checkedUnitDirector != ''"> and checked_unit_director like concat('%', #{checkedUnitDirector}, '%')</if>
+            <if test="checkedUnitDirectorAcccoutNumber != null "> and checked_unit_director_acccout_number like concat('%', #{checkedUnitDirectorAcccoutNumber}, '%')</if>
+            <if test="checkPolice != null  and checkPolice != ''"> and check_police like concat('%', #{checkPolice}, '%')</if>
+            <if test="finishDate != null "> and finish_date = #{finishDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectCheckRectifyResultReviewRecordById" parameterType="Long" resultMap="CheckRectifyResultReviewRecordResult">
+        <include refid="selectCheckRectifyResultReviewRecordVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCheckRectifyResultReviewRecord" parameterType="CheckRectifyResultReviewRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into check_rectify_result_review_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chectedUnit != null and chectedUnit != ''">chected_unit,</if>
+            <if test="placeId != null">place_id,</if>
+            <if test="checkDate != null">check_date,</if>
+            <if test="checkedUnitDirector != null and checkedUnitDirector != ''">checked_unit_director,</if>
+            <if test="checkedUnitDirectorAcccoutNumber != null">checked_unit_director_acccout_number,</if>
+            <if test="checkPolice != null and checkPolice != ''">check_police,</if>
+            <if test="checkSaftyDanger != null and checkSaftyDanger != ''">check_safty_danger,</if>
+            <if test="rectifyMeasure != null and rectifyMeasure != ''">rectify_measure,</if>
+            <if test="finishDate != null">finish_date,</if>
+            <if test="rectifyNoticePhoto != null and rectifyNoticePhoto != ''">rectify_notice_photo,</if>
+            <if test="rectifyResultSitePhoto != null and rectifyResultSitePhoto != ''">rectify_result_site_photo,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chectedUnit != null and chectedUnit != ''">#{chectedUnit},</if>
+            <if test="placeId != null">#{placeId},</if>
+            <if test="checkDate != null">#{checkDate},</if>
+            <if test="checkedUnitDirector != null and checkedUnitDirector != ''">#{checkedUnitDirector},</if>
+            <if test="checkedUnitDirectorAcccoutNumber != null">#{checkedUnitDirectorAcccoutNumber},</if>
+            <if test="checkPolice != null and checkPolice != ''">#{checkPolice},</if>
+            <if test="checkSaftyDanger != null and checkSaftyDanger != ''">#{checkSaftyDanger},</if>
+            <if test="rectifyMeasure != null and rectifyMeasure != ''">#{rectifyMeasure},</if>
+            <if test="finishDate != null">#{finishDate},</if>
+            <if test="rectifyNoticePhoto != null and rectifyNoticePhoto != ''">#{rectifyNoticePhoto},</if>
+            <if test="rectifyResultSitePhoto != null and rectifyResultSitePhoto != ''">#{rectifyResultSitePhoto},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCheckRectifyResultReviewRecord" parameterType="CheckRectifyResultReviewRecord">
+        update check_rectify_result_review_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chectedUnit != null and chectedUnit != ''">chected_unit = #{chectedUnit},</if>
+            <if test="placeId != null">place_id = #{placeId},</if>
+            <if test="checkDate != null">check_date = #{checkDate},</if>
+            <if test="checkedUnitDirector != null and checkedUnitDirector != ''">checked_unit_director = #{checkedUnitDirector},</if>
+            <if test="checkedUnitDirectorAcccoutNumber != null">checked_unit_director_acccout_number = #{checkedUnitDirectorAcccoutNumber},</if>
+            <if test="checkPolice != null and checkPolice != ''">check_police = #{checkPolice},</if>
+            <if test="checkSaftyDanger != null and checkSaftyDanger != ''">check_safty_danger = #{checkSaftyDanger},</if>
+            <if test="rectifyMeasure != null and rectifyMeasure != ''">rectify_measure = #{rectifyMeasure},</if>
+            <if test="finishDate != null">finish_date = #{finishDate},</if>
+            <if test="rectifyNoticePhoto != null and rectifyNoticePhoto != ''">rectify_notice_photo = #{rectifyNoticePhoto},</if>
+            <if test="rectifyResultSitePhoto != null and rectifyResultSitePhoto != ''">rectify_result_site_photo = #{rectifyResultSitePhoto},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCheckRectifyResultReviewRecordById" parameterType="Long">
+        delete from check_rectify_result_review_record where id = #{id}
+    </delete>
+
+    <delete id="deleteCheckRectifyResultReviewRecordByIds" parameterType="String">
+        delete from check_rectify_result_review_record where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
