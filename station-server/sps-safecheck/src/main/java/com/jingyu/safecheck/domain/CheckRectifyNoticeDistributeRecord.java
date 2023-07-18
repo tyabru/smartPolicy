@@ -16,7 +16,6 @@ import com.jingyu.common.core.domain.BaseEntity;
 public class CheckRectifyNoticeDistributeRecord extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
-
     /** 序号 */
     private Long id;
 
@@ -25,6 +24,7 @@ public class CheckRectifyNoticeDistributeRecord extends BaseEntity
     private String chectedUnit;
 
     /** 场所 */
+    @Excel(name = "场所")
     private Long placeId;
 
     /** 检查日期 */
@@ -39,6 +39,10 @@ public class CheckRectifyNoticeDistributeRecord extends BaseEntity
     /** 被检查人账号 */
     @Excel(name = "被检查人账号")
     private Long checkedUnitDirectorAcccoutNumber;
+
+    /** 被检查人电话号码 */
+    @Excel(name = "被检查人电话号码")
+    private Long phoneNumber;
 
     /** 责任民警 */
     @Excel(name = "责任民警")
@@ -57,124 +61,146 @@ public class CheckRectifyNoticeDistributeRecord extends BaseEntity
     @Excel(name = "完成时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date finishDate;
 
-    /** 状态 */
-    @Excel(name = "状态")
-    private String status;
+    /** 完成状态(0:正常1：超期） */
+    private String finishStatus;
 
-    public void setId(Long id) 
+    /** 短信提醒状态（0:未提醒1：已提醒） */
+    private String noticeStatus;
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setChectedUnit(String chectedUnit) 
+    public void setChectedUnit(String chectedUnit)
     {
         this.chectedUnit = chectedUnit;
     }
 
-    public String getChectedUnit() 
+    public String getChectedUnit()
     {
         return chectedUnit;
     }
-    public void setPlaceId(Long placeId) 
+    public void setPlaceId(Long placeId)
     {
         this.placeId = placeId;
     }
 
-    public Long getPlaceId() 
+    public Long getPlaceId()
     {
         return placeId;
     }
-    public void setCheckDate(Date checkDate) 
+    public void setCheckDate(Date checkDate)
     {
         this.checkDate = checkDate;
     }
 
-    public Date getCheckDate() 
+    public Date getCheckDate()
     {
         return checkDate;
     }
-    public void setCheckedUnitDirector(String checkedUnitDirector) 
+    public void setCheckedUnitDirector(String checkedUnitDirector)
     {
         this.checkedUnitDirector = checkedUnitDirector;
     }
 
-    public String getCheckedUnitDirector() 
+    public String getCheckedUnitDirector()
     {
         return checkedUnitDirector;
     }
-    public void setCheckedUnitDirectorAcccoutNumber(Long checkedUnitDirectorAcccoutNumber) 
+    public void setCheckedUnitDirectorAcccoutNumber(Long checkedUnitDirectorAcccoutNumber)
     {
         this.checkedUnitDirectorAcccoutNumber = checkedUnitDirectorAcccoutNumber;
     }
 
-    public Long getCheckedUnitDirectorAcccoutNumber() 
+    public Long getCheckedUnitDirectorAcccoutNumber()
     {
         return checkedUnitDirectorAcccoutNumber;
     }
-    public void setCheckPolice(String checkPolice) 
+    public void setPhoneNumber(Long phoneNumber)
+    {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public Long getPhoneNumber()
+    {
+        return phoneNumber;
+    }
+    public void setCheckPolice(String checkPolice)
     {
         this.checkPolice = checkPolice;
     }
 
-    public String getCheckPolice() 
+    public String getCheckPolice()
     {
         return checkPolice;
     }
-    public void setCheckSaftyDanger(String checkSaftyDanger) 
+    public void setCheckSaftyDanger(String checkSaftyDanger)
     {
         this.checkSaftyDanger = checkSaftyDanger;
     }
 
-    public String getCheckSaftyDanger() 
+    public String getCheckSaftyDanger()
     {
         return checkSaftyDanger;
     }
-    public void setRectifyMeasure(String rectifyMeasure) 
+    public void setRectifyMeasure(String rectifyMeasure)
     {
         this.rectifyMeasure = rectifyMeasure;
     }
 
-    public String getRectifyMeasure() 
+    public String getRectifyMeasure()
     {
         return rectifyMeasure;
     }
-    public void setFinishDate(Date finishDate) 
+    public void setFinishDate(Date finishDate)
     {
         this.finishDate = finishDate;
     }
 
-    public Date getFinishDate() 
+    public Date getFinishDate()
     {
         return finishDate;
     }
-    public void setStatus(String status) 
+    public void setFinishStatus(String finishStatus)
     {
-        this.status = status;
+        this.finishStatus = finishStatus;
     }
 
-    public String getStatus() 
+    public String getFinishStatus()
     {
-        return status;
+        return finishStatus;
+    }
+    public void setNoticeStatus(String noticeStatus)
+    {
+        this.noticeStatus = noticeStatus;
+    }
+
+    public String getNoticeStatus()
+    {
+        return noticeStatus;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("chectedUnit", getChectedUnit())
-            .append("placeId", getPlaceId())
-            .append("checkDate", getCheckDate())
-            .append("checkedUnitDirector", getCheckedUnitDirector())
-            .append("checkedUnitDirectorAcccoutNumber", getCheckedUnitDirectorAcccoutNumber())
-            .append("checkPolice", getCheckPolice())
-            .append("checkSaftyDanger", getCheckSaftyDanger())
-            .append("rectifyMeasure", getRectifyMeasure())
-            .append("finishDate", getFinishDate())
-            .append("status", getStatus())
-            .toString();
+                .append("id", getId())
+                .append("chectedUnit", getChectedUnit())
+                .append("placeId", getPlaceId())
+                .append("checkDate", getCheckDate())
+                .append("checkedUnitDirector", getCheckedUnitDirector())
+                .append("checkedUnitDirectorAcccoutNumber", getCheckedUnitDirectorAcccoutNumber())
+                .append("phoneNumber", getPhoneNumber())
+                .append("checkPolice", getCheckPolice())
+                .append("checkSaftyDanger", getCheckSaftyDanger())
+                .append("rectifyMeasure", getRectifyMeasure())
+                .append("finishDate", getFinishDate())
+                .append("finishStatus", getFinishStatus())
+                .append("noticeStatus", getNoticeStatus())
+                .toString();
     }
 }

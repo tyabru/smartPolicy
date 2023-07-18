@@ -2,6 +2,8 @@ package com.jingyu.safecheck.service.impl;
 
 import java.util.List;
 
+import com.jingyu.common.annotation.DataScope;
+import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.safecheck.domain.CheckDangerRecord;
 import com.jingyu.safecheck.mapper.CheckDangerRecordMapper;
 import com.jingyu.safecheck.service.ICheckDangerRecordService;
@@ -39,6 +41,7 @@ public class CheckDangerRecordServiceImpl implements ICheckDangerRecordService
      * @return 安全隐患检查登记
      */
     @Override
+//    @DataScope(deptAlias = "d", userAlias = "u")
     public List<CheckDangerRecord> selectCheckDangerRecordList(CheckDangerRecord checkDangerRecord)
     {
         return checkDangerRecordMapper.selectCheckDangerRecordList(checkDangerRecord);
@@ -53,6 +56,8 @@ public class CheckDangerRecordServiceImpl implements ICheckDangerRecordService
     @Override
     public int insertCheckDangerRecord(CheckDangerRecord checkDangerRecord)
     {
+//        checkDangerRecord.setCreateBy(SecurityUtils.getUsername());
+        checkDangerRecord.setUserId(SecurityUtils.getUserId());
         return checkDangerRecordMapper.insertCheckDangerRecord(checkDangerRecord);
     }
 

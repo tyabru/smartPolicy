@@ -66,7 +66,7 @@
           v-hasPermi="['safecheck:rectifynoticedistribute:add']"
         >新增</el-button>
       </el-col>
-      <!-- <el-col :span="1.5">
+      <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -87,8 +87,8 @@
           @click="handleDelete"
           v-hasPermi="['safecheck:rectifynoticedistribute:remove']"
         >删除</el-button>
-      </el-col> -->
-      <el-col :span="1.5">
+      </el-col>
+      <!-- <el-col :span="1.5">
         <el-button
           type="warning"
           plain
@@ -97,13 +97,13 @@
           @click="handleExport"
           v-hasPermi="['safecheck:rectifynoticedistribute:export']"
         >导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="rectifynoticedistributeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" align="center" prop="id" />
+      <!-- <el-table-column label="序号" align="center" prop="id" /> -->
       <el-table-column label="被检查单位" align="center" prop="chectedUnit" />
       <el-table-column label="检查日期" align="center" prop="checkDate" width="180">
         <template slot-scope="scope">
@@ -112,6 +112,7 @@
       </el-table-column>
       <el-table-column label="被检查单位负责人" align="center" prop="checkedUnitDirector" />
       <el-table-column label="被检查人账号" align="center" prop="checkedUnitDirectorAcccoutNumber" />
+      <el-table-column label="被检查人电话号码" align="center" prop="phoneNumber" />
       <el-table-column label="责任民警" align="center" prop="checkPolice" />
       <el-table-column label="问题隐患" align="center" prop="checkSaftyDanger" />
       <el-table-column label="整改措施" align="center" prop="rectifyMeasure" />
@@ -120,10 +121,10 @@
           <span>{{ parseTime(scope.row.finishDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status"> 
+      <el-table-column label="完成状态" align="center" prop="finishStatus"> 
         <template scope="scope">
-          <span v-if="scope.row.status==='正常'" class="noticeStatus0">正常</span>
-          <span v-if="scope.row.status==='超期'" class="noticeStatus1">超期</span>
+          <span v-if="scope.row.finishStatus==='0'" class="noticeStatus0">正常</span>
+          <span v-if="scope.row.finishStatus==='1'" class="noticeStatus1">超期</span>
         </template>
       </el-table-column>
       <!-- <el-table-column label="状态" align="center" prop="status">
@@ -133,7 +134,7 @@
       </el-table-column> -->
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
@@ -146,7 +147,14 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['safecheck:rectifynoticedistribute:remove']"
-          >删除</el-button>
+          >删除</el-button> -->
+           <el-button
+          type="text"
+          plain
+          size="medium"
+          @click="handleExport(scope.row.id)"
+          v-hasPermi="['safecheck:checkdanger:exportWord']"
+        >预览</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -189,6 +197,9 @@
         <el-form-item label="被检查人账号" prop="checkedUnitDirectorAcccoutNumber">
           <el-input v-model="form.checkedUnitDirectorAcccoutNumber" placeholder="请输入被检查人账号" />
         </el-form-item>
+         <el-form-item label="被检查人电话号码" prop="phoneNumber">
+          <el-input v-model="form.phoneNumber" placeholder="请输入被检查人电话号码" />
+        </el-form-item>
         <el-form-item label="责任民警" prop="checkPolice">
           <el-input v-model="form.checkPolice" placeholder="请输入责任民警" />
         </el-form-item>
@@ -216,7 +227,7 @@
 </template>
 
 <script>
-import { listRectifynoticedistribute, getRectifynoticedistribute, delRectifynoticedistribute, addRectifynoticedistribute, updateRectifynoticedistribute } from "@/api/safecheck/rectifynoticedistribute";
+import { listRectifynoticedistribute, getRectifynoticedistribute, delRectifynoticedistribute, addRectifynoticedistribute, updateRectifynoticedistribute ,exportWord} from "@/api/safecheck/rectifynoticedistribute";
 
 export default {
   name: "Rectifynoticedistribute",
@@ -246,12 +257,15 @@ export default {
         pageNum: 1,
         pageSize: 10,
         chectedUnit: null,
+        placeId: null,
         checkDate: null,
         checkedUnitDirector: null,
         checkedUnitDirectorAcccoutNumber: null,
+        phoneNumber: null,
         checkPolice: null,
+        checkSaftyDanger: null,
+        rectifyMeasure: null,
         finishDate: null,
-        status: null
       },
       // 表单参数
       form: {},
@@ -271,6 +285,9 @@ export default {
         ],
         checkedUnitDirectorAcccoutNumber: [
           { required: true, message: "被检查人账号不能为空", trigger: "blur" }
+        ],
+        phoneNumber: [
+          { required: true, message: "被检查人电话号码不能为空", trigger: "blur" }
         ],
         checkPolice: [
           { required: true, message: "责任民警不能为空", trigger: "blur" }
@@ -308,11 +325,13 @@ export default {
         checkDate: null,
         checkedUnitDirector: null,
         checkedUnitDirectorAcccoutNumber: null,
+        phoneNumber: null,
         checkPolice: null,
         checkSaftyDanger: null,
         rectifyMeasure: null,
         finishDate: null,
-        status: null
+        finishStatus: null,
+        noticeStatus: null
       };
       this.resetForm("form");
     },
@@ -379,10 +398,25 @@ export default {
       }).catch(() => {});
     },
     /** 导出按钮操作 */
-    handleExport() {
-      this.download('safecheck/rectifynoticedistribute/export', {
-        ...this.queryParams
-      }, `rectifynoticedistribute_${new Date().getTime()}.xlsx`)
+    handleExport(id) {
+      // this.download('safecheck/rectifynoticedistribute/export', {
+      //   ...this.queryParams
+      // }, `rectifynoticedistribute_${new Date().getTime()}.xlsx`)
+    
+      const queryParams = {
+        id:id
+      }
+      this.$confirm('是否确认跳转至新的页面进行预览？', {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.exportLoading = true;
+        // console.log(this.checkdangerList)
+        return exportWord(queryParams);
+      }).then(response => {
+        window.open(this.$store.state.settings.base_url+"/profile/upload/"+response.msg)
+        }).catch(() => {});
     }
   }
 };
@@ -392,9 +426,8 @@ export default {
   .noticeStatus0{
     color: white;
     font: 13px Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
-    background-color: #1890FF;
-    border:2px solid #1890FF;
-    border-radius: 8px 8px 8px 8px;;
+    background-color: green;
+    border:2px solid green;
     margin: 5px 5px;
     padding: 4px 4px;
   }
@@ -403,7 +436,6 @@ export default {
     font: 13px Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
     background-color: red;
     border:2px solid red;
-    border-radius: 8px 8px 8px 8px;;
     margin: 5px 5px;
     padding: 4px 4px;
   }

@@ -88,7 +88,7 @@
           v-hasPermi="['safecheck:rectifyresultreview:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
+      <!-- <el-col :span="1.5">
         <el-button
           type="warning"
           plain
@@ -97,13 +97,13 @@
           @click="handleExport"
           v-hasPermi="['safecheck:rectifyresultreview:export']"
         >导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="rectifyresultreviewList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" align="center" prop="id" />
+      <!-- <el-table-column label="序号" align="center" prop="id" /> -->
       <el-table-column label="被检查单位" align="center" prop="chectedUnit" />
       <el-table-column label="检查日期" align="center" prop="checkDate" width="180">
         <template slot-scope="scope">
@@ -136,6 +136,12 @@
             </div>
           </li>
         </transition-group> -->
+        
+         <template slot-scope="scope">
+          <div v-show=scope.row.rectifyNoticePhoto>
+            <a @click="handlePreview(scope.row.rectifyNoticePhoto)" target="_blank" class="buttonText" style="color: #00afff;">查看</a>
+          </div>
+        </template>
       </el-table-column>
       <el-table-column label="整改结果现场照片" align="center" prop="rectifyResultSitePhoto" width="100">
         <template slot-scope="scope">
@@ -146,15 +152,13 @@
         <template slot-scope="scope">
           <el-button
             size="mini"
-            type="button"
-            icon="el-icon-edit"
+            type="success"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['safecheck:rectifyresultreview:edit']"
           >通过</el-button>
           <el-button
             size="mini"
-            type="button"
-            icon="el-icon-delete"
+            type="danger"
             @click="handleDelete(scope.row)"
             v-hasPermi="['safecheck:rectifyresultreview:remove']"
           >不通过</el-button>
@@ -315,6 +319,11 @@ export default {
     this.getList();
   },
   methods: {
+        /**文档预览**/
+    //我是在组件el-table里面绑定该方法 根据需求你们随意
+    handlePreview(row) {
+       window.open(this.$store.state.settings.base_url+row)
+    },
     /** 查询整改结果审核列表 */
     getList() {
       this.loading = true;

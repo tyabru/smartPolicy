@@ -65,7 +65,7 @@
 
     <el-table v-loading="loading" :data="checkplacedictList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" align="center" prop="id" />
+      <!-- <el-table-column label="序号" align="center" prop="id" /> -->
       <el-table-column label="场所行业名称" align="center" prop="placeName" >
         <template slot-scope="scope">
          <dict-tag :options="dict.type.place_list" :value="scope.row.placeName"/>

@@ -42,3 +42,12 @@ export function delCheckdanger(id) {
     method: 'delete'
   })
 }
+
+// 根据模板导出word
+export function exportWord(query) {
+  return request({
+    url: '/safecheck/checkdanger/exportWord',
+    method: 'get',
+    params: query
+  })
+}

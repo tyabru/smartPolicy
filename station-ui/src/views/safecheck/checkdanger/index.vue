@@ -60,7 +60,7 @@
           v-hasPermi="['safecheck:checkplacedict:list']"
         >新增</el-button>
       </el-col>
-      <!-- <el-col :span="1.5">
+      <el-col :span="1.5">
         <el-button
           type="success"
           plain
@@ -81,23 +81,23 @@
           @click="handleDelete"
           v-hasPermi="['safecheck:checkdanger:remove']"
         >删除</el-button>
-      </el-col> -->
-      <el-col :span="1.5">
+      </el-col>
+      <!-- <el-col :span="1.5">
         <el-button
           type="warning"
           plain
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['safecheck:checkdanger:export']"
+          v-hasPermi="['safecheck:checkdanger:exportWord']"
         >导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="checkdangerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="序号" align="center" prop="id" />
+      <!-- <el-table-column label="序号" align="center" prop="id" /> -->
       <el-table-column label="被检查单位" align="center" prop="chectedUnit" />
       <el-table-column label="场所" align="center" prop="placeId">
         <template slot-scope="scope">
@@ -113,7 +113,7 @@
       <el-table-column label="检查人员" align="center" prop="checkPerson" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
+          <!-- <el-button
             size="mini"
             type="text"
             icon="el-icon-edit"
@@ -126,7 +126,28 @@
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['safecheck:checkdanger:remove']"
-          >删除</el-button>
+          >删除</el-button> -->
+          <el-button
+          type="text"
+          plain
+          size="mini"
+          @click="handleExport(scope.row.id)"
+          v-hasPermi="['safecheck:checkdanger:exportWord']"
+        >预览</el-button>
+        <el-button
+          type="text"
+          plain
+          size="mini"
+          @click="uploadForm(scope.row,scope.index)"
+          v-hasPermi="['safecheck:checkdanger:exportWord']"
+        >上传</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column label="检查记录表签名文件" align="center" prop="checkResult" >
+        <template slot-scope="scope">
+          <div v-show=scope.row.checkResult>
+            <a @click="handlePreview(scope.row.checkResult)" target="_blank" class="buttonText" style="color: #00afff;">查看</a>
+          </div>
         </template>
       </el-table-column>
     </el-table>
@@ -195,13 +216,31 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+
+     <el-dialog title="场所检查项列表" :visible.sync="open1" width="700px" append-to-body>
+      <el-form ref="form1" :model="form1" label-width="100px" size="mini">
+        <el-row>
+           <el-form-item label="检查记录表签名文件" prop="checkResult">
+            <file-upload v-model="form1.checkResult"/>
+          </el-form-item>
+        </el-row>
+         </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitForm1">确 定</el-button>
+        <el-button @click="cancel1">取 消</el-button>
+      </div>
+    </el-dialog>
+
+
+
   </div>
 </template>
 
 <script>
 import PlaceType from "@/components/PlaceType";
-import { listCheckdanger, getCheckdanger, delCheckdanger, addCheckdanger, updateCheckdanger } from "@/api/safecheck/checkdanger";
-
+import { listCheckdanger, getCheckdanger, delCheckdanger, addCheckdanger, updateCheckdanger,exportWord } from "@/api/safecheck/checkdanger";
+import { saveAs } from 'file-saver'
 
 export default {
   name: "Checkdanger",
@@ -230,6 +269,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      open1:false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -242,6 +282,7 @@ export default {
       },
       // 表单参数
       form: {},
+      form1:{},
       // 表单校验
       // checkItems:[1,2,3,4,5,6],
       rules: {
@@ -292,6 +333,9 @@ export default {
 
   },
   methods: {
+    handlePreview(row) {
+       window.open(this.$store.state.settings.base_url+row)
+    },
     getcheckItemsResults(PlaceTypeCheckItemsResults){
       // console.log(checkItemsResults)
       try{
@@ -315,6 +359,12 @@ export default {
     cancel() {
       this.open = false;
       this.reset();
+      // this.placeValue=''
+      
+    },
+    cancel1() {
+      this.open1 = false;
+      // this.reset();
       // this.placeValue=''
       
     },
@@ -397,6 +447,21 @@ export default {
         }
       });
     },
+    /** 提交按钮 */
+    submitForm1() {
+      this.$refs["form1"].validate(valid => {
+        if (valid) {
+          if (this.form1.id != null) {
+            updateCheckdanger(this.form1).then(response => {
+              this.$modal.msgSuccess("上传成功");
+              this.open1 = false;
+              // this.getList();
+              // this.isShow=false
+            })
+          }
+        }
+      })
+    },
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
@@ -408,11 +473,53 @@ export default {
       }).catch(() => {});
     },
     /** 导出按钮操作 */
-    handleExport() {
-      this.download('safecheck/checkdanger/export', {
-        ...this.queryParams
-      }, `checkdanger_${new Date().getTime()}.xlsx`)
+    handleExport(id) {
+      // this.download('safecheck/checkdanger/export', {
+      //   ...this.queryParams
+      // }, `checkdanger_${new Date().getTime()}.xlsx`)
+
+      const queryParams = {
+        id:id
+      }
+      this.$confirm('是否确认跳转至新的页面进行预览？', {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        this.exportLoading = true;
+        // console.log(this.checkdangerList)
+        return exportWord(queryParams);
+      }).then(response => {
+        // console.log(this.$store.state.settings.base_url)
+         window.open(this.$store.state.settings.base_url+"/profile/upload/"+response.msg)
+        // window.open("http://10.181.155.115:8080/profile/upload/"+response.msg)
+        }).catch(() => {});
+    //     const isBlob = blobValidate(data);
+    // if (isBlob) {
+    //   const blob = new Blob([data])
+    //   saveAs(blob, filename)
+    // } else {
+    //   const resText = data.text();
+    //   const rspObj = JSON.parse(resText);
+    //   const errMsg = errorCode[rspObj.code] || rspObj.msg || errorCode['default']
+    //   Message.error(errMsg);
+    // }
+    // downloadLoadingInstance.close();
+    //     // this.download('',response.msg);
+    //     console.log(response)
+    //     this.exportLoading = false;
+    //   }).catch(() => {});
+    // window.open("http://10.181.155.115:8080/profile/upload/未命名1.pdf")
+    },
+
+    uploadForm(row) {
+      this.open1 = true;
+      this.form1 = row;
+      console.log(this.form1)
+      // console.log("qqqqqqq   "+row)
+      // this.form1 = Array(this.form1.checkItems.split(","))
     }
+
   },
   components:{PlaceType}
 };

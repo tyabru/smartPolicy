@@ -37,100 +37,130 @@ public class CheckDangerRecord extends BaseEntity
     @Excel(name = "被检查单位负责人")
     private String checkedUnitDirector;
 
+    /** 用户id */
+    @Excel(name = "用户id")
+    private Long userId;
+
     /** 检查人员 */
     @Excel(name = "检查人员")
     private String checkPerson;
 
     /** 检查项填写结果 */
+    @Excel(name = "检查项填写结果")
     private String checkItemResults;
 
     /** 其他安全隐患 */
+    @Excel(name = "其他安全隐患")
     private String otherSaftyDanger;
 
-    public void setId(Long id) 
+    /** 检查记录表签名文件 */
+    @Excel(name = "检查记录表签名文件")
+    private String checkResult;
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setChectedUnit(String chectedUnit) 
+    public void setChectedUnit(String chectedUnit)
     {
         this.chectedUnit = chectedUnit;
     }
 
-    public String getChectedUnit() 
+    public String getChectedUnit()
     {
         return chectedUnit;
     }
-    public void setPlaceId(Long placeId) 
+    public void setPlaceId(Long placeId)
     {
         this.placeId = placeId;
     }
 
-    public Long getPlaceId() 
+    public Long getPlaceId()
     {
         return placeId;
     }
-    public void setCheckDate(Date checkDate) 
+    public void setCheckDate(Date checkDate)
     {
         this.checkDate = checkDate;
     }
 
-    public Date getCheckDate() 
+    public Date getCheckDate()
     {
         return checkDate;
     }
-    public void setCheckedUnitDirector(String checkedUnitDirector) 
+    public void setCheckedUnitDirector(String checkedUnitDirector)
     {
         this.checkedUnitDirector = checkedUnitDirector;
     }
 
-    public String getCheckedUnitDirector() 
+    public String getCheckedUnitDirector()
     {
         return checkedUnitDirector;
     }
-    public void setCheckPerson(String checkPerson) 
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+    public void setCheckPerson(String checkPerson)
     {
         this.checkPerson = checkPerson;
     }
 
-    public String getCheckPerson() 
+    public String getCheckPerson()
     {
         return checkPerson;
     }
-    public void setCheckItemResults(String checkItemResults) 
+    public void setCheckItemResults(String checkItemResults)
     {
         this.checkItemResults = checkItemResults;
     }
 
-    public String getCheckItemResults() 
+    public String getCheckItemResults()
     {
         return checkItemResults;
     }
-    public void setOtherSaftyDanger(String otherSaftyDanger) 
+    public void setOtherSaftyDanger(String otherSaftyDanger)
     {
         this.otherSaftyDanger = otherSaftyDanger;
     }
 
-    public String getOtherSaftyDanger() 
+    public String getOtherSaftyDanger()
     {
         return otherSaftyDanger;
+    }
+    public void setCheckResult(String checkResult)
+    {
+        this.checkResult = checkResult;
+    }
+
+    public String getCheckResult()
+    {
+        return checkResult;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("chectedUnit", getChectedUnit())
-            .append("placeId", getPlaceId())
-            .append("checkDate", getCheckDate())
-            .append("checkedUnitDirector", getCheckedUnitDirector())
-            .append("checkPerson", getCheckPerson())
-            .append("checkItemResults", getCheckItemResults())
-            .append("otherSaftyDanger", getOtherSaftyDanger())
-            .toString();
+                .append("id", getId())
+                .append("chectedUnit", getChectedUnit())
+                .append("placeId", getPlaceId())
+                .append("checkDate", getCheckDate())
+                .append("checkedUnitDirector", getCheckedUnitDirector())
+                .append("userId", getUserId())
+                .append("checkPerson", getCheckPerson())
+                .append("checkItemResults", getCheckItemResults())
+                .append("otherSaftyDanger", getOtherSaftyDanger())
+                .append("checkResult", getCheckResult())
+                .toString();
     }
 }
