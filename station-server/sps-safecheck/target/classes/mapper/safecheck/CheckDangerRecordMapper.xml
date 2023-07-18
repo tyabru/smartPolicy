@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.safecheck.mapper.CheckDangerRecordMapper">
+
+    <resultMap type="CheckDangerRecord" id="CheckDangerRecordResult">
+        <result property="id"    column="id"    />
+        <result property="chectedUnit"    column="chected_unit"    />
+        <result property="placeId"    column="place_id"    />
+        <result property="checkDate"    column="check_date"    />
+        <result property="checkedUnitDirector"    column="checked_unit_director"    />
+        <result property="userId"    column="user_id"    />
+        <result property="checkPerson"    column="check_person"    />
+        <result property="checkItemResults"    column="check_item_results"    />
+        <result property="otherSaftyDanger"    column="other_safty_danger"    />
+        <result property="checkResult"    column="check_result"    />
+    </resultMap>
+
+    <sql id="selectCheckDangerRecordVo">
+        select c.id, c.chected_unit, c.place_id, c.check_date, c.checked_unit_director, c.user_id, c.check_person, c.check_item_results, c.other_safty_danger, c.check_result
+        from check_danger_record c
+        left join sys_user u on u.user_id = c.user_id
+        left join sys_dept d on d.dept_id = u.dept_id
+    </sql>
+
+    <select id="selectCheckDangerRecordList" parameterType="CheckDangerRecord" resultMap="CheckDangerRecordResult">
+        <include refid="selectCheckDangerRecordVo"/>
+        <where>  
+            <if test="chectedUnit != null  and chectedUnit != ''"> and chected_unit like concat('%', #{chectedUnit}, '%')</if>
+            <if test="placeId != null "> and place_id like concat('%', #{placeId}, '%')</if>
+            <if test="checkDate != null "> and check_date = #{checkDate}</if>
+            <if test="checkedUnitDirector != null  and checkedUnitDirector != ''"> and checked_unit_director like concat('%', #{checkedUnitDirector}, '%')</if>
+            <if test="checkPerson != null  and checkPerson != ''"> and check_person like concat('%', #{checkPerson}, '%')</if>
+        </where>
+<!--        ${params.dataScope}-->
+    </select>
+
+    <select id="selectCheckDangerRecordById" parameterType="Long" resultMap="CheckDangerRecordResult">
+        <include refid="selectCheckDangerRecordVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCheckDangerRecord" parameterType="CheckDangerRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into check_danger_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chectedUnit != null and chectedUnit != ''">chected_unit,</if>
+            <if test="placeId != null">place_id,</if>
+            <if test="checkDate != null">check_date,</if>
+            <if test="checkedUnitDirector != null and checkedUnitDirector != ''">checked_unit_director,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="checkPerson != null and checkPerson != ''">check_person,</if>
+            <if test="checkItemResults != null and checkItemResults != ''">check_item_results,</if>
+            <if test="otherSaftyDanger != null">other_safty_danger,</if>
+            <if test="checkResult != null">check_result,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chectedUnit != null and chectedUnit != ''">#{chectedUnit},</if>
+            <if test="placeId != null">#{placeId},</if>
+            <if test="checkDate != null">#{checkDate},</if>
+            <if test="checkedUnitDirector != null and checkedUnitDirector != ''">#{checkedUnitDirector},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="checkPerson != null and checkPerson != ''">#{checkPerson},</if>
+            <if test="checkItemResults != null and checkItemResults != ''">#{checkItemResults},</if>
+            <if test="otherSaftyDanger != null">#{otherSaftyDanger},</if>
+            <if test="checkResult != null">#{checkResult},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCheckDangerRecord" parameterType="CheckDangerRecord">
+        update check_danger_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chectedUnit != null and chectedUnit != ''">chected_unit = #{chectedUnit},</if>
+            <if test="placeId != null">place_id = #{placeId},</if>
+            <if test="checkDate != null">check_date = #{checkDate},</if>
+            <if test="checkedUnitDirector != null and checkedUnitDirector != ''">checked_unit_director = #{checkedUnitDirector},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="checkPerson != null and checkPerson != ''">check_person = #{checkPerson},</if>
+            <if test="checkItemResults != null and checkItemResults != ''">check_item_results = #{checkItemResults},</if>
+            <if test="otherSaftyDanger != null">other_safty_danger = #{otherSaftyDanger},</if>
+            <if test="checkResult != null">check_result = #{checkResult},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCheckDangerRecordById" parameterType="Long">
+        delete from check_danger_record where id = #{id}
+    </delete>
+
+    <delete id="deleteCheckDangerRecordByIds" parameterType="String">
+        delete from check_danger_record where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

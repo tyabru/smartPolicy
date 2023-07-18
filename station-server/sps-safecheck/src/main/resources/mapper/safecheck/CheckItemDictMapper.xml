@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.safecheck.mapper.CheckItemDictMapper">
+    
+    <resultMap type="CheckItemDict" id="CheckItemDictResult">
+        <result property="id"    column="id"    />
+        <result property="checkItemDescribe"    column="check_item_describe"    />
+    </resultMap>
+
+    <sql id="selectCheckItemDictVo">
+        select id, check_item_describe from check_item_dict
+    </sql>
+
+    <select id="selectCheckItemDictList" parameterType="CheckItemDict" resultMap="CheckItemDictResult">
+        <include refid="selectCheckItemDictVo"/>
+        <where>  
+        </where>
+    </select>
+    
+    <select id="selectCheckItemDictById" parameterType="Long" resultMap="CheckItemDictResult">
+        <include refid="selectCheckItemDictVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCheckItemDict" parameterType="CheckItemDict" useGeneratedKeys="true" keyProperty="id">
+        insert into check_item_dict
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="checkItemDescribe != null and checkItemDescribe != ''">check_item_describe,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="checkItemDescribe != null and checkItemDescribe != ''">#{checkItemDescribe},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCheckItemDict" parameterType="CheckItemDict">
+        update check_item_dict
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="checkItemDescribe != null and checkItemDescribe != ''">check_item_describe = #{checkItemDescribe},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCheckItemDictById" parameterType="Long">
+        delete from check_item_dict where id = #{id}
+    </delete>
+
+    <delete id="deleteCheckItemDictByIds" parameterType="String">
+        delete from check_item_dict where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
