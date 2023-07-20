@@ -92,10 +92,10 @@
           <router-link :to="'/safecheck/checkplacedictcheckitems/index/' + scope.row.id" class="link-type">
             <span>查看</span>
           </router-link> -->
-      
-          
-   
-      </el-table-column> 
+
+
+
+      </el-table-column>
       <el-table-column label="整改通知书模板参数" align="center" prop="rectifyNoticeTemplateParams" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -113,10 +113,10 @@
             @click="handleDelete(scope.row)"
             v-hasPermi="['safecheck:checkplacedict:remove']"
           >删除</el-button>
-        </template> 
+        </template>
       </el-table-column>
     </el-table>
-    
+
     <pagination
       v-show="total>0"
       :total="total"
@@ -170,22 +170,20 @@
               label="登录信息："
             >{{ form.operName }} / {{ form.operIp }} / {{ form.operLocation }}</el-form-item>
           </el-col> -->
-        
-       
+
+
           <!-- <template v-for="(item,index) in scope.row.checkItems.split(',') "> -->
           <template v-for="(item,index) in form1.checkItems.split(',')">
             <dict-tag :options="dict.type.check_items" :value="item ? item : [] " :key="index"/>
             <br :key="index+item"/>
           </template>
-         
+
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="open1 = false">关 闭</el-button>
       </div>
     </el-dialog>
-  </div>
-</template>
   </div>
 </template>
 
@@ -238,7 +236,7 @@ export default {
   },
   created() {
     this.getList();
-    
+
   },
   methods: {
     /** 查询安全隐患检查场所字典列表 */
@@ -350,7 +348,7 @@ export default {
 
 
 
-    
+
   }
 };
 </script>
