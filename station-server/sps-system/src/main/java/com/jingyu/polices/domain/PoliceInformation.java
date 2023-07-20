@@ -38,10 +38,6 @@ public class PoliceInformation extends BaseEntity
     @SensitiveNew(setterEncrypt = "setPoliceName", getterDncrypt = "getPoliceName", EncryptMethod = "nameEncrypt", notEncryptByResponse = true)
     private String policeName;
 
-    /** 性别0女1男 */
-    @Excel(name = "性别0女1男")
-    private Long gender;
-
     /** 年龄 */
     @Excel(name = "年龄")
     private Long policeAge;
@@ -59,15 +55,6 @@ public class PoliceInformation extends BaseEntity
     @SensitiveNew(setterEncrypt = "setIdCard", getterDncrypt = "getIdCard", neeDecrypt = true, neeEecrypt = true)
     private String idCard;
 
-    /** 手机号 */
-    @Excel(name = "手机号")
-    @SensitiveNew(setterEncrypt = "setPhoneNumber", getterDncrypt = "getPhoneNumber", neeDecrypt = true, neeEecrypt = true)
-    private String phoneNumber;
-
-    /** 警员邮箱 */
-    @Excel(name = "警员邮箱")
-    private String email;
-
     /** 政治面貌0党员1团员2群众 */
     @Excel(name = "政治面貌0党员1团员2群众")
     private Long identityType;
@@ -79,14 +66,6 @@ public class PoliceInformation extends BaseEntity
     /** 毕业院校 */
     @Excel(name = "毕业院校")
     private String graduationSchool;
-
-    /** 警察类型0民警1辅警 */
-    @Excel(name = "警察类型0民警1辅警")
-    private Long policePost;
-
-    /** 所属岗位 */
-    @Excel(name = "所属岗位")
-    private Long policeType;
 
     /** 技能专长 */
     @Excel(name = "技能专长")
@@ -100,12 +79,8 @@ public class PoliceInformation extends BaseEntity
     @Excel(name = "警员照片")
     private String policePhoto;
 
-    /** 小区编码 */
-    @Excel(name = "小区编码")
-    private String communityCode;
-
-    /** 居住地址编码 */
-    @Excel(name = "居住地址编码")
+    /** 居住地址 */
+    @Excel(name = "居住地址")
     private String addressCode;
 
     /** 入职时间 */
@@ -147,6 +122,6 @@ public class PoliceInformation extends BaseEntity
 
     /** 用户ID */
     @Excel(name = "用户ID")
-    private Long UserId;
+    private Long userId;
 
 }

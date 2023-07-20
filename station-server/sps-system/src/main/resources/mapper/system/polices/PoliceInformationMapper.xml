@@ -6,24 +6,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="PoliceInformation" id="PoliceInformationResult">
         <result property="id"    column="id"    />
+        <result property="userId"    column="user_id"    />
         <result property="policeNumber"    column="police_number"    />
         <result property="policeName"    column="police_name"    />
-        <result property="gender"    column="gender"    />
         <result property="policeAge"    column="police_age"    />
         <result property="nation"    column="nation"    />
         <result property="birthday"    column="birthday"    />
         <result property="idCard"    column="id_card"    />
-        <result property="phoneNumber"    column="phone_number"    />
-        <result property="email"    column="email"    />
         <result property="identityType"    column="identity_type"    />
         <result property="education"    column="education"    />
         <result property="graduationSchool"    column="graduation_school"    />
-        <result property="policePost"    column="police_post"    />
-        <result property="policeType"    column="police_type"    />
         <result property="speciality"    column="speciality"    />
-        <result property="deptId"    column="dept_id"    />
         <result property="policePhoto"    column="police_photo"    />
-        <result property="communityCode"    column="community_code"    />
         <result property="addressCode"    column="address_code"    />
         <result property="entryTime"    column="entry_time"    />
         <result property="createTime"    column="create_time"    />
@@ -36,34 +30,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPoliceInformationVo">
-        select id, police_number, police_name, gender, police_age, nation, birthday, id_card, phone_number, email, identity_type,
-            education, graduation_school, police_post, police_type, speciality, dept_id, police_photo, community_code,
-            address_code, entry_time, create_time, update_time, delete_time, operate_time, operate_type, operate_name, remark
+        select id, user_id, police_number, police_name, police_age, nation, birthday, id_card, identity_type,
+            education, graduation_school, speciality, police_photo, address_code, entry_time, create_time, update_time, delete_time,
+            operate_time, operate_type, operate_name, remark
         from police_information
     </sql>
 
     <select id="selectPoliceInformationList" parameterType="PoliceInformation" resultMap="PoliceInformationResult">
         <include refid="selectPoliceInformationVo"/>
         <where>
-            AND operate_type != 2
+            operate_type != 2
             <if test="policeNumber != null  and policeNumber != ''"> and instr(police_number,#{policeNumber})</if>
-            <if test="policeName != null  and policeName != ''"> and instr(police_name,#{policeName})</if>
-            <if test="gender != null "> and gender = #{gender}</if>
+            <if test="policeName != null and policeName != ''"> and police_name = #{policeName}</if>
             <if test="policeAge != null "> and police_age = #{policeAge}</if>
             <if test="nation != null and nation != ''"> and nation = #{nation}</if>
             <if test="birthday != null and birthday != ''"> and birthday = #{birthday}</if>
             <if test="idCard != null  and idCard != ''"> and  instr(my_aes_decrypt(id_card),#{idCard})</if>
-            <if test="phoneNumber != null  and phoneNumber != ''"> and instr(my_aes_decrypt(phone_number),#{phoneNumber})</if>
-            <if test="email != null  and email != ''"> and instr(email,#{email})</if>
             <if test="identityType != null "> and identity_type = #{identityType}</if>
             <if test="education != null "> and education = #{education}</if>
             <if test="graduationSchool != null  and graduationSchool != ''"> and instr(graduation_school,#{graduationSchool})</if>
-            <if test="policePost != null "> and police_post = #{policePost}</if>
-            <if test="policeType != null "> and police_type = #{policeType}</if>
             <if test="speciality != null  and speciality != ''"> and speciality = #{speciality}</if>
-            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
             <if test="policePhoto != null  and policePhoto != ''"> and police_photo = #{policePhoto}</if>
-            <if test="communityCode != null  and communityCode != ''"> and instr(community_code,#{communityCode})</if>
             <if test="addressCode != null  and addressCode != ''"> and instr(address_code,#{addressCode})</if>
             <if test="entryTime != null "> and entry_time = #{entryTime}</if>
             <if test="deleteTime != null "> and delete_time = #{deleteTime}</if>
@@ -76,35 +63,39 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectPoliceInformationById" parameterType="Long" resultMap="PoliceInformationResult">
         <include refid="selectPoliceInformationVo"/>
-        where id = #{id}
+        where id = #{id} AND operate_type != 2
     </select>
 
     <select id="selectPoliceInformationByPoliceNumber" parameterType="String" resultMap="PoliceInformationResult">
         <include refid="selectPoliceInformationVo"/>
         where police_number = #{policeNumber}
     </select>
+
+    <select id="selectPoliceInformationByIdCard" parameterType="String" resultMap="PoliceInformationResult">
+        <include refid="selectPoliceInformationVo"/>
+        where id_card = #{idCard} AND operate_type != 2
+    </select>
+
+    <select id="selectPoliceInformationByuserId" parameterType="Long" resultMap="PoliceInformationResult">
+        <include refid="selectPoliceInformationVo"/>
+        where user_id = #{userId}
+    </select>
         
     <insert id="insertPoliceInformation" parameterType="PoliceInformation" useGeneratedKeys="true" keyProperty="id">
         insert into police_information
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
             <if test="policeNumber != null and policeNumber != ''">police_number,</if>
             <if test="policeName != null and policeName != ''">police_name,</if>
-            <if test="gender != null">gender,</if>
             <if test="policeAge != null">police_age,</if>
             <if test="nation != null and nation != ''">nation,</if>
             <if test="birthday != null and birthday != ''">birthday,</if>
             <if test="idCard != null and idCard != ''">id_card,</if>
-            <if test="phoneNumber != null and phoneNumber != ''">phone_number,</if>
-            <if test="email != null">email,</if>
             <if test="identityType != null">identity_type,</if>
             <if test="education != null">education,</if>
             <if test="graduationSchool != null">graduation_school,</if>
-            <if test="policePost != null">police_post,</if>
-            <if test="policeType != null">police_type,</if>
             <if test="speciality != null">speciality,</if>
-            <if test="deptId != null">dept_id,</if>
             <if test="policePhoto != null and policePhoto != ''">police_photo,</if>
-            <if test="communityCode != null">community_code,</if>
             <if test="addressCode != null and addressCode != ''">address_code,</if>
             <if test="entryTime != null">entry_time,</if>
             <if test="updateTime != null">update_time,</if>
@@ -116,24 +107,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             operate_type
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
             <if test="policeNumber != null and policeNumber != ''">#{policeNumber},</if>
             <if test="policeName != null and policeName != ''">#{policeName},</if>
-            <if test="gender != null">#{gender},</if>
             <if test="policeAge != null">#{policeAge},</if>
             <if test="nation != null and nation != ''">#{nation},</if>
             <if test="birthday != null and birthday != ''">#{birthday},</if>
             <if test="idCard != null and idCard != ''">#{idCard},</if>
-            <if test="phoneNumber != null and phoneNumber != ''">#{phoneNumber},</if>
-            <if test="email != null">#{email},</if>
             <if test="identityType != null">#{identityType},</if>
             <if test="education != null">#{education},</if>
             <if test="graduationSchool != null">#{graduationSchool},</if>
-            <if test="policePost != null">#{policePost},</if>
-            <if test="policeType != null">#{policeType},</if>
             <if test="speciality != null">#{speciality},</if>
-            <if test="deptId != null">#{deptId},</if>
             <if test="policePhoto != null and policePhoto != ''">#{policePhoto},</if>
-            <if test="communityCode != null">#{communityCode},</if>
             <if test="addressCode != null and addressCode != ''">#{addressCode},</if>
             <if test="entryTime != null">#{entryTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
@@ -149,24 +134,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updatePoliceInformation" parameterType="PoliceInformation">
         update police_information
         <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
             <if test="policeNumber != null and policeNumber != ''">police_number = #{policeNumber},</if>
             <if test="policeName != null and policeName != ''">police_name = #{policeName},</if>
-            <if test="gender != null">gender = #{gender},</if>
             <if test="policeAge != null">police_age = #{policeAge},</if>
             <if test="nation != null and nation != ''">nation = #{nation},</if>
             <if test="birthday != null and birthday != ''">birthday = #{birthday},</if>
             <if test="idCard != null and idCard != ''">id_card = #{idCard},</if>
-            <if test="phoneNumber != null and phoneNumber != ''">phone_number = #{phoneNumber},</if>
-            <if test="email != null">email = #{email},</if>
             <if test="identityType != null">identity_type = #{identityType},</if>
             <if test="education != null">education = #{education},</if>
             <if test="graduationSchool != null">graduation_school = #{graduationSchool},</if>
-            <if test="policePost != null">police_post = #{policePost},</if>
-            <if test="policeType != null">police_type = #{policeType},</if>
             <if test="speciality != null">speciality = #{speciality},</if>
             <if test="deptId != null">dept_id = #{deptId},</if>
             <if test="policePhoto != null and policePhoto != ''">police_photo = #{policePhoto},</if>
-            <if test="communityCode != null">community_code = #{communityCode},</if>
             <if test="addressCode != null and addressCode != ''">address_code = #{addressCode},</if>
             <if test="entryTime != null">entry_time = #{entryTime},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
@@ -177,7 +157,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             operate_time = NOW(),
             operate_type = 1
         </trim>
-        where id = #{id}
+        where user_id = #{userId}
+    </update>
+
+    <update id="updatePoliceInformationByPoliceNumber" parameterType="PoliceInformation">
+        update police_information set user_id = #{userId} where police_number = #{policeNumber}
     </update>
 
     <delete id="deletePoliceInformationById" parameterType="Long">

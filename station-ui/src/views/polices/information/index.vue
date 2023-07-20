@@ -183,18 +183,6 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="小区编码" prop="communityCode">
-              <el-input v-model="form.communityCode" placeholder="请输入小区编码" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="地址编码" prop="addressCode">
-              <el-input v-model="form.addressCode" placeholder="请输入居住地址编码" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
             <el-form-item label="入职时间" prop="entryTime">
               <el-date-picker style="width: 325px;" clearable v-model="form.entryTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择入职时间">
               </el-date-picker>
@@ -205,6 +193,18 @@
               <el-select  v-model="form.policeType" placeholder="请选择警员所属岗位" style="width: 100%">
                 <el-option v-for="item in postOptions" :key="item.postId" :label="item.postName" :value="item.postId" :disabled="item.status == 1"></el-option>
               </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="小区编码" prop="communityCode">
+              <el-input v-model="form.communityCode" placeholder="请输入小区编码" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="地址编码" prop="addressCode">
+              <el-input v-model="form.addressCode" placeholder="请输入居住地址编码" />
             </el-form-item>
           </el-col>
         </el-row>

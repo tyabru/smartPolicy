@@ -1,4 +1,3 @@
-const CryptoJS = require('crypto-js');  //引用AES源码js
 const crypto = require('crypto');
 
 export function Decrypt(word) {

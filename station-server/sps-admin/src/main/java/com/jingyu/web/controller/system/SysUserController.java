@@ -6,7 +6,12 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
+import com.alibaba.druid.sql.visitor.functions.If;
 import com.jingyu.common.core.domain.model.LoginUser;
+import com.jingyu.common.utils.encryption_decryption.SensitiveNewsHander;
+import com.jingyu.common.utils.sign.AESUtil;
+import com.jingyu.polices.domain.PoliceInformation;
+import com.jingyu.polices.service.IPoliceInformationService;
 import lombok.val;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +57,9 @@ public class SysUserController extends BaseController
 
     @Autowired
     private ISysPostService postService;
+
+    @Autowired
+    private IPoliceInformationService policeInformationService;
 
     /**
      * 获取用户列表
@@ -109,7 +117,7 @@ public class SysUserController extends BaseController
         if (StringUtils.isNotNull(userId))
         {
             SysUser sysUser = userService.selectUserById(userId);
-            ajax.put(AjaxResult.DATA_TAG, sysUser);
+            ajax.put(AjaxResult.DATA_TAG, SensitiveNewsHander.parseRequestParams(sysUser));
             ajax.put("postIds", postService.selectPostListByUserId(userId));
             ajax.put("roleIds", sysUser.getRoles().stream().map(SysRole::getRoleId).collect(Collectors.toList()));
         }
@@ -164,6 +172,12 @@ public class SysUserController extends BaseController
             return error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
         user.setUpdateBy(getUsername());
+        if (user.getIdCard().equals("**")) {
+            PoliceInformation oldPoliceInformation = policeInformationService.selectPoliceInformationById(user.getUserId());
+            user.setIdCard(AESUtil.decrypt(oldPoliceInformation.getIdCard()));
+        } else if (StringUtils.isNotNull(policeInformationService.selectPoliceInformationByIdCard(user.getIdCard()))){
+            return error("修改用户'" + user.getIdCard() + "'失败，公民身份证已存在");
+        }
         return toAjax(userService.updateUser(user));
     }
 

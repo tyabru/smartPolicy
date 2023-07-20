@@ -5,6 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.validation.Validator;
+
+import com.jingyu.common.utils.sign.AESUtil;
+import com.jingyu.polices.domain.PoliceInformation;
+import com.jingyu.polices.mapper.PoliceInformationMapper;
+import com.jingyu.polices.service.IPoliceInformationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +36,8 @@ import com.jingyu.system.mapper.SysUserRoleMapper;
 import com.jingyu.system.service.ISysConfigService;
 import com.jingyu.system.service.ISysUserService;
 
+import static com.jingyu.common.utils.SecurityUtils.getUsername;
+
 /**
  * 用户 业务层处理
  * 
@@ -41,19 +48,19 @@ public class SysUserServiceImpl implements ISysUserService
 {
     private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
 
-    @Autowired
+    @Resource
     private SysUserMapper userMapper;
 
-    @Autowired
+    @Resource
     private SysRoleMapper roleMapper;
 
-    @Autowired
+    @Resource
     private SysPostMapper postMapper;
 
-    @Autowired
+    @Resource
     private SysUserRoleMapper userRoleMapper;
 
-    @Autowired
+    @Resource
     private SysUserPostMapper userPostMapper;
 
     @Autowired
@@ -61,6 +68,12 @@ public class SysUserServiceImpl implements ISysUserService
 
     @Autowired
     protected Validator validator;
+
+    @Autowired
+    protected IPoliceInformationService policeInformationService;
+
+    @Resource
+    protected PoliceInformationMapper policeInformationMapper;
 
     /**
      * 根据条件分页查询用户列表
@@ -122,7 +135,23 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public SysUser selectUserById(Long userId)
     {
-        return userMapper.selectUserById(userId);
+        SysUser sysUser = userMapper.selectUserById(userId);
+        PoliceInformation policeInformation = policeInformationMapper.selectPoliceInformationByuserId(userId);
+        if (StringUtils.isNotNull(policeInformation)) {
+            sysUser.setPoliceNumber(policeInformation.getPoliceNumber());
+            sysUser.setPoliceAge(policeInformation.getPoliceAge());
+            sysUser.setNation(policeInformation.getNation());
+            sysUser.setIdCard(AESUtil.decrypt(policeInformation.getIdCard()));
+            sysUser.setIdentityType(policeInformation.getIdentityType());
+            sysUser.setEducation(policeInformation.getEducation());
+            sysUser.setGraduationSchool(policeInformation.getGraduationSchool());
+            sysUser.setEducation(policeInformation.getEducation());
+            sysUser.setPoliceNumber(policeInformation.getGraduationSchool());
+            sysUser.setSpeciality(policeInformation.getSpeciality());
+            sysUser.setAddressCode(policeInformation.getAddressCode());
+            sysUser.setEntryTime(policeInformation.getEntryTime());
+        }
+        return sysUser;
     }
 
     /**
@@ -263,7 +292,31 @@ public class SysUserServiceImpl implements ISysUserService
         insertUserPost(user);
         // 新增用户与角色管理
         insertUserRole(user);
+        if (rows > 0) {
+            //新增警员信息
+            policeInformationService.insertPoliceInformation(handlePoliceInformation(user));
+        }
         return rows;
+    }
+
+    //警员信息处理
+    public PoliceInformation handlePoliceInformation(SysUser user) {
+        SysUser sysUser = userMapper.selectUserByUserName(user.getUserName());
+        PoliceInformation policeInformation = new PoliceInformation();
+        policeInformation.setUserId(sysUser.getUserId());
+        policeInformation.setPoliceNumber(user.getUserName());
+        policeInformation.setPoliceName(user.getNickName());
+        policeInformation.setPoliceAge(user.getPoliceAge());
+        policeInformation.setNation(user.getNation());
+        policeInformation.setIdCard(AESUtil.encrypt(user.getIdCard()));
+        policeInformation.setIdentityType(user.getIdentityType());
+        policeInformation.setEducation(user.getEducation());
+        policeInformation.setGraduationSchool(user.getGraduationSchool());
+        policeInformation.setSpeciality(user.getSpeciality());
+        policeInformation.setAddressCode(user.getAddressCode());
+        policeInformation.setEntryTime(user.getEntryTime());
+        policeInformation.setOperateName(getUsername());
+        return policeInformation;
     }
 
     /**
@@ -297,7 +350,11 @@ public class SysUserServiceImpl implements ISysUserService
         userPostMapper.deleteUserPostByUserId(userId);
         // 新增用户与岗位管理
         insertUserPost(user);
-        return userMapper.updateUser(user);
+        int i = userMapper.updateUser(user);
+        if (i > 0) {
+            policeInformationService.updatePoliceInformation(handlePoliceInformation(user));
+        }
+        return i;
     }
 
     /**

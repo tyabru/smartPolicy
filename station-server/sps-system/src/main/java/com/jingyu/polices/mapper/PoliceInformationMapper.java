@@ -67,4 +67,28 @@ public interface PoliceInformationMapper
      * @return 警员基本信息
      */
     public PoliceInformation selectPoliceInformationByPoliceNumber(String policeNumber);
+
+    /**
+     * 查询警员基本信息列表
+     *
+     * @param idCard 身份证号码
+     * @return 警员基本信息
+     */
+    public PoliceInformation selectPoliceInformationByIdCard(String idCard);
+
+    /**
+     * 警员信息添加用户ID
+     *
+     * @param policeInformation 警员信息
+     * @return 警员基本信息
+     */
+    public int updatePoliceInformationByPoliceNumber(PoliceInformation policeInformation);
+
+    /**
+     * 查询警员基本信息列表
+     *
+     * @param userId 用户ID
+     * @return 警员基本信息
+     */
+    public PoliceInformation selectPoliceInformationByuserId(Long userId);
 }

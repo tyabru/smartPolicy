@@ -135,6 +135,11 @@ export default {
   dicts: [ 'equipment_type' ],
   components: { DictTag ,Treeselect},
   data() {
+    const validEquipmentNumber = async (rules, value, callback) => {
+      if (value == null) {
+        
+      }
+    }
     return {
       disabled: true,
       user: null,
@@ -179,7 +184,8 @@ export default {
       // 表单校验
       rules: {
         equipmentNumber: [
-          { required: true, message: "装备编码不能为空", trigger: "blur" }
+          { required: true, message: "装备编码不能为空", trigger: "blur" },
+          { validator: validEquipmentNumber, trigger: 'blur' }
         ],
         equipmentType: [
           { required: true, message: "装备类型不能为空", trigger: "change" }

@@ -59,4 +59,12 @@ public interface IPoliceInformationService
      * @return 结果
      */
     public int deletePoliceInformationById(Long id);
+
+    /**
+     * 查询警员基本信息列表
+     *
+     * @param idCard 身份证号码
+     * @return 警员基本信息
+     */
+    public PoliceInformation selectPoliceInformationByIdCard(String idCard);
 }

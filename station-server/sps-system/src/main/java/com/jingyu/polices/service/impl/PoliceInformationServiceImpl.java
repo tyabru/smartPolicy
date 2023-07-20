@@ -6,9 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 import com.jingyu.common.core.domain.entity.SysUser;
+import com.jingyu.common.exception.CustomException;
 import com.jingyu.common.utils.*;
 import com.jingyu.common.utils.sign.AESUtil;
 import com.jingyu.common.utils.sign.Md5Utils;
+import com.jingyu.polices.domain.PoliceDutyGroups;
+import com.jingyu.polices.mapper.PoliceDutyGroupsMapper;
 import com.jingyu.system.domain.SysUserPost;
 import com.jingyu.system.domain.SysUserRole;
 import com.jingyu.system.mapper.SysUserMapper;
@@ -39,10 +42,7 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
     private SysUserMapper sysUserMapper;
 
     @Resource
-    private SysUserRoleMapper userRoleMapper;
-
-    @Resource
-    private SysUserPostMapper userPostMapper;
+    private PoliceDutyGroupsMapper policeDutyGroupsMapper;
 
     /**
      * 查询警员基本信息
@@ -78,86 +78,9 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
     public int insertPoliceInformation(PoliceInformation policeInformation)
     {
         policeInformation.setBirthday(StringReplaceUtil.idCardToBirthday(AESUtil.decrypt(policeInformation.getIdCard())));
-        //校验重复
-        PoliceInformation police = policeInformationMapper.selectPoliceInformationByPoliceNumber(policeInformation.getPoliceNumber());
-//        if (StringUtils.isNull(police)) {
-//            throw new CustomException("APPKEY错误，请核对APPKEY是否正确！");
-//        }
-        int i = policeInformationMapper.insertPoliceInformation(policeInformation);
-        if (i > 0) {
-            //添加用户
-            addSysUser(policeInformation);
-        }
-        return i;
-    }
-
-    /**
-     * 添加用户信息
-     * */
-    public void addSysUser(PoliceInformation policeInformation) {
-        SysUser sysUser = new SysUser();
-        sysUser.setDeptId(Long.parseLong(policeInformation.getDeptId()));
-        sysUser.setUserName(AESUtil.decrypt(policeInformation.getPhoneNumber()));
-        sysUser.setNickName(policeInformation.getPoliceName());
-        sysUser.setPhonenumber(AESUtil.decrypt(policeInformation.getPhoneNumber()));
-        sysUser.setSex(policeInformation.getGender().toString());
-        sysUser.setDelFlag("0");
-        sysUser.setStatus("0");
-        sysUser.setCreateBy(policeInformation.getOperateName());
-        sysUser.setCreateTime(new Date());
-        String passWard = "Abc" + sysUser.getPhonenumber().substring(sysUser.getPhonenumber().length()-6);
-        sysUser.setPassword(SecurityUtils.encryptPassword(passWard));
-        Long[] roleIds = new Long[1];
-        roleIds[0] = Long.parseLong("100");//警员
-        sysUser.setRoleIds(roleIds);
-        Long[] postIds = new Long[1];
-        postIds[0] = policeInformation.getPoliceType();
-        sysUser.setPostIds(postIds);
-        int i = sysUserMapper.insertUser(sysUser);
-        if (i > 0) {
-            SysUser sysUser1 = sysUserMapper.selectUserByUserName(sysUser.getUserName());
-            PoliceInformation policeInformation1 = new PoliceInformation();
-            policeInformation1.setUserId(sysUser1.getUserId());
-            policeInformationMapper.updatePoliceInformation(policeInformation1);
-        }
-        // 新增用户岗位关联
-        insertUserPost(sysUser);
-        // 新增用户与角色管理
-        insertUserRole(sysUser);
-    }
-
-    public void insertUserPost(SysUser user) {
-        Long[] posts = user.getPostIds();
-        if (StringUtils.isNotEmpty(posts)) {
-            // 新增用户与岗位管理
-            List<SysUserPost> list = new ArrayList<SysUserPost>(posts.length);
-            for (Long postId : posts) {
-                SysUserPost up = new SysUserPost();
-                up.setUserId(user.getUserId());
-                up.setPostId(postId);
-                list.add(up);
-            }
-            userPostMapper.batchUserPost(list);
-        }
-    }
-
-    /**
-     * 新增用户角色信息
-     *
-     * @param user 用户对象
-     */
-    public void insertUserRole(SysUser user) {
-        if (StringUtils.isNotEmpty(user.getRoleIds())) {
-            // 新增用户与角色管理
-            List<SysUserRole> list = new ArrayList<SysUserRole>(user.getRoleIds().length);
-            for (Long roleId : user.getRoleIds()) {
-                SysUserRole ur = new SysUserRole();
-                ur.setUserId(user.getUserId());
-                ur.setRoleId(roleId);
-                list.add(ur);
-            }
-            userRoleMapper.batchUserRole(list);
-        }
+        //警号和身份证号码判断是否重复
+        handleData(policeInformation);
+        return policeInformationMapper.insertPoliceInformation(policeInformation);
     }
 
     /**
@@ -174,6 +97,20 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
     }
 
     /**
+     * 校验警号和身份证号码是否重复
+     * */
+    public void handleData(PoliceInformation policeInformation) {
+        PoliceInformation police = policeInformationMapper.selectPoliceInformationByPoliceNumber(policeInformation.getPoliceNumber());
+        if (StringUtils.isNotNull(police)) {
+            throw new CustomException("警号已存在，请核对警号是否正确！");
+        }
+        PoliceInformation policeInfo = policeInformationMapper.selectPoliceInformationByIdCard(policeInformation.getIdCard());
+        if (StringUtils.isNotNull(policeInfo)) {
+            throw new CustomException("该身份证号码已存在，请核对身份证是否正确！");
+        }
+    }
+
+    /**
      * 批量删除警员基本信息
      * 
      * @param ids 需要删除的警员基本信息主键
@@ -182,6 +119,12 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
     @Override
     public int deletePoliceInformationByIds(Long[] ids)
     {
+        for (Long id : ids) {
+            //停用警员账号
+            deactivatePoliceInformation(id);
+            //删除警员分组表中的警员
+            updatePoliceDutyGroupTeamMembers(id);
+        }
         return policeInformationMapper.deletePoliceInformationByIds(ids);
     }
 
@@ -194,6 +137,51 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
     @Override
     public int deletePoliceInformationById(Long id)
     {
+        //停用警员账号
+        deactivatePoliceInformation(id);
+        updatePoliceDutyGroupTeamMembers(id);
         return policeInformationMapper.deletePoliceInformationById(id);
+    }
+
+    /**
+     * 查询警员基本信息列表
+     *
+     * @param idCard 身份证号码
+     * @return 警员基本信息
+     */
+    @Override
+    public PoliceInformation selectPoliceInformationByIdCard(String idCard) {
+        return policeInformationMapper.selectPoliceInformationByIdCard(idCard);
+    }
+
+    /**
+     * 停用该警员的账号
+     * */
+    public int deactivatePoliceInformation(Long id)
+    {
+        SysUser sysUser = new SysUser();
+        PoliceInformation policeInformation = policeInformationMapper.selectPoliceInformationById(id);
+        if (StringUtils.isNotNull(policeInformation)) {
+            sysUser.setStatus("1");
+            sysUser.setUserId(policeInformation.getUserId());
+        }
+        return sysUserMapper.updateUser(sysUser);
+    }
+
+    /**
+     * 删除警员分组表中的警员
+     * */
+    public void updatePoliceDutyGroupTeamMembers(Long id)
+    {
+        PoliceDutyGroups policeDutyGroups = new PoliceDutyGroups();
+        PoliceInformation policeInformation = policeInformationMapper.selectPoliceInformationById(id);
+        if (StringUtils.isNotNull(policeInformation)) {
+            policeDutyGroups.setTeamMembers(policeInformation.getPoliceNumber());
+        }
+        List<PoliceDutyGroups> list = policeDutyGroupsMapper.selectPoliceDutyGroupsList(policeDutyGroups);
+        for (PoliceDutyGroups dutyGroups : list) {
+            dutyGroups.setTeamMembers(dutyGroups.getTeamMembers().replace(policeInformation.getPoliceNumber() + ",",""));
+            policeDutyGroupsMapper.updatePoliceDutyGroups(dutyGroups);
+        }
     }
 }

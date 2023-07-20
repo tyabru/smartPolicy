@@ -2,6 +2,7 @@ package com.jingyu.polices.service.impl;
 
 import java.util.List;
 
+import com.jingyu.common.utils.StringUtils;
 import com.jingyu.polices.domain.PoliceInformation;
 import com.jingyu.polices.mapper.PoliceInformationMapper;
 import org.springframework.stereotype.Service;
@@ -58,22 +59,24 @@ public class PoliceDutyGroupsServiceImpl implements IPoliceDutyGroupsService
 
     //警号查询警员姓名
     public PoliceDutyGroups policeNumberToPoliceName(PoliceDutyGroups policeDutyGroups) {
-            String policeNames = "";
-            String policeNumbers = "";
-            String[] policeList = policeDutyGroups.getTeamMembers().split(",");
-            for (String policeNumber : policeList) {
-                PoliceInformation policeInformation = policeInformationMapper.selectPoliceInformationByPoliceNumber(policeNumber);
+        String policeNames = "";
+        String policeNumbers = "";
+        String[] policeList = policeDutyGroups.getTeamMembers().split(",");
+        for (String policeNumber : policeList) {
+            PoliceInformation policeInformation = policeInformationMapper.selectPoliceInformationByPoliceNumber(policeNumber);
+            if (StringUtils.isNotNull(policeInformation)) {
                 policeNames += policeInformation.getPoliceName() + ",";
                 policeNumbers += policeNumber + ",";
             }
-            if (policeNames.length() > 0) {
-                policeNames = policeNames.substring(0, policeNames.length() - 1);
-                policeDutyGroups.setPoliceNames(policeNames);
-            }
-            if (policeNumbers.length() > 0) {
-                policeNumbers = policeNumbers.substring(0, policeNumbers.length() - 1);
-                policeDutyGroups.setTeamMembers(policeNumbers);
-            }
+        }
+        if (policeNames.length() > 0) {
+            policeNames = policeNames.substring(0, policeNames.length() - 1);
+            policeDutyGroups.setPoliceNames(policeNames);
+        }
+        if (policeNumbers.length() > 0) {
+            policeNumbers = policeNumbers.substring(0, policeNumbers.length() - 1);
+            policeDutyGroups.setTeamMembers(policeNumbers);
+        }
         return policeDutyGroups;
     }
 
