@@ -169,7 +169,7 @@ export default {
   data() {
     const validIdCode = (rule, value, callback) => {
       const isRequired = this.form.headMaster && this.form.headMaster.length > 0
-      if(isRequired && !value && value.length < 1){
+      if(isRequired || !value && value.length < 1){
         callback("填写负责人后，身份证号为必填项！");
       }else if(value && !validIdCodeByType(value, this.form.identityType)){
         callback("身份证号不符合验证规则！");
@@ -360,8 +360,8 @@ export default {
     communityChange(value) {
       queryBelongDeptByTypeAndId(this.form.communityId, '101').then(response => {
         if(response.code === 200 && response.data) {
-          this.form.pcsId = response.data.deptId;
-          this.form.pcsName = response.data.deptName;
+          this.$set(this.form, 'pcsId', response.data.deptId);
+          this.$set(this.form, 'pcsName', response.data.deptName);
           this.queryPoliceById();
         }
       });

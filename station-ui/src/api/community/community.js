@@ -50,3 +50,10 @@ export function delCommunity(id) {
     method: 'delete'
   })
 }
+
+export function queryBelongDeptByTypeAndId(deptId, deptType) {
+  return request({
+    url: `/system/dept/${deptId}/parent/${deptType}`,
+    method: 'get'
+  })
+}

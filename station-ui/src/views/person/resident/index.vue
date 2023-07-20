@@ -1,7 +1,7 @@
 <template>
   <table-panel :show-search="showSearch">
     <template #search-form>
-      <el-form size="mini" :model="queryParams" label-width="80px" inline>
+      <el-form ref="queryForm" size="mini" :model="queryParams" label-width="80px" inline>
         <el-row>
           <el-col :span="6">
             <el-form-item label="所属部门">
@@ -50,11 +50,13 @@
     </template>
     <template #search-form-btn>
       <el-button size="mini" type="primary" @click="queryChanged">查询</el-button>
-      <el-button size="mini" type="info">重置</el-button>
+      <el-button size="mini" type="info" @click="resetQuery">重置</el-button>
     </template>
     <template #btn>
-      <el-button size="mini" type="primary" @click="openEditDialog">新增</el-button>
-      <el-button size="mini" type="info">导出</el-button>
+      <el-button type="primary" plain icon="el-icon-plus"
+        size="mini" @click="openEditDialog" v-hasPermi="['person:resident:add']">新增</el-button>
+      <el-button type="warning" plain icon="el-icon-download" size="mini"
+        @click="handleExport" v-hasPermi="['person:resident:export']">导出</el-button>
     </template>
     <el-table :data="tableData" emptyText="暂无数据">
       <el-table-column type="selection"></el-table-column>
@@ -66,15 +68,17 @@
       <el-table-column prop="isImportant" label="重点关注" align="center"></el-table-column>
       <el-table-column label="操作" align="center">
         <template v-slot="{ row }">
-          <el-button size="mini" type="text" @click="openEditDialog(row)">更新</el-button>
-          <el-button size="mini" type="text" @click="removeItem(row)">删除</el-button>
+          <el-button size="mini" type="text" v-hasPermi="['person:resident:edit']"
+                     @click="openEditDialog(row)">更新</el-button>
+          <el-button size="mini" type="text" v-hasPermi="['person:resident:remove']"
+                     @click="removeItem(row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
     <pagination
       :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
       :pageSizes="pageSizes" @pagination="queryChanged" #page></pagination>
-    <el-dialog :visible.sync="editVisible" custom-class="dialog-mini">
+    <el-dialog :visible.sync="editVisible" :title="title" custom-class="dialog-mini">
       <edit-form :form-id="selectId" :submit-finish="submitFinish"></edit-form>
     </el-dialog>
 
@@ -95,7 +99,8 @@ export default {
     return {
       editVisible: false,
       selectId: null,
-      tableData: []
+      tableData: [],
+      title: ''
     }
   },
   mounted() {
@@ -105,8 +110,10 @@ export default {
     openEditDialog(item = {}) {
       this.editVisible = true
       if(item.id) {
+        this.title = "修改常驻人员信息"
         this.selectId = item.id
       } else {
+        this.title = "新增常驻人员信息"
         this.selectId = null
       }
     },

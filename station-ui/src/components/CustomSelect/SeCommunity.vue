@@ -1,6 +1,7 @@
 <script>
 import { listCommunity } from '@/api/community/community'
 import * as _ from 'lodash'
+import fi from 'element-ui/src/locale/lang/fi'
 export default {
   name: 'SeCommunity',
   props: {
@@ -26,7 +27,11 @@ export default {
   },
   mounted() {
     if(this.defaultLabel) {
-      this.querySearch(this.defaultLabel)
+      listCommunity({ name: this.defaultLabel }).then(({ code, rows = [] }) => {
+        if(code === 200) {
+          this.options = rows
+        }
+      })
     }
   },
   methods: {
@@ -48,6 +53,10 @@ export default {
       const filter = this.options.filter(i => i.id === item)
       this.$emit('input', item);
       this.$emit('change', item, filter && filter.length > 0? filter[0]: null);
+    },
+    getSelectItem() {
+      const filter = this.options.filter(i => i.id === selectItem)
+      return !filter || filter.length < 1? {} :filter[0]
     }
   }
 

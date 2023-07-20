@@ -19,6 +19,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="createBy"    column="create_by"    />
         <result property="updateTime"    column="update_time"    />
         <result property="updateBy"    column="update_by"    />
+        <result property="pcsId"    column="pcs_id"    />
+        <result property="pcsName"    column="pcs_name"    />
         <result property="preventiveMeasures"    column="preventive_measures"    />
         <result property="fileCount"    column="fileCount"  />
         <association property="detail" column="id" select="com.jingyu.community.mapper.CommunityDetailMapper.selectByVillageId" />
@@ -30,7 +32,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         select
             id, code, name, type, address, community, remark,
             preventive_measures, is_safe_area, naming_organ, naming_time,
-            create_time, create_by, update_time, update_by,
+            create_time, create_by, update_time, update_by, pcs_id, pcs_name,
             (select count(0) from sq_community_desc where community_id = s.id) fileCount
         from sq_community s
     </sql>
@@ -46,6 +48,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and name like #{nameLike}
             </if>
             <if test="type != null "> and type = #{type}</if>
+            <if test="pcsId != null "> and pcs_id = #{pcsId}</if>
+            <if test="pcsName != null and pcsName != ''"> and pcs_name = #{pcsName}</if>
             <if test="address != null  and address != ''"> and address = #{address}</if>
             <if test="community != null  and community != ''"> and community = #{community}</if>
             <if test="preventiveMeasures != null "> and preventive_measures = #{preventiveMeasures}</if>
@@ -97,6 +101,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time,</if>
             <if test="createBy != null">create_by,</if>
             <if test="updateBy != null">update_by,</if>
+            <if test="pcsId != null ">pcs_id,</if>
+            <if test="pcsName != null and pcsName != ''">pcs_name,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="code != null and code != ''">#{code},</if>
@@ -112,6 +118,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">#{createTime},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="updateBy != null">#{updateBy},</if>
+            <if test="pcsId != null ">#{pcsId},</if>
+            <if test="pcsName != null and pcsName != ''">#{pcsName},</if>
          </trim>
     </insert>
 
@@ -131,6 +139,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="pcsId != null ">pcs_id = #{pcsId},</if>
+            <if test="pcsName != null and pcsName != ''">pcs_name = #{pcsName},</if>
         </trim>
         where id = #{id}
     </update>

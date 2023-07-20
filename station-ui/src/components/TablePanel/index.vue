@@ -37,6 +37,7 @@
 </script>
 <style scoped lang="scss">
 .container {
+  --el-table-min-height: 400px;
   overflow: auto;
   padding: 10px 10px 10px 10px;
   background-color: var(--page-background-color);
@@ -48,7 +49,7 @@
     background-color: var(--page-panel-background-color);
 
     & ::v-deep .el-table {
-      min-height: 400px;
+      min-height: var(--el-table-min-height);
     }
   }
 

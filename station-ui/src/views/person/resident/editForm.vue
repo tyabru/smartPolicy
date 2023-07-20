@@ -1,32 +1,41 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" :rules="rules" label-width="100px">
+      <h4 class="title-h4">人员基本信息</h4>
       <el-row>
-        <el-col :span="12">
-          <el-form-item label="所属小区" prop="xqId">
-            <se-community v-model="form.xqId" class="width-100Rate" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="地址编码" prop="metaAddrId">
-            <el-input v-model="form.metaAddrId" placeholder="请输入地址编码" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="与房东关系" prop="identity">
-            <el-select v-model="form.identity" class="width-100Rate" placeholder="请选择与房东关系">
-              <el-option v-for="dict in dict.type.family_member_relationship"
-                         :key="dict.value"
-                         :label="dict.label"
-                         :value="dict.value"
-              ></el-option>
-            </el-select>
-          </el-form-item>
-        </el-col>
+<!--        <el-col :span="12">-->
+<!--          <el-form-item label="所属小区" prop="xqId">-->
+<!--            <se-community v-model="form.communityId" class="width-100Rate" />-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+<!--        <el-col :span="12">-->
+<!--          <el-form-item label="地址编码" prop="metaAddrId">-->
+<!--            <el-input v-model="form.metaAddrId" placeholder="请输入地址编码" />-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
+<!--        <el-col :span="12">-->
+<!--          <el-form-item label="与房东关系" prop="identity">-->
+<!--            <el-select v-model="form.identity" class="width-100Rate" placeholder="请选择与房东关系">-->
+<!--              <el-option v-for="dict in dict.type.family_member_relationship"-->
+<!--                         :key="dict.value"-->
+<!--                         :label="dict.label"-->
+<!--                         :value="dict.value"-->
+<!--              ></el-option>-->
+<!--            </el-select>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
 
         <el-col :span="12">
           <el-form-item label="人员姓名" prop="name">
             <el-input v-model="form.name" placeholder="请输入人员姓名" />
+          </el-form-item>
+        </el-col>
+        <el-col :span="12">
+          <el-form-item label="证件类型" prop="certType">
+            <el-select v-model="form.certType" class="width-100Rate" placeholder="请输入身份证件类型">
+              <el-option value="CN_CARD" label="中国身份证"></el-option>
+              <el-option value="PASS_PORT" label="护照"></el-option>
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -52,16 +61,16 @@
             <el-input v-model="form.nativePlace" placeholder="请输入籍贯" />
           </el-form-item>
         </el-col>
-        <el-col :span="12">
-          <el-form-item label="入住日期" prop="livingDate">
-            <el-date-picker clearable style="width: 100%;"
-                            v-model="form.livingDate"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            placeholder="请选择入住日期">
-            </el-date-picker>
-          </el-form-item>
-        </el-col>
+<!--        <el-col :span="12">-->
+<!--          <el-form-item label="入住日期" prop="livingDate">-->
+<!--            <el-date-picker clearable style="width: 100%;"-->
+<!--                            v-model="form.livingDate"-->
+<!--                            type="date"-->
+<!--                            value-format="yyyy-MM-dd"-->
+<!--                            placeholder="请选择入住日期">-->
+<!--            </el-date-picker>-->
+<!--          </el-form-item>-->
+<!--        </el-col>-->
         <el-col :span="12">
           <el-form-item label="公司" class="width-100Rate" prop="company">
             <el-input v-model="form.company" placeholder="请输入公司" />
@@ -70,11 +79,6 @@
         <el-col :span="12">
           <el-form-item label="职业" class="width-100Rate" prop="career">
             <el-input v-model="form.career" placeholder="请输入职业" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="12">
-          <el-form-item label="数据来源" class="width-100Rate" prop="sourcePlatform">
-            <el-input v-model="form.sourcePlatform" placeholder="请输入数据来源平台" />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -101,14 +105,26 @@
             </el-select>
           </el-form-item>
         </el-col>
-
         <el-col :span="24">
-          <el-form-item label="人脸图片地址" prop="faceImgUrl">
-            <image-upload v-model="form.faceImgUrl"/>
+          <el-form-item label="人脸图片地址" required prop="faceImgUrl">
+            <image-upload v-model="form.faceImgUrl" :limit="1"/>
           </el-form-item>
         </el-col>
+<!--        <el-col :span="24" style="&#45;&#45;el-table-min-height: auto">-->
+<!--          <h4 class="title-h4">管理房屋地址</h4>-->
+<!--          <el-table size="mini" :data="form.houseList" >-->
+<!--            <el-table-column prop="communityName" label="所属小区" />-->
+<!--            <el-table-column prop="addressName" label="地址名称"-->
+<!--                             show-overflow-tooltip width="200px" />-->
+<!--            <el-table-column prop="livingFlag" label="居住地址" />-->
+<!--            <el-table-column prop="relationshipWithOwner" label="与房东关系" />-->
+<!--            <el-table-column label="操作" align="center">-->
+<!--              <el-button type="text" >删除</el-button>-->
+<!--            </el-table-column>-->
+<!--          </el-table>-->
+<!--        </el-col>-->
       </el-row>
-      <el-row>
+      <el-row style="margin-top: 20px">
         <el-button type="primary" @click="submitForm">保存</el-button>
       </el-row>
     </el-form>
@@ -116,20 +132,28 @@
 </template>
 
 <script>
-import { addResident, updateResident } from "@/api/person/resident";
+import { addResident, listResident, updateResident } from '@/api/person/resident'
 import { validIdCodeByType } from '@/utils/validate'
 
 export default {
   name: "Resident",
   dicts: ['sys_yes_no', 'important_level', 'family_member_relationship'],
   data() {
-    const validIdCode = (rule, value, callback) => {
-      if(!value && value.length < 1){
+    const validIdCode = async (rule, value, callback) => {
+      if(!value || value.length < 1){
         callback("身份证号为必填项！");
-      }else if(value && !validIdCodeByType(value, this.form.certType)){
-        callback("身份证号不符合验证规则！");
-      } else {
-        callback()
+      }else {
+        if(!validIdCodeByType(value, this.form.certType)){
+          callback("身份证号不符合验证规则！");
+        } else {
+          const { code, data } = listResident({certNo: value})
+          if(code == 200  && data  && data.rows) {
+            if(data.rows.length > 0 && (!this.form.id || data.rows[0].certNo === value)) {
+              callback("身份证号已存在！无法继续录入！");
+            }
+          }
+          callback()
+        }
       }
     }
     return {
@@ -137,7 +161,9 @@ export default {
       loading: true,
       // 表单参数
       form: {
-        certType: 'CN_CARD'
+        certType: 'CN_CARD',
+        attentionLevel: 'green',
+        houseList: []
       },
       // 表单校验
       rules: {

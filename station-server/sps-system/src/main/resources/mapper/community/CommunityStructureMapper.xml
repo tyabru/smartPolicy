@@ -12,15 +12,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="metaAddrId"    column="meta_addr_id"    />
         <result property="fullAddress"    column="full_address"    />
         <result property="metaLevel"    column="meta_level"    />
+        <result property="dong"    column="dong"    />
+        <result property="unit"    column="unit"    />
+        <result property="ceng"    column="ceng"    />
+        <result property="room"    column="room"    />
         <result property="parentId"    column="parent_id"    />
-        <result property="deptId"    column="dept_id"    />
+        <result property="pcsId"    column="pcs_id"    />
+        <result property="pcsName"    column="pcs_name"    />
         <result property="shortName"    column="short_name"    />
         <result property="region"    column="region"    />
         <result property="regionName"    column="region_name"    />
     </resultMap>
 
     <sql id="selectCommunityStructureVo">
-        select id, community_id, community_code, community_name, meta_addr_id, full_address, meta_level, parent_id, dept_id, short_name, region, region_name from sq_community_structure
+        select id, community_id, community_code, community_name, meta_addr_id, full_address, meta_level, dong, unit, ceng, room, parent_id, pcs_id, pcs_name, short_name, region, region_name from sq_community_structure
     </sql>
 
     <select id="selectCommunityStructureList" parameterType="CommunityStructure" resultMap="CommunityStructureResult">
@@ -32,8 +37,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="metaAddrId != null  and metaAddrId != ''"> and meta_addr_id = #{metaAddrId}</if>
             <if test="fullAddress != null  and fullAddress != ''"> and full_address = #{fullAddress}</if>
             <if test="metaLevel != null "> and meta_level = #{metaLevel}</if>
+            <if test="dong != null  and dong != ''"> and dong = #{dong}</if>
+            <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
+            <if test="ceng != null  and ceng != ''"> and ceng = #{ceng}</if>
+            <if test="room != null  and room != ''"> and room = #{room}</if>
             <if test="parentId != null "> and parent_id = #{parentId}</if>
-            <if test="deptId != null  and deptId != ''"> and dept_id = #{deptId}</if>
+            <if test="pcsId != null  and pcsId != ''"> and pcs_id = #{pcsId}</if>
+            <if test="pcsName != null  and pcsName != ''"> and pcs_name like concat('%', #{pcsName}, '%')</if>
             <if test="shortName != null  and shortName != ''"> and short_name like concat('%', #{shortName}, '%')</if>
             <if test="region != null  and region != ''"> and region = #{region}</if>
             <if test="regionName != null  and regionName != ''"> and region_name like concat('%', #{regionName}, '%')</if>
@@ -54,8 +64,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="metaAddrId != null">meta_addr_id,</if>
             <if test="fullAddress != null">full_address,</if>
             <if test="metaLevel != null">meta_level,</if>
+            <if test="dong != null">dong,</if>
+            <if test="unit != null">unit,</if>
+            <if test="ceng != null">ceng,</if>
+            <if test="room != null">room,</if>
             <if test="parentId != null">parent_id,</if>
-            <if test="deptId != null">dept_id,</if>
+            <if test="pcsId != null">pcs_id,</if>
+            <if test="pcsName != null">pcs_name,</if>
             <if test="shortName != null">short_name,</if>
             <if test="region != null">region,</if>
             <if test="regionName != null">region_name,</if>
@@ -67,8 +82,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="metaAddrId != null">#{metaAddrId},</if>
             <if test="fullAddress != null">#{fullAddress},</if>
             <if test="metaLevel != null">#{metaLevel},</if>
+            <if test="dong != null">#{dong},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="ceng != null">#{ceng},</if>
+            <if test="room != null">#{room},</if>
             <if test="parentId != null">#{parentId},</if>
-            <if test="deptId != null">#{deptId},</if>
+            <if test="pcsId != null">#{pcsId},</if>
+            <if test="pcsName != null">#{pcsName},</if>
             <if test="shortName != null">#{shortName},</if>
             <if test="region != null">#{region},</if>
             <if test="regionName != null">#{regionName},</if>
@@ -84,8 +104,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="metaAddrId != null">meta_addr_id = #{metaAddrId},</if>
             <if test="fullAddress != null">full_address = #{fullAddress},</if>
             <if test="metaLevel != null">meta_level = #{metaLevel},</if>
+            <if test="dong != null">dong = #{dong},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="ceng != null">ceng = #{ceng},</if>
+            <if test="room != null">room = #{room},</if>
             <if test="parentId != null">parent_id = #{parentId},</if>
-            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="pcsId != null">pcs_id = #{pcsId},</if>
+            <if test="pcsName != null">pcs_name = #{pcsName},</if>
             <if test="shortName != null">short_name = #{shortName},</if>
             <if test="region != null">region = #{region},</if>
             <if test="regionName != null">region_name = #{regionName},</if>

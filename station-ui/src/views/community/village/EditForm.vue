@@ -33,7 +33,7 @@
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="所属派出所" prop="pcsName">
-              <el-input v-model="form.detail.pcsName" readonly/>
+              <el-input v-model="form.pcsName" readonly/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -179,8 +179,8 @@ export default {
       if(newVal) {
         this.communityChange(newVal)
       } else {
-        this.form.detail.pcsId = null;
-        this.form.detail.pcsName = null;
+        this.form.pcsId = null;
+        this.form.pcsName = null;
         this.form.detail.police = null
         this.form.detail.policeName = null
         this.form.detail.policePhone = null
@@ -330,17 +330,17 @@ export default {
           if(!this.form.detail) {
             this.form.detail = {}
           }
-          this.form.detail.pcsId = response.data.deptId;
-          this.form.detail.pcsName = response.data.deptName;
+          this.form.pcsId = response.data.deptId;
+          this.form.pcsName = response.data.deptName;
           this.queryPoliceById();
         }
       });
     },
     queryPoliceById() {
-      if(!this.form.detail.pcsId) {
+      if(!this.form.pcsId) {
         return
       }
-      queryPcsPoliceUser(this.form.detail.pcsId).then(response => {
+      queryPcsPoliceUser(this.form.pcsId).then(response => {
         if(response.code === 200 && response.data) {
           this.policeList = response.data
           this.policeChange(this.form.detail.police)

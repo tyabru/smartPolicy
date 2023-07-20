@@ -88,11 +88,15 @@
     </template>
     <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="派出所" align="center" prop="pcsName" />
       <el-table-column label="小区名称" align="center" prop="communityName" />
       <el-table-column label="地址编码" align="center" prop="metaAddrId" />
       <el-table-column label="地址全称" align="center" prop="fullAddress" />
-      <el-table-column label="地址级别" align="center" prop="metaLevel" />
-      <el-table-column label="区域名称" align="center" prop="regionName" />
+      <el-table-column label="地址级别" align="center" prop="metaLevel">
+        <template v-slot="{ row }">
+          <dict-tag :options="dict.type['structure_level']" :value="row.metaLevel" />
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -122,38 +126,71 @@
     />
 
     <!-- 添加或修改小区房屋结构和地址信息对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
-      <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="所属小区" prop="communityId">
-          <se-community v-model="form.communityId" @change="communityChange"
-                        placeholder="请输入小区外键" class="width-100Rate" />
-        </el-form-item>
-        <el-form-item label="地址编码" prop="metaAddrId">
-          <el-input v-model="form.metaAddrId" placeholder="请输入小区地址编码" />
-        </el-form-item>
-        <el-form-item label="地址全称" prop="fullAddress">
-          <el-input v-model="form.fullAddress" placeholder="请输入地址全称" />
-        </el-form-item>
-        <el-form-item label="地址级别" prop="metaLevel">
-          <el-select v-model="form.metaLevel" class="width-100Rate" @change="levelChange" placeholder="请输入地址级别">
-            <el-option v-for="item in dict.type['structure_level']"
-                       :key="item.value" :value="item.value" :label="item.label" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="上级地址" prop="parentId">
-          <el-select v-model="form.parentId"
-                     :disabled="!form.communityId || !form.metaLevel || form.metaLevel == 10"
-                     placeholder="请输入上级编码" class="width-100Rate" >
-            <el-option v-for="item in parentList"
-                       :key="item.id" :value="item.id" :label="item.fullAddress" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="所属部门" prop="deptId">
-          <el-input v-model="form.deptId" placeholder="请输入所属部门" />
-        </el-form-item>
-        <el-form-item label="地址简称" prop="shortName">
-          <el-input v-model="form.shortName" placeholder="请输入地址简称" />
-        </el-form-item>
+    <el-dialog :title="title" :visible.sync="open" @close="reset"
+               width="50vw" append-to-body>
+      <el-form ref="form" :loading="dialogLoading" :model="form" :rules="rules" label-width="110px">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="地址全称" prop="fullAddress">
+              <el-input v-model="form.fullAddress" placeholder="请输入地址全称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="所属小区" prop="communityId">
+              <se-community  ref="form-community" v-model="form.communityId"
+                             :default-label="form.communityName"
+                             @change="communityChange"
+                             placeholder="请输入小区外键" class="width-100Rate" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="所属派出所" prop="pcsId">
+              <el-input :value="form.pcsName" readonly placeholder="请输入所属派出所" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="地址编码" prop="metaAddrId">
+              <el-input v-model="form.metaAddrId" placeholder="请输入小区地址编码" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="地址简称" prop="shortName">
+              <el-input v-model="form.shortName" placeholder="请输入地址简称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="地址级别" prop="metaLevel">
+              <el-select v-model="form.metaLevel" class="width-100Rate" placeholder="请输入地址级别">
+                <el-option v-for="item in dict.type['structure_level']"
+                           :key="item.value" :value="Number(item.value)" :label="item.label" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="楼栋" prop="dong">
+              <el-input v-model="form.dong"
+                        placeholder="请输入地址楼栋" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="单元" prop="unit">
+              <el-input v-model="form.unit"
+                        placeholder="请输入地址单元" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="楼层" prop="ceng">
+              <el-input v-model="form.ceng"
+                        placeholder="请输入地址楼层" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="门牌" prop="room">
+              <el-input v-model="form.room"
+                        placeholder="请输入地址门牌号" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -167,12 +204,29 @@
 import { listStructure, getStructure, delStructure, addStructure, updateStructure } from "@/api/community/structure";
 import TablePanel from '@/components/TablePanel/index.vue'
 import tableListMixins from '@/mixins/tableListMixins.js'
+import { queryBelongDeptByTypeAndId } from '@/api/system/dept'
+import { getCommunity } from '@/api/community/community'
 export default {
   name: "Structure",
   dicts: ['structure_level'],
   components: { TablePanel },
   mixins: [ tableListMixins ],
   data() {
+    const validUniqueMetaAddrId = async (rules, value, callback) => {
+      if(!value || value === '') {
+        callback('地址编码是唯一的值且不能为空！')
+      } else {
+        const response = await listStructure({ metaAddrId: value });
+        if(response.code === 200) {
+          if(response.rows && response.rows.length > 0) {
+            if(!this.form.id || value !== response.rows[0].metaAddrId) {
+              callback('地址编码在数据库中已存在。')
+            }
+          }
+        }
+        callback()
+      }
+    }
     return {
       // 选中数组
       ids: [],
@@ -182,6 +236,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      dialogLoading: false,
       // 表单参数
       form: {},
       parentList: [],
@@ -191,7 +246,7 @@ export default {
           { required: true, message: "小区外键不能为空", trigger: "blur" }
         ],
         metaAddrId: [
-          { required: true, message: "地址编码不能为空", trigger: "blur" }
+          { validator: validUniqueMetaAddrId, trigger: "blur" }
         ],
         fullAddress: [
           { required: true, message: "地址全称不能为空", trigger: "blur" }
@@ -243,14 +298,28 @@ export default {
       this.reset();
       const id = row.id || this.ids
       getStructure(id).then(response => {
-        this.form = response.data;
         this.open = true;
         this.title = "修改小区房屋结构和地址信息";
+        this.form = response.data;
+        this.dialogLoading = true
+        getCommunity(this.form.communityId).then(({ code, data }) => {
+          if(code === 200 && data) {
+            this.form.pcsId = data.pcsId
+            this.form.pcsName = data.pcsName
+            this.form.region = data.communityObj?.deptId
+            this.form.regionName = data.communityObj?.deptName
+          }
+        }).finally(() => { this.dialogLoading = false })
+
       });
     },
     communityChange(key, item) {
       this.form.communityCode = item.code
       this.form.communityName = item.name
+      this.form.pcsId = item.pcsId
+      this.form.pcsName = item.pcsName
+      this.form.region = item.communityObj?.deptId
+      this.form.regionName = item.communityObj?.deptName
     },
     /** 提交按钮 */
     submitForm() {
@@ -287,15 +356,6 @@ export default {
       this.download('community/structure/export', {
         ...this.queryParams
       }, `structure_${new Date().getTime()}.xlsx`)
-    },
-    levelChange(item) {
-      if(this.form.communityId && item > 10 && item < 15) {
-        listStructure({ communityId: this.form.communityId, metaLevel: item - 1}).then(response => {
-          if(response.code === 200 && response.data) {
-            this.parentList = response.data
-          }
-        })
-      }
     }
   }
 };

@@ -93,6 +93,11 @@ public class Community extends BaseEntity {
     @Excel(name = "命名时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date namingTime;
 
+    private Long pcsId;
+
+    @Excel(name = "所属派出所")
+    private String pcsName;
+
     private int fileCount = 0;
 
     private CommunityDetail detail;
