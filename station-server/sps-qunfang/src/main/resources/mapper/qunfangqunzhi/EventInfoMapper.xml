@@ -21,7 +21,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="uploadTime"    column="upload_time"    />
         <result property="remark"    column="remark"    />
         <result property="eventSummarize"    column="event_summarize"    />
-    </resultMap>
+        <result property="finishUserId"    column="finish_user_id"    />
+        <result property="finishTime"  column="finish_time" />
+        <result property="finishUserName"  column="finish_user_name" />
+     </resultMap>
 
     <resultMap id="EventInfoEventUserAllocatedResult" type="EventInfo" extends="EventInfoResult">
         <collection property="eventUserAllocatedList" notNullColumn="sub_id" javaType="java.util.List" resultMap="EventUserAllocatedResult" />
@@ -30,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="EventUserAllocated" id="EventUserAllocatedResult">
         <result property="id"    column="sub_id"    />
         <result property="userId"    column="sub_user_id"    />
+        <result property="userType"    column="user_type"    />
         <result property="eventId"    column="sub_event_id"    />
         <result property="inspectDetail"    column="sub_inspect_detail"    />
         <result property="rectifyOpinion"    column="sub_rectify_opinion"    />
@@ -42,10 +46,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="status"    column="sub_status"    />
         <result property="allocatedUserType"    column="sub_allocated_user_type"    />
         <result property="allocateUserId"    column="sub_allocate_user_id"    />
+        <result property="dealFlag"    column="deal_flag"    />
+        <result property="allocateTime"    column="allocate_time"    />
     </resultMap>
 
     <sql id="selectEventInfoVo">
-        select id, upload_user_id, event_type, contact_person_name, contact_phone, address, address_data, event_description, occur_time, photo_url, video_url, status, reply, upload_time,remark,event_summarize from event_info
+        select id, upload_user_id, event_type, contact_person_name, contact_phone, address, address_data, event_description, occur_time, photo_url, video_url, status, reply, upload_time,remark,event_summarize ,finish_time,finish_user_id,finish_user_name from event_info
     </sql>
 
     <select id="selectEventInfoList" parameterType="EventInfo" resultMap="EventInfoResult">
@@ -58,18 +64,28 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="address != null  and address != ''"> and address = #{address}</if>
             <if test="addressData != null  and addressData != ''"> and address_data = #{addressData}</if>
             <if test="eventDescription != null  and eventDescription != ''"> and event_description = #{eventDescription}</if>
-            <if test="occurTime != null "> and occur_time = #{occurTime}</if>
+            <if test="params.beginOccurTime != null and params.beginOccurTime != ''"><!-- 开始时间检索 -->
+                AND date_format(occur_time,'%y%m%d') &gt;= date_format(#{params.beginOccurTime},'%y%m%d')
+            </if>
+            <if test="params.endOccurTime != null and params.endOccurTime != ''"><!-- 结束时间检索 -->
+                AND date_format(occur_time,'%y%m%d') &lt;=  date_format(#{params.endOccurTime},'%y%m%d')
+            </if>
             <if test="photoUrl != null  and photoUrl != ''"> and photo_url = #{photoUrl}</if>
             <if test="videoUrl != null  and videoUrl != ''"> and video_url = #{videoUrl}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="reply != null  and reply != ''"> and reply = #{reply}</if>
-            <if test="uploadTime != null "> and upload_time = #{uploadTime}</if>
+            <if test="params.beginUploadTime != null and params.beginUploadTime != ''"><!-- 开始时间检索 -->
+                AND upload_time &gt;= #{params.beginUploadTime}
+            </if>
+            <if test="params.endUploadTime != null and params.endUploadTime != ''"><!-- 结束时间检索 -->
+                AND upload_time &lt;= #{params.endUploadTime}
+            </if>
         </where>
     </select>
 
     <select id="selectEventInfoById" parameterType="Long" resultMap="EventInfoEventUserAllocatedResult">
         select a.id, a.upload_user_id, a.event_type, a.contact_person_name, a.contact_phone, a.address, a.address_data, a.event_description, a.occur_time, a.photo_url, a.video_url, a.status, a.reply, a.upload_time,a.event_summarize, a.remark,
- b.id as sub_id, b.user_id as sub_user_id, b.event_id as sub_event_id, b.inspect_detail as sub_inspect_detail, b.rectify_opinion as sub_rectify_opinion, b.rectify_result as sub_rectify_result, b.inspect_location as sub_inspect_location, b.inspect_datetime as sub_inspect_datetime, b.exist_problem as sub_exist_problem, b.photo_url as sub_photo_url, b.video_url as sub_video_url, b.status as sub_status, b.allocated_user_type as sub_allocated_user_type, b.allocate_user_id as sub_allocate_user_id
+        b.id as sub_id, b.user_id as sub_user_id, b.event_id as sub_event_id, b.inspect_detail as sub_inspect_detail, b.rectify_opinion as sub_rectify_opinion, b.rectify_result as sub_rectify_result, b.inspect_location as sub_inspect_location, b.inspect_datetime as sub_inspect_datetime, b.exist_problem as sub_exist_problem, b.photo_url as sub_photo_url, b.video_url as sub_video_url, b.status as sub_status, b.allocated_user_type as sub_allocated_user_type, b.allocate_user_id as sub_allocate_user_id,b.user_type,b.deal_flag, b.allocate_time
         from event_info a
         left join event_user_allocated b on b.event_id = a.id and b.status != "2"
         where a.id = #{id}
@@ -92,7 +108,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="status != null">status,</if>
             <if test="reply != null">reply,</if>
             <if test="uploadTime != null">upload_time,</if>
-            <if test="event_summarize != null">event_summarize</if>
+            <if test="eventSummarize != null">event_summarize</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id},</if>
@@ -158,9 +174,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <insert id="batchEventUserAllocated">
-        insert into event_user_allocated( id, user_id, event_id, inspect_detail, rectify_opinion, rectify_result, inspect_location, inspect_datetime, exist_problem, photo_url, video_url, status, allocated_user_type, allocate_user_id) values
+        insert into event_user_allocated( id, user_id, event_id, inspect_detail, rectify_opinion, rectify_result, inspect_location, inspect_datetime, exist_problem, photo_url, video_url, status, allocated_user_type, allocate_user_id,allocate_time) values
 		<foreach item="item" index="index" collection="list" separator=",">
-            ( #{item.id}, #{item.userId}, #{item.eventId}, #{item.inspectDetail}, #{item.rectifyOpinion}, #{item.rectifyResult}, #{item.inspectLocation}, #{item.inspectDatetime}, #{item.existProblem}, #{item.photoUrl}, #{item.videoUrl}, #{item.status}, #{item.allocatedUserType}, #{item.allocateUserId})
+            ( #{item.id}, #{item.userId}, #{item.eventId}, #{item.inspectDetail}, #{item.rectifyOpinion}, #{item.rectifyResult}, #{item.inspectLocation}, #{item.inspectDatetime}, #{item.existProblem}, #{item.photoUrl}, #{item.videoUrl}, #{item.status}, #{item.allocatedUserType}, #{item.allocateUserId},#{item.allocateTime})
         </foreach>
     </insert>
 </mapper>

@@ -42,3 +42,12 @@ export function delThreatmanagement(id) {
     method: 'delete'
   })
 }
+
+// 归档上报事件管理
+export function finishThreatmanagement(data) {
+  return request({
+    url: '/qf/threatmanagement/finish',
+    method: 'post',
+    data:data
+  })
+}

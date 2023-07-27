@@ -82,16 +82,16 @@
           v-hasPermi="['threat:threatmanagement:remove']"
         >删除</el-button>
       </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['threat:threatmanagement:export']"
-        >导出</el-button>
-      </el-col>
+<!--      <el-col :span="1.5">-->
+<!--        <el-button-->
+<!--          type="warning"-->
+<!--          plain-->
+<!--          icon="el-icon-download"-->
+<!--          size="mini"-->
+<!--          @click="handleExport"-->
+<!--          v-hasPermi="['threat:threatmanagement:export']"-->
+<!--        >导出</el-button>-->
+<!--      </el-col>-->
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -155,20 +155,28 @@
     <!-- 添加或修改群防群治对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="提交用户id" prop="uploadUserId">
-          <el-input v-model="form.uploadUserId" placeholder="请输入提交用户id" />
-        </el-form-item>
         <el-form-item label="联系人姓名" prop="contactPersonName">
           <el-input v-model="form.contactPersonName" placeholder="请输入联系人姓名" />
         </el-form-item>
         <el-form-item label="联系电话" prop="contactPhone">
           <el-input v-model="form.contactPhone" placeholder="请输入联系电话" />
         </el-form-item>
+        <el-form-item label="事件类型" prop="userType">
+          <el-select v-model="form.eventType"    clearable placeholder="请选择事件类型">
+            <el-option
+              v-for="item in this.dict.type.event_type"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            >
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="发生地址" prop="address">
           <el-input v-model="form.address" placeholder="请输入发生地址" />
         </el-form-item>
-        <el-form-item label="发生地址经纬度信息" prop="addressData">
-          <el-input v-model="form.addressData" placeholder="请输入发生地址经纬度信息" />
+        <el-form-item label="发生地址" prop="address">
+          <el-input v-model="form.address" placeholder="请输入发生地址" />
         </el-form-item>
         <el-form-item label="事件描述" prop="eventDescription">
           <el-input v-model="form.eventDescription" placeholder="请输入事件描述" />
@@ -180,81 +188,119 @@
             placeholder="请选择发生时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="照片地址" prop="photoUrl">
-          <el-input v-model="form.photoUrl" placeholder="请输入照片地址" />
-        </el-form-item>
-        <el-form-item label="视频地址" prop="videoUrl">
-          <el-input v-model="form.videoUrl" placeholder="请输入视频地址" />
-        </el-form-item>
-        <el-form-item label="完成时提供反馈信息" prop="reply">
+        <el-form-item label="反馈信息" v-if="form.status == '2'"  prop="reply">
           <el-input v-model="form.reply" placeholder="请输入完成时提供反馈信息" />
         </el-form-item>
-        <el-divider content-position="center">${subTable.functionName}信息</el-divider>
-        <el-row :gutter="10" class="mb8">
-          <el-col :span="1.5">
-            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddEventUserAllocated">添加</el-button>
-          </el-col>
-          <el-col :span="1.5">
-            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteEventUserAllocated">删除</el-button>
-          </el-col>
-        </el-row>
-        <el-table :data="eventUserAllocatedList" :row-class-name="rowEventUserAllocatedIndex" @selection-change="handleEventUserAllocatedSelectionChange" ref="eventUserAllocated">
-          <el-table-column type="selection" width="50" align="center" />
-          <el-table-column label="序号" align="center" prop="index" width="50"/>
-          <el-table-column label="分配userid" prop="userId" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.userId" placeholder="请输入分配userid" />
-            </template>
-          </el-table-column>
-          <el-table-column label="事件调查详情" prop="eventDetail" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.eventDetail" placeholder="请输入事件调查详情" />
-            </template>
-          </el-table-column>
-          <el-table-column label="图片上传路径" prop="photoUrl" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.photoUrl" placeholder="请输入图片上传路径" />
-            </template>
-          </el-table-column>
-          <el-table-column label="视频上传路径" prop="videoUrl" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.videoUrl" placeholder="请输入视频上传路径" />
-            </template>
-          </el-table-column>
-          <el-table-column label="事件结果" prop="eventResult" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.eventResult" placeholder="请输入事件结果" />
-            </template>
-          </el-table-column>
-          <el-table-column label="结果照片地址" prop="resultPhotoUrl" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.resultPhotoUrl" placeholder="请输入结果照片地址" />
-            </template>
-          </el-table-column>
-          <el-table-column label="结果视频地址" prop="resultVideoUrl" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.resultVideoUrl" placeholder="请输入结果视频地址" />
-            </template>
-          </el-table-column>
-          <el-table-column label="事件处理状态" prop="status" width="150">
-            <template slot-scope="scope">
-              <el-select v-model="scope.row.status" placeholder="请选择事件处理状态，0未确认，1已确认，2已取消，3已完成">
-                <el-option label="请选择字典生成" value="" />
-              </el-select>
-            </template>
-          </el-table-column>
-          <el-table-column label="分配这件事用户的id" prop="allocateUserId" width="150">
-            <template slot-scope="scope">
-              <el-input v-model="scope.row.allocateUserId" placeholder="请输入分配这件事用户的id" />
-            </template>
-          </el-table-column>
-        </el-table>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 修改群防群治信息对话框 -->
+<!--    <el-dialog title="修改事件信息" :visible.sync="updateOpen" width="500px" append-to-body>-->
+<!--      <el-form ref="form" :model="form" :rules="rules" label-width="80px">-->
+<!--        <el-form-item label="提交用户id" prop="uploadUserId">-->
+<!--          <el-input v-model="form.uploadUserId" placeholder="请输入提交用户id" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="联系人姓名" prop="contactPersonName">-->
+<!--          <el-input v-model="form.contactPersonName" placeholder="请输入联系人姓名" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="联系电话" prop="contactPhone">-->
+<!--          <el-input v-model="form.contactPhone" placeholder="请输入联系电话" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="发生地址" prop="address">-->
+<!--          <el-input v-model="form.address" placeholder="请输入发生地址" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="发生地址经纬度信息" prop="addressData">-->
+<!--          <el-input v-model="form.addressData" placeholder="请输入发生地址经纬度信息" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="事件描述" prop="eventDescription">-->
+<!--          <el-input v-model="form.eventDescription" placeholder="请输入事件描述" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="发生时间" prop="occurTime">-->
+<!--          <el-date-picker clearable-->
+<!--                          v-model="form.occurTime"-->
+<!--                          type="datetime"-->
+<!--                          placeholder="请选择发生时间">-->
+<!--          </el-date-picker>-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="照片地址" prop="photoUrl">-->
+<!--          <el-input v-model="form.photoUrl" placeholder="请输入照片地址" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="视频地址" prop="videoUrl">-->
+<!--          <el-input v-model="form.videoUrl" placeholder="请输入视频地址" />-->
+<!--        </el-form-item>-->
+<!--        <el-form-item label="完成时提供反馈信息" prop="reply">-->
+<!--          <el-input v-model="form.reply" placeholder="请输入完成时提供反馈信息" />-->
+<!--        </el-form-item>-->
+<!--        <el-divider content-position="center">${subTable.functionName}信息</el-divider>-->
+<!--        <el-row :gutter="10" class="mb8">-->
+<!--          <el-col :span="1.5">-->
+<!--            <el-button type="primary" icon="el-icon-plus" size="mini" @click="handleAddEventUserAllocated">添加</el-button>-->
+<!--          </el-col>-->
+<!--          <el-col :span="1.5">-->
+<!--            <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteEventUserAllocated">删除</el-button>-->
+<!--          </el-col>-->
+<!--        </el-row>-->
+<!--        <el-table :data="eventUserAllocatedList" :row-class-name="rowEventUserAllocatedIndex" @selection-change="handleEventUserAllocatedSelectionChange" ref="eventUserAllocated">-->
+<!--          <el-table-column type="selection" width="50" align="center" />-->
+<!--          <el-table-column label="序号" align="center" prop="index" width="50"/>-->
+<!--          <el-table-column label="分配userid" prop="userId" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.userId" placeholder="请输入分配userid" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="事件调查详情" prop="eventDetail" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.eventDetail" placeholder="请输入事件调查详情" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="图片上传路径" prop="photoUrl" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.photoUrl" placeholder="请输入图片上传路径" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="视频上传路径" prop="videoUrl" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.videoUrl" placeholder="请输入视频上传路径" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="事件结果" prop="eventResult" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.eventResult" placeholder="请输入事件结果" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="结果照片地址" prop="resultPhotoUrl" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.resultPhotoUrl" placeholder="请输入结果照片地址" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="结果视频地址" prop="resultVideoUrl" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.resultVideoUrl" placeholder="请输入结果视频地址" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="事件处理状态" prop="status" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-select v-model="scope.row.status" placeholder="请选择事件处理状态，0未确认，1已确认，2已取消，3已完成">-->
+<!--                <el-option label="请选择字典生成" value="" />-->
+<!--              </el-select>-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--          <el-table-column label="分配这件事用户的id" prop="allocateUserId" width="150">-->
+<!--            <template slot-scope="scope">-->
+<!--              <el-input v-model="scope.row.allocateUserId" placeholder="请输入分配这件事用户的id" />-->
+<!--            </template>-->
+<!--          </el-table-column>-->
+<!--        </el-table>-->
+<!--      </el-form>-->
+<!--      <div slot="footer" class="dialog-footer">-->
+<!--        <el-button type="primary" @click="submitForm">确 定</el-button>-->
+<!--        <el-button @click="cancel">取 消</el-button>-->
+<!--      </div>-->
+<!--    </el-dialog>-->
   </div>
 </template>
 
@@ -310,8 +356,8 @@ export default {
       form: {},
       // 表单校验
       rules: {
-
-      }
+      },
+      updateOpen:false,
     };
   },
   created() {
@@ -326,9 +372,9 @@ export default {
         this.queryParams.params["beginOccurTime"] = this.daterangeOccurTime[0];
         this.queryParams.params["endOccurTime"] = this.daterangeOccurTime[1];
       }
-      if (null != this.daterangeOccurTime && '' != this.daterangeOccurTime) {
-        this.queryParams.params["beginUploadTime"] = this.daterangeOccurTime[0];
-        this.queryParams.params["endUploadTime"] = this.daterangeOccurTime[1];
+      if (null != this.daterangeUploadTime && '' != this.daterangeUploadTime) {
+        this.queryParams.params["beginUploadTime"] = this.daterangeUploadTime[0];
+        this.queryParams.params["endUploadTime"] = this.daterangeUploadTime[1];
       }
       listThreatmanagement(this.queryParams).then(response => {
 
@@ -384,7 +430,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加群防群治";
+      this.title = "新增事件信息";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -392,23 +438,25 @@ export default {
       const id = row.id || this.ids
       getThreatmanagement(id).then(response => {
         this.form = response.data;
-        this.eventUserAllocatedList = response.data.eventUserAllocatedList;
         this.open = true;
-        this.title = "修改群防群治";
+        this.title = "修改事件信息";
       });
     },
     /** 提交按钮 */
     submitForm() {
+
       this.$refs["form"].validate(valid => {
         if (valid) {
-          this.form.eventUserAllocatedList = this.eventUserAllocatedList;
+          this.form.eventUserAllocatedList = null;
           if (this.form.id != null) {
+            console.log(this.form+"修改")
             updateThreatmanagement(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
             });
           } else {
+            console.log(this.form+"新增")
             addThreatmanagement(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;

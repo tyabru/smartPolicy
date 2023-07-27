@@ -105,4 +105,19 @@ public class QFConstants {
             return this.value;
         }
     }
+
+    /**
+     *  事件处置类型,是否为处置
+     */
+    public enum EventDealType{
+        DEAL("1"),
+        ALLOCATE("0");
+        private final String value;
+        EventDealType(String value){
+            this.value = value;
+        }
+        public String getValue(){
+            return this.value;
+        }
+    }
 }

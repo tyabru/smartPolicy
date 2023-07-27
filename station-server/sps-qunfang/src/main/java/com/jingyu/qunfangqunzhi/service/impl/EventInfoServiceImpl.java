@@ -4,6 +4,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.jingyu.common.utils.SecurityUtils;
+import com.jingyu.qunfangqunzhi.constant.QFConstants;
+import com.jingyu.qunfangqunzhi.domain.CommonUser;
+import com.jingyu.qunfangqunzhi.mapper.CommonUsersMapper;
 import com.jingyu.qunfangqunzhi.util.MyIdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +30,9 @@ public class EventInfoServiceImpl implements IEventInfoService
     @Autowired
     private EventInfoMapper eventInfoMapper;
 
+
+
+
     /**
      * 查询上报事件管理
      *
@@ -37,6 +43,8 @@ public class EventInfoServiceImpl implements IEventInfoService
     public EventInfo selectEventInfoById(Long id)
     {
         return eventInfoMapper.selectEventInfoById(id);
+
+
     }
 
     /**
@@ -79,8 +87,6 @@ public class EventInfoServiceImpl implements IEventInfoService
     @Override
     public int updateEventInfo(EventInfo eventInfo)
     {
-        eventInfoMapper.deleteEventUserAllocatedByUserId(eventInfo.getId());
-        insertEventUserAllocated(eventInfo);
         return eventInfoMapper.updateEventInfo(eventInfo);
     }
 

@@ -1,7 +1,19 @@
 package com.jingyu.web.controller.qunfangqunzhi;
 
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.jingyu.common.core.domain.entity.SysUser;
+import com.jingyu.common.exception.ServiceException;
+import com.jingyu.common.utils.SecurityUtils;
+import com.jingyu.common.utils.StringUtils;
+import com.jingyu.qunfangqunzhi.constant.QFConstants;
+import com.jingyu.qunfangqunzhi.domain.CommonUser;
+import com.jingyu.qunfangqunzhi.domain.EventUserAllocated;
+import com.jingyu.qunfangqunzhi.service.ICommonUsersService;
+import com.jingyu.qunfangqunzhi.service.IEventUserAllocatedService;
+import com.jingyu.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +45,15 @@ public class EventInfoController extends BaseController
 {
     @Autowired
     private IEventInfoService eventInfoService;
+
+    @Autowired
+    private IEventUserAllocatedService allocatedService;
+
+    @Autowired
+    private ISysUserService sysUserService;
+
+    @Autowired
+    private ICommonUsersService commonUsersService;
 
     /**
      * 查询上报事件管理列表
@@ -66,7 +87,34 @@ public class EventInfoController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return success(eventInfoService.selectEventInfoById(id));
+        EventInfo eventInfo = eventInfoService.selectEventInfoById(id);
+        List<EventUserAllocated> eventUserAllocatedList = eventInfo.getEventUserAllocatedList();
+
+        for(EventUserAllocated allocatedEvent:eventUserAllocatedList){
+            String allocatedUserType = allocatedEvent.getAllocatedUserType();
+            SysUser sysUser = null;
+            //管理员下发
+            if(allocatedUserType.equals(QFConstants.AllocateUserType.SYSTEM_USER.getValue())){
+                sysUser = sysUserService.selectUserById(allocatedEvent.getAllocateUserId());
+                allocatedEvent.getParams().put("allocatedUserName", sysUser.getUserName());
+            }else{
+                CommonUser commonUser = commonUsersService.selectCommonUsersByUserId(allocatedEvent.getAllocateUserId());
+                allocatedEvent.getParams().put("allocatedUserName", commonUser.getUserName());
+            }
+            //查询被下发用户id
+            //非处置情况
+            if(allocatedEvent.getDealFlag().equals(QFConstants.EventDealType.ALLOCATE.getValue())){
+                CommonUser commonUser = commonUsersService.selectCommonUsersByUserId(allocatedEvent.getUserId());
+                String userName = commonUser.getUserName();
+                allocatedEvent.getParams().put("userName", userName);
+                allocatedEvent.setUserType(commonUser.getUserType());
+            }else{
+                allocatedEvent.getParams().put("userName", sysUser.getUserName());
+            }
+
+
+        }
+        return success(eventInfo);
     }
 
     /**
@@ -103,6 +151,24 @@ public class EventInfoController extends BaseController
         return toAjax(eventInfoService.deleteEventInfoByIds(ids));
     }
 
-
+    /**
+     * 归档
+     */
+    @Log(title = "群防群治事件归档", businessType = BusinessType.UPDATE)
+    @PostMapping("/finish")
+    public AjaxResult remove(@RequestBody EventInfo eventInfo)
+    {
+        EventInfo info = eventInfoService.selectEventInfoById(eventInfo.getId());
+        String currentStatus = info.getStatus();
+        if(currentStatus.equals(QFConstants.EventStatus.COMPLETED.getValue())){
+            throw new ServiceException("当前状态不可归档");
+        }
+        eventInfo.setFinishUserId(SecurityUtils.getUserId());
+        eventInfo.setFinishTime(new Date());
+        eventInfo.setFinishUserName(SecurityUtils.getUsername());
+        eventInfo.setStatus(QFConstants.EventStatus.COMPLETED.getValue());
+        allocatedService.cancelByEventId(eventInfo.getId());
+        return toAjax(eventInfoService.updateEventInfo(eventInfo));
+    }
 
 }

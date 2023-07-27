@@ -8,6 +8,7 @@ import com.jingyu.common.core.page.TableDataInfo;
 import com.jingyu.common.enums.BusinessType;
 import com.jingyu.common.utils.poi.ExcelUtil;
 import com.jingyu.qunfangqunzhi.constant.CommonUserConstants;
+import com.jingyu.qunfangqunzhi.constant.QFConstants;
 import com.jingyu.qunfangqunzhi.domain.CommonUser;
 import com.jingyu.qunfangqunzhi.domain.CommonUsersApplication;
 import com.jingyu.qunfangqunzhi.domain.EventUserAllocated;
@@ -74,7 +75,9 @@ public class CommonUsersController extends BaseController
         EventUserAllocated allocated = new EventUserAllocated();
         allocated.setEventId(eventID);
         List<EventUserAllocated> eventUserAllocateds = allocatedService.selectEventUserAllocatedList(allocated);
-        List<Long> userIDs = eventUserAllocateds.stream().map(eventUserAllocated -> eventUserAllocated.getUserId()).collect(Collectors.toList());
+        List<Long> userIDs = eventUserAllocateds.stream().filter(eventUserAllocated ->
+                    !eventUserAllocated.getStatus().equals(QFConstants.AllocatedEventStatus.CANCELED.getValue()))
+                    .map(eventUserAllocated -> eventUserAllocated.getUserId()).collect(Collectors.toList());
         //过滤掉角色非网格员长用户
         for(Iterator<CommonUser> iterator = list.iterator(); iterator.hasNext();){
             CommonUser commonUser = iterator.next();
@@ -85,7 +88,7 @@ public class CommonUsersController extends BaseController
             };
             List<String> rolesList = Arrays.asList(commonUser.getUserType().split(","));
            //过滤掉非网格员角色
-            if(!rolesList.contains(CommonUserConstants.CommonUserType.WANGGEYUANZHANG.getValue())){
+            if(!rolesList.contains(CommonUserConstants.CommonUserType.WANGGEYUANZHANG.getValue())&&!rolesList.contains(CommonUserConstants.CommonUserType.WANGGEYUAN.getValue())){
                 iterator.remove();
             }
         }

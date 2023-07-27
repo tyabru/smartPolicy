@@ -27,7 +27,7 @@
       </el-form-item>
 
       <el-form-item v-if="this.photoUrls &&this.photoUrls.length!==0" label="图片说明" prop="photoUrls">
-        <el-image v-for="url in photoUrls" :src="url" style="width: 300px; height: 180px" :preview-src-list="[url]"/>
+        <el-image v-for="url in photoUrls" :src="url" style="width: 300px; height: 180px;margin-right: 20px" :preview-src-list="[url]"/>
       </el-form-item>
       <!--      <el-form-item label="照片地址" prop="photoUrl">-->
       <!--        <el-input v-model="form.photoUrl" placeholder="请输入照片地址" />-->
@@ -50,7 +50,7 @@
 
 
       <el-divider content-position="center">处理信息</el-divider>
-      <el-row :gutter="10" class="mb8">
+      <el-row :gutter="10" class="mb8" v-if="form.status !== '2' ">
         <el-col :span="1.5">
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteEventUserAllocated">批量取消
           </el-button>
@@ -58,22 +58,31 @@
         <el-col :span="1.5">
           <el-button type="primary" icon="el-icon-delete" size="mini" @click="openDialog">下发</el-button>
         </el-col>
+        <el-col :span="1.5">
+          <el-button type="primary" icon="el-icon-delete" size="mini" @click="openDeal">处置</el-button>
+        </el-col>
+        <el-col :span="1.5">
+          <el-button  type="primary" icon="el-icon-delete" size="mini" @click="openFinish">归档</el-button>
+        </el-col>
       </el-row>
       <el-table v-loading="loading" :data="eventUserAllocatedList"
                 @selection-change="handleEventUserAllocatedSelectionChange" ref="eventUserAllocated"
       >
         <el-table-column type="selection" width="55" align="center"/>
-        <el-table-column label="处理人员编号" align="center" prop="userId"/>
-        <el-table-column label="检查时间" align="center" prop="inspectDateTime"/>
-        <el-table-column label="整改意见" align="center" prop="rectifyOpinion"/>
-        <el-table-column label="整改结果" align="center" prop="rectifyResult"/>
+        <el-table-column label="处理人员账号" align="center" prop="params.userName"/>
+        <el-table-column label="处理人员类型" align="center" prop="userType">
+          <template slot-scope="scope">
+            <span>{{getUserTypeLabel(scope.row.userType)}}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="下发用户账号" align="center" prop="params.allocatedUserName"/>
+        <el-table-column label="下发用户类型" align="center" prop="allocatedUserType"/>
+        <el-table-column label="下发时间" align="center" prop="allocateTime"/>
         <el-table-column label="事件处理状态" align="center" prop="status">
           <template slot-scope="scope">
             <span>{{getStatusLabel(scope.row.status)}}</span>
           </template>
         </el-table-column>
-        <el-table-column label="下发用户编号" align="center" prop="allocateUserId"/>
-        <el-table-column label="下发用户类型" align="center" prop="allocatedUserType"/>
         <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
           <template slot-scope="scope">
             <el-button
@@ -85,6 +94,7 @@
             >详情
             </el-button>
             <el-button
+              v-if="form.status !=='2' & scope.row.status !=='3' "
               size="mini"
               type="text"
               icon="el-icon-delete"
@@ -130,11 +140,15 @@
           <el-col :span="20" :xs="24">
             <el-table v-loading="loading" :data="userList" @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="50" align="center"/>
-              <el-table-column label="用户编号" align="center" key="userId" prop="userId"/>
-              <el-table-column label="用户名称" align="center" key="userName" prop="userName"
+              <el-table-column label="用户类型" align="center" prop="userType" >
+                <template slot-scope="scope">
+                  <span>{{getUserTypeLabel(scope.row.userType)}}</span>
+                </template>
+              </el-table-column>
+              <el-table-column label="用户账号" align="center" key="userName" prop="userName"
                                :show-overflow-tooltip="true"
               />
-              <el-table-column label="用户昵称" align="center" key="nickName" prop="nickName"
+              <el-table-column label="姓名" align="center" key="realName" prop="realName"
                                :show-overflow-tooltip="true"
               />
               <el-table-column label="手机号码" align="center" key="phonenumber" prop="phonenumber" width="120"/>
@@ -155,16 +169,16 @@
       </div>
     </el-dialog>
 
-
-    <el-dialog :title="allocatedTitle" :visible.sync="allpcatedFormOpen" v-if="allpcatedFormOpen" width="1200px" append-to-body >
+<!--    下发详情窗口-->
+    <el-dialog :title="allocatedTitle" :visible.sync="allocatedFormOpen" v-if="allocatedFormOpen" width="1200px" append-to-body >
       <el-form ref="form" :model="allocatedForm" label-width="120px">
-        <el-form-item label="网格员编号">
+        <el-form-item :label="detailUser+'编号'">
           <el-input v-model="allocatedForm.userId"  readonly></el-input>
         </el-form-item>
-        <el-form-item label="网格员账号">
+        <el-form-item :label="detailUser+'账号'">
           <el-input v-model="allocatedForm.params.userName"  readonly></el-input>
         </el-form-item>
-        <el-form-item label="网格员姓名">
+        <el-form-item :label="detailUser+'姓名'" v-if="allocatedForm.dealFlag == '0' ">
           <el-input v-model="allocatedForm.params.realName"  readonly></el-input>
         </el-form-item>
         <el-form-item label="事件编号">
@@ -189,7 +203,7 @@
           <el-input v-model="allocatedForm.rectifyResult"  type="textarea" readonly></el-input>
         </el-form-item >
         <el-form-item v-if="this.photoUrls &&this.photoUrls.length!==0" label="图片说明" prop="photoUrls">
-          <el-image v-for="url in photoUrls" :src="url" style="width: 300px; height: 180px" :preview-src-list="[url]"/>
+          <el-image v-for="url in photoUrls" :src="url" style="width: 300px; height: 180px;margin-right: 20px" :preview-src-list="[url]"/>
         </el-form-item>
         <el-form-item v-if="this.videoUrl && this.videoUrl!==''"   label="视频信息" prop="videoUrl" style="width: 600px; ">
           <vue-aliplayer-v2
@@ -199,22 +213,137 @@
         </el-form-item>
       </el-form>
 
+      <el-divider>修改意见</el-divider>
+      <el-row>
+        <el-button v-if=" allocatedForm.status==='1' || allocatedForm.status==='0' " style="margin-bottom: 20px" @click="redoAllocate(allocatedForm.id)">增加修改意见</el-button>
+      </el-row>
+
+      <el-table
+        :data="rectifyOpinions"
+        height="250"
+        border
+        style="width: 100%">
+        <el-table-column
+          align="center"
+          prop="sendTime"
+          label="发送日期"
+          width="150px"
+          >
+        </el-table-column>
+        <el-table-column
+          align="center"
+          prop="rectifyOpinion"
+          label="修改意见"
+          width="850px"
+          >
+        </el-table-column>
+        <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <template slot-scope="scope">
+            <el-button
+              size="mini"
+              type="text"
+              icon="el-icon-zoom-in"
+              @click="deleteRectifyOpinion(scope.row.id)"
+              v-hasPermi="['threat:allocated:query']"
+            >删除
+            </el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="confirmAllocate" v-if="this.allocatedForm.status == 1">确 认</el-button>
+        <el-button @click="allocatedFormOpen = false">关 闭</el-button>
+      </div>
+
+    </el-dialog>
+<!--    处置窗口-->
+    <el-dialog :title="dealTitle" :visible.sync="dealFormOpen" v-if="dealFormOpen" width="1200px" append-to-body >
+      <el-form ref="form" :model="dealForm" label-width="120px">
+        <el-form-item label="检查时间">
+          <el-date-picker
+            v-model="dealForm.inspectDatetime"
+            type="datetime"
+            placeholder="选择日期时间"
+            align="right"
+            value-format="yyyy-MM-dd HH:mm:ss"
+            :picker-options="pickerOptions">
+          </el-date-picker>
+        </el-form-item>
+        <el-form-item label="检查位置">
+          <el-input v-model="dealForm.inspectLocation"  req></el-input>
+        </el-form-item>
+        <el-form-item label="检查细节">
+          <el-input v-model="dealForm.inspectDetail"  type="textarea" ></el-input>
+        </el-form-item >
+        <el-form-item label="存在问题">
+          <el-input v-model="dealForm.existProblem"   type="textarea" ></el-input>
+        </el-form-item >
+        <el-form-item label="整改意见">
+          <el-input v-model="dealForm.rectifyOpinion" type="textarea" ></el-input>
+        </el-form-item >
+        <el-form-item label="整改结果">
+          <el-input v-model="dealForm.rectifyResult"  type="textarea" ></el-input>
+        </el-form-item >
+        <el-form-item  label="图片说明" prop="photoUrls" required>
+          <my-image-up-load  v-model="dealForm.photoUrl" ></my-image-up-load>
+        </el-form-item>
+        <el-form-item  label="视频信息" prop="videoUrl" style="width: 600px;" >
+          <file-upload v-model="dealForm.videoUrl" :file-size="20" :file-type="fileType" :limit="1" ></file-upload>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitDealForm">确 定</el-button>
+        <el-button @click="cancelDealForm">取 消</el-button>
+      </div>
+    </el-dialog>
+<!--    归档窗口-->
+    <el-dialog :title="finishTitle" :visible.sync="finishFormOpen" v-if="finishFormOpen" width="1200px" append-to-body >
+      <el-form ref="form" :model="finishForm" label-width="120px">
+        <el-form-item label="反馈信息">
+          <el-input v-model="finishForm.reply"  type="textarea" ></el-input>
+        </el-form-item >
+        <el-form-item label="事件备注">
+          <el-input v-model="finishForm.userName"   type="textarea" ></el-input>
+        </el-form-item >
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFinishForm">确 定</el-button>
+        <el-button @click="cancelFinishForm">取 消</el-button>
+      </div>
+    </el-dialog>
+
+
+    <!--    回退窗口-->
+    <el-dialog title="修改说明" :visible.sync="redoFormOpen" v-if="redoFormOpen" width="1200px" append-to-body >
+      <el-form ref="form" :model="redoForm" label-width="120px">
+        <el-form-item label="反馈信息">
+          <el-input v-model="redoForm.rectifyOpinion"  type="textarea" ></el-input>
+        </el-form-item >
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitRedoForm">确 定</el-button>
+        <el-button @click="cancelRedoForm">取 消</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
-  import { getThreatmanagement } from '@/api/qunfangqunzhi/threatmanagement'
+  import { getThreatmanagement,finishThreatmanagement } from '@/api/qunfangqunzhi/threatmanagement'
   import { addAllocated, updateAllocated, downloadEventAllocated,cancelEventAllocated,getAllocated} from '@/api/qunfangqunzhi/allocated'
   import { deptTreeSelect } from '@/api/system/user'
   import {listGridStuff} from  "@/api/qunfangqunzhi/CommonUsers"
   import VueAliplayerV2 from "vue-aliplayer-v2";
+  import {getToken} from "@/utils/auth";
+  import {addAllocateRectify,listAllocateRectify,delAllocateRectify} from "@/api/qunfangqunzhi/allocateRectify";
+  import myImageUpLoad from "@/views/qunfangqunzhi/myImageUpLoad";
 
   export default {
     name: 'threatDetail',
-    dicts:['threat_allocate_status'],
+    dicts:['threat_allocate_status','common_user_type'],
     components: {
-        VueAliplayerV2
+        VueAliplayerV2,
+        myImageUpLoad
     },
     data() {
       return {
@@ -248,8 +377,56 @@
 
         //下发情况详细表单
         allocatedForm:{},
-        allpcatedFormOpen:false,
-        allocatedTitle:"处理详情"
+        allocatedFormOpen:false,
+        allocatedTitle:"处理详情",
+        //处置窗口表单
+        dealForm: {
+          photoUrl:null,
+          videoUrl:null
+        },
+        dealFormOpen:false,
+        dealTitle:"处置表头",
+        pickerOptions: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        },
+        //上传照片地址
+        uploadImgUrl: process.env.VUE_APP_BASE_API + "/common/upload",
+        headers: {
+          Authorization: "Bearer " + getToken(),
+        },
+        // 上传文件类型, 例如['png', 'jpg', 'jpeg']
+        fileType:["avi", "mp4", "3gp","flv","f4v","3g2","rmvb","wmv"],
+        fileList:[],
+        //归档数据项
+        finishForm:{},
+        finishFormOpen:false,
+        finishTitle:"事件归档",
+        detailUser:"网格员",
+        //归档数据项
+        redoForm:{
+          rectifyOpinion:null
+        },
+        redoFormOpen:false,
+        rectifyOpinions:null
       }
     },
     created() {
@@ -298,7 +475,7 @@
         })
       },
       /**批量取消下发数据 */
-      handleDeleteEventUserAllocated() {
+      handleDeleteEventUserAllocated(){
         if (!this.checkedEventUserAllocated||this.checkedEventUserAllocated.length=== 0) {
           this.$modal.msgError('请先选择要取消的数据')
         } else {
@@ -394,7 +571,18 @@
       //获取下发事件处理情况标签内容
       getStatusLabel(val){
         for(let dict of this.dict.type.threat_allocate_status){
-          if(dict.value == val){
+          if(dict.value === val){
+            return dict.label;
+          }
+        }
+      },
+      //获取用户类型处理标签内容
+      getUserTypeLabel(val){
+        if(val == null || val ==""){
+          return "管理员";
+        }
+        for(let dict of this.dict.type.common_user_type){
+          if(dict.value === val){
             return dict.label;
           }
         }
@@ -414,21 +602,108 @@
 
       },
       handleAllocateDetail(id){
-        this.allpcatedFormOpen = true;
         getAllocated(id).then(res=>{
           this.allocatedForm = res.data;
+          if(this.allocatedForm.dealFlag == "0"){
+            this.detailUser = "网格员";
+          }else{
+            this.detailUser = "管理员";
+          }
+          this.allocatedFormOpen = true;
+        });
+        let param = {
+          allocateId:id
+        }
+        listAllocateRectify(param).then(res=>{
+          this.rectifyOpinions = res.rows;
+
         })
+      },
+      openDeal(){
+        this.dealFormOpen = {}
+        this.dealFormOpen = true;
+      },
+      // 提交处置信息
+      submitDealForm(){
+        this.dealForm.eventId = this.id;
+        addAllocated(this.dealForm).then(res=>{
+          this.$message.success("提交处置信息成功");
+        });
+        this.dealFormOpen = false;
+      },
+      cancelDealForm(){
+        this.dealFormOpen = false;
+        this.dealForm = {}
+      },
+      //归档处理
+      openFinish(){
+        this.finishForm = {};
+        this.finishFormOpen = true;
+      },
+      submitFinishForm(){
+        this.$confirm("归档后不能再对事件进行处置或下发，未完成以及未确认的下发事件将会被取消，确定要归档事件吗？",'提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(()=>{
+          this.finishForm.id = this.id;
+          finishThreatmanagement(this.finishForm).then(res=>{
+            this.$message.success("归档事件成功");
+            this.finishFormOpen = false;
+            this.getDetail();
+          })
+        }).catch(()=>{})
+      },
+      cancelFinishForm(){
+          this.finishFormOpen = false;
+          this.finishForm = {};
+      },
+      //获取下用户类型标签内容
+      redoAllocate(id){
+        this.redoFormOpen = true;
+        this.redoForm = {
+          rectifyOpinion:null
+        };
+        this.redoForm.allocateId = id;
+      },
+      //提交
+      submitRedoForm(){
+        addAllocateRectify(this.redoForm).then(res=>{
+          this.$message.success("成功下发修改意见")
+          this.redoFormOpen = false
+        })
+      },
+      deleteRectifyOpinion(id){
+        delAllocateRectify(id).then(res=>{
+          this.$message.success("删除修改意见成功")
+          this.handleAllocateDetail(this.allocatedForm.id)
+        })
+      },
+      confirmAllocate(){
+        let item ={
+          id:this.allocatedForm.id,
+          status:3
+        }
+        this.$confirm("点击确定后网格员不能再对任务信息进行修改！",'提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(i=>{
+          updateAllocated(item).then(res=>{
+            this.$message.success("归档下发任务成功")
+          });
+        }).catch(()=>{});
+      },
+      cancelRedoForm(){
+        this.redoFormOpen=false;
+        this.redoForm = {};
       }
-    }
+    },
+
 
   }
 </script>
 
 <style scoped>
-  .my_tag {
-    width: 100%;
-    color: black;
-
-  }
 
 </style>

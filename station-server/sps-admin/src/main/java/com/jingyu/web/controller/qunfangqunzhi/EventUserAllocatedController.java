@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jingyu.common.core.domain.entity.SysUser;
 import com.jingyu.common.utils.SecurityUtils;
+import com.jingyu.common.utils.StringUtils;
 import com.jingyu.qunfangqunzhi.constant.CommonUserConstants;
 import com.jingyu.qunfangqunzhi.constant.QFConstants;
 import com.jingyu.qunfangqunzhi.domain.CommonUser;
@@ -14,6 +16,7 @@ import com.jingyu.qunfangqunzhi.service.ICommonUsersService;
 import com.jingyu.qunfangqunzhi.service.IEventInfoService;
 import com.jingyu.qunfangqunzhi.service.IEventUserAllocatedService;
 import com.jingyu.qunfangqunzhi.util.MyIdUtil;
+import com.jingyu.system.service.ISysUserService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -52,6 +55,9 @@ public class EventUserAllocatedController extends BaseController
     @Autowired
     private ICommonUsersService usersService;
 
+    @Autowired
+    private ISysUserService sysUserService;
+
     /**
      * 查询事件分配列表
      */
@@ -61,6 +67,13 @@ public class EventUserAllocatedController extends BaseController
     {
         startPage();
         List<EventUserAllocated> list = eventUserAllocatedService.selectEventUserAllocatedList(eventUserAllocated);
+        for(EventUserAllocated item:list){
+            Long userId = item.getUserId();
+            CommonUser commonUser = usersService.selectCommonUsersByUserId(userId);
+            eventUserAllocated.getParams().put("userName", commonUser.getUserName());
+            eventUserAllocated.getParams().put("realName", commonUser.getRealName());
+
+        }
         return getDataTable(list);
     }
 
@@ -86,9 +99,15 @@ public class EventUserAllocatedController extends BaseController
     {
         EventUserAllocated eventUserAllocated = eventUserAllocatedService.selectEventUserAllocatedById(id);
         Long userId = eventUserAllocated.getUserId();
-        CommonUser commonUser = usersService.selectCommonUsersByUserId(userId);
-        eventUserAllocated.getParams().put("userName", commonUser.getUserName());
-        eventUserAllocated.getParams().put("realName", commonUser.getRealName());
+        if(eventUserAllocated.getDealFlag().equals(QFConstants.EventDealType.ALLOCATE.getValue())){
+            CommonUser commonUser = usersService.selectCommonUsersByUserId(userId);
+            eventUserAllocated.getParams().put("userName", commonUser.getUserName());
+            eventUserAllocated.getParams().put("realName", commonUser.getRealName());
+            eventUserAllocated.getParams().put("userType", commonUser.getUserType());
+        }else {
+            SysUser sysUser = sysUserService.selectUserById(userId);
+            eventUserAllocated.getParams().put("userName", sysUser.getUserName());
+        }
 
         return success(eventUserAllocated);
     }
@@ -107,18 +126,20 @@ public class EventUserAllocatedController extends BaseController
         for(Long userId:userIds){
             EventUserAllocated eventUserAllocated = new EventUserAllocated();
             eventUserAllocated.setAllocateUserId(SecurityUtils.getUserId());
+            eventUserAllocated.setAllocateTime(new Date());
             eventUserAllocated.setUserId(userId);
             eventUserAllocated.setId(MyIdUtil.getRandomId());
             eventUserAllocated.setEventId(eventId);
-            eventUserAllocated.setStatus("0");
+            eventUserAllocated.setStatus(QFConstants.AllocatedEventStatus.UNCONFIRMED.getValue());
             eventUserAllocated.setAllocatedUserType(QFConstants.AllocateUserType.SYSTEM_USER.getValue());
+            eventUserAllocated.setAllocateTime(date);
             list.add(eventUserAllocated);
         }
-
         eventUserAllocatedService.insertBatchEventUserAllocated(list);
         EventInfo eventInfo = new EventInfo();
         eventInfo.setId(eventId);
         eventInfo.setStatus(QFConstants.EventStatus.CONFIRMED.getValue());
+        eventInfoService.updateEventInfo(eventInfo);
         return AjaxResult.success("下发事件成功");
     }
 
@@ -141,14 +162,26 @@ public class EventUserAllocatedController extends BaseController
     }
 
     /**
-     * 新增事件分配
+     * 处置事件
      */
     @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocated:add')")
     @Log(title = "事件分配", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody EventUserAllocated eventUserAllocated)
     {
-        return toAjax(eventUserAllocatedService.insertEventUserAllocated(eventUserAllocated));
+        eventUserAllocated.setAllocateTime(new Date());
+        eventUserAllocated.setUserType(QFConstants.AllocateUserType.SYSTEM_USER.getValue());
+        eventUserAllocated.setAllocateUserId(SecurityUtils.getUserId());
+        eventUserAllocated.setUserId(SecurityUtils.getUserId());
+        eventUserAllocated.setStatus(QFConstants.AllocatedEventStatus.COMPLETED.getValue());
+        eventUserAllocated.setAllocatedUserType(QFConstants.AllocateUserType.SYSTEM_USER.getValue());
+        eventUserAllocated.setDealFlag(QFConstants.EventDealType.DEAL.getValue());
+        eventUserAllocatedService.insertEventUserAllocated(eventUserAllocated);
+        Long eventId = eventUserAllocated.getEventId();
+        EventInfo eventInfo = new EventInfo();
+        eventInfo.setId(eventId);
+        eventInfo.setStatus(QFConstants.EventStatus.CONFIRMED.getValue());
+        return toAjax(eventInfoService.updateEventInfo(eventInfo));
     }
 
     /**

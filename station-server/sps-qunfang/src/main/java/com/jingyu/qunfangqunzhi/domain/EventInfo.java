@@ -75,6 +75,17 @@ public class EventInfo extends BaseEntity
     @Excel(name = "事件上传时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date uploadTime;
 
+    /** 事件结束事件 **/
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date finishTime;
+
+
+    private String finishUserName;
+
+
+
+    private Long finishUserId;
+
 
     /**
      * 事件概述
@@ -232,6 +243,30 @@ public class EventInfo extends BaseEntity
 
     public void setEventSummarize(String eventSummarize) {
         this.eventSummarize = eventSummarize;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    public String getFinishUserName() {
+        return finishUserName;
+    }
+
+    public void setFinishUserName(String finishUserName) {
+        this.finishUserName = finishUserName;
+    }
+
+    public Long getFinishUserId() {
+        return finishUserId;
+    }
+
+    public void setFinishUserId(Long finishUserId) {
+        this.finishUserId = finishUserId;
     }
 
     @Override

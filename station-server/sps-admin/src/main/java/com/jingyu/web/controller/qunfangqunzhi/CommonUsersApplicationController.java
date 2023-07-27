@@ -1,4 +1,4 @@
-package com.jingyu.qunfangqunzhi.controller;
+package com.jingyu.web.controller.qunfangqunzhi;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;

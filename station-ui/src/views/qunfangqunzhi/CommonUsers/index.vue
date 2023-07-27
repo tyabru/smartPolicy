@@ -114,16 +114,16 @@
               v-hasPermi="['qunfangqunzhi:CommonUsers:remove']"
             >删除</el-button>
           </el-col>
-          <el-col :span="1.5">
-            <el-button
-              type="warning"
-              plain
-              icon="el-icon-download"
-              size="mini"
-              @click="handleExport"
-              v-hasPermi="['qunfangqunzhi:CommonUsers:export']"
-            >导出</el-button>
-          </el-col>
+<!--          <el-col :span="1.5">-->
+<!--            <el-button-->
+<!--              type="warning"-->
+<!--              plain-->
+<!--              icon="el-icon-download"-->
+<!--              size="mini"-->
+<!--              @click="handleExport"-->
+<!--              v-hasPermi="['qunfangqunzhi:CommonUsers:export']"-->
+<!--            >导出</el-button>-->
+<!--          </el-col>-->
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"> </right-toolbar>
         </el-row>
 
@@ -299,7 +299,7 @@
             v-if="this.imgUrl"
             style="width: 300px; height: 300px"
             :src="imgUrl"
-            :fit="fit"
+            fit="fit"
             :preview-src-list="[imgUrl]">
           </el-image>
           <span v-show="!this.imgUrl" style="color: red">暂无照片</span>
