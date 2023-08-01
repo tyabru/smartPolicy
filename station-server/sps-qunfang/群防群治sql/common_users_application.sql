@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 18/07/2023 16:55:44
+ Date: 01/08/2023 23:27:55
 */
 
 SET NAMES utf8mb4;
@@ -28,7 +28,7 @@ CREATE TABLE `common_users_application`  (
   `application_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '申请类型',
   `status` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '处理状态，0未处理，1已接受，2已拒绝',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of common_users_application

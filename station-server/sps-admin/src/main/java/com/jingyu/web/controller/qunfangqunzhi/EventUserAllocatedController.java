@@ -176,6 +176,7 @@ public class EventUserAllocatedController extends BaseController
         eventUserAllocated.setStatus(QFConstants.AllocatedEventStatus.COMPLETED.getValue());
         eventUserAllocated.setAllocatedUserType(QFConstants.AllocateUserType.SYSTEM_USER.getValue());
         eventUserAllocated.setDealFlag(QFConstants.EventDealType.DEAL.getValue());
+        eventUserAllocated.setUpdateTime(new Date());
         eventUserAllocatedService.insertEventUserAllocated(eventUserAllocated);
         Long eventId = eventUserAllocated.getEventId();
         EventInfo eventInfo = new EventInfo();

@@ -140,7 +140,9 @@
           let params = {
             tag: val
           }
-          this.$refs.chartGridStuff.getData(params);
+          let req = {}
+          req.params = params;
+          this.$refs.chartGridStuff.getData(req);
         } else {
           this.checkData1 = null;
           let params = {
@@ -148,7 +150,9 @@
             beginTime: this.dateCheck1[0],
             endTime: this.dateCheck1[1]
           }
-          this.$refs.chartGridStuff.getData(params);
+          let req = {}
+          req.params = params;
+          this.$refs.chartGridStuff.getData(req);
         }
       },
       handleGridStuffLeaderSelect(val) {
@@ -157,7 +161,9 @@
           let params = {
             tag: val
           }
-          this.$refs.chartGridStuffLeader.getData(params);
+          let req = {}
+          req.params = params;
+          this.$refs.chartGridStuffLeader.getData(req);
         } else {
           this.checkData2 = null;
           let params = {
@@ -165,7 +171,9 @@
             beginTime: this.dateCheck2[0],
             endTime: this.dateCheck2[1]
           }
-          this.$refs.chartGridStuffLeader.getData(params);
+          let req = {}
+          req.params = params;
+          this.$refs.chartGridStuffLeader.getData(req);
         }
       },
       handleCommunitySelect(val) {
@@ -174,7 +182,9 @@
           let params = {
             tag: val
           }
-          this.$refs.chartCommunity.getData(params);
+          let req = {}
+          req.params = params;
+          this.$refs.chartCommunity.getData(req);
         } else {
           this.checkData3 = null;
           let params = {
@@ -182,7 +192,9 @@
             beginTime: this.dateCheck3[0],
             endTime: this.dateCheck3[1]
           }
-          this.$refs.chartCommunity.getData(params);
+          let req = {}
+          req.params = params;
+          this.$refs.chartCommunity.getData(req);
         }
       },
       handlePeopleSelect(val) {
@@ -191,7 +203,10 @@
           let params = {
             tag: val
           }
-          this.$refs.chartPeople.getData(params);
+          let req = {}
+          req.params = params;
+          console.log(req.params)
+          this.$refs.chartPeople.getData(req);
         } else {
           this.checkData4= null;
           let params = {
@@ -199,7 +214,9 @@
             beginTime: this.dateCheck4[0],
             endTime: this.dateCheck4[1]
           }
-          this.$refs.chartPeople.getData(params);
+          let req = {}
+          req.params = params;
+          this.$refs.chartPeople.getData(req);
         }
       }
     }

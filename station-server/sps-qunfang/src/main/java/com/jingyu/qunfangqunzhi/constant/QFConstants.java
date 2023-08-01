@@ -120,4 +120,19 @@ public class QFConstants {
             return this.value;
         }
     }
+
+    /**
+     *  事件上传用户类型
+     */
+    public enum UploadUserType{
+        COMMON_USER("普通用户"),
+        MANAGER("管理员");
+        private final String value;
+        UploadUserType(String value){
+            this.value = value;
+        }
+        public String getValue(){
+            return this.value;
+        }
+    }
 }

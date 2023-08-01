@@ -20,6 +20,9 @@ public class StatisticsEntity {
 
     private String userType;
 
+    private String eventType;
+
+
     public Integer getTimes() {
         return times;
     }
@@ -66,6 +69,14 @@ public class StatisticsEntity {
 
     public void setUserType(String userType) {
         this.userType = userType;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
     @Override

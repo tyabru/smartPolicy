@@ -88,6 +88,9 @@ public class EventInfoController extends BaseController
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
         EventInfo eventInfo = eventInfoService.selectEventInfoById(id);
+        if(eventInfo.getUploadUserType().equals(QFConstants.UploadUserType.MANAGER.getValue())){
+            eventInfo.setUserName(sysUserService.selectUserById(eventInfo.getUploadUserId()).getUserName());
+        }
         List<EventUserAllocated> eventUserAllocatedList = eventInfo.getEventUserAllocatedList();
 
         for(EventUserAllocated allocatedEvent:eventUserAllocatedList){
@@ -125,7 +128,6 @@ public class EventInfoController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody EventInfo eventInfo)
     {
-
         return toAjax(eventInfoService.insertEventInfo(eventInfo));
     }
 
@@ -169,6 +171,30 @@ public class EventInfoController extends BaseController
         eventInfo.setStatus(QFConstants.EventStatus.COMPLETED.getValue());
         allocatedService.cancelByEventId(eventInfo.getId());
         return toAjax(eventInfoService.updateEventInfo(eventInfo));
+    }
+
+
+    @GetMapping("/transferEvent/{eventId}")
+    public AjaxResult transferEvent(@PathVariable("eventId")Long eventId)
+    {
+        if(SecurityUtils.isAdmin(SecurityUtils.getUserId())){
+            return AjaxResult.success("超级管理员没有上级用户","error");
+        }
+        //获取用户上级辖区id
+        Long userId = SecurityUtils.getUserId();
+        Long parentDeptId = eventInfoService.selectSuperiorDeptIdById(userId);
+        if(StringUtils.isNull(parentDeptId)){
+            throw new RuntimeException("部门信息异常");
+        }
+        if(parentDeptId == 0L){
+            return AjaxResult.success("当前用户没有更上级单位","error");
+        }else{
+            EventInfo eventInfo = new EventInfo();
+            eventInfo.setDeptId(parentDeptId);
+            eventInfo.setId(eventId);
+            eventInfoService.updateEventInfo(eventInfo);
+        }
+        return AjaxResult.success("提交上级单位成功");
     }
 
 }

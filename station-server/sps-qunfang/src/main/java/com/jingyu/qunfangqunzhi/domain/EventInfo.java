@@ -3,10 +3,12 @@ package com.jingyu.qunfangqunzhi.domain;
 import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jingyu.common.core.domain.entity.SysDept;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
 import com.jingyu.common.core.domain.BaseEntity;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 上报事件管理对象 event_info
@@ -87,6 +89,13 @@ public class EventInfo extends BaseEntity
     private Long finishUserId;
 
 
+
+    private Long deptId;
+
+
+    private SysDept dept;
+
+
     /**
      * 事件概述
      */
@@ -95,6 +104,13 @@ public class EventInfo extends BaseEntity
 
     //备注
     private String remark;
+
+    //上报用户名
+    private String userName;
+
+
+    //上报用户类型
+    private String uploadUserType;
 
 
     /** $table.subTable.functionName信息 */
@@ -277,6 +293,39 @@ public class EventInfo extends BaseEntity
     @Override
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Long getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(Long deptId) {
+        this.deptId = deptId;
+    }
+
+    public SysDept getDept() {
+        return dept;
+    }
+
+    public void setDept(SysDept dept) {
+        this.dept = dept;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+
+    public String getUploadUserType() {
+        return uploadUserType;
+    }
+
+    public void setUploadUserType(String uploadUserType) {
+        this.uploadUserType = uploadUserType;
     }
 
     @Override

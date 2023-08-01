@@ -416,7 +416,14 @@ export default {
           {required: true, message: "用户类型不能为空", trigger: "change"}
         ],
         userName:[
-          {required: true, message: "用户账号不能为空", trigger: "change"}
+          {required: true, message: "用户账号不能为空", trigger: "change"},
+          {pattern:/^[a-zA-Z0-9]{4,16}$/, message: '用户名长度在 4 到 16 个字符,包括字符和数字组合', trigger: 'blur' }
+        ],
+        phonenumber:[
+          {pattern:/^1[3-9][0-9]([0-9]){8}$/, message: '请输入正确的手机号码', trigger: 'blur'}
+        ],
+        idNumber:[
+          {pattern:/^[0-9]{15,17}[1-9xX]?$/, message: '请输入正确的身份证号码', trigger: 'blur'}
         ]
       },
       // 部门名称

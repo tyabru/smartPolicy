@@ -51,3 +51,10 @@ export function finishThreatmanagement(data) {
     data:data
   })
 }
+
+export function transferEvent(id) {
+  return request({
+    url: '/qf/threatmanagement/transferEvent/'+id,
+    method: 'get'
+  })
+}

@@ -31,3 +31,11 @@ export function countPeople(data) {
   })
 }
 
+
+export function countUnconfirmedEvents() {
+  return request({
+    url: '/qf/statistics/unconfirmedEvents' ,
+    method: 'get',
+  })
+}
+

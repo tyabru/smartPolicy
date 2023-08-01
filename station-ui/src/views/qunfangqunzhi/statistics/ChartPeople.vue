@@ -98,11 +98,16 @@ export default {
     },
     initChart() {
       this.chart = echarts.init(this.$refs.chart, 'macarons');
-      this.chart.setOption(this.option);
+      this.$nextTick(()=>{
+        this.chart.setOption(this.option);
+      })
+
     },
     resetChart(){
-      this.chart.setOption(this.option);
-      this.chart.resize();
+      this.$nextTick(()=>{
+        this.chart.setOption(this.option);
+        this.chart.resize();
+      })
     }
   }
 }

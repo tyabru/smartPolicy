@@ -1,8 +1,11 @@
 <template>
   <div class="app-container">
     <el-form ref="form" :model="form" label-width="120px">
-      <el-form-item label="提交用户id" prop="uploadUserId">
-        <el-input v-model="form.uploadUserId"  readonly></el-input>
+      <el-form-item label="提交用户账号" prop="userName">
+        <el-input v-model="form.userName"  readonly></el-input>
+      </el-form-item>
+      <el-form-item label="提交用户类型" prop="uploadUserType">
+        <el-input v-model="form.uploadUserType"  readonly></el-input>
       </el-form-item>
       <el-form-item label="联系人姓名" prop="contactPersonName">
         <el-input v-model="form.contactPersonName"  readonly></el-input>
@@ -42,10 +45,10 @@
         />
       </el-form-item>
       <el-form-item v-if="form.reply!=null" label="反馈信息" prop="reply">
-        <el-input v-model="form.reply " readonly></el-input>
+        <el-input v-model="form.reply "  readonly></el-input>
       </el-form-item>
       <el-form-item  v-if="form.remark!=null" label="备注" prop="reply">
-        <el-input v-model="form.remark " readonly></el-input>
+        <el-input v-model="form.remark "   readonly></el-input>
       </el-form-item>
 
 
@@ -56,13 +59,13 @@
           </el-button>
         </el-col>
         <el-col :span="1.5">
-          <el-button type="primary" icon="el-icon-delete" size="mini" @click="openDialog">下发</el-button>
+          <el-button type="primary" icon="el-icon-user" size="mini" @click="openDialog">下发</el-button>
         </el-col>
         <el-col :span="1.5">
-          <el-button type="primary" icon="el-icon-delete" size="mini" @click="openDeal">处置</el-button>
+          <el-button type="primary" icon="el-icon-edit" size="mini" @click="openDeal">处置</el-button>
         </el-col>
         <el-col :span="1.5">
-          <el-button  type="primary" icon="el-icon-delete" size="mini" @click="openFinish">归档</el-button>
+          <el-button  type="primary" icon="el-icon-s-order" size="mini" @click="openFinish">归档</el-button>
         </el-col>
       </el-row>
       <el-table v-loading="loading" :data="eventUserAllocatedList"
@@ -94,7 +97,6 @@
             >详情
             </el-button>
             <el-button
-              v-if="form.status !=='2' & scope.row.status !=='3' "
               size="mini"
               type="text"
               icon="el-icon-delete"
@@ -170,7 +172,7 @@
     </el-dialog>
 
 <!--    下发详情窗口-->
-    <el-dialog :title="allocatedTitle" :visible.sync="allocatedFormOpen" v-if="allocatedFormOpen" width="1200px" append-to-body >
+    <el-dialog :title="allocatedTitle" :visible.sync="allocatedFormOpen"  v-if="allocatedFormOpen" width="1200px" append-to-body >
       <el-form ref="form" :model="allocatedForm" label-width="120px">
         <el-form-item :label="detailUser+'编号'">
           <el-input v-model="allocatedForm.userId"  readonly></el-input>
@@ -202,12 +204,12 @@
         <el-form-item label="整改结果">
           <el-input v-model="allocatedForm.rectifyResult"  type="textarea" readonly></el-input>
         </el-form-item >
-        <el-form-item v-if="this.photoUrls &&this.photoUrls.length!==0" label="图片说明" prop="photoUrls">
-          <el-image v-for="url in photoUrls" :src="url" style="width: 300px; height: 180px;margin-right: 20px" :preview-src-list="[url]"/>
+        <el-form-item v-if="this.detailPhotoUrl &&this.detailPhotoUrl.length!==0" label="图片说明" prop="detailPhotoUrl">
+          <el-image v-for="url in detailPhotoUrl" :src="url" style="width: 200px; height: 120px;margin-right: 20px" :preview-src-list="[url]"/>
         </el-form-item>
-        <el-form-item v-if="this.videoUrl && this.videoUrl!==''"   label="视频信息" prop="videoUrl" style="width: 600px; ">
+        <el-form-item v-if="this.detailVideoUrl && this.detailVideoUrl!==''"   label="视频信息" prop="detailVideoUrl" style="width: 600px; ">
           <vue-aliplayer-v2
-            :source="this.videoUrl"
+            :source="this.detailVideoUrl"
             ref="VueAliplayerV2"
           />
         </el-form-item>
@@ -215,7 +217,7 @@
 
       <el-divider>修改意见</el-divider>
       <el-row>
-        <el-button v-if=" allocatedForm.status==='1' || allocatedForm.status==='0' " style="margin-bottom: 20px" @click="redoAllocate(allocatedForm.id)">增加修改意见</el-button>
+        <el-button v-if=" allocatedForm.status==='1' || allocatedForm.status==='0' " style="margin-bottom: 20px" @click="redoAllocate(allocatedForm.id)">增加处理意见</el-button>
       </el-row>
 
       <el-table
@@ -258,8 +260,8 @@
     </el-dialog>
 <!--    处置窗口-->
     <el-dialog :title="dealTitle" :visible.sync="dealFormOpen" v-if="dealFormOpen" width="1200px" append-to-body >
-      <el-form ref="form" :model="dealForm" label-width="120px">
-        <el-form-item label="检查时间">
+      <el-form ref="form" :rules="rules" :model="dealForm" label-width="120px">
+        <el-form-item label="检查时间" prop="inspectDatetime">
           <el-date-picker
             v-model="dealForm.inspectDatetime"
             type="datetime"
@@ -269,22 +271,22 @@
             :picker-options="pickerOptions">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="检查位置">
-          <el-input v-model="dealForm.inspectLocation"  req></el-input>
+        <el-form-item label="检查位置" prop="inspectLocation">
+          <el-input v-model="dealForm.inspectLocation"  ></el-input>
         </el-form-item>
-        <el-form-item label="检查细节">
+        <el-form-item label="检查细节" prop="inspectDetail">
           <el-input v-model="dealForm.inspectDetail"  type="textarea" ></el-input>
         </el-form-item >
-        <el-form-item label="存在问题">
+        <el-form-item label="存在问题" prop="existProblem">
           <el-input v-model="dealForm.existProblem"   type="textarea" ></el-input>
         </el-form-item >
-        <el-form-item label="整改意见">
+        <el-form-item label="整改意见" prop="rectifyOpinion">
           <el-input v-model="dealForm.rectifyOpinion" type="textarea" ></el-input>
         </el-form-item >
-        <el-form-item label="整改结果">
+        <el-form-item label="整改结果" prop="rectifyResult">
           <el-input v-model="dealForm.rectifyResult"  type="textarea" ></el-input>
         </el-form-item >
-        <el-form-item  label="图片说明" prop="photoUrls" required>
+        <el-form-item  label="图片说明" prop="photoUrl" required>
           <my-image-up-load  v-model="dealForm.photoUrl" ></my-image-up-load>
         </el-form-item>
         <el-form-item  label="视频信息" prop="videoUrl" style="width: 600px;" >
@@ -300,7 +302,7 @@
     <el-dialog :title="finishTitle" :visible.sync="finishFormOpen" v-if="finishFormOpen" width="1200px" append-to-body >
       <el-form ref="form" :model="finishForm" label-width="120px">
         <el-form-item label="反馈信息">
-          <el-input v-model="finishForm.reply"  type="textarea" ></el-input>
+          <el-input v-model="finishForm.reply"  placeholder="请填写反馈给上报事件群众的反馈信息" type="textarea" ></el-input>
         </el-form-item >
         <el-form-item label="事件备注">
           <el-input v-model="finishForm.userName"   type="textarea" ></el-input>
@@ -316,8 +318,8 @@
     <!--    回退窗口-->
     <el-dialog title="修改说明" :visible.sync="redoFormOpen" v-if="redoFormOpen" width="1200px" append-to-body >
       <el-form ref="form" :model="redoForm" label-width="120px">
-        <el-form-item label="反馈信息">
-          <el-input v-model="redoForm.rectifyOpinion"  type="textarea" ></el-input>
+        <el-form-item label="修改意见">
+          <el-input v-model="redoForm.rectifyOpinion"  type="textarea"  required="true"></el-input>
         </el-form-item >
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -351,7 +353,27 @@
         id: null,
         eventUserAllocatedList: null,
         open: false,
-        rules: {},
+        rules: {
+          inspectDatetime: [
+            { required: true, message: "检查时间不能为空", trigger: "change" }
+          ],
+          inspectLocation:[
+            {required: true, message: "检查地点不能为空", trigger: "change"}
+          ],
+          inspectDetail:[
+            {required: true, message: "检查细节不能为空", trigger: "change"},
+          ],
+          rectifyOpinion:[
+            {required: true, message: "整改意见不能为空", trigger: "change"},
+          ],
+          rectifyResult:[
+            {required: true, message: "整改结果不能为空", trigger: "change"},
+          ],
+          existProblem:[
+            {required: true, message: "存在问题不能为空", trigger: "change"},
+          ],
+
+        },
         title: '下发时间',
         deptName: '',
         deptOptions: null,
@@ -385,7 +407,7 @@
           videoUrl:null
         },
         dealFormOpen:false,
-        dealTitle:"处置表头",
+        dealTitle:"事件处置信息",
         pickerOptions: {
           shortcuts: [{
             text: '今天',
@@ -426,7 +448,10 @@
           rectifyOpinion:null
         },
         redoFormOpen:false,
-        rectifyOpinions:null
+        rectifyOpinions:null,
+        //下发详情中的图片和视频数据
+        detailVideoUrl:null,
+        detailPhotoUrl:null,
       }
     },
     created() {
@@ -602,6 +627,8 @@
 
       },
       handleAllocateDetail(id){
+        this.detailVideoUrl = null;
+        this.detailPhotoUrl =null;
         getAllocated(id).then(res=>{
           this.allocatedForm = res.data;
           if(this.allocatedForm.dealFlag == "0"){
@@ -610,17 +637,30 @@
             this.detailUser = "管理员";
           }
           this.allocatedFormOpen = true;
+          if(res.data.photoUrl  && res.data.photoUrl !== ""){
+            let str = res.data.photoUrl;
+            let strings = str.split(",");
+            this.detailPhotoUrl= strings.map((string)=>{
+              return process.env.VUE_APP_BASE_API +string;
+            })
+
+          }
+          if(res.data.videoUrl && res.data.videoUrl!==""){
+            this.detailVideoUrl = process.env.VUE_APP_BASE_API +res.data.videoUrl;
+          }
         });
+        this.getRectifyOpinions(id);
+      },
+      getRectifyOpinions(id){
         let param = {
           allocateId:id
         }
         listAllocateRectify(param).then(res=>{
           this.rectifyOpinions = res.rows;
-
         })
       },
       openDeal(){
-        this.dealFormOpen = {}
+        this.dealForm = {}
         this.dealFormOpen = true;
       },
       // 提交处置信息
@@ -628,6 +668,8 @@
         this.dealForm.eventId = this.id;
         addAllocated(this.dealForm).then(res=>{
           this.$message.success("提交处置信息成功");
+        }).then(()=>{
+          this.getDetail(this.id);
         });
         this.dealFormOpen = false;
       },
@@ -671,6 +713,7 @@
         addAllocateRectify(this.redoForm).then(res=>{
           this.$message.success("成功下发修改意见")
           this.redoFormOpen = false
+          this.getRectifyOpinions(this.allocatedForm.id);
         })
       },
       deleteRectifyOpinion(id){
