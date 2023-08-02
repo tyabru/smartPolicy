@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.person.mapper.PersonFcousMapper">
+    
+    <resultMap type="PersonFcous" id="PersonFcousResult">
+        <result property="id"    column="id"    />
+        <result property="xqId"    column="xq_id"    />
+        <result property="personType"    column="person_type"    />
+        <result property="focusReason"    column="focus_reason"    />
+        <result property="level"    column="level"    />
+        <result property="reasonDesc"    column="reason_desc"    />
+        <result property="address"    column="address"    />
+        <result property="metaAddrId"    column="meta_addr_id"    />
+        <result property="nativePalce"    column="native_palce"    />
+        <result property="livingDate"    column="living_date"    />
+        <result property="nation"    column="nation"    />
+        <result property="name"    column="name"    />
+        <result property="certType"    column="cert_type"    />
+        <result property="certNo"    column="cert_no"    />
+        <result property="phone"    column="phone"    />
+        <result property="faceImgUrl"    column="face_img_url"    />
+        <result property="features"    column="features"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="sourcePlatform"    column="source_platform"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectPersonFcousVo">
+        select id, xq_id, person_type, focus_reason, level, reason_desc, address, meta_addr_id, native_palce, living_date, nation, name, cert_type, cert_no, phone, face_img_url, features, create_by, create_time, source_platform, update_by, update_time from sq_person_fcous
+    </sql>
+
+    <select id="selectPersonFcousList" parameterType="PersonFcous" resultMap="PersonFcousResult">
+        <include refid="selectPersonFcousVo"/>
+        <where>  
+            <if test="xqId != null "> and xq_id = #{xqId}</if>
+            <if test="personType != null "> and person_type = #{personType}</if>
+            <if test="focusReason != null  and focusReason != ''"> and focus_reason = #{focusReason}</if>
+            <if test="level != null  and level != ''"> and level = #{level}</if>
+            <if test="reasonDesc != null  and reasonDesc != ''"> and reason_desc = #{reasonDesc}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="metaAddrId != null  and metaAddrId != ''"> and meta_addr_id = #{metaAddrId}</if>
+            <if test="nativePalce != null  and nativePalce != ''"> and native_palce = #{nativePalce}</if>
+            <if test="livingDate != null "> and living_date = #{livingDate}</if>
+            <if test="nation != null  and nation != ''"> and nation = #{nation}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="certType != null  and certType != ''"> and cert_type = #{certType}</if>
+            <if test="certNo != null  and certNo != ''"> and cert_no = #{certNo}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="faceImgUrl != null  and faceImgUrl != ''"> and face_img_url = #{faceImgUrl}</if>
+            <if test="features != null  and features != ''"> and features = #{features}</if>
+            <if test="sourcePlatform != null  and sourcePlatform != ''"> and source_platform = #{sourcePlatform}</if>
+        </where>
+    </select>
+    
+    <select id="selectPersonFcousById" parameterType="Long" resultMap="PersonFcousResult">
+        <include refid="selectPersonFcousVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPersonFcous" parameterType="PersonFcous" useGeneratedKeys="true" keyProperty="id">
+        insert into sq_person_fcous
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="xqId != null">xq_id,</if>
+            <if test="personType != null">person_type,</if>
+            <if test="focusReason != null">focus_reason,</if>
+            <if test="level != null">level,</if>
+            <if test="reasonDesc != null">reason_desc,</if>
+            <if test="address != null">address,</if>
+            <if test="metaAddrId != null">meta_addr_id,</if>
+            <if test="nativePalce != null">native_palce,</if>
+            <if test="livingDate != null">living_date,</if>
+            <if test="nation != null">nation,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="certType != null">cert_type,</if>
+            <if test="certNo != null and certNo != ''">cert_no,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="faceImgUrl != null">face_img_url,</if>
+            <if test="features != null">features,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="sourcePlatform != null">source_platform,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="xqId != null">#{xqId},</if>
+            <if test="personType != null">#{personType},</if>
+            <if test="focusReason != null">#{focusReason},</if>
+            <if test="level != null">#{level},</if>
+            <if test="reasonDesc != null">#{reasonDesc},</if>
+            <if test="address != null">#{address},</if>
+            <if test="metaAddrId != null">#{metaAddrId},</if>
+            <if test="nativePalce != null">#{nativePalce},</if>
+            <if test="livingDate != null">#{livingDate},</if>
+            <if test="nation != null">#{nation},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="certType != null">#{certType},</if>
+            <if test="certNo != null and certNo != ''">#{certNo},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="faceImgUrl != null">#{faceImgUrl},</if>
+            <if test="features != null">#{features},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="sourcePlatform != null">#{sourcePlatform},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePersonFcous" parameterType="PersonFcous">
+        update sq_person_fcous
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="xqId != null">xq_id = #{xqId},</if>
+            <if test="personType != null">person_type = #{personType},</if>
+            <if test="focusReason != null">focus_reason = #{focusReason},</if>
+            <if test="level != null">level = #{level},</if>
+            <if test="reasonDesc != null">reason_desc = #{reasonDesc},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="metaAddrId != null">meta_addr_id = #{metaAddrId},</if>
+            <if test="nativePalce != null">native_palce = #{nativePalce},</if>
+            <if test="livingDate != null">living_date = #{livingDate},</if>
+            <if test="nation != null">nation = #{nation},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="certType != null">cert_type = #{certType},</if>
+            <if test="certNo != null and certNo != ''">cert_no = #{certNo},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="faceImgUrl != null">face_img_url = #{faceImgUrl},</if>
+            <if test="features != null">features = #{features},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="sourcePlatform != null">source_platform = #{sourcePlatform},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePersonFcousById" parameterType="Long">
+        delete from sq_person_fcous where id = #{id}
+    </delete>
+
+    <delete id="deletePersonFcousByIds" parameterType="String">
+        delete from sq_person_fcous where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

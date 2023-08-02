@@ -22,10 +22,6 @@ public class CommunityStructure extends BaseEntity
     /** $column.columnComment */
     private Long id;
 
-    /** 小区外键 */
-    @Excel(name = "小区外键")
-    private Long communityId;
-
     /** 小区编码 */
     @Excel(name = "小区编码")
     private String communityCode;
@@ -45,10 +41,6 @@ public class CommunityStructure extends BaseEntity
     /** 地址级别 10 小区 11楼栋 12 单元 13 层 14 房屋 */
     @Excel(name = "地址级别", dictType="structure_level")
     private Long metaLevel;
-
-    /** 上级编码 */
-    @Excel(name = "上级编码")
-    private Long parentId;
 
     /** 所属派出所ID */
     private String pcsId;
@@ -76,5 +68,11 @@ public class CommunityStructure extends BaseEntity
     private String ceng;
     @Excel(name = "房间号")
     private String room;
+    @Excel(name = "经度")
+    private Double longitude;
+    @Excel(name = "纬度")
+    private Double latitude;
+
+    private Integer level;
 
 }

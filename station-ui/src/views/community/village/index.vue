@@ -53,6 +53,7 @@
       <el-table-column prop="name" label="小区（村）名称" align="center"></el-table-column>
       <el-table-column prop="detail.person" label="总人口" align="center"></el-table-column>
       <el-table-column prop="detail.resident" label="常驻人口" align="center"></el-table-column>
+      <el-table-column prop="detail.flows" label="流动人口" align="center"></el-table-column>
       <el-table-column prop="detail.important" label="重点关注" align="center"></el-table-column>
       <el-table-column prop="detail.policeName" label="负责民警" align="center"></el-table-column>
       <el-table-column prop="detail.policePhone" label="联系电话" align="center"></el-table-column>

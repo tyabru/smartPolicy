@@ -1,12 +1,11 @@
 <script>
 import * as _ from 'lodash'
-import { listCompany } from '@/api/community/company'
+import { getCompany, listCompany } from '@/api/community/company'
 export default {
   name: 'SeCompany',
   props: {
-    value: [String, Number],
-    customClass: String,
-    defaultLabel: String
+    value: Number,
+    customClass: String
   },
   data() {
     return {
@@ -19,14 +18,17 @@ export default {
   watch: {
     value: {
       handler(newVal) {
-        this.selectItem = newVal
+        if(newVal && this.options.length < 1) {
+          getCompany(newVal).then(({ code, data }) => {
+            if(code === 200 && data) {
+              this.options = [ data ]
+            }
+          }).finally(() => { this.selectItem = newVal })
+        } else {
+          this.selectItem = newVal
+        }
       },
       immediate: true
-    }
-  },
-  mounted() {
-    if(this.defaultLabel) {
-      this.querySearch(this.defaultLabel)
     }
   },
   methods: {

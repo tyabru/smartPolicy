@@ -64,4 +64,5 @@ public interface CommunityMapper
     public int deleteSqCommunityByIds(Long[] ids);
 
     int countByCondition(Community community);
+
 }

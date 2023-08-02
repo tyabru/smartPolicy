@@ -1,7 +1,14 @@
 package com.jingyu.community.mapper;
 
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
+import java.util.Map;
+
 import com.jingyu.community.domain.CommunityStructure;
+import com.jingyu.community.domain.StructureImportVo;
+import org.apache.ibatis.annotations.MapKey;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 小区房屋结构和地址信息Mapper接口
@@ -9,6 +16,7 @@ import com.jingyu.community.domain.CommunityStructure;
  * @author jingyu
  * @date 2023-07-17
  */
+@Mapper
 public interface CommunityStructureMapper 
 {
     /**
@@ -58,4 +66,10 @@ public interface CommunityStructureMapper
      * @return 结果
      */
     public int deleteCommunityStructureByIds(Long[] ids);
+
+    int batchInsertFormVo(List<StructureImportVo> list) throws SQLIntegrityConstraintViolationException;
+
+    List<Map<String, Object>> selectCommunityList(@Param("queryString") String queryString);
+
+    List<CommunityStructure> selectRoomListByCommunityCode(CommunityStructure structure);
 }

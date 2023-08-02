@@ -2,6 +2,7 @@ package com.jingyu.community.service;
 
 import java.util.List;
 import com.jingyu.community.domain.CommunityDetail;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 小区/村基本信息Service接口
@@ -18,6 +19,9 @@ public interface ICommunityDetailService
      * @return 小区/村基本信息
      */
     public CommunityDetail selectCommunityDetailById(Long id);
+
+    CommunityDetail getByCodeWithLock(String communityCode);
+
 
     /**
      * 查询小区/村基本信息列表
@@ -60,4 +64,7 @@ public interface ICommunityDetailService
     public int deleteCommunityDetailById(Long id);
 
     void deleteByVillageId(Long id);
+
+    void asyncUpdatePersonCount(String communityCode, Long type, int count, int importCount);
+
 }

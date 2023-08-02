@@ -64,6 +64,10 @@ public class CommunityDetail extends BaseEntity
     @Excel(name = "常驻人口数")
     private int resident = 0;
 
+    /** 流动人口数 */
+    @Excel(name = "流动人口数")
+    private int flows = 0;
+
     /** 重点关注人口数 */
     @Excel(name = "重点关注人口数")
     private int important = 0;

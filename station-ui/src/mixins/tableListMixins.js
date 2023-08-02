@@ -6,6 +6,7 @@ export default {
         needPaging: true,
         axiosRequest: null
       },
+      btnVisible: false,
       loading: false,
       total: 0,
       // 选中数组
@@ -32,6 +33,7 @@ export default {
       this.changeLoading(true)
       requestApi(this.queryParams).then((response) => {
         if (response.rows || response.data) {
+          this.total = response.total
           this.setTableData(response.rows || response.data)
         } else {
           this.$message.warning(response.msg)
@@ -46,13 +48,11 @@ export default {
     },
     setTableData(tableData) {
       this.tableData = tableData
-      this.total = this.tableData.length
     },
     queryChanged() {
       if(!this.axiosRequest || !this.handleResponse) {
         return
       }
-      this.queryParams.pageNum = 1;
       this.initTableData(this.axiosRequest, this.handleResponse);
     },
     changeLoading(loading) {

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.person.mapper.PersonFlowMapper">
+    
+    <resultMap type="PersonFlow" id="PersonFlowResult">
+        <result property="id"    column="id"    />
+        <result property="bm"    column="bm"    />
+        <result property="name"    column="name"    />
+        <result property="certType"    column="cert_type"    />
+        <result property="certNo"    column="cert_no"    />
+        <result property="phone"    column="phone"    />
+        <result property="nativePlace"    column="native_place"    />
+        <result property="nation"    column="nation"    />
+        <result property="remark"    column="remark"    />
+        <result property="faceImgUrl"    column="face_img_url"    />
+        <result property="features"    column="features"    />
+        <result property="company"    column="company"    />
+        <result property="career"    column="career"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="isImportant"    column="is_important"    />
+        <result property="attentionLevel"    column="attention_level"    />
+    </resultMap>
+
+    <sql id="selectPersonFlowVo">
+        select id, bm, name, cert_type, cert_no, phone, native_place, nation, remark, face_img_url, features, company, career, create_by, create_time, update_time, update_by, is_important, attention_level from sq_person_flow
+    </sql>
+
+    <select id="selectPersonFlowList" parameterType="PersonFlow" resultMap="PersonFlowResult">
+        <include refid="selectPersonFlowVo"/>
+        <where>  
+            <if test="bm != null  and bm != ''"> and bm = #{bm}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="certType != null  and certType != ''"> and cert_type = #{certType}</if>
+            <if test="certNo != null  and certNo != ''"> and cert_no = #{certNo}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="nativePlace != null  and nativePlace != ''"> and native_place = #{nativePlace}</if>
+            <if test="nation != null  and nation != ''"> and nation = #{nation}</if>
+            <if test="faceImgUrl != null  and faceImgUrl != ''"> and face_img_url = #{faceImgUrl}</if>
+            <if test="company != null  and company != ''"> and company = #{company}</if>
+            <if test="career != null  and career != ''"> and career = #{career}</if>
+            <if test="createBy != null  and createBy != ''"> and create_by = #{createBy}</if>
+            <if test="updateTime != null "> and update_time = #{updateTime}</if>
+            <if test="updateBy != null  and updateBy != ''"> and update_by = #{updateBy}</if>
+            <if test="isImportant != null  and isImportant != ''"> and is_important = #{isImportant}</if>
+            <if test="attentionLevel != null  and attentionLevel != ''"> and attention_level = #{attentionLevel}</if>
+        </where>
+    </select>
+    
+    <select id="selectPersonFlowById" parameterType="Long" resultMap="PersonFlowResult">
+        <include refid="selectPersonFlowVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPersonFlow" parameterType="PersonFlow" useGeneratedKeys="true" keyProperty="id">
+        insert into sq_person_flow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bm != null and bm != ''">bm,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="certType != null and certType != ''">cert_type,</if>
+            <if test="certNo != null and certNo != ''">cert_no,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="nativePlace != null">native_place,</if>
+            <if test="nation != null">nation,</if>
+            <if test="remark != null">remark,</if>
+            <if test="faceImgUrl != null and faceImgUrl != ''">face_img_url,</if>
+            <if test="features != null">features,</if>
+            <if test="company != null">company,</if>
+            <if test="career != null">career,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="isImportant != null and isImportant != ''">is_important,</if>
+            <if test="attentionLevel != null and attentionLevel != ''">attention_level,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bm != null and bm != ''">#{bm},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="certType != null and certType != ''">#{certType},</if>
+            <if test="certNo != null and certNo != ''">#{certNo},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="nativePlace != null">#{nativePlace},</if>
+            <if test="nation != null">#{nation},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="faceImgUrl != null and faceImgUrl != ''">#{faceImgUrl},</if>
+            <if test="features != null">#{features},</if>
+            <if test="company != null">#{company},</if>
+            <if test="career != null">#{career},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="isImportant != null and isImportant != ''">#{isImportant},</if>
+            <if test="attentionLevel != null and attentionLevel != ''">#{attentionLevel},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePersonFlow" parameterType="PersonFlow">
+        update sq_person_flow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="bm != null and bm != ''">bm = #{bm},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="certType != null and certType != ''">cert_type = #{certType},</if>
+            <if test="certNo != null and certNo != ''">cert_no = #{certNo},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="nativePlace != null">native_place = #{nativePlace},</if>
+            <if test="nation != null">nation = #{nation},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="faceImgUrl != null and faceImgUrl != ''">face_img_url = #{faceImgUrl},</if>
+            <if test="features != null">features = #{features},</if>
+            <if test="company != null">company = #{company},</if>
+            <if test="career != null">career = #{career},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="isImportant != null and isImportant != ''">is_important = #{isImportant},</if>
+            <if test="attentionLevel != null and attentionLevel != ''">attention_level = #{attentionLevel},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePersonFlowById" parameterType="Long">
+        delete from sq_person_flow where id = #{id}
+    </delete>
+
+    <delete id="deletePersonFlowByIds" parameterType="String">
+        delete from sq_person_flow where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

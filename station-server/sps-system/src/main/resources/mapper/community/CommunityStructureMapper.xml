@@ -6,7 +6,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <resultMap type="CommunityStructure" id="CommunityStructureResult">
         <result property="id"    column="id"    />
-        <result property="communityId"    column="community_id"    />
         <result property="communityCode"    column="community_code"    />
         <result property="communityName"    column="community_name"    />
         <result property="metaAddrId"    column="meta_addr_id"    />
@@ -16,7 +15,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="unit"    column="unit"    />
         <result property="ceng"    column="ceng"    />
         <result property="room"    column="room"    />
-        <result property="parentId"    column="parent_id"    />
         <result property="pcsId"    column="pcs_id"    />
         <result property="pcsName"    column="pcs_name"    />
         <result property="shortName"    column="short_name"    />
@@ -25,13 +23,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCommunityStructureVo">
-        select id, community_id, community_code, community_name, meta_addr_id, full_address, meta_level, dong, unit, ceng, room, parent_id, pcs_id, pcs_name, short_name, region, region_name from sq_community_structure
+        select id, community_code, community_name, meta_addr_id, full_address, meta_level, dong, unit, ceng, room, pcs_id, pcs_name, short_name, region, region_name from sq_community_structure
     </sql>
 
     <select id="selectCommunityStructureList" parameterType="CommunityStructure" resultMap="CommunityStructureResult">
         <include refid="selectCommunityStructureVo"/>
         <where>  
-            <if test="communityId != null "> and community_id = #{communityId}</if>
             <if test="communityCode != null  and communityCode != ''"> and community_code = #{communityCode}</if>
             <if test="communityName != null  and communityName != ''"> and community_name like concat('%', #{communityName}, '%')</if>
             <if test="metaAddrId != null  and metaAddrId != ''"> and meta_addr_id = #{metaAddrId}</if>
@@ -41,24 +38,66 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null  and unit != ''"> and unit = #{unit}</if>
             <if test="ceng != null  and ceng != ''"> and ceng = #{ceng}</if>
             <if test="room != null  and room != ''"> and room = #{room}</if>
-            <if test="parentId != null "> and parent_id = #{parentId}</if>
             <if test="pcsId != null  and pcsId != ''"> and pcs_id = #{pcsId}</if>
             <if test="pcsName != null  and pcsName != ''"> and pcs_name like concat('%', #{pcsName}, '%')</if>
             <if test="shortName != null  and shortName != ''"> and short_name like concat('%', #{shortName}, '%')</if>
             <if test="region != null  and region != ''"> and region = #{region}</if>
             <if test="regionName != null  and regionName != ''"> and region_name like concat('%', #{regionName}, '%')</if>
         </where>
+        order by short_name
     </select>
     
     <select id="selectCommunityStructureById" parameterType="Long" resultMap="CommunityStructureResult">
         <include refid="selectCommunityStructureVo"/>
         where id = #{id}
     </select>
-        
+    <select id="selectCommunityList" parameterType="string" resultType="java.util.HashMap">
+        select distinct community_code as "code", community_name as "value"
+            from sq_community_structure
+        <where>
+            <if test="queryString != null and queryString != ''">
+                and community_name like concat('%', #{queryString}, '%')
+            </if>
+        </where>
+    </select>
+    <select id="selectRoomListByCommunityCode" parameterType="CommunityStructure" resultMap="CommunityStructureResult">
+        select full_address, meta_addr_id, dong, unit, ceng, room, short_name
+        from sq_community_structure s
+        <where>
+            and s.meta_level = 14
+            and s.community_code = #{communityCode}
+            <if test="shortName != null and shortName != ''">
+                <bind name="shortNameLike" value="shortName + '%'"/>
+                and shortName like #{shortNameLike}
+            </if>
+        </where>
+        order by short_name
+    </select>
+
+    <insert id="batchInsertFormVo" parameterType="StructureImportVo">
+        insert into sq_community_structure
+            (community_code, community_name, meta_addr_id, full_address, meta_level, dong, unit, ceng, room,
+                short_name,region,region_name, longitude, latitude ) values
+        <foreach collection="list" separator="," item="item">
+            (#{item.communityCode},#{item.communityName},#{item.metaAddrId},#{item.fullAddress},#{item.metaLevel},
+            #{item.dong},#{item.unit},#{item.ceng},#{item.room},#{item.shortName},
+             #{item.region},#{item.regionName}, #{item.longitude}, #{item.latitude})
+        </foreach>
+        ON DUPLICATE KEY UPDATE
+                 full_address = VALUES(full_address),
+                 dong = VALUES(dong),
+                 unit = VALUES(unit),
+                 ceng = VALUES(ceng),
+                 room = VALUES(room),
+                 short_name = VALUES(short_name),
+                 region_name = VALUES(region_name),
+                 longitude = VALUES(longitude),
+                 latitude = VALUES(latitude),
+                 meta_level = VALUES(meta_level);
+    </insert>
     <insert id="insertCommunityStructure" parameterType="CommunityStructure" useGeneratedKeys="true" keyProperty="id">
         insert into sq_community_structure
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="communityId != null">community_id,</if>
             <if test="communityCode != null and communityCode != ''">community_code,</if>
             <if test="communityName != null">community_name,</if>
             <if test="metaAddrId != null">meta_addr_id,</if>
@@ -68,7 +107,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">unit,</if>
             <if test="ceng != null">ceng,</if>
             <if test="room != null">room,</if>
-            <if test="parentId != null">parent_id,</if>
             <if test="pcsId != null">pcs_id,</if>
             <if test="pcsName != null">pcs_name,</if>
             <if test="shortName != null">short_name,</if>
@@ -76,7 +114,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="regionName != null">region_name,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="communityId != null">#{communityId},</if>
             <if test="communityCode != null and communityCode != ''">#{communityCode},</if>
             <if test="communityName != null">#{communityName},</if>
             <if test="metaAddrId != null">#{metaAddrId},</if>
@@ -86,7 +123,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">#{unit},</if>
             <if test="ceng != null">#{ceng},</if>
             <if test="room != null">#{room},</if>
-            <if test="parentId != null">#{parentId},</if>
             <if test="pcsId != null">#{pcsId},</if>
             <if test="pcsName != null">#{pcsName},</if>
             <if test="shortName != null">#{shortName},</if>
@@ -98,7 +134,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateCommunityStructure" parameterType="CommunityStructure">
         update sq_community_structure
         <trim prefix="SET" suffixOverrides=",">
-            <if test="communityId != null">community_id = #{communityId},</if>
             <if test="communityCode != null and communityCode != ''">community_code = #{communityCode},</if>
             <if test="communityName != null">community_name = #{communityName},</if>
             <if test="metaAddrId != null">meta_addr_id = #{metaAddrId},</if>
@@ -108,7 +143,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">unit = #{unit},</if>
             <if test="ceng != null">ceng = #{ceng},</if>
             <if test="room != null">room = #{room},</if>
-            <if test="parentId != null">parent_id = #{parentId},</if>
             <if test="pcsId != null">pcs_id = #{pcsId},</if>
             <if test="pcsName != null">pcs_name = #{pcsName},</if>
             <if test="shortName != null">short_name = #{shortName},</if>

@@ -2,6 +2,7 @@ package com.jingyu.person.mapper;
 
 import java.util.List;
 import com.jingyu.person.domain.PersonResident;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 社区常驻人口Mapper接口
@@ -9,6 +10,7 @@ import com.jingyu.person.domain.PersonResident;
  * @author jingyu
  * @date 2023-07-10
  */
+@Mapper
 public interface PersonResidentMapper 
 {
     /**

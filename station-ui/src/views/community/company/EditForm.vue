@@ -237,9 +237,6 @@ export default {
         if(response.code === 200 && response.data) {
           this.form = {...response.data}
           this.form.police = parseInt(this.form.police)
-          if(this.form.communityObj) {
-            this.$refs['scdSelect']?.querySearch(this.form.communityObj.deptName);
-          }
           if(this.form.centerPoint && this.form.centerPoint.split(',').length > 1) {
             const s = this.form.centerPoint.split(',')
             this.form.longitude = s[0]

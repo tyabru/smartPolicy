@@ -1,13 +1,12 @@
 <script>
 import { listCommunity } from '@/api/community/community'
 import * as _ from 'lodash'
-import { listCommunityDept, listDept } from '@/api/system/dept'
+import { getDept, listCommunityDept, listDept } from '@/api/system/dept'
 export default {
   name: 'SeCommunityDept',
   props: {
-    value: [String, Number],
-    customClass: String,
-    defaultLabel: String
+    value: Number,
+    customClass: String
   },
   data() {
     return {
@@ -20,14 +19,17 @@ export default {
   watch: {
     value: {
       handler(newVal) {
-        this.selectItem = newVal
+        if(newVal && this.options.length < 1) {
+          getDept(newVal).then(({ code, data }) => {
+            if(code === 200 && data) {
+              this.options = [ data ]
+            }
+          }).finally(() => { this.selectItem = newVal })
+        } else {
+          this.selectItem = newVal
+        }
       },
       immediate: true
-    }
-  },
-  mounted() {
-    if(this.defaultLabel) {
-      this.querySearch(this.defaultLabel)
     }
   },
   methods: {

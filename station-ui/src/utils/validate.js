@@ -1,3 +1,5 @@
+import { listResident } from '@/api/person/resident'
+
 /**
  * @param {string} path
  * @returns {Boolean}

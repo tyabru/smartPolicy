@@ -1,7 +1,12 @@
 package com.jingyu.community.service;
 
 import java.util.List;
+import java.util.Map;
+
+import com.jingyu.common.core.domain.Cascader;
+import com.jingyu.common.core.domain.TreeSelect;
 import com.jingyu.community.domain.CommunityStructure;
+import com.jingyu.community.domain.StructureImportVo;
 
 /**
  * 小区房屋结构和地址信息Service接口
@@ -58,4 +63,14 @@ public interface ICommunityStructureService
      * @return 结果
      */
     public int deleteCommunityStructureById(Long id);
+
+    int batchInsert(List<StructureImportVo> sendList);
+
+    /** 根据小区名称模糊查询存在与标准地址表中的小区信息
+     * @param queryString 小区名称模糊查询字段
+     * */
+    List<Map<String,Object>> selectCommunityList(String queryString);
+
+    //
+    List<Cascader<CommunityStructure>> querySelectorList(CommunityStructure structure);
 }

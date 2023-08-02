@@ -65,4 +65,6 @@ public interface CommunityDetailMapper
     public int deleteCommunityDetailByIds(Long[] ids);
 
     void deleteByVillageId(Long id);
+
+    CommunityDetail getByCodeWithLock(@Param("communityCode") String communityCode);
 }

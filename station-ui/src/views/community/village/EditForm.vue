@@ -40,7 +40,11 @@
         <el-row>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="小区（村）名称" prop="name">
-              <el-input v-model="form.name" />
+              <el-autocomplete v-model="form.name"
+                :fetch-suggestions="querySearchAsync"
+                placeholder="请输入内容"
+                @select="handleSelect" class="width-100Rate"
+              ></el-autocomplete>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
@@ -153,6 +157,8 @@ import { deleteByFileId, getDescListByVillageId, uploadFileDesc } from '@/api/co
 import { addCommunity, getCommunity, updateCommunity } from '@/api/community/community'
 import { queryBelongDeptByTypeAndId } from '@/api/system/dept'
 import { queryPcsPoliceUser } from '@/api/system/user'
+import _ from 'lodash'
+import { loadXqxxByNameFormStructure } from '@/api/community/structure'
 export default {
   name: 'edit-form',
   components: { UploadGroup },
@@ -209,9 +215,6 @@ export default {
         if(response.code === 200 && response.data) {
           this.form = {...response.data}
           this.form.detail.police = parseInt(this.form.detail.police)
-          if(this.form.communityObj) {
-            this.$refs['scdSelect']?.querySearch(this.form.communityObj.deptName);
-          }
         } else {
           this.$message.error("获取表单数据失败！")
         }
@@ -226,6 +229,17 @@ export default {
     },
     fileChanged(fileList) {
       this.fileList = fileList;
+    },
+    querySearchAsync: _.debounce((queryString, cb) => {
+      let results = []
+      loadXqxxByNameFormStructure(queryString).then(({code, data}) => {
+        if(code === 200 && data ) {
+          results = data
+        }
+      }).finally(() => { cb(results) })
+    }, 1000),
+    handleSelect(item) {
+      this.form.code = item.code
     },
     submitForm(stayThisPage) {
       if(this.formLoad) {

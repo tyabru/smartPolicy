@@ -134,8 +134,7 @@
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px">
         <el-form-item label="所属小区" prop="communityId">
-          <se-community v-model="form.communityId"
-                        :default-label="communityName" style="width: 100%" />
+          <se-community v-model="form.communityId" style="width: 100%" />
         </el-form-item>
         <el-form-item label="工作单位" prop="company">
           <el-input v-model="form.company" placeholder="请输入工作单位" />

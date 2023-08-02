@@ -17,7 +17,7 @@ public interface ICommunityService
      * @param id 小区（村）基本信息主键
      * @return 小区（村）基本信息
      */
-    public Community selectSqCommunityById(Long id);
+    Community selectSqCommunityById(Long id);
 
     /**
      * 查询小区（村）基本信息列表
@@ -25,7 +25,7 @@ public interface ICommunityService
      * @param community 小区（村）基本信息
      * @return 小区（村）基本信息集合
      */
-    public List<Community> selectSqCommunityList(Community community);
+    List<Community> selectSqCommunityList(Community community);
 
     /**
      * 新增小区（村）基本信息
@@ -33,7 +33,7 @@ public interface ICommunityService
      * @param community 小区（村）基本信息
      * @return 结果
      */
-    public int insertSqCommunity(Community community);
+    int insertSqCommunity(Community community);
 
     /**
      * 修改小区（村）基本信息
@@ -41,7 +41,7 @@ public interface ICommunityService
      * @param community 小区（村）基本信息
      * @return 结果
      */
-    public int updateSqCommunity(Community community);
+    int updateSqCommunity(Community community);
 
     /**
      * 批量删除小区（村）基本信息
@@ -49,7 +49,7 @@ public interface ICommunityService
      * @param ids 需要删除的小区（村）基本信息主键集合
      * @return 结果
      */
-    public int deleteSqCommunityByIds(Long[] ids);
+    int deleteSqCommunityByIds(Long[] ids);
 
     /**
      * 删除小区（村）基本信息信息
@@ -57,7 +57,8 @@ public interface ICommunityService
      * @param id 小区（村）基本信息主键
      * @return 结果
      */
-    public int deleteSqCommunityById(Long id);
+    int deleteSqCommunityById(Long id);
 
-    public boolean codeIsExists(String code);
+    boolean codeIsExists(String code);
+
 }

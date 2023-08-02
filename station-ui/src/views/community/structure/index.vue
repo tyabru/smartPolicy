@@ -50,53 +50,29 @@
       <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
     </template>
     <template #btn>
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['community:structure:add']"
-        >新增</el-button>
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['community:structure:edit']"
-        >修改</el-button>
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['community:structure:remove']"
-        >删除</el-button>
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['community:structure:export']"
-        >导出</el-button>
+        <el-button type="primary" plain icon="el-icon-plus"
+          size="mini" @click="handleAdd" v-hasPermi="['community:structure:add']" >新增</el-button>
+        <el-button type="success" plain icon="el-icon-edit" size="mini"
+          :disabled="single" @click="handleUpdate" v-hasPermi="['community:structure:edit']">修改</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple"
+          @click="handleDelete" v-hasPermi="['community:structure:remove']">删除</el-button>
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['community:structure:export']">导出</el-button>
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleImport"
+                 v-hasPermi="['community:structure:export']">批量导入</el-button>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
     </template>
     <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="派出所" align="center" prop="pcsName" />
       <el-table-column label="小区名称" align="center" prop="communityName" />
       <el-table-column label="地址编码" align="center" prop="metaAddrId" />
-      <el-table-column label="地址全称" align="center" prop="fullAddress" />
+      <el-table-column label="地址全称" align="left" prop="fullAddress" width="240px" />
       <el-table-column label="地址级别" align="center" prop="metaLevel">
         <template v-slot="{ row }">
           <dict-tag :options="dict.type['structure_level']" :value="row.metaLevel" />
         </template>
       </el-table-column>
+      <el-table-column label="地址简称" align="left" prop="shortName" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -127,18 +103,17 @@
 
     <!-- 添加或修改小区房屋结构和地址信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" @close="reset"
-               width="50vw" append-to-body>
+               width="50vw" append-to-body :close-on-click-modal="false">
       <el-form ref="form" :loading="dialogLoading" :model="form" :rules="rules" label-width="110px">
         <el-row>
           <el-col :span="24">
             <el-form-item label="地址全称" prop="fullAddress">
-              <el-input v-model="form.fullAddress" placeholder="请输入地址全称" />
+              <el-input v-model="form.fullAddress" @input="changeAddress" placeholder="请输入地址全称" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="所属小区" prop="communityId">
               <se-community  ref="form-community" v-model="form.communityId"
-                             :default-label="form.communityName"
                              @change="communityChange"
                              placeholder="请输入小区外键" class="width-100Rate" />
             </el-form-item>
@@ -197,15 +172,39 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+    <el-dialog :visible.sync="importDialog" title="标准地址导入" @close="cancel" :close-on-click-modal="false">
+      <file-upload v-model="fileUrl" :limit="1" base-dir="temp-upload"
+                   drag :file-size="30" :file-type="['xls', 'xlsx', 'csv']" />
+      <div style="background-color: #e8e8e8; margin-top: 20px; border-radius: 4px; padding: 10px">
+        导入文件类型为Excel表格或CSV文件，文档导入的Excel模板可以
+        <el-button type="text"
+                   @click="downloadExample"
+                   style="text-decoration: underline">点此下载</el-button>。列标题不可更改以免导入失败。
+      </div>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" :disabled="btnVisible" :loading="btnVisible" @click="importForm">确 定</el-button>
+        <el-button @click="cancel">取 消</el-button>
+      </div>
+    </el-dialog>
   </table-panel>
 </template>
 
 <script>
-import { listStructure, getStructure, delStructure, addStructure, updateStructure } from "@/api/community/structure";
+import {
+  listStructure,
+  getStructure,
+  delStructure,
+  addStructure,
+  updateStructure,
+  downloadExample, importFormExcel
+} from '@/api/community/structure'
 import TablePanel from '@/components/TablePanel/index.vue'
 import tableListMixins from '@/mixins/tableListMixins.js'
 import { queryBelongDeptByTypeAndId } from '@/api/system/dept'
-import { getCommunity } from '@/api/community/community'
+import { getCommunity, listCommunity } from '@/api/community/community'
+import { matchFullAddress } from '@/views/community/structure/js'
+import * as _ from 'lodash'
+import { deleteFileByResource } from '@/api/tool/file'
 export default {
   name: "Structure",
   dicts: ['structure_level'],
@@ -228,12 +227,14 @@ export default {
       }
     }
     return {
+      importDialog: false,
       // 选中数组
       ids: [],
       // 非多个禁用
       multiple: true,
       // 弹出层标题
       title: "",
+      fileUrl: null,
       // 是否显示弹出层
       open: false,
       dialogLoading: false,
@@ -263,8 +264,12 @@ export default {
   methods: {
     // 取消按钮
     cancel() {
+      this.importDialog = false;
       this.open = false;
       this.reset();
+      if(this.fileUrl) {
+        deleteFileByResource(this.fileUrl);
+      }
     },
     // 表单重置
     reset() {
@@ -287,6 +292,23 @@ export default {
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
+    changeAddress: _.debounce(function(item) {
+      matchFullAddress(item).then(arr => {
+        if(arr && arr.length > 3) {
+          for(let i = arr.length;i > 1; i--) {
+            if(arr[i-1] && arr[i-1].length > 0) {
+              this.form.metaLevel = i - 1 + 10
+              break
+            }
+          }
+          this.$set(this.form, 'shortName', arr[0])
+          this.$set(this.form, 'dong', arr[1])
+          this.$set(this.form, 'unit', arr[2])
+          this.$set(this.form, 'ceng', arr[3])
+          this.$set(this.form, 'room', arr[4])
+        }
+      });
+    }, 400),
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
@@ -302,15 +324,16 @@ export default {
         this.title = "修改小区房屋结构和地址信息";
         this.form = response.data;
         this.dialogLoading = true
-        getCommunity(this.form.communityId).then(({ code, data }) => {
-          if(code === 200 && data) {
+        listCommunity({ code: this.form.communityCode }).then(({ code, rows }) => {
+          if(code === 200 && rows && rows.length > 0) {
+            const data = rows[0]
+            this.form.communityId = data.id
             this.form.pcsId = data.pcsId
             this.form.pcsName = data.pcsName
-            this.form.region = data.communityObj?.deptId
-            this.form.regionName = data.communityObj?.deptName
+            // this.form.region = data.communityObj?.deptId
+            // this.form.regionName = data.communityObj?.deptName
           }
         }).finally(() => { this.dialogLoading = false })
-
       });
     },
     communityChange(key, item) {
@@ -320,6 +343,30 @@ export default {
       this.form.pcsName = item.pcsName
       this.form.region = item.communityObj?.deptId
       this.form.regionName = item.communityObj?.deptName
+    },
+    handleImport() {
+      this.importDialog = true
+      if(this.fileUrl) {
+        deleteFileByResource(this.fileUrl)
+        this.fileUrl = null
+      }
+    },
+    importForm() {
+      if(this.fileUrl) {
+        if(this.btnVisible) {
+          return;
+        }
+        this.btnVisible = true
+        importFormExcel(this.fileUrl).then(response => {
+          this.$message.success(response.msg);
+          this.cancel()
+        }).finally(() => {
+          this.btnVisible = false
+        })
+      } else {
+        this.$message.success("还未上传需要导入的文件！");
+      }
+
     },
     /** 提交按钮 */
     submitForm() {
@@ -356,7 +403,10 @@ export default {
       this.download('community/structure/export', {
         ...this.queryParams
       }, `structure_${new Date().getTime()}.xlsx`)
-    }
+    },
+    downloadExample() {
+      downloadExample()
+    },
   }
 };
 </script>

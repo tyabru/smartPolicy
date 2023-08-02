@@ -6,6 +6,10 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
 import com.jingyu.common.core.domain.BaseEntity;
 
+import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 社区常驻人口对象 sq_person_resident
  * 
@@ -34,15 +38,12 @@ public class PersonResident extends BaseEntity
 
     /** 身份证号 */
     @Excel(name = "身份证号")
+    @NotEmpty(message = "人员身份证号不能为空")
     private String certNo;
 
     /** 联系方式 */
     @Excel(name = "联系方式")
     private String phone;
-
-    /** 居住地址 */
-    @Excel(name = "居住地址")
-    private String address;
 
     /** 籍贯 */
     @Excel(name = "籍贯")
@@ -66,7 +67,7 @@ public class PersonResident extends BaseEntity
 
     /** 是否是重点人员 */
     @Excel(name = "是否是重点人员")
-    private Long isImportant;
+    private String isImportant;
 
     /** 关注的级别 0绿 1黄 2红 */
     @Excel(name = "关注的级别 0绿 1黄 2红")
@@ -75,5 +76,7 @@ public class PersonResident extends BaseEntity
     /** 数据来源平台（群众自主、警员录入、网页、三方） */
     @Excel(name = "数据来源平台", readConverterExp = "群=众自主、警员录入、网页、三方")
     private String sourcePlatform;
+
+    private List<PersonHouse> houseList = new ArrayList<>();
 
 }

@@ -129,7 +129,7 @@ export default {
         title = `修改[ ${row.companyName} ]信息`;
         params['sq_pk'] = Encrypt(JSON.stringify({id: row.id | 'unknown'}));
       }
-      this.$tab.openPage(title, '/community/company/info-edit', params);
+      this.$tab.openPage(title, '/community/company/gs-info-edit', params);
     },
     /** 删除按钮操作 */
     handleDelete(row) {

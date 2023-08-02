@@ -2,24 +2,23 @@ package com.jingyu.community.service.impl;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.IntStream;
 
 import com.jingyu.common.exception.base.BaseException;
 import com.jingyu.common.utils.DateUtils;
 import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.common.utils.StringUtils;
-import com.jingyu.community.domain.CommunityDesc;
 import com.jingyu.community.domain.CommunityDetail;
-import com.jingyu.community.mapper.CommunityDescMapper;
 import com.jingyu.community.service.ICommunityDescService;
 import com.jingyu.community.service.ICommunityDetailService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import com.jingyu.community.mapper.CommunityMapper;
 import com.jingyu.community.domain.Community;
 import com.jingyu.community.service.ICommunityService;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.jingyu.person.PersonConstants.*;
 
 /**
  * 小区（村）基本信息Service业务层处理
@@ -200,4 +199,6 @@ public class CommunityServiceImpl implements ICommunityService
         int count = communityMapper.countByCondition(community);
         return count > 0;
     }
+
+
 }
