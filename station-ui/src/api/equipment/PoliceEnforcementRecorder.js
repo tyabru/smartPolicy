@@ -17,6 +17,14 @@ export function getPoliceEnforcementRecorder(id) {
   })
 }
 
+// 查询警用装备
+export function getPoliceEnforcementRecorderByDeviceCode(deviceCode) {
+  return request({
+    url: '/polices/PoliceEnforcementRecorder/getPoliceEnforcementRecorderByDeviceCode/' + deviceCode,
+    method: 'get'
+  })
+}
+
 // 新增执法仪记录仪
 export function addPoliceEnforcementRecorder(data) {
   return request({

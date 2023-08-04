@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="carType"    column="car_type"    />
         <result property="carBrand"    column="car_brand"    />
         <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
         <result property="carLong"    column="car_long"    />
         <result property="carHeight"    column="car_height"    />
         <result property="carWide"    column="car_wide"    />
@@ -28,9 +29,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPoliceCarsVo">
-        select id, license_number, car_code, license_type, car_type, car_brand, dept_id, car_long, car_height, car_wide, vehicle_photos,
-          is_vehicle, equipment_number, create_time, update_time, delete_time, operate_time, operate_type, operate_name, remark
-        from police_cars
+        select p.id, p.license_number, p.car_code, p.license_type, p.car_type, p.car_brand, p.dept_id, p.car_long, p.car_height, p.car_wide, p.vehicle_photos,
+          p.is_vehicle, p.equipment_number, p.create_time, p.update_time, p.delete_time, p.operate_time, p.operate_type, p.operate_name, p.remark, sys_dept.dept_name
+        from police_cars p
+        inner join sys_dept on p.dept_id = sys_dept.dept_id
     </sql>
 
     <select id="selectPoliceCarsList" parameterType="PoliceCars" resultMap="PoliceCarsResult">
@@ -60,6 +62,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectPoliceCarsById" parameterType="Long" resultMap="PoliceCarsResult">
         <include refid="selectPoliceCarsVo"/>
         where id = #{id}
+    </select>
+
+    <select id="getPoliceCarByLicenseNumber" parameterType="String" resultMap="PoliceCarsResult">
+        <include refid="selectPoliceCarsVo"/>
+        where license_number = #{licenseNumber} AND operate_type != 2
+    </select>
+
+    <select id="getPoliceCarByCarCode" parameterType="String" resultMap="PoliceCarsResult">
+        <include refid="selectPoliceCarsVo"/>
+        where car_code = #{carCode} AND operate_type != 2
+    </select>
+
+    <select id="getPoliceCarByEquipmentNumber" parameterType="String" resultMap="PoliceCarsResult">
+        <include refid="selectPoliceCarsVo"/>
+        where equipment_number = #{equipmentNumber} AND operate_type != 2
     </select>
         
     <insert id="insertPoliceCars" parameterType="PoliceCars" useGeneratedKeys="true" keyProperty="id">

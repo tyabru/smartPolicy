@@ -1,30 +1,32 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="警号" prop="policeNumber">
-        <el-input v-model="queryParams.policeNumber" placeholder="请输入警号" clearable/>
-      </el-form-item>
-      <el-form-item label="装备编码" prop="equipmentNumber">
-        <el-input v-model="queryParams.equipmentNumber" placeholder="请输入装备编码" clearable @keyup.enter.native="handleQuery"/>
-      </el-form-item>
-      <el-form-item label="是否归还" prop="isReturn">
-        <el-select  v-model="queryParams.isReturn" placeholder="请输入是否归还" style="width: 100%">
-          <el-option v-for="item in dict.type.sys_yes_no" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="是否损坏" prop="isEquipmentDefective">
-        <el-select  v-model="queryParams.isEquipmentDefective" placeholder="请输入装备是否损坏" style="width: 100%">
-          <el-option v-for="item in dict.type.sys_yes_no" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="损坏原因" prop="causesOfDamage">
-        <el-input v-model="queryParams.causesOfDamage" placeholder="请输入损坏原因" clearable/>
-      </el-form-item>
-      <el-form-item>
+    <search-form-bar>
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="警号" prop="policeNumber">
+          <el-input v-model="queryParams.policeNumber" placeholder="请输入警号" clearable/>
+        </el-form-item>
+        <el-form-item label="装备编码" prop="equipmentNumber">
+          <el-input v-model="queryParams.equipmentNumber" placeholder="请输入装备编码" clearable @keyup.enter.native="handleQuery"/>
+        </el-form-item>
+        <el-form-item label="是否归还" prop="isReturn">
+          <el-select  v-model="queryParams.isReturn" placeholder="请输入是否归还" style="width: 100%">
+            <el-option v-for="item in dict.type.sys_yes_no" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否损坏" prop="isEquipmentDefective">
+          <el-select  v-model="queryParams.isEquipmentDefective" placeholder="请输入装备是否损坏" style="width: 100%">
+            <el-option v-for="item in dict.type.sys_yes_no" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="损坏原因" prop="causesOfDamage">
+          <el-input v-model="queryParams.causesOfDamage" placeholder="请输入损坏原因" clearable/>
+        </el-form-item>
+      </el-form>
+      <template #btn>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+      </template>
+    </search-form-bar>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -43,7 +45,7 @@
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['equipment:claimReturn:export']">导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="claimReturnList" @selection-change="handleSelectionChange">
@@ -154,7 +156,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-show="isDisplay" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -176,6 +178,7 @@ export default {
   components: { DictTag, Treeselect },
   data() {
     return {
+      isDisplay: false,
       disabled: true,
       user: null,
       // 遮罩层
@@ -325,6 +328,7 @@ export default {
       this.reset();
       this.disabled = false;
       this.open = true;
+      this.isDisplay = true;
       this.title = "添加警用设备配发与归还记录";
     },
     /** 查看按钮操作 */
@@ -335,6 +339,7 @@ export default {
         this.form = response.data;
         this.disabled = true;
         this.open = true;
+        this.isDisplay = false;
         this.title = "查看警用设备配发与归还记录";
       });
     },
@@ -346,6 +351,7 @@ export default {
         this.form = response.data;
         this.disabled = false;
         this.open = true;
+        this.isDisplay = true;
         this.title = "修改警用设备配发与归还记录";
       });
     },

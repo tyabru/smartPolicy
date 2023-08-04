@@ -8,8 +8,8 @@ import com.jingyu.common.enums.BusinessType;
 import com.jingyu.common.utils.poi.ExcelUtil;
 import com.jingyu.polices.domain.PoliceFileManagements;
 import com.jingyu.polices.service.IPoliceFileManagementsService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,7 +19,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.nio.file.Paths;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -112,40 +114,41 @@ public class PoliceFileManagementsController extends BaseController
     }
 
     /**
-     * 文件下载
+     * 文件下载(网络)
      * */
-    @GetMapping("/fileDownload/{id}")
-    public AjaxResult downloadLocal(HttpServletResponse response, @PathVariable("id") Long id) {
-        //默认下载文件夹
-        String downloadPath = "D:/下载";
-        File downloadPathFile = new File(downloadPath);
-        if (!downloadPathFile.exists()) {
-            // 若不存在文件夹，则创建一个文件夹
-            downloadPathFile.mkdirs();
-        }
-        AjaxResult ajaxResult = new AjaxResult();
+    @GetMapping( "/fileDownload/{id}" )
+    public void downloadLocal(@PathVariable("id") Long id, HttpServletResponse response) {
         PoliceFileManagements policeFileManagements = policeFileManagementsService.selectPoliceFileManagementsById(id);
-        //设置文件路径
-        File file = new File(filePath + policeFileManagements.getFilePath());
-        //获取文件名称
-        String fileName = file.getName();
+        String path = "http://36.133.97.150:8081/image/内勤警务各表设计 (5).docx";
+        response.setContentType("application/octet-stream");
+        response.setHeader("content-disposition", "attachment;filename=" + policeFileManagements.getFileName());
+        response.setCharacterEncoding("UTF-8");
+        URL urlfile = null;
+//        String downPath = filePath + "/download";
+//        //默认下载文件夹
+//        File downloadPathFile = new File(downPath);
+//        if (!downloadPathFile.exists()) {
+//            // 若不存在文件夹，则创建一个文件夹
+//            downloadPathFile.mkdirs();
+//        }
+        BufferedInputStream bis = null;
+        BufferedOutputStream fis = null;
         //判断文件是否存在
-        if (file.exists()) {
-            response.setContentType("multipart/form-data");// 设置强制下载不打开
-            response.addHeader("Content-Disposition", "attachment;fileName=" + fileName);// 设置文件名
             byte[] buffer = new byte[1024];
-            FileInputStream fis = null;
-            BufferedInputStream bis = null;
             try {
-                fis = new FileInputStream(file);
-                bis = new BufferedInputStream(fis);
-                OutputStream os = new FileOutputStream(downloadPath + "/"+fileName);
+                urlfile = new URL(path);
+
+                String[] split = urlfile.getFile().split("/");
+                HttpURLConnection httpUrl = (HttpURLConnection) urlfile.openConnection();
+                InputStream inputStream = httpUrl.getInputStream();
+                bis = new BufferedInputStream(inputStream);
+//                OutputStream os = new FileOutputStream(downPath + "/"+ split[split.length-1]);
+                fis = new BufferedOutputStream(response.getOutputStream());
                 int i = bis.read(buffer);
                 while (i != -1) {
-                    os.write(buffer, 0, i);
+                    fis.write(buffer, 0, i);
                     i = bis.read(buffer);
                 }
-                file.delete();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -164,11 +167,60 @@ public class PoliceFileManagementsController extends BaseController
                     }
                 }
             }
-            ajaxResult.put("code",200);
-            ajaxResult.put("msg","下载成功,请前往(" + downloadPath + ")文件夹中查看");
-        } else {
+    }
+
+    /**
+     * 文件下载(本地)
+     * */
+    @GetMapping( "/downloadFile/{id}" )
+    public AjaxResult downloadFile(@PathVariable("id") Long id, HttpServletResponse response) {
+        PoliceFileManagements policeFileManagements = policeFileManagementsService.selectPoliceFileManagementsById(id);
+
+        response.setContentType("application/octet-stream");
+        response.setHeader("content-disposition", "attachment;filename=" + policeFileManagements.getFileName());
+        response.setCharacterEncoding("UTF-8");
+        AjaxResult ajaxResult = new AjaxResult();
+        String downPath = filePath + "/download";
+        //默认下载文件夹
+        File downloadPathFile = new File(downPath);
+        if (!downloadPathFile.exists()) {
+            // 若不存在文件夹，则创建一个文件夹
+            downloadPathFile.mkdirs();
+        }
+        BufferedInputStream bis = null;
+        BufferedOutputStream fis = null;
+        //判断文件是否存在
+        byte[] buffer = new byte[1024];
+        try {
+            FileInputStream inputStream = new FileInputStream(filePath + policeFileManagements.getFilePath());
+            bis = new BufferedInputStream(inputStream);
+            fis = new BufferedOutputStream(response.getOutputStream());
+            int i = bis.read(buffer);
+            while (i != -1) {
+                fis.write(buffer, 0, i);
+                i = bis.read(buffer);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             ajaxResult.put("code",400);
-            ajaxResult.put("code","查无文件,请确定文件路径是否正确！！");
+            ajaxResult.put("msg","下载失败");
+        } finally {
+            if (bis != null) {
+                try {
+                    bis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            if (fis != null) {
+                try {
+                    fis.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            ajaxResult.put("code",200);
+            ajaxResult.put("msg","下载成功,请前往" + downPath + "文件夹查看");
         }
         return ajaxResult;
     }

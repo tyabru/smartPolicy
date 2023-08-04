@@ -10,13 +10,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="deviceCode"    column="device_code"    />
         <result property="model"    column="model"    />
         <result property="manufacturer"    column="manufacturer"    />
-        <result property="focalLength"    column="focal_length"    />
-        <result property="resolutionRatio"    column="resolution_ratio"    />
-        <result property="opticalZoom"    column="optical_zoom"    />
-        <result property="videoCoding"    column="video_coding"    />
-        <result property="prePosition"    column="pre_position"    />
-        <result property="networking"    column="networking"    />
         <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="deleteTime"    column="delete_time"    />
@@ -27,9 +22,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPoliceOnboardEquipmentVo">
-        select id, device_name, device_code, model, manufacturer, focal_length, resolution_ratio, optical_zoom, video_coding, pre_position,
-          networking, dept_id, create_time, update_time, delete_time, operate_time, operate_type, operate_name, remark
-        from police_onboard_equipment
+        select p.id, p.device_name, p.device_code, p.model, p.manufacturer, p.dept_id, p.create_time, p.update_time, p.delete_time,
+          p.operate_time, p.operate_type, p.operate_name, p.remark, sys_dept.dept_name
+        from police_onboard_equipment p
+        inner join sys_dept on p.dept_id = sys_dept.dept_id
     </sql>
 
     <select id="selectPoliceOnboardEquipmentList" parameterType="PoliceOnboardEquipment" resultMap="PoliceOnboardEquipmentResult">
@@ -40,13 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deviceCode != null  and deviceCode != ''"> and instr(device_code,#{deviceCode})</if>
             <if test="model != null  and model != ''"> and instr(model,#{model})</if>
             <if test="manufacturer != null  and manufacturer != ''"> and instr(manufacturer,#{manufacturer})</if>
-            <if test="focalLength != null  and focalLength != ''"> and instr(focal_length,#{focalLength})</if>
-            <if test="resolutionRatio != null  and resolutionRatio != ''"> and instr(resolution_ratio,#{resolutionRatio})</if>
-            <if test="opticalZoom != null  and opticalZoom != ''"> and instr(optical_zoom,#{opticalZoom})</if>
-            <if test="videoCoding != null  and videoCoding != ''"> and instr(video_coding,#{videoCoding})</if>
-            <if test="prePosition != null  and prePosition != ''"> and instr(pre_position,#{prePosition})</if>
             <if test="deptId != null "> and instr(dept_id,#{deptId})</if>
-            <if test="networking != null "> and instr(networking,#{networking})</if>
             <if test="deleteTime != null "> and instr(delete_time,#{deleteTime})</if>
             <if test="operateTime != null "> and instr(operate_time,#{operateTime})</if>
             <if test="operateType != null "> and operate_type = #{operateType}</if>
@@ -59,6 +49,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectPoliceOnboardEquipmentVo"/>
         where id = #{id}
     </select>
+
+    <select id="getPoliceOnboardEquipmentByDeviceCode" parameterType="String" resultMap="PoliceOnboardEquipmentResult">
+        <include refid="selectPoliceOnboardEquipmentVo"/>
+        where device_code = #{deviceCode}
+    </select>
         
     <insert id="insertPoliceOnboardEquipment" parameterType="PoliceOnboardEquipment" useGeneratedKeys="true" keyProperty="id">
         insert into police_onboard_equipment
@@ -67,12 +62,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deviceCode != null and deviceCode != ''">device_code,</if>
             <if test="model != null and model != ''">model,</if>
             <if test="manufacturer != null and manufacturer != ''">manufacturer,</if>
-            <if test="focalLength != null">focal_length,</if>
-            <if test="resolutionRatio != null">resolution_ratio,</if>
-            <if test="opticalZoom != null">optical_zoom,</if>
-            <if test="videoCoding != null">video_coding,</if>
-            <if test="prePosition != null">pre_position,</if>
-            <if test="networking != null">networking,</if>
             <if test="deptId != null">dept_id,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="deleteTime != null">delete_time,</if>
@@ -87,12 +76,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deviceCode != null and deviceCode != ''">#{deviceCode},</if>
             <if test="model != null and model != ''">#{model},</if>
             <if test="manufacturer != null and manufacturer != ''">#{manufacturer},</if>
-            <if test="focalLength != null">#{focalLength},</if>
-            <if test="resolutionRatio != null">#{resolutionRatio},</if>
-            <if test="opticalZoom != null">#{opticalZoom},</if>
-            <if test="videoCoding != null">#{videoCoding},</if>
-            <if test="prePosition != null">#{prePosition},</if>
-            <if test="networking != null">#{networking},</if>
             <if test="deptId != null">#{deptId},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="deleteTime != null">#{deleteTime},</if>
@@ -111,12 +94,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deviceCode != null and deviceCode != ''">device_code = #{deviceCode},</if>
             <if test="model != null and model != ''">model = #{model},</if>
             <if test="manufacturer != null and manufacturer != ''">manufacturer = #{manufacturer},</if>
-            <if test="focalLength != null">focal_length = #{focalLength},</if>
-            <if test="resolutionRatio != null">resolution_ratio = #{resolutionRatio},</if>
-            <if test="opticalZoom != null">optical_zoom = #{opticalZoom},</if>
-            <if test="videoCoding != null">video_coding = #{videoCoding},</if>
-            <if test="prePosition != null">pre_position = #{prePosition},</if>
-            <if test="networking != null">networking = #{networking},</if>
             <if test="deptId != null">dept_id = #{deptId},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="deleteTime != null">delete_time = #{deleteTime},</if>

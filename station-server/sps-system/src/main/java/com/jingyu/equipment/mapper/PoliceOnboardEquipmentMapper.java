@@ -59,4 +59,12 @@ public interface PoliceOnboardEquipmentMapper
      * @return 结果
      */
     public int deletePoliceOnboardEquipmentByIds(Long[] ids);
+
+    /**
+     * 查询车载设备列表
+     *
+     * @param deviceCode 车备编码
+     * @return 车载设备集合
+     */
+    public PoliceOnboardEquipment getPoliceOnboardEquipmentByDeviceCode(String deviceCode);
 }

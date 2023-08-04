@@ -45,6 +45,7 @@ public class SysUser extends BaseEntity
 
     /** 用户昵称 */
     @Excel(name = "用户名称")
+    @SensitiveNew(setterEncrypt = "setNickName", getterDncrypt = "getNickName", EncryptMethod = "nameEncrypt", notEncryptByResponse = true)
     private String nickName;
 
     /** 用户邮箱 */
@@ -53,6 +54,7 @@ public class SysUser extends BaseEntity
 
     /** 手机号码 */
     @Excel(name = "手机号码")
+    @SensitiveNew(setterEncrypt = "setPhonenumber", getterDncrypt = "getPhonenumber", neeDecrypt = true, neeEecrypt = true)
     private String phonenumber;
 
     /** 用户性别 */
@@ -152,6 +154,14 @@ public class SysUser extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "入职时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date entryTime;
+
+    /** 是否配备执法记录仪 */
+    @Excel(name = "是否配备执法记录仪")
+    private String isVehicle;
+
+    /** 设备编码 */
+    @Excel(name = "设备编码")
+    private String equipmentNumber;
 
     public SysUser()
     {

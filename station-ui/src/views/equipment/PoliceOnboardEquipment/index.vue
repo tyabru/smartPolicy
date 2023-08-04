@@ -1,20 +1,25 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="设备编码" prop="deviceCode">
-        <el-input v-model="queryParams.deviceCode" placeholder="请输入设备编码" clearable/>
-      </el-form-item>
-      <el-form-item label="型号" prop="model">
-        <el-input v-model="queryParams.model" placeholder="请输入型号" clearable/>
-      </el-form-item>
-      <el-form-item label="生产厂家" prop="manufacturer">
-        <el-input v-model="queryParams.manufacturer" placeholder="请输入生产厂家" clearable/>
-      </el-form-item>
-      <el-form-item>
+    <search-form-bar>
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="设备名称" prop="deviceName">
+          <el-input v-model="queryParams.deviceName" placeholder="请输入设备名称" clearable/>
+        </el-form-item>
+        <el-form-item label="设备编码" prop="deviceCode">
+          <el-input v-model="queryParams.deviceCode" placeholder="请输入设备编码" clearable/>
+        </el-form-item>
+        <el-form-item label="型号" prop="model">
+          <el-input v-model="queryParams.model" placeholder="请输入型号" clearable/>
+        </el-form-item>
+        <el-form-item label="生产厂家" prop="manufacturer">
+          <el-input v-model="queryParams.manufacturer" placeholder="请输入生产厂家" clearable/>
+        </el-form-item>
+      </el-form>
+      <template #btn>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+      </template>
+    </search-form-bar>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -33,25 +38,16 @@
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['polices:PoliceOnboardEquipment:export']">导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="PoliceOnboardEquipmentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="部门名称" align="center" prop="deptName" />
+      <el-table-column label="设备名称" align="center" prop="deviceName" />
       <el-table-column label="设备编码" align="center" prop="deviceCode" />
       <el-table-column label="型号" align="center" prop="model" />
       <el-table-column label="生产厂家" align="center" prop="manufacturer" />
-      <el-table-column label="焦距(单位:mm)" align="center" prop="focalLength" />
-      <el-table-column label="分辨率" align="center" prop="resolutionRatio" />
-      <el-table-column label="光学变倍(单位:倍)" align="center" prop="opticalZoom" />
-      <el-table-column label="视频编码" align="center" prop="videoCoding" />
-      <el-table-column label="预位置(单位:个)" align="center" prop="prePosition" />
-      <el-table-column label="网络通讯" align="center" prop="networking" >
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_networking" :value="scope.row.networking"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="部门ID" align="center" prop="deptId" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -100,49 +96,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="网络通讯" prop="networking">
-              <el-select  v-model="form.networking" placeholder="请选择装备类型" style="width: 100%">
-                <el-option v-for="item in dict.type.sys_networking" :key="item.value" :label="item.label" :value="Number(item.value)">
-                  <el-tooltip placement="top">
-                    <div slot="content">{{item.raw.remark}}</div>
-                    <span style="float: left">{{ item.label }}</span>
-                  </el-tooltip>
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="分辨率" prop="resolutionRatio">
-              <el-input v-model="form.resolutionRatio" placeholder="请输入分辨率" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="光学变倍" prop="opticalZoom">
-              <el-input style="width: 265px;" v-model="form.opticalZoom" placeholder="请输入光学变倍(单位:倍)" /> (单位:倍)
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="视频编码" prop="videoCoding">
-              <el-input v-model="form.videoCoding" placeholder="请输入视频编码" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="预位置" prop="prePosition">
-              <el-input style="width: 265px;" v-model="form.prePosition" placeholder="请输入预位置(单位:个)" /> (单位:个)
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="焦距" prop="focalLength">
-              <el-input style="width: 255px;" v-model="form.focalLength" placeholder="请输入焦距(单位:mm)" /> (单位:mm)
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" placeholder="请输入备注" />
             </el-form-item>
@@ -150,7 +103,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-show="isDisplay" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -158,7 +111,7 @@
 </template>
 
 <script>
-import { listPoliceOnboardEquipment, getPoliceOnboardEquipment, delPoliceOnboardEquipment, 
+import { listPoliceOnboardEquipment, getPoliceOnboardEquipment, delPoliceOnboardEquipment, getPoliceOnboardEquipmentByDeviceCode,
   addPoliceOnboardEquipment, updatePoliceOnboardEquipment } from "@/api/equipment/PoliceOnboardEquipment";
 import { getUserProfile, deptTreeSelect } from "@/api/system/user";
 import DictTag from '@/components/DictTag';
@@ -170,7 +123,24 @@ export default {
   dicts: [ 'sys_networking' ],
   components: { DictTag ,Treeselect},
   data() {
+    const validDeviceCode = (rules, value, callback) => {
+      if (value == null || value == "") {
+        callback("装备编码不能为空")
+      } else {
+        getPoliceOnboardEquipmentByDeviceCode(value).then(response => {
+          console.log(response)
+          if (this.form.id != null && response.data != null && this.form.id != response.data.id) {
+            callback("装备编码已存在！")
+          } else if (this.form.id == null && response.data != null){
+            callback("装备编码已存在！")
+          } else {
+            callback()
+          }
+        })
+      }
+    }
     return {
+      isDisplay: false,
       disabled: true,
       user: null,
       // 遮罩层
@@ -201,12 +171,6 @@ export default {
         deviceCode: null,
         model: null,
         manufacturer: null,
-        focalLength: null,
-        resolutionRatio: null,
-        opticalZoom: null,
-        videoCoding: null,
-        prePosition: null,
-        networking: null,
         deptId: null,
         deleteTime: null,
         operateTime: null,
@@ -223,7 +187,8 @@ export default {
           { required: true, message: "设备名称不能为空", trigger: "blur" }
         ],
         deviceCode: [
-          { required: true, message: "编码不能为空", trigger: "blur" }
+          { required: true, message: "编码不能为空", trigger: "blur" },
+          { validator : validDeviceCode, trigger: "blur" }
         ],
         model: [
           { required: true, message: "型号不能为空", trigger: "blur" }
@@ -278,12 +243,6 @@ export default {
         deviceCode: null,
         model: null,
         manufacturer: null,
-        focalLength: null,
-        resolutionRatio: null,
-        opticalZoom: null,
-        videoCoding: null,
-        prePosition: null,
-        networking: null,
         deptId: null,
         createTime: null,
         updateTime: null,
@@ -316,6 +275,7 @@ export default {
       this.reset();
       this.disabled = false;
       this.open = true;
+      this.isDisplay = true;
       this.title = "添加车载设备";
     },
     /** 查看按钮操作 */
@@ -326,6 +286,7 @@ export default {
         this.form = response.data;
         this.disabled = true;
         this.open = true;
+        this.isDisplay = false;
         this.title = "查看车载设备";
       });
     },
@@ -337,6 +298,7 @@ export default {
         this.form = response.data;
         this.disabled = false;
         this.open = true;
+        this.isDisplay = true;
         this.title = "修改车载设备";
       });
     },

@@ -1,26 +1,28 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="装备编码" prop="equipmentNumber">
-        <el-input v-model="queryParams.equipmentNumber" placeholder="请输入装备编码" clearable/>
-      </el-form-item>
-      <el-form-item label="装备类型" prop="equipmentType">
-        <el-select  v-model="queryParams.equipmentType" placeholder="请选择装备类型" style="width: 100%">
-          <el-option v-for="item in dict.type.equipment_type" :key="item.value" :label="item.label" :value="Number(item.value)"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="装备描述" prop="equipmentDescription">
-        <el-input v-model="queryParams.equipmentDescription" placeholder="请输入装备描述" clearable/>
-      </el-form-item>
-      <el-form-item label="采购时间" prop="procurementTime">
-        <el-date-picker clearable v-model="queryParams.procurementTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择采购时间">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item>
+    <search-form-bar>
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="装备编码" prop="equipmentNumber">
+          <el-input v-model="queryParams.equipmentNumber" placeholder="请输入装备编码" clearable/>
+        </el-form-item>
+        <el-form-item label="装备类型" prop="equipmentType">
+          <el-select  v-model="queryParams.equipmentType" placeholder="请选择装备类型" style="width: 100%">
+            <el-option v-for="item in dict.type.equipment_type" :key="item.value" :label="item.label" :value="Number(item.value)"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="装备描述" prop="equipmentDescription">
+          <el-input v-model="queryParams.equipmentDescription" placeholder="请输入装备描述" clearable/>
+        </el-form-item>
+        <el-form-item label="采购时间" prop="procurementTime">
+          <el-date-picker clearable v-model="queryParams.procurementTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择采购时间">
+          </el-date-picker>
+        </el-form-item>
+      </el-form>
+      <template #btn>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+      </template>
+    </search-form-bar>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -39,11 +41,12 @@
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['equipment:equipment:export']">导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="equipmentList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="部门名称" align="center" prop="deptName" />
       <el-table-column label="装备编码" align="center" prop="equipmentNumber" />
       <el-table-column label="装备类型" align="center" prop="equipmentType" >
         <template slot-scope="scope">
@@ -51,7 +54,6 @@
         </template>
       </el-table-column>
       <el-table-column label="装备描述" align="center" prop="equipmentDescription" />
-      <el-table-column label="部门ID" align="center" prop="deptId" />
       <el-table-column label="采购时间" align="center" prop="procurementTime" />
       <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -116,7 +118,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-show="isDisplay" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -124,7 +126,7 @@
 </template>
 
 <script>
-import { listEquipment, getEquipment, delEquipment, addEquipment, updateEquipment } from "@/api/equipment/equipment";
+import { listEquipment, getEquipment, delEquipment, addEquipment, updateEquipment, getPoliceEquipmentByEquipmentNumber } from "@/api/equipment/equipment";
 import { getUserProfile, deptTreeSelect } from "@/api/system/user";
 import DictTag from '@/components/DictTag';
 import Treeselect from "@riophae/vue-treeselect";
@@ -135,12 +137,24 @@ export default {
   dicts: [ 'equipment_type' ],
   components: { DictTag ,Treeselect},
   data() {
-    const validEquipmentNumber = async (rules, value, callback) => {
-      if (value == null) {
-        
+    const validEquipmentNumber = (rules, value, callback) => {
+      if (value == null || value == "") {
+        callback("装备编码不能为空")
+      } else {
+        getPoliceEquipmentByEquipmentNumber(value).then(response => {
+          console.log(response)
+          if (this.form.id != null && response.data != null && this.form.id != response.data.id) {
+            callback("装备编码已存在！")
+          } else if (this.form.id == null && response.data != null){
+            callback("装备编码已存在！")
+          } else {
+            callback()
+          }
+        })
       }
     }
     return {
+      isDisplay: false,
       disabled: true,
       user: null,
       // 遮罩层
@@ -185,7 +199,7 @@ export default {
       rules: {
         equipmentNumber: [
           { required: true, message: "装备编码不能为空", trigger: "blur" },
-          { validator: validEquipmentNumber, trigger: 'blur' }
+          { validator : validEquipmentNumber, trigger: "blur" }
         ],
         equipmentType: [
           { required: true, message: "装备类型不能为空", trigger: "change" }
@@ -275,6 +289,7 @@ export default {
       this.reset();
       this.disabled = false;
       this.open = true;
+      this.isDisplay = true;
       this.title = "添加警用装备信息";
     },
      /** 查看按钮操作 */
@@ -284,7 +299,9 @@ export default {
       getEquipment(id).then(response => {
         this.form = response.data;
         this.disabled = true;
+        this.disabled = false;
         this.open = true;
+        this.isDisplay = false;
         this.title = "查看警用装备信息";
       });
     },
@@ -296,6 +313,7 @@ export default {
         this.form = response.data;
         this.disabled = false;
         this.open = true;
+        this.isDisplay = true;
         this.title = "修改警用装备信息";
       });
     },

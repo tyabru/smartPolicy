@@ -67,4 +67,20 @@ public interface IPoliceInformationService
      * @return 警员基本信息
      */
     public PoliceInformation selectPoliceInformationByIdCard(String idCard);
+
+    /**
+     * 查询警员基本信息列表
+     *
+     * @param userId 用户ID
+     * @return 警员基本信息
+     */
+    public PoliceInformation selectPoliceInformationByUserId(Long userId);
+
+    /**
+     * 删除警员基本信息信息
+     *
+     * @param userIds 用户ID
+     * @return 警员基本信息
+     */
+    public int deletePoliceInformationByUserIds(Long[] userIds);
 }

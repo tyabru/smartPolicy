@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="equipmentType"    column="equipment_type"    />
         <result property="equipmentDescription"    column="equipment_description"    />
         <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
         <result property="procurementTime"    column="procurement_time"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
@@ -21,9 +22,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPoliceEquipmentVo">
-        select id, equipment_number, equipment_type, equipment_description, procurement_time, create_time, update_time, delete_time, dept_id,
-          operate_time, operate_name, operate_type, remark
-        from police_equipment
+        select p.id, p.equipment_number, p.equipment_type, p.equipment_description, p.procurement_time, p.create_time, p.update_time, p.delete_time, p.dept_id,
+          p.operate_time, p.operate_name, p.operate_type, p.remark, sys_dept.dept_name
+        from police_equipment p
+        inner join sys_dept on p.dept_id = sys_dept.dept_id
     </sql>
 
     <select id="selectPoliceEquipmentList" parameterType="PoliceEquipment" resultMap="PoliceEquipmentResult">
@@ -46,6 +48,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectPoliceEquipmentById" parameterType="Long" resultMap="PoliceEquipmentResult">
         <include refid="selectPoliceEquipmentVo"/>
         where id = #{id}
+    </select>
+
+    <select id="getPoliceEquipmentByEquipmentNumber" parameterType="String" resultMap="PoliceEquipmentResult">
+        <include refid="selectPoliceEquipmentVo"/>
+        where equipment_number = #{equipmentNumber}
     </select>
         
     <insert id="insertPoliceEquipment" parameterType="PoliceEquipment">

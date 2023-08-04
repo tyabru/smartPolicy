@@ -24,7 +24,7 @@ public class SensitiveNewsHander {
                     Method getter = cls.getDeclaredMethod(getterDncrypt);
                     Method setter = cls.getDeclaredMethod(setterEncrypt, String.class);
                     String value = (String)(getter.invoke(params));
-                    if(true) {
+                    if(deviceAttr.neeDecrypt()) {
                         value = AESUtil.decrypt(value);
                     }
                     if (switchChange.getSwitchChange()) {

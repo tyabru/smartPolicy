@@ -58,4 +58,28 @@ public interface IPoliceCarsService
      * @return 结果
      */
     public int deletePoliceCarsById(Long id);
+
+    /**
+     * 查询警用车辆列表
+     *
+     * @param licenseNumber 车牌号
+     * @return 警用车辆集合
+     */
+    public PoliceCars getPoliceCarByLicenseNumber(String licenseNumber);
+
+    /**
+     * 查询警用车辆列表
+     *
+     * @param carCode 车辆编码
+     * @return 警用车辆集合
+     */
+    public PoliceCars getPoliceCarByCarCode(String carCode);
+
+    /**
+     * 查询警用车辆列表
+     *
+     * @param equipmentNumber 车载设备编码
+     * @return 警用车辆集合
+     */
+    public PoliceCars getPoliceCarByEquipmentNumber(String equipmentNumber);
 }

@@ -12,7 +12,7 @@ import com.jingyu.common.annotation.Excel;
 import com.jingyu.common.core.domain.BaseEntity;
 
 /**
- * 警用装备配发领取记录对象 police_equipment
+ * 警用装备对象 police_equipment
  * 
  * @author jiatongbo
  * @date 2023-06-27
@@ -80,4 +80,7 @@ public class PoliceEquipment extends BaseEntity
     /** 备注 */
     @Excel(name = "备注")
     private String remark;
+
+    /** 部门名称 */
+    private String deptName;
 }

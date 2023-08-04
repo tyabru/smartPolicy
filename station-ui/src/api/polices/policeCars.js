@@ -17,6 +17,30 @@ export function getCars(id) {
   })
 }
 
+// 查询警用车辆详细
+export function getPoliceCarByLicenseNumber(licenseNumber) {
+  return request({
+    url: '/polices/cars/getPoliceCarByLicenseNumber/' + licenseNumber,
+    method: 'get'
+  })
+}
+
+// 查询警用车辆详细
+export function getPoliceCarByCarCode(carCode) {
+  return request({
+    url: '/polices/cars/getPoliceCarByCarCode/' + carCode,
+    method: 'get'
+  })
+}
+
+// 查询警用车辆详细
+export function getPoliceCarByEquipmentNumber(equipmentNumber) {
+  return request({
+    url: '/polices/cars/getPoliceCarByEquipmentNumber/' + equipmentNumber,
+    method: 'get'
+  })
+}
+
 // 新增警用车辆
 export function addCars(data) {
   return request({

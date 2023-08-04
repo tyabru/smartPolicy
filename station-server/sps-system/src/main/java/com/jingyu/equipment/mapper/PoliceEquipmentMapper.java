@@ -4,7 +4,7 @@ import java.util.List;
 import com.jingyu.equipment.domain.PoliceEquipment;
 
 /**
- * 警用装备配发领取记录Mapper接口
+ * 警用装备Mapper接口
  * 
  * @author jiatongbo
  * @date 2023-06-27
@@ -58,4 +58,12 @@ public interface PoliceEquipmentMapper
      * @return 结果
      */
     public int deletePoliceEquipmentByIds(Long[] ids);
+
+    /**
+     * 查询警用装备
+     *
+     * @param equipmentNumber 装备编码
+     * @return 警用装备配
+     */
+    public PoliceEquipment getPoliceEquipmentByEquipmentNumber(String equipmentNumber);
 }

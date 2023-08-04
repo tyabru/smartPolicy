@@ -1,5 +1,6 @@
 package com.jingyu.web.controller.common;
 
+import com.jingyu.common.annotation.Anonymous;
 import com.jingyu.common.core.domain.AjaxResult;
 import com.jingyu.common.utils.FTPUtils;
 import com.jingyu.common.utils.MD5Util;
@@ -108,6 +109,7 @@ public class ImageHandleController {
 	}
 
 	// 本地开发与部署在内网获取图片
+	@Anonymous
 	@RequestMapping(value="/getImg")
 	public void getImgNw(@RequestParam(value = "fileRelativePath", required = true) String fileRelativePath,
 						 HttpServletResponse response) throws IOException {

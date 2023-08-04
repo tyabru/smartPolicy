@@ -27,10 +27,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="operateType"    column="operate_type"    />
         <result property="operateName"    column="operate_name"    />
         <result property="remark"    column="remark"    />
+        <result property="isVehicle"    column="is_vehicle"    />
+        <result property="equipmentNumber"    column="equipment_number"    />
     </resultMap>
 
     <sql id="selectPoliceInformationVo">
-        select id, user_id, police_number, police_name, police_age, nation, birthday, id_card, identity_type,
+        select id, user_id, police_number, police_name, police_age, nation, birthday, id_card, identity_type, is_vehicle, equipment_number,
             education, graduation_school, speciality, police_photo, address_code, entry_time, create_time, update_time, delete_time,
             operate_time, operate_type, operate_name, remark
         from police_information
@@ -52,6 +54,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="speciality != null  and speciality != ''"> and speciality = #{speciality}</if>
             <if test="policePhoto != null  and policePhoto != ''"> and police_photo = #{policePhoto}</if>
             <if test="addressCode != null  and addressCode != ''"> and instr(address_code,#{addressCode})</if>
+            <if test="isVehicle != null "> and is_vehicle = #{isVehicle}</if>
+            <if test="equipmentNumber != null  and equipmentNumber != ''"> and instr(equipment_number,#{equipmentNumber})</if>
             <if test="entryTime != null "> and entry_time = #{entryTime}</if>
             <if test="deleteTime != null "> and delete_time = #{deleteTime}</if>
             <if test="operateTime != null "> and operate_time = #{operateTime}</if>
@@ -80,6 +84,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectPoliceInformationVo"/>
         where user_id = #{userId}
     </select>
+
+    <select id="getPoliceInformationByEquipmentNumber" parameterType="String" resultMap="PoliceInformationResult">
+        <include refid="selectPoliceInformationVo"/>
+        where equipment_number = #{equipmentNumber} AND operate_type != 2
+    </select>
         
     <insert id="insertPoliceInformation" parameterType="PoliceInformation" useGeneratedKeys="true" keyProperty="id">
         insert into police_information
@@ -97,6 +106,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="speciality != null">speciality,</if>
             <if test="policePhoto != null and policePhoto != ''">police_photo,</if>
             <if test="addressCode != null and addressCode != ''">address_code,</if>
+            <if test="isVehicle != null">is_vehicle,</if>
+            <if test="equipmentNumber != null">equipment_number,</if>
             <if test="entryTime != null">entry_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="deleteTime != null">delete_time,</if>
@@ -120,6 +131,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="speciality != null">#{speciality},</if>
             <if test="policePhoto != null and policePhoto != ''">#{policePhoto},</if>
             <if test="addressCode != null and addressCode != ''">#{addressCode},</if>
+            <if test="isVehicle != null">#{isVehicle},</if>
+            <if test="equipmentNumber != null">#{equipmentNumber},</if>
             <if test="entryTime != null">#{entryTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="deleteTime != null">#{deleteTime},</if>
@@ -148,6 +161,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="deptId != null">dept_id = #{deptId},</if>
             <if test="policePhoto != null and policePhoto != ''">police_photo = #{policePhoto},</if>
             <if test="addressCode != null and addressCode != ''">address_code = #{addressCode},</if>
+            <if test="isVehicle != null">is_vehicle = #{isVehicle},</if>
+            <if test="equipmentNumber != null">equipment_number = #{equipmentNumber},</if>
             <if test="entryTime != null">entry_time = #{entryTime},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="deleteTime != null">delete_time = #{deleteTime},</if>
@@ -173,6 +188,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <foreach item="id" collection="array" open="(" separator=","
                  close=")">
             #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deletePoliceInformationByUserIds" parameterType="String">
+        update police_information set operate_type = 2, delete_time = NOW(), operate_time = NOW() where user_id in
+        <foreach item="userId" collection="array" open="(" separator=","
+                 close=")">
+            #{userId}
         </foreach>
     </delete>
 </mapper>

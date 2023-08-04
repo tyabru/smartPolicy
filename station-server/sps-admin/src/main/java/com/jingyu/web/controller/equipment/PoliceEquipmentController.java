@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
- * 警用装备配发领取记录Controller
+ * 警用装备Controller
  * 
  * @author jiatongbo
  * @date 2023-06-27
@@ -30,7 +30,7 @@ public class PoliceEquipmentController extends BaseController
     private IPoliceEquipmentService policeEquipmentService;
 
     /**
-     * 查询警用装备配发领取记录列表
+     * 查询警用装备列表
      */
     @PreAuthorize("@ss.hasPermi('equipment:equipment:list')")
     @GetMapping("/list")
@@ -42,20 +42,20 @@ public class PoliceEquipmentController extends BaseController
     }
 
     /**
-     * 导出警用装备配发领取记录列表
+     * 导出警用装备列表
      */
     @PreAuthorize("@ss.hasPermi('equipment:equipment:export')")
-    @Log(title = "警用装备配发领取记录", businessType = BusinessType.EXPORT)
+    @Log(title = "警用装备", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, PoliceEquipment policeEquipment)
     {
         List<PoliceEquipment> list = policeEquipmentService.selectPoliceEquipmentList(policeEquipment);
         ExcelUtil<PoliceEquipment> util = new ExcelUtil<PoliceEquipment>(PoliceEquipment.class);
-        util.exportExcel(response, list, "警用装备配发领取记录数据");
+        util.exportExcel(response, list, "警用装备数据");
     }
 
     /**
-     * 获取警用装备配发领取记录详细信息
+     * 获取警用装备详细信息
      */
     @PreAuthorize("@ss.hasPermi('equipment:equipment:query')")
     @GetMapping(value = "/{id}")
@@ -65,10 +65,21 @@ public class PoliceEquipmentController extends BaseController
     }
 
     /**
-     * 新增警用装备配发领取记录
+     * 获取警用装备详细信息
+     */
+    @GetMapping("/getPoliceEquipmentByEquipmentNumber/{equipmentNumber}")
+    public AjaxResult getPoliceEquipmentByEquipmentNumber(@PathVariable("equipmentNumber") String equipmentNumber)
+    {
+        PoliceEquipment policeEquipment = policeEquipmentService.getPoliceEquipmentByEquipmentNumber(equipmentNumber);
+        AjaxResult ajaxResult = new AjaxResult();
+        return ajaxResult.put("data",policeEquipment);
+    }
+
+    /**
+     * 新增警用装备
      */
     @PreAuthorize("@ss.hasPermi('equipment:equipment:add')")
-    @Log(title = "警用装备配发领取记录", businessType = BusinessType.INSERT)
+    @Log(title = "警用装备", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody PoliceEquipment policeEquipment)
     {
@@ -76,10 +87,10 @@ public class PoliceEquipmentController extends BaseController
     }
 
     /**
-     * 修改警用装备配发领取记录
+     * 修改警用装备
      */
     @PreAuthorize("@ss.hasPermi('equipment:equipment:edit')")
-    @Log(title = "警用装备配发领取记录", businessType = BusinessType.UPDATE)
+    @Log(title = "警用装备", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody PoliceEquipment policeEquipment)
     {
@@ -87,10 +98,10 @@ public class PoliceEquipmentController extends BaseController
     }
 
     /**
-     * 删除警用装备配发领取记录
+     * 删除警用装备
      */
     @PreAuthorize("@ss.hasPermi('equipment:equipment:remove')")
-    @Log(title = "警用装备配发领取记录", businessType = BusinessType.DELETE)
+    @Log(title = "警用装备", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {

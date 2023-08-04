@@ -5,6 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jingyu.common.utils.poi.ExcelUtil;
 import com.jingyu.equipment.domain.PoliceEnforcementRecorder;
+import com.jingyu.equipment.domain.PoliceEquipment;
 import com.jingyu.equipment.service.IPoliceEnforcementRecorderService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,6 +69,17 @@ public class PoliceEnforcementRecorderController extends BaseController
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
         return success(policeEnforcementRecorderService.selectPoliceEnforcementRecorderById(id));
+    }
+
+    /**
+     * 获取警用装备详细信息
+     */
+    @GetMapping("/getPoliceEnforcementRecorderByDeviceCode/{deviceCode}")
+    public AjaxResult getPoliceEnforcementRecorderByDeviceCode(@PathVariable("deviceCode") String deviceCode)
+    {
+        PoliceEnforcementRecorder policeEnforcementRecorder = policeEnforcementRecorderService.getPoliceEnforcementRecorderByDeviceCode(deviceCode);
+        AjaxResult ajaxResult = new AjaxResult();
+        return ajaxResult.put("data",policeEnforcementRecorder);
     }
 
     /**

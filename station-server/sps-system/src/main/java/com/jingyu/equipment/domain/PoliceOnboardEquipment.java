@@ -44,30 +44,6 @@ public class PoliceOnboardEquipment extends BaseEntity
     @Excel(name = "生产厂家")
     private String manufacturer;
 
-    /** 焦距 */
-    @Excel(name = "焦距")
-    private String focalLength;
-
-    /** 分辨率 */
-    @Excel(name = "分辨率")
-    private String resolutionRatio;
-
-    /** 光学变倍 */
-    @Excel(name = "光学变倍")
-    private String opticalZoom;
-
-    /** 视频编码 */
-    @Excel(name = "视频编码")
-    private String videoCoding;
-
-    /** 预位置 */
-    @Excel(name = "预位置")
-    private String prePosition;
-
-    /** 网络通讯0协议1（3G/4G）2wifi3蓝牙 */
-    @Excel(name = "网络通讯0协议1", readConverterExp = "3=G/4G")
-    private Long networking;
-
     /** 部门ID */
     @Excel(name = "部门ID")
     private Long deptId;
@@ -89,4 +65,7 @@ public class PoliceOnboardEquipment extends BaseEntity
     /** 操作人姓名 */
     @Excel(name = "操作人姓名")
     private String operateName;
+
+    /** 部门名称 */
+    private String deptName;
 }

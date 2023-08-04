@@ -124,4 +124,12 @@ public class PoliceInformation extends BaseEntity
     @Excel(name = "用户ID")
     private Long userId;
 
+    /** 是否配备执法记录仪 */
+    @Excel(name = "是否配备执法记录仪")
+    private String isVehicle;
+
+    /** 设备编码 */
+    @Excel(name = "设备编码")
+    private String equipmentNumber;
+
 }

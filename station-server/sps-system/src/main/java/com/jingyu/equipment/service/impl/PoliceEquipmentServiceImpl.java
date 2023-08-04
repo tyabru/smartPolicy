@@ -8,8 +8,10 @@ import com.jingyu.equipment.mapper.PoliceEquipmentMapper;
 import com.jingyu.equipment.domain.PoliceEquipment;
 import com.jingyu.equipment.service.IPoliceEquipmentService;
 
+import javax.annotation.Resource;
+
 /**
- * 警用装备配发领取记录Service业务层处理
+ * 警用装备Service业务层处理
  * 
  * @author jiatongbo
  * @date 2023-06-27
@@ -17,7 +19,7 @@ import com.jingyu.equipment.service.IPoliceEquipmentService;
 @Service
 public class PoliceEquipmentServiceImpl implements IPoliceEquipmentService 
 {
-    @Autowired
+    @Resource
     private PoliceEquipmentMapper policeEquipmentMapper;
 
     /**
@@ -90,5 +92,16 @@ public class PoliceEquipmentServiceImpl implements IPoliceEquipmentService
     public int deletePoliceEquipmentById(Long id)
     {
         return policeEquipmentMapper.deletePoliceEquipmentById(id);
+    }
+
+    /**
+     * 查询警用装备
+     *
+     * @param equipmentNumber 装备编码
+     * @return 警用装备配
+     */
+    @Override
+    public PoliceEquipment getPoliceEquipmentByEquipmentNumber(String equipmentNumber) {
+        return policeEquipmentMapper.getPoliceEquipmentByEquipmentNumber(equipmentNumber);
     }
 }

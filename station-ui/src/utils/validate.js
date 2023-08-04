@@ -109,12 +109,21 @@ export function validPpliceIdCard (rule, value, callback)  {
   }
 }
 
-export function validPhoneNumber(phone) {
-  if(!phone || phone.length < 1) {
-    return false
+export function  validPhone (rule, value, callback) {
+  if (value.includes("**")) {
+   callback()
   }
-
-}
+  if (!value) {
+    callback();
+    return;
+  }
+  const regex = /^((13[0-9])|(14[5,7,9])|(15[0-3,5-9])|(166)|(17[0-9])|(18[0-9])|(19[1,8,9]))\d{8}$/
+  if (!regex.test(value)) {
+    callback(new Error('请输入正确的手机号'));
+  } else {
+      callback();
+  }
+};
 
 export function validIdCodeByType(code, type = 'CN_CARD') {
   if(type === 'CN_CARD') {
@@ -133,6 +142,11 @@ export function validCnIdentity(identityCode) {
   }
   const pattern = /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/
   return pattern.test(identityCode);
+}
+
+export function validPassword(password) {
+  const regex = "(?![0-9A-Z]+$)(?![0-9a-z]+$)(?![a-zA-Z]+$)[0-9A-Za-z@#!%&._+=~?-]{6,18}$";
+  return password.match(regex);
 }
 
 export function validPassport(passport) {

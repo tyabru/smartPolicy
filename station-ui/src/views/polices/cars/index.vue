@@ -1,32 +1,34 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="车牌号码" prop="licenseNumber">
-        <el-input v-model="queryParams.licenseNumber" placeholder="请输入车牌号码" clearable/>
-      </el-form-item>
-      <el-form-item label="车辆编码" prop="carCode">
-        <el-input v-model="queryParams.carCode" placeholder="请输入公安内部车辆编码" clearable/>
-      </el-form-item>
-      <el-form-item label="车辆类型" prop="carType">
-        <el-select  v-model="queryParams.carType" placeholder="请选择车辆类型" style="width: 100%">
-          <el-option v-for="item in dict.type.sys_car_type" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="车牌类型" prop="licenseType">
-        <el-select  v-model="queryParams.licenseType" placeholder="请选择车牌类型" style="width: 100%">
-          <el-option v-for="item in dict.type.sys_license_type" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="是否配备车载" prop="isVehicle">
-        <el-select  v-model="queryParams.isVehicle" placeholder="请选择是否配备车载布控球" style="width: 100%">
-          <el-option v-for="item in dict.type.sys_yes_no" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
+    <search-form-bar>
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="车牌号码" prop="licenseNumber">
+          <el-input v-model="queryParams.licenseNumber" placeholder="请输入车牌号码" clearable/>
+        </el-form-item>
+        <el-form-item label="车辆编码" prop="carCode">
+          <el-input v-model="queryParams.carCode" placeholder="请输入公安内部车辆编码" clearable/>
+        </el-form-item>
+        <el-form-item label="车辆类型" prop="carType">
+          <el-select  v-model="queryParams.carType" placeholder="请选择车辆类型" style="width: 100%">
+            <el-option v-for="item in dict.type.sys_car_type" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="车牌类型" prop="licenseType">
+          <el-select  v-model="queryParams.licenseType" placeholder="请选择车牌类型" style="width: 100%">
+            <el-option v-for="item in dict.type.sys_license_type" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="是否配备车载" prop="isVehicle">
+          <el-select  v-model="queryParams.isVehicle" placeholder="请选择是否配备车载布控球" style="width: 100%">
+            <el-option v-for="item in dict.type.sys_yes_no" :key="item.value" :label="item.label" :value="item.value"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #btn>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+      </template>
+    </search-form-bar>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -46,11 +48,12 @@
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport" 
         v-hasPermi="['polices:cars:export']">导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="carsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="部门名称" align="center" prop="deptName" />
       <el-table-column label="车牌号码" align="center" prop="licenseNumber" />
       <el-table-column label="车辆编码" align="center" prop="carCode" />
       <el-table-column label="车牌类型" align="center" prop="licenseType">
@@ -63,9 +66,9 @@
           <dict-tag :options="dict.type.sys_car_type" :value="scope.row.carType"/>
         </template>
       </el-table-column>
-      <el-table-column label="车长(单位cm)" align="center" prop="carLong" />
+      <!-- <el-table-column label="车长(单位cm)" align="center" prop="carLong" />
       <el-table-column label="车宽(单位cm)" align="center" prop="carHeight" />
-      <el-table-column label="车高(单位cm)" align="center" prop="carWide" />
+      <el-table-column label="车高(单位cm)" align="center" prop="carWide" /> -->
       <el-table-column label="是否配备车载布控球" align="center" prop="isVehicle">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.isVehicle"/>
@@ -74,7 +77,7 @@
       <el-table-column label="车载设备编码" align="center" prop="equipmentNumber" />
       <el-table-column label="车辆照片" align="center" prop="vehiclePhotos" :render-header="renderZPHeader">
         <template slot-scope="scope">
-          <el-image style="width: 108px; height: 100px" :src="getImgUrl(scope.row.vehiclePhotos)" 
+          <el-image style="width: 65px; height: 85px" :src="getImgUrl(scope.row.vehiclePhotos)" 
             :preview-src-list="[getImgUrl(scope.row.vehiclePhotos)]" :onerror="errorUserPhoto"  fit="cover" ></el-image>
           </template>
       </el-table-column>
@@ -144,8 +147,9 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="车载编码" prop="equipmentNumber">
-              <el-select  v-model="form.equipmentNumber" placeholder="请输入车载设备编码" style="width: 100%" :disabled="form.isVehicle != 'Y'">
+            <el-form-item label="车载编码" prop="equipmentNumber" 
+              :rules="[{ required: form.isVehicle == 'Y', message: '当该车配车载时,车载编码不能为空', trigger: 'blur' }]">
+              <el-select  v-model="form.equipmentNumber" placeholder="请选择车载设备" style="width: 100%" :disabled="form.isVehicle != 'Y'">
                 <el-option v-for="item in vehicleEquipmentList" :key="item.deviceCode" :label="item.deviceCode" :value="item.deviceCode">
                 {{item.deviceCode+"----------"+item.deviceName}}
                 </el-option>
@@ -194,7 +198,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-show="isDisplay" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -202,11 +206,11 @@
 </template>
 
 <script>
-import { listCars, getCars, delCars, addCars, updateCars } from "@/api/polices/policeCars";
+import { listCars, getCars, delCars, addCars, updateCars, getPoliceCarByLicenseNumber ,getPoliceCarByCarCode, getPoliceCarByEquipmentNumber } from "@/api/polices/policeCars";
 import { listPoliceOnboardEquipment } from "@/api/equipment/PoliceOnboardEquipment";
-import { addImgData } from "@/api/polices/policeInformation";
+import { addImgData, getImage } from "@/api/polices/policeInformation";
 import * as imageConversion from 'image-conversion';
-import {getImgUrl} from "../../../utils";
+import { getImgUrl } from "../../../utils";
 import policeCarPhoto from "@/views/polices/cars/policeCar.png";
 import DictTag from '@/components/DictTag';
 import { getUserProfile, deptTreeSelect } from "@/api/system/user";
@@ -218,7 +222,40 @@ export default {
   dicts: ['sys_yes_no', 'sys_car_type', 'sys_license_type' ],
   components: { DictTag ,Treeselect},
   data() {
+    //检验车牌号
+    const validLicenseNumber = (rules, value, callback) => {
+      if (value == null || value == "") {
+        callback("车牌号码不能为空！")
+      } else {
+        getPoliceCarByLicenseNumber(value).then(response => {
+          if (this.form.id != null && response.data != null && this.form.id != response.data.id) {
+            callback("车牌号码已存在！")
+          } else if (this.form.id == null && response.data != null){
+            callback("车牌号码已存在！")
+          } else {
+            callback()
+          }
+        })
+      }
+    }
+    //检验车牌号
+    const validCarCode = (rules, value, callback) => {
+      if (value == null || value == "") {
+        callback("车辆编码不能为空！")
+      } else {
+        getPoliceCarByCarCode(value).then(response => {
+          if (this.form.id != null && response.data != null && this.form.id != response.data.id) {
+            callback("车辆编码已存在！")
+          } else if (this.form.id == null && response.data != null){
+            callback("车辆编码已存在！")
+          } else {
+            callback()
+          }
+        })
+      }
+    }
     return {
+      isDisplay: false,
       disabled: true,
       user: null,
       errorUserPhoto: 'this.src="' + policeCarPhoto + '"',
@@ -247,6 +284,8 @@ export default {
       deptOptions: [],
       //车载设备集合
       vehicleEquipmentList: [],
+      //车载设备集合
+      vehicleEquipmentListUpdate: [],
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -279,10 +318,12 @@ export default {
       // 表单校验
       rules: {
         licenseNumber: [
-          { required: true, message: "车牌号码不能为空", trigger: "blur" }
+          { required: true, message: "车牌号码不能为空", trigger: "blur" },
+          { validator : validLicenseNumber, trigger: "blur" }
         ],
         carCode: [
-          { required: true, message: "公安内部车辆编码不能为空", trigger: "blur" }
+          { required: true, message: "公安内部车辆编码不能为空", trigger: "blur" },
+          { validator : validCarCode, trigger: "blur" }
         ],
         deptId: [
           { required: true, message: "车辆归属单位编码不能为空", trigger: "blur" }
@@ -305,7 +346,6 @@ export default {
   created() {
     this.getUser();
     this.getDeptTree();
-    this.getVehicleEquipment();
   },
   computed: {
     uploadDisabled: function () {
@@ -330,6 +370,7 @@ export default {
         this.total = response.total;
         this.loading = false;
       });
+      this.getVehicleEquipment();
     },
     //车载设备
     getVehicleEquipment() {
@@ -337,8 +378,28 @@ export default {
         deptId: null
       }
       listPoliceOnboardEquipment(dateForm).then(response => {
+        //全部车载
         this.vehicleEquipmentList = response.rows;
+        this.vehicleEquipmentListUpdate = response.rows;
+        this.handleData(this.vehicleEquipmentListUpdate);
       });
+    },
+    handleData(vehicleEquipmentList) {
+      let equipmentListUpdate = [];
+      let flage = true;
+      for (let i = 0; i < vehicleEquipmentList.length; i++) {
+        for (let j = 0; j < this.carsList.length; j++) {
+          flage = true;
+          if (vehicleEquipmentList[i].deviceCode == this.carsList[j].equipmentNumber) {
+            flage = false;
+            break;
+          }
+        }
+        if (flage) {
+          equipmentListUpdate.push(vehicleEquipmentList[i]);
+        }
+      }
+      this.vehicleEquipmentList = equipmentListUpdate;
     },
     /** 查询部门下拉树结构 */
     getDeptTree() {
@@ -502,7 +563,9 @@ export default {
     handleAdd() {
       this.reset();
       this.disabled = false;
+      this.handleData(this.vehicleEquipmentListUpdate);
       this.open = true;
+      this.isDisplay = true;
       this.title = "添加警用车辆";
     },
     /** 查看按钮操作 */
@@ -510,6 +573,7 @@ export default {
       this.reset();
       this.imagelist = [];
       const id = row.id || this.ids
+      this.vehicleEquipmentList = this.vehicleEquipmentListUpdate;
       getCars(id).then(response => {
         this.form = response.data;
         var imgUrl = getImgUrl(this.form.vehiclePhotos);
@@ -518,6 +582,7 @@ export default {
         this.imagelist.push(obj);
         this.disabled = true;
         this.open = true;
+        this.isDisplay = false;
         this.title = "查看警用车辆";
       });
     },
@@ -526,6 +591,7 @@ export default {
       this.reset();
       this.imagelist = [];
       const id = row.id || this.ids
+      this.vehicleEquipmentList = this.vehicleEquipmentListUpdate;
       getCars(id).then(response => {
         this.form = response.data;
         var imgUrl = getImgUrl(this.form.vehiclePhotos);
@@ -534,6 +600,7 @@ export default {
         this.imagelist.push(obj);
         this.disabled = false;
         this.open = true;
+        this.isDisplay = true;
         this.title = "修改警用车辆";
       });
     },
@@ -550,6 +617,7 @@ export default {
               self.form.vehiclePhotos = res.imgUrl;
             });
           }
+          console.log(this.form)
           if (this.form.id != null) {
             updateCars(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");

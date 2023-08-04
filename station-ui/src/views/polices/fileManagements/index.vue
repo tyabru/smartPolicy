@@ -1,17 +1,19 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="文件名称" prop="fileName">
-        <el-input v-model="queryParams.fileName" placeholder="请输入文件名称" clearable/>
-      </el-form-item>
-      <el-form-item label="存储路径" prop="filePath">
-        <el-input v-model="queryParams.filePath" placeholder="请输入文件存储路径" clearable/>
-      </el-form-item>
-      <el-form-item>
+    <search-form-bar>
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="文件名称" prop="fileName">
+          <el-input v-model="queryParams.fileName" placeholder="请输入文件名称" clearable/>
+        </el-form-item>
+        <el-form-item label="存储路径" prop="filePath">
+          <el-input v-model="queryParams.filePath" placeholder="请输入文件存储路径" clearable/>
+        </el-form-item>
+      </el-form>
+      <template #btn>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+      </template>
+    </search-form-bar>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -30,18 +32,18 @@
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['polices:fileManagements:export']">导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="fileManagementsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="部门名称" align="center" prop="deptName" />
       <el-table-column label="文件名称" align="center" prop="fileName" />
       <el-table-column label="文件存储路径" align="center" prop="filePath" />
       <el-table-column label="文件描述" align="center" prop="fileDescription" />
-      <el-table-column label="备注" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleFileDownload(scope.row)">下载</el-button>
+          <el-button size="mini" type="text" icon="el-icon-download" @click="handleFileDownload(scope.row)">下载</el-button>
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleSelect(scope.row)" 
             v-hasPermi="['polices:fileManagements:query']">查看</el-button>
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
@@ -84,16 +86,9 @@
           <el-col :span="12">
             <el-form-item label="选择文件" prop="remark">
               <el-upload  class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple
-                :accept="accept"
-                :http-request="uploadFile"
-                :on-success="handleSuccess"
-                :on-error="handleError"
-                :on-progress="handleProgress"
-                :on-exceed="handleExceed"
-                :before-upload="beforeUpload"
-                :limit="1"
-                :on-preview="handlePreview"
-                :show-file-list="false">
+                :accept="accept" :http-request="uploadFile" :on-success="handleSuccess" :on-error="handleError" :on-progress="handleProgress" 
+                :on-change="handleChange" :auto-upload="true" :on-exceed="handleExceed" :before-upload="beforeUpload" 
+                :limit="1" :on-preview="handlePreview" :show-file-list="true">
                 <i class="el-icon-upload"></i>
                 <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
               </el-upload>
@@ -102,7 +97,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-show="isDisplay" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -110,7 +105,7 @@
 </template>
 
 <script>
-import { listFileManagements, getFileManagements, delFileManagements, addFileManagements, updateFileManagements, uploadFile, fileDownload } from "@/api/polices/fileManagements";
+import { listFileManagements, getFileManagements, delFileManagements, addFileManagements, updateFileManagements, uploadFile, fileDownload, downloadFile } from "@/api/polices/fileManagements";
 import { getUserProfile, deptTreeSelect } from "@/api/system/user";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -136,6 +131,8 @@ export default {
   },
   data() {
     return {
+      fileList: [],
+      isDisplay: false,
       disabled: true,
       user: null,
       // 遮罩层
@@ -252,6 +249,9 @@ export default {
       this.multiple = !selection.length
     },
 
+    handleChange(file, fileList) {
+      this.fileList = fileList.slice(-3);
+    },
 
     handleExceed(files, fileList) {
       this.$message.warning(`当前限制选择${this.limit}个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
@@ -306,7 +306,7 @@ export default {
      * 文件上传成功时的钩子
      * @param {*} response
      */
-    handleSuccess(response, file) {
+    handleSuccess(response, file,fileList) {
       this.$emit('success', response, file)
     },
     /**
@@ -378,6 +378,7 @@ export default {
       this.reset();
       this.disabled = false;
       this.open = true;
+      this.isDisplay = true;
       this.title = "添加日常文件管理";
     },
     /** 查看按钮操作 */
@@ -388,6 +389,7 @@ export default {
         this.form = response.data;
         this.disabled = true;
         this.open = true;
+        this.isDisplay = false;
         this.title = "查看日常文件管理";
       });
     },
@@ -399,18 +401,26 @@ export default {
         this.form = response.data;
         this.disabled = false;
         this.open = true;
+        this.isDisplay = true;
         this.title = "修改日常文件管理";
       });
     },
     //文件下载
     handleFileDownload(row) {
-      fileDownload(row.id).then(response => {
-        if (response.code == 200) {
-          this.$modal.msgSuccess(response.msg);
-          this.getList();
+      downloadFile(row.id).then(res => {
+        var debug = res;
+        if (debug) {
+          var elink = document.createElement('a');
+          elink.download = row.fileName;
+          //elink.download = "1b69ef520557348fda6ff3b8682adaea1669021837595.jpg";
+          elink.style.display = 'none';
+          var blob = new Blob([debug], { type: 'application/octet-stream' });
+          elink.href = URL.createObjectURL(blob);
+          document.body.appendChild(elink);
+          elink.click();
+          document.body.removeChild(elink);
         } else {
-          this.$message.error(response.msg)
-          this.getList();
+            this.$message.error('下载异常请联系管理员');
         }
       })
     },

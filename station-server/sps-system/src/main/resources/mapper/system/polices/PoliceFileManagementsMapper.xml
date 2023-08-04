@@ -11,6 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="folderName"    column="folder_name"    />
         <result property="fileDescription"    column="file_description"    />
         <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="deleteTime"    column="delete_time"    />
@@ -21,9 +22,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPoliceFileManagementsVo">
-        select id, file_name, file_path, folder_name, file_description, create_time, update_time, delete_time, operate_time, dept_id,
-          operate_name, operate_type, remark
-        from police_file_managements
+        select p.id, p.file_name, p.file_path, p.folder_name, p.file_description, p.create_time, p.update_time, p.delete_time, p.operate_time, p.dept_id,
+          p.operate_name, p.operate_type, p.remark, sys_dept.dept_name
+        from police_file_managements p
+        inner join sys_dept on p.dept_id = sys_dept.dept_id
     </sql>
 
     <select id="selectPoliceFileManagementsList" parameterType="PoliceFileManagements" resultMap="PoliceFileManagementsResult">

@@ -1,21 +1,23 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="组名" prop="groupName">
-        <el-input v-model="queryParams.groupName" placeholder="请输入组名" clearable/>
-      </el-form-item>
-      <el-form-item label="组员" prop="teamMembers">
-        <el-select  v-model="queryParams.teamMembers" placeholder="请选择组员" style="width: 100%" clearable>
-          <el-option v-for="item in policeInformationUpdate" :key="item.policeNumber" :label="item.policeNumber" :value="item.policeNumber">
-          {{item.policeNumber+"----------"+item.policeName}}
-          </el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
+    <search-form-bar>
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="组名" prop="groupName">
+          <el-input v-model="queryParams.groupName" placeholder="请输入组名" clearable/>
+        </el-form-item>
+        <el-form-item label="组员" prop="teamMembers">
+          <el-select  v-model="queryParams.teamMembers" placeholder="请选择组员" style="width: 100%" clearable>
+            <el-option v-for="item in policeInformationUpdate" :key="item.policeNumber" :label="item.policeNumber" :value="item.policeNumber">
+            {{item.policeNumber+"----------"+item.policeName}}
+            </el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #btn>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+      </template>
+    </search-form-bar>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -34,7 +36,7 @@
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['polices:polices:export']">导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="policesDutyGroupList" @selection-change="handleSelectionChange">
@@ -105,7 +107,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-show="isDisplay" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -124,6 +126,7 @@ export default {
   components: { DictTag },
   data() {
     return {
+      isDisplay: false,
       disabled: true,
       user: null,
       // 遮罩层
@@ -286,6 +289,7 @@ export default {
       this.disabled = false;
       this.dataHandle(this.policeInformationListUpdate)
       this.open = true;
+      this.isDisplay = true;
       this.title = "添加警员分组详情";
     },
     /** 查看按钮操作 */
@@ -306,6 +310,7 @@ export default {
         this.form.teamMembers = policeNumberList;
         this.disabled = true;
         this.open = true;
+        this.isDisplay = false;
         this.title = "查看警员分组详情";
       });
     },
@@ -327,6 +332,7 @@ export default {
         this.form.teamMembers = policeNumberList;
         this.disabled = false;
         this.open = true;
+        this.isDisplay = true;
         this.title = "修改警员分组详情";
       });
     },

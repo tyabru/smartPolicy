@@ -94,4 +94,15 @@ public class PoliceOnboardEquipmentServiceImpl implements IPoliceOnboardEquipmen
     {
         return policeOnboardEquipmentMapper.deletePoliceOnboardEquipmentById(id);
     }
+
+    /**
+     * 查询车载设备列表
+     *
+     * @param deviceCode 车备编码
+     * @return 车载设备集合
+     */
+    @Override
+    public PoliceOnboardEquipment getPoliceOnboardEquipmentByDeviceCode(String deviceCode) {
+        return policeOnboardEquipmentMapper.getPoliceOnboardEquipmentByDeviceCode(deviceCode);
+    }
 }

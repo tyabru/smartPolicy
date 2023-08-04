@@ -48,38 +48,6 @@ public class PoliceEnforcementRecorder extends BaseEntity
     @Excel(name = "部门ID")
     private Long deptId;
 
-    /** 是否有夜视功能 */
-    @Excel(name = "是否有夜视功能")
-    private String nightVision;
-
-    /** 图像分辨率 */
-    @Excel(name = "图像分辨率")
-    private String imageResolution;
-
-    /** 录像分辨率 */
-    @Excel(name = "录像分辨率")
-    private String recordingResolution;
-
-    /** 内存（16GB/32G/64G/128G/256G） */
-    @Excel(name = "内存", readConverterExp = "16GB/32G/64G/128G/256G")
-    private Long memory;
-
-    /** 最大工作时长 */
-    @Excel(name = "最大工作时长")
-    private String maxWorkingHours;
-
-    /** 网络通讯0协议1（3G/4G）2wifi3蓝牙 */
-    @Excel(name = "网络通讯0协议1", readConverterExp = "3=G/4G")
-    private Long networking;
-
-    /** 电池容量 */
-    @Excel(name = "电池容量")
-    private String batteryCapacity;
-
-    /** 状态：0在线，1离线 */
-    @Excel(name = "状态：0在线，1离线")
-    private Long statue;
-
     /** 删除时间 */
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "删除时间", width = 30, dateFormat = "yyyy-MM-dd")
@@ -97,4 +65,7 @@ public class PoliceEnforcementRecorder extends BaseEntity
     /** 操作人姓名 */
     @Excel(name = "操作人姓名")
     private String operateName;
+
+    /** 部门名称 */
+    private String deptName;
 }

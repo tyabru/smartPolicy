@@ -85,7 +85,12 @@ public class SysUserServiceImpl implements ISysUserService
     @DataScope(deptAlias = "d", userAlias = "u")
     public List<SysUser> selectUserList(SysUser user)
     {
-        return userMapper.selectUserList(user);
+        user.setPhonenumber(AESUtil.encrypt(user.getPhonenumber()));
+        List<SysUser> sysUsers = userMapper.selectUserList(user);
+        for (SysUser sysUser : sysUsers) {
+            policeInformationToSysUser(sysUser);
+        }
+        return sysUsers;
     }
 
     /**
@@ -136,12 +141,16 @@ public class SysUserServiceImpl implements ISysUserService
     public SysUser selectUserById(Long userId)
     {
         SysUser sysUser = userMapper.selectUserById(userId);
-        PoliceInformation policeInformation = policeInformationMapper.selectPoliceInformationByuserId(userId);
+        return policeInformationToSysUser(sysUser);
+    }
+
+    public SysUser policeInformationToSysUser (SysUser sysUser) {
+        PoliceInformation policeInformation = policeInformationMapper.selectPoliceInformationByuserId(sysUser.getUserId());
         if (StringUtils.isNotNull(policeInformation)) {
             sysUser.setPoliceNumber(policeInformation.getPoliceNumber());
             sysUser.setPoliceAge(policeInformation.getPoliceAge());
             sysUser.setNation(policeInformation.getNation());
-            sysUser.setIdCard(AESUtil.decrypt(policeInformation.getIdCard()));
+            sysUser.setIdCard(policeInformation.getIdCard());
             sysUser.setIdentityType(policeInformation.getIdentityType());
             sysUser.setEducation(policeInformation.getEducation());
             sysUser.setGraduationSchool(policeInformation.getGraduationSchool());
@@ -150,6 +159,9 @@ public class SysUserServiceImpl implements ISysUserService
             sysUser.setSpeciality(policeInformation.getSpeciality());
             sysUser.setAddressCode(policeInformation.getAddressCode());
             sysUser.setEntryTime(policeInformation.getEntryTime());
+            sysUser.setPolicePhoto(policeInformation.getPolicePhoto());
+            sysUser.setIsVehicle(policeInformation.getIsVehicle());
+            sysUser.setEquipmentNumber(policeInformation.getEquipmentNumber());
         }
         return sysUser;
     }
@@ -216,7 +228,7 @@ public class SysUserServiceImpl implements ISysUserService
     public boolean checkPhoneUnique(SysUser user)
     {
         Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
-        SysUser info = userMapper.checkPhoneUnique(user.getPhonenumber());
+        SysUser info = userMapper.checkPhoneUnique(AESUtil.encrypt(user.getPhonenumber()));
         if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
@@ -286,6 +298,7 @@ public class SysUserServiceImpl implements ISysUserService
     @Transactional
     public int insertUser(SysUser user)
     {
+        user.setPhonenumber(AESUtil.encrypt(user.getPhonenumber()));
         // 新增用户信息
         int rows = userMapper.insertUser(user);
         // 新增用户岗位关联
@@ -301,9 +314,10 @@ public class SysUserServiceImpl implements ISysUserService
 
     //警员信息处理
     public PoliceInformation handlePoliceInformation(SysUser user) {
-        SysUser sysUser = userMapper.selectUserByUserName(user.getUserName());
         PoliceInformation policeInformation = new PoliceInformation();
-        policeInformation.setUserId(sysUser.getUserId());
+        if (user.getUserId().longValue() > 0) {
+            policeInformation.setUserId(user.getUserId());
+        }
         policeInformation.setPoliceNumber(user.getUserName());
         policeInformation.setPoliceName(user.getNickName());
         policeInformation.setPoliceAge(user.getPoliceAge());
@@ -316,6 +330,9 @@ public class SysUserServiceImpl implements ISysUserService
         policeInformation.setAddressCode(user.getAddressCode());
         policeInformation.setEntryTime(user.getEntryTime());
         policeInformation.setOperateName(getUsername());
+        policeInformation.setPolicePhoto(user.getPolicePhoto());
+        policeInformation.setIsVehicle(user.getIsVehicle());
+        policeInformation.setEquipmentNumber(user.getEquipmentNumber());
         return policeInformation;
     }
 
@@ -520,11 +537,14 @@ public class SysUserServiceImpl implements ISysUserService
         {
             checkUserAllowed(new SysUser(userId));
             checkUserDataScope(userId);
+
         }
         // 删除用户与角色关联
         userRoleMapper.deleteUserRole(userIds);
         // 删除用户与岗位关联
         userPostMapper.deleteUserPost(userIds);
+        // 删除用户与警员关联
+        policeInformationService.deletePoliceInformationByUserIds(userIds);
         return userMapper.deleteUserByIds(userIds);
     }
 

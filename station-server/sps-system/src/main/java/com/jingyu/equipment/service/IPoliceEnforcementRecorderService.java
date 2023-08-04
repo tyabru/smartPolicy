@@ -59,4 +59,12 @@ public interface IPoliceEnforcementRecorderService
      * @return 结果
      */
     public int deletePoliceEnforcementRecorderById(Long id);
+
+    /**
+     * 查询执法仪记录仪
+     *
+     * @param deviceCode 设备编码
+     * @return 执法仪记录仪
+     */
+    public PoliceEnforcementRecorder getPoliceEnforcementRecorderByDeviceCode(String deviceCode);
 }

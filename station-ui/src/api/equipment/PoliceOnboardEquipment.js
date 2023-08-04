@@ -17,6 +17,14 @@ export function getPoliceOnboardEquipment(id) {
   })
 }
 
+// 查询警用装备
+export function getPoliceOnboardEquipmentByDeviceCode(deviceCode) {
+  return request({
+    url: '/polices/PoliceOnboardEquipment/getPoliceOnboardEquipmentByDeviceCode/' + deviceCode,
+    method: 'get'
+  })
+}
+
 // 新增车载设备
 export function addPoliceOnboardEquipment(data) {
   return request({

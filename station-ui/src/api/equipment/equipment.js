@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询警用装备配发领取记录列表
+// 查询警用装备
 export function listEquipment(query) {
   return request({
     url: '/equipment/equipment/list',
@@ -9,7 +9,7 @@ export function listEquipment(query) {
   })
 }
 
-// 查询警用装备配发领取记录详细
+// 查询警用装备
 export function getEquipment(id) {
   return request({
     url: '/equipment/equipment/' + id,
@@ -17,7 +17,15 @@ export function getEquipment(id) {
   })
 }
 
-// 新增警用装备配发领取记录
+// 查询警用装备
+export function getPoliceEquipmentByEquipmentNumber(equipmentNumber) {
+  return request({
+    url: '/equipment/equipment/getPoliceEquipmentByEquipmentNumber/' + equipmentNumber,
+    method: 'get'
+  })
+}
+
+// 新增警用装备
 export function addEquipment(data) {
   return request({
     url: '/equipment/equipment',
@@ -26,7 +34,7 @@ export function addEquipment(data) {
   })
 }
 
-// 修改警用装备配发领取记录
+// 修改警用装备
 export function updateEquipment(data) {
   return request({
     url: '/equipment/equipment',
@@ -35,7 +43,7 @@ export function updateEquipment(data) {
   })
 }
 
-// 删除警用装备配发领取记录
+// 删除警用装备
 export function delEquipment(id) {
   return request({
     url: '/equipment/equipment/' + id,

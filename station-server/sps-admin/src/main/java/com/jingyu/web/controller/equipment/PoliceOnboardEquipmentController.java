@@ -3,6 +3,7 @@ package com.jingyu.web.controller.equipment;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 
+import com.jingyu.equipment.domain.PoliceEquipment;
 import com.jingyu.equipment.domain.PoliceOnboardEquipment;
 import com.jingyu.equipment.service.IPoliceOnboardEquipmentService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -68,6 +69,17 @@ public class PoliceOnboardEquipmentController extends BaseController
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
         return success(policeOnboardEquipmentService.selectPoliceOnboardEquipmentById(id));
+    }
+
+    /**
+     * 获取警用装备详细信息
+     */
+    @GetMapping("/getPoliceOnboardEquipmentByDeviceCode/{deviceCode}")
+    public AjaxResult getPoliceOnboardEquipmentByDeviceCode(@PathVariable("deviceCode") String deviceCode)
+    {
+        PoliceOnboardEquipment policeOnboardEquipment = policeOnboardEquipmentService.getPoliceOnboardEquipmentByDeviceCode(deviceCode);
+        AjaxResult ajaxResult = new AjaxResult();
+        return ajaxResult.put("data",policeOnboardEquipment);
     }
 
     /**

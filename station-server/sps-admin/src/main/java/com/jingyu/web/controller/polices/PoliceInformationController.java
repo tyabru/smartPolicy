@@ -65,6 +65,19 @@ public class PoliceInformationController extends BaseController
         return toAjax(policeInformationService.selectPoliceInformationById(id));
     }
 
+
+    /**
+     * 获取警员基本信息详细信息
+     */
+    @PreAuthorize("@ss.hasPermi('polices:information:query')")
+    @GetMapping(value = "/getPoliceInformationByIdCard/{idCard}")
+    public AjaxResult getPoliceInformationByIdCard(@PathVariable("idCard") String idCard)
+    {
+        PoliceInformation policeInformation = policeInformationService.selectPoliceInformationByIdCard(idCard);
+        AjaxResult ajaxResult = new AjaxResult();
+        return ajaxResult.put("data",policeInformation);
+    }
+
     /**
      * 新增警员基本信息
      */

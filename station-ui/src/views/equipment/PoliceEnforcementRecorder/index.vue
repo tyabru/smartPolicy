@@ -1,26 +1,25 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="设备名称" prop="deviceName">
-        <el-input v-model="queryParams.deviceName" placeholder="请输入设备名称" clearable/>
-      </el-form-item>
-      <el-form-item label="设备编码" prop="deviceCode">
-        <el-input v-model="queryParams.deviceCode" placeholder="请输入设备编码" clearable/>
-      </el-form-item>
-      <el-form-item label="制造商" prop="manufacturer">
-        <el-input v-model="queryParams.manufacturer" placeholder="请输入制造商" clearable/>
-      </el-form-item>
-      <el-form-item label="型号" prop="model">
-        <el-input v-model="queryParams.model" placeholder="请输入型号" clearable/>
-      </el-form-item>
-      <el-form-item label="状态" prop="statue">
-        <el-input v-model="queryParams.statue" placeholder="请输入状态" clearable/>
-      </el-form-item>
-      <el-form-item>
+    <search-form-bar>
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+        <el-form-item label="设备名称" prop="deviceName">
+          <el-input v-model="queryParams.deviceName" placeholder="请输入设备名称" clearable/>
+        </el-form-item>
+        <el-form-item label="设备编码" prop="deviceCode">
+          <el-input v-model="queryParams.deviceCode" placeholder="请输入设备编码" clearable/>
+        </el-form-item>
+        <el-form-item label="制造商" prop="manufacturer">
+          <el-input v-model="queryParams.manufacturer" placeholder="请输入制造商" clearable/>
+        </el-form-item>
+        <el-form-item label="型号" prop="model">
+          <el-input v-model="queryParams.model" placeholder="请输入型号" clearable/>
+        </el-form-item>
+      </el-form>
+      <template #btn>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+      </template>
+    </search-form-bar>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
@@ -39,40 +38,16 @@
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['polices:PoliceEnforcementRecorder:export']">导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="PoliceEnforcementRecorderList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
+      <el-table-column label="部门名称" align="center" prop="deptName" />
       <el-table-column label="设备名称" align="center" prop="deviceName" />
       <el-table-column label="设备编码" align="center" prop="deviceCode" />
       <el-table-column label="制造商" align="center" prop="manufacturer" />
       <el-table-column label="型号" align="center" prop="model" />
-      <el-table-column label="部门ID" align="center" prop="deptId" />
-      <el-table-column label="是否有夜视功能" align="center" prop="nightVision" >
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.nightVision"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="图像分辨率" align="center" prop="imageResolution" />
-      <el-table-column label="录像分辨率" align="center" prop="recordingResolution" />
-      <el-table-column label="内存" align="center" prop="memory" >
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_memory" :value="scope.row.memory"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="最大工作时长" align="center" prop="maxWorkingHours" />
-      <el-table-column label="网络通讯" align="center" prop="networking" >
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_networking" :value="scope.row.networking"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="电池容量" align="center" prop="batteryCapacity" />
-      <el-table-column label="状态" align="center" prop="statue" >
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.sys_equipment_statue" :value="scope.row.statue"/>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleSelect(scope.row)" 
@@ -120,67 +95,6 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="夜视功能" prop="nightVision">
-              <el-select  v-model="form.nightVision" placeholder="请选择是否有夜视功能" style="width: 100%">
-                <el-option v-for="item in dict.type.sys_yes_no" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="图像分辨率" prop="imageResolution">
-              <el-input v-model="form.imageResolution" placeholder="请输入图像分辨率" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="录像分辨率" prop="recordingResolution">
-              <el-input v-model="form.recordingResolution" placeholder="请输入录像分辨率" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="内存" prop="memory">
-              <el-select  v-model="form.memory" placeholder="请选择内存大小" style="width: 100%">
-                <el-option v-for="item in dict.type.sys_memory" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="工作时长" prop="maxWorkingHours">
-              <el-input v-model="form.maxWorkingHours" placeholder="请输入最大工作时长" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="电池容量" prop="batteryCapacity">
-              <el-input v-model="form.batteryCapacity" placeholder="请输入电池容量" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="网络通讯" prop="networking">
-              <el-select  v-model="form.networking" placeholder="请选择装备类型" style="width: 100%">
-                <el-option v-for="item in dict.type.sys_networking" :key="item.value" :label="item.label" :value="Number(item.value)">
-                  <el-tooltip placement="top">
-                    <div slot="content">{{item.raw.remark}}</div>
-                    <span style="float: left">{{ item.label }}</span>
-                  </el-tooltip>
-                </el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="状态" prop="statue">
-              <el-select  v-model="form.statue" placeholder="请选择设备状态" style="width: 100%">
-                <el-option v-for="item in dict.type.sys_equipment_statue" :key="item.value" :label="item.label" :value="item.value"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
             <el-form-item label="备注" prop="remark">
               <el-input v-model="form.remark" placeholder="请输入备注" />
             </el-form-item>
@@ -188,7 +102,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-show="isDisplay" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -196,7 +110,7 @@
 </template>
 
 <script>
-import { listPoliceEnforcementRecorder, getPoliceEnforcementRecorder, delPoliceEnforcementRecorder, 
+import { listPoliceEnforcementRecorder, getPoliceEnforcementRecorder, delPoliceEnforcementRecorder, getPoliceEnforcementRecorderByDeviceCode,
   addPoliceEnforcementRecorder, updatePoliceEnforcementRecorder } from "@/api/equipment/PoliceEnforcementRecorder";
 import { getUserProfile, deptTreeSelect } from "@/api/system/user";
 import DictTag from '@/components/DictTag';
@@ -208,7 +122,24 @@ export default {
   dicts: [ 'sys_networking', 'sys_yes_no', 'sys_memory', 'sys_equipment_statue' ],
   components: { DictTag ,Treeselect},
   data() {
+    const validDeviceCode = (rules, value, callback) => {
+      if (value == null || value == "") {
+        callback("装备编码不能为空")
+      } else {
+        getPoliceEnforcementRecorderByDeviceCode(value).then(response => {
+          console.log(response)
+          if (this.form.id != null && response.data != null && this.form.id != response.data.id) {
+            callback("装备编码已存在！")
+          } else if (this.form.id == null && response.data != null){
+            callback("装备编码已存在！")
+          } else {
+            callback()
+          }
+        })
+      }
+    }
     return {
+      isDisplay: false,
       disabled: true,
       user: null,
       // 遮罩层
@@ -240,14 +171,6 @@ export default {
         manufacturer: null,
         model: null,
         deptId: null,
-        nightVision: null,
-        imageResolution: null,
-        recordingResolution: null,
-        memory: null,
-        maxWorkingHours: null,
-        networking: null,
-        batteryCapacity: null,
-        statue: null,
         deleteTime: null,
         operateTime: null,
         operateType: null,
@@ -263,7 +186,8 @@ export default {
           { required: true, message: "设备名称不能为空", trigger: "blur" }
         ],
         deviceCode: [
-          { required: true, message: "设备编码不能为空", trigger: "blur" }
+          { required: true, message: "设备编码不能为空", trigger: "blur" },
+          { validator : validDeviceCode, trigger: "blur" }
         ],
         manufacturer: [
           { required: true, message: "制造商不能为空", trigger: "blur" }
@@ -319,14 +243,6 @@ export default {
         manufacturer: null,
         model: null,
         deptId: null,
-        nightVision: null,
-        imageResolution: null,
-        recordingResolution: null,
-        memory: null,
-        maxWorkingHours: null,
-        networking: null,
-        batteryCapacity: null,
-        statue: null,
         createTime: null,
         updateTime: null,
         deleteTime: null,
@@ -358,6 +274,7 @@ export default {
       this.reset();
       this.disabled = false;
       this.open = true;
+      this.isDisplay = true;
       this.title = "添加执法仪记录仪";
     },
     /** 查看按钮操作 */
@@ -368,6 +285,7 @@ export default {
         this.form = response.data;
         this.disabled = true;
         this.open = true;
+        this.isDisplay = false;
         this.title = "查看执法仪记录仪";
       });
     },
@@ -379,6 +297,7 @@ export default {
         this.form = response.data;
         this.disabled = false;
         this.open = true;
+        this.isDisplay = true;
         this.title = "修改执法仪记录仪";
       });
     },

@@ -94,4 +94,15 @@ public class PoliceEnforcementRecorderServiceImpl implements IPoliceEnforcementR
     {
         return policeEnforcementRecorderMapper.deletePoliceEnforcementRecorderById(id);
     }
+
+    /**
+     * 查询执法仪记录仪
+     *
+     * @param deviceCode 设备编码
+     * @return 执法仪记录仪
+     */
+    @Override
+    public PoliceEnforcementRecorder getPoliceEnforcementRecorderByDeviceCode(String deviceCode) {
+        return policeEnforcementRecorderMapper.getPoliceEnforcementRecorderByDeviceCode(deviceCode);
+    }
 }

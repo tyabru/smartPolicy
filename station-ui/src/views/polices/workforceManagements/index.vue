@@ -112,7 +112,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-show="isDisplay" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -129,6 +129,7 @@ export default {
   name: "Managements",
   data() {
     return {
+      disabled: false,
       user: null,
       dateValue: new Date(),
       // 遮罩层
@@ -296,6 +297,7 @@ export default {
       this.reset();
       this.form.dutyDate = date.day
       this.open = true;
+      this.isDisplay = true;
       this.title = "添加排班管理";
     },
     /** 修改按钮操作 */
@@ -304,6 +306,7 @@ export default {
       getManagementsByDutyDate(date.day).then(response => {
         this.form = response.data;
         this.open = true;
+        this.isDisplay = true;
         this.title = "查看或修改排班管理";
       })
     },

@@ -1,5 +1,6 @@
 package com.jingyu.polices.service.impl;
 
+import java.io.File;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
@@ -10,6 +11,7 @@ import com.jingyu.common.exception.CustomException;
 import com.jingyu.common.utils.*;
 import com.jingyu.common.utils.sign.AESUtil;
 import com.jingyu.common.utils.sign.Md5Utils;
+import com.jingyu.polices.domain.PoliceCars;
 import com.jingyu.polices.domain.PoliceDutyGroups;
 import com.jingyu.polices.mapper.PoliceDutyGroupsMapper;
 import com.jingyu.system.domain.SysUserPost;
@@ -19,6 +21,7 @@ import com.jingyu.system.mapper.SysUserPostMapper;
 import com.jingyu.system.mapper.SysUserRoleMapper;
 import org.apache.commons.codec.digest.Md5Crypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.jingyu.polices.mapper.PoliceInformationMapper;
 import com.jingyu.polices.domain.PoliceInformation;
@@ -35,6 +38,9 @@ import javax.annotation.Resource;
 @Service
 public class PoliceInformationServiceImpl implements IPoliceInformationService
 {
+    @Value("${jingyu.profile}")
+    private String filePath;
+
     @Resource
     private PoliceInformationMapper policeInformationMapper;
 
@@ -78,8 +84,11 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
     public int insertPoliceInformation(PoliceInformation policeInformation)
     {
         policeInformation.setBirthday(StringReplaceUtil.idCardToBirthday(AESUtil.decrypt(policeInformation.getIdCard())));
-        //警号和身份证号码判断是否重复
+        //校验执法记录仪和身份证号码是否重复
         handleData(policeInformation);
+        //回填用户user_id
+        SysUser sysUser = sysUserMapper.selectUserByUserName(policeInformation.getPoliceNumber());
+        policeInformation.setUserId(sysUser.getUserId());
         return policeInformationMapper.insertPoliceInformation(policeInformation);
     }
 
@@ -93,20 +102,41 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
     public int updatePoliceInformation(PoliceInformation policeInformation)
     {
         policeInformation.setBirthday(StringReplaceUtil.idCardToBirthday(AESUtil.decrypt(policeInformation.getIdCard())));
+        //校验执法记录仪和身份证号码是否重复
+        handleData(policeInformation);
         return policeInformationMapper.updatePoliceInformation(policeInformation);
     }
 
     /**
-     * 校验警号和身份证号码是否重复
+     * 校验执法记录仪和身份证号码是否重复
      * */
     public void handleData(PoliceInformation policeInformation) {
-        PoliceInformation police = policeInformationMapper.selectPoliceInformationByPoliceNumber(policeInformation.getPoliceNumber());
-        if (StringUtils.isNotNull(police)) {
-            throw new CustomException("警号已存在，请核对警号是否正确！");
-        }
-        PoliceInformation policeInfo = policeInformationMapper.selectPoliceInformationByIdCard(policeInformation.getIdCard());
-        if (StringUtils.isNotNull(policeInfo)) {
+        //校验身份证号码
+        PoliceInformation police = policeInformationMapper.selectPoliceInformationByIdCard(policeInformation.getIdCard());
+        if (policeInformation.getUserId() != 0 && StringUtils.isNotNull(police)
+                && policeInformation.getUserId().longValue() != police.getUserId().longValue()) {
             throw new CustomException("该身份证号码已存在，请核对身份证是否正确！");
+        } else if (policeInformation.getUserId() == null && StringUtils.isNotNull(police)){
+            throw new CustomException("该身份证号码已存在，请核对身份证是否正确！");
+        }
+        //校验执法记录仪编码
+        if (policeInformation.getIsVehicle().equals("Y")) {
+            PoliceInformation policeInfo = policeInformationMapper.getPoliceInformationByEquipmentNumber(policeInformation.getEquipmentNumber());
+            if (policeInformation.getUserId() != 0 && StringUtils.isNotNull(policeInfo)
+                    && policeInfo.getUserId().longValue() != policeInformation.getUserId().longValue()) {
+                throw new CustomException("执法记录仪编码" + policeInfo.getEquipmentNumber() + "与警号" + policeInfo.getPoliceNumber() + "绑定,请重新选择！");
+            } else if (policeInformation.getUserId() == null && StringUtils.isNotNull(policeInfo)) {
+                throw new CustomException("执法记录仪编码" + policeInfo.getEquipmentNumber() + "与警号" + policeInfo.getPoliceNumber() + "绑定,请重新选择！");
+            }
+        } else {
+            policeInformation.setEquipmentNumber("null");
+        }
+        //删除警员照片
+        if (policeInformation.getUserId() != 0) {
+            PoliceInformation policeInformation1 = policeInformationMapper.selectPoliceInformationByuserId(policeInformation.getUserId());
+            if (!policeInformation.getPolicePhoto().equals(policeInformation1.getPolicePhoto())) {
+                deletePolicePhoto(policeInformation1.getUserId());
+            }
         }
     }
 
@@ -155,6 +185,32 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
     }
 
     /**
+     * 查询警员基本信息列表
+     *
+     * @param userId 用户ID
+     * @return 警员基本信息
+     */
+    @Override
+    public PoliceInformation selectPoliceInformationByUserId(Long userId) {
+        return policeInformationMapper.selectPoliceInformationByuserId(userId);
+    }
+
+    /**
+     * 批量删除警员基本信息
+     *
+     * @param userIds 需要删除的用户ID
+     * @return 结果
+     */
+    @Override
+    public int deletePoliceInformationByUserIds(Long[] userIds) {
+        //删除警员照片
+        for (Long userId : userIds) {
+            deletePolicePhoto(userId);
+        }
+       return policeInformationMapper.deletePoliceInformationByUserIds(userIds);
+    }
+
+    /**
      * 停用该警员的账号
      * */
     public int deactivatePoliceInformation(Long id)
@@ -182,6 +238,21 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
         for (PoliceDutyGroups dutyGroups : list) {
             dutyGroups.setTeamMembers(dutyGroups.getTeamMembers().replace(policeInformation.getPoliceNumber() + ",",""));
             policeDutyGroupsMapper.updatePoliceDutyGroups(dutyGroups);
+        }
+    }
+
+    /**
+     * 删除警员照片
+     * */
+    public void deletePolicePhoto (Long userId) {
+        PoliceInformation policeInformation = policeInformationMapper.selectPoliceInformationByuserId(userId);
+        String fileUrlPath = filePath + policeInformation.getPolicePhoto();
+        System.out.println(fileUrlPath);
+        File file = new File(fileUrlPath);
+        if (file.exists()) {
+            file.delete();
+        } else {
+            throw new ClassCastException("警员照片不存在,请确定照片路径是否正确!");
         }
     }
 }

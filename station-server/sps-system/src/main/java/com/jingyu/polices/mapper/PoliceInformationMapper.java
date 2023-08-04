@@ -91,4 +91,20 @@ public interface PoliceInformationMapper
      * @return 警员基本信息
      */
     public PoliceInformation selectPoliceInformationByuserId(Long userId);
+
+    /**
+     * 批量删除警员基本信息
+     *
+     * @param userIds 需要删除的数据userIds
+     * @return 结果
+     */
+    public int deletePoliceInformationByUserIds(Long[] userIds);
+
+    /**
+     * 查询警员基本信息列表
+     *
+     * @param equipmentNumber 设备编码
+     * @return 警员基本信息
+     */
+    public PoliceInformation getPoliceInformationByEquipmentNumber(String equipmentNumber);
 }

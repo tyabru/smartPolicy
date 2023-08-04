@@ -76,6 +76,42 @@ public class PoliceCarsController extends BaseController
     }
 
     /**
+     * 查询警用车辆
+     */
+    @Log(title = "警用车辆", businessType = BusinessType.INSERT)
+    @GetMapping("/getPoliceCarByEquipmentNumber/{equipmentNumber}")
+    public AjaxResult getPoliceCarByEquipmentNumber(@PathVariable("equipmentNumber") String equipmentNumber)
+    {
+        PoliceCars policeCar = policeCarsService.getPoliceCarByEquipmentNumber(equipmentNumber);
+        AjaxResult ajaxResult = new AjaxResult();
+        return ajaxResult.put("data",policeCar);
+    }
+
+    /**
+     * 查询警用车辆
+     */
+    @Log(title = "警用车辆", businessType = BusinessType.INSERT)
+    @GetMapping("/getPoliceCarByLicenseNumber/{licenseNumber}")
+    public AjaxResult getPoliceCarByLicenseNumber(@PathVariable("licenseNumber") String licenseNumber)
+    {
+        PoliceCars policeCar = policeCarsService.getPoliceCarByLicenseNumber(licenseNumber);
+        AjaxResult ajaxResult = new AjaxResult();
+        return ajaxResult.put("data",policeCar);
+    }
+
+    /**
+     * 查询警用车辆
+     */
+    @Log(title = "警用车辆", businessType = BusinessType.INSERT)
+    @GetMapping("/getPoliceCarByCarCode/{carCode}")
+    public AjaxResult getPoliceCarByCarCode(@PathVariable("carCode") String carCode)
+    {
+        AjaxResult ajaxResult = new AjaxResult();
+        PoliceCars policeCar = policeCarsService.getPoliceCarByCarCode(carCode);
+        return ajaxResult.put("data",policeCar);
+    }
+
+    /**
      * 修改警用车辆
      */
     @PreAuthorize("@ss.hasPermi('polices:cars:edit')")

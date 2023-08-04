@@ -17,6 +17,14 @@ export function getInformation(id) {
   })
 }
 
+// 查询警员基本信息详细
+export function getPoliceInformationByIdCard(idCard) {
+  return request({
+    url: '/polices/information/getPoliceInformationByIdCard/' + idCard,
+    method: 'get'
+  })
+}
+
 // 新增警员基本信息
 export function addInformation(data) {
   return request({
@@ -54,5 +62,12 @@ export function addImgData(data) {
       'uploadType': 'syrk'
     },
     data: data    // 参数需要是单一的formData形式
+  })
+}
+
+export function getImage(path) {
+  return request({
+    url: '/common/imgHandler/getImg/' + path,
+    method: 'get',
   })
 }

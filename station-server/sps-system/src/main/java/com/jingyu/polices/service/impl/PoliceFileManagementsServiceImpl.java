@@ -1,12 +1,16 @@
 package com.jingyu.polices.service.impl;
 
+import java.io.File;
 import java.util.List;
 import com.jingyu.common.utils.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.jingyu.polices.mapper.PoliceFileManagementsMapper;
 import com.jingyu.polices.domain.PoliceFileManagements;
 import com.jingyu.polices.service.IPoliceFileManagementsService;
+
+import javax.annotation.Resource;
 
 /**
  * 日常文件管理Service业务层处理
@@ -17,7 +21,10 @@ import com.jingyu.polices.service.IPoliceFileManagementsService;
 @Service
 public class PoliceFileManagementsServiceImpl implements IPoliceFileManagementsService 
 {
-    @Autowired
+    @Value("${jingyu.profile}")
+    private String filePath;
+
+    @Resource
     private PoliceFileManagementsMapper policeFileManagementsMapper;
 
     /**
@@ -77,6 +84,10 @@ public class PoliceFileManagementsServiceImpl implements IPoliceFileManagementsS
     @Override
     public int deletePoliceFileManagementsByIds(Long[] ids)
     {
+        for (Long id : ids) {
+            //删除文件
+            deleteFile(id);
+        }
         return policeFileManagementsMapper.deletePoliceFileManagementsByIds(ids);
     }
 
@@ -89,6 +100,22 @@ public class PoliceFileManagementsServiceImpl implements IPoliceFileManagementsS
     @Override
     public int deletePoliceFileManagementsById(Long id)
     {
+        //删除文件
+        deleteFile(id);
         return policeFileManagementsMapper.deletePoliceFileManagementsById(id);
+    }
+
+    /**
+     * 删除文件
+     * */
+    public void deleteFile(Long id) {
+        PoliceFileManagements policeFileManagements = policeFileManagementsMapper.selectPoliceFileManagementsById(id);
+        String fileUrlPath = filePath + policeFileManagements.getFilePath();
+        File file = new File(fileUrlPath);
+        if (file.exists()) {
+            file.delete();
+        } else {
+            throw new ClassCastException("文件不存在,请确定路径是否正确!");
+        }
     }
 }

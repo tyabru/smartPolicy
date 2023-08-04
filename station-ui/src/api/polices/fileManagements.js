@@ -63,6 +63,16 @@ export function uploadFile(data,folderName,deptId) {
 export function fileDownload(id) {
   return request({
     url: '/polices/fileManagements/fileDownload/' + id,
-    method: 'get'
+    method: 'get',
+  })
+}
+
+
+// 下载日常文件
+export function downloadFile(id) {
+  return request({
+    url: '/polices/fileManagements/downloadFile/' + id,
+    method: 'get',
+    responseType: 'blob'
   })
 }

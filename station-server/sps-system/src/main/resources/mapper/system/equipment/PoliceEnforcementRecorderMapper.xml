@@ -11,14 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="manufacturer"    column="manufacturer"    />
         <result property="model"    column="model"    />
         <result property="deptId"    column="dept_id"    />
-        <result property="nightVision"    column="night_vision"    />
-        <result property="imageResolution"    column="image_resolution"    />
-        <result property="recordingResolution"    column="recording_resolution"    />
-        <result property="memory"    column="memory"    />
-        <result property="maxWorkingHours"    column="max_working_hours"    />
-        <result property="networking"    column="networking"    />
-        <result property="batteryCapacity"    column="battery_capacity"    />
-        <result property="statue"    column="statue"    />
+        <result property="deptName"    column="dept_name"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="deleteTime"    column="delete_time"    />
@@ -29,9 +22,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPoliceEnforcementRecorderVo">
-        select id, device_name, device_code, manufacturer, model, dept_id, night_vision, image_resolution, recording_resolution, memory,
-          max_working_hours, networking, battery_capacity, statue, create_time, update_time, delete_time, operate_time, operate_type, operate_name, remark
-        from police_enforcement_recorder
+        select p.id, p.device_name, p.device_code, p.manufacturer, p.model, p.dept_id, p.create_time, p.update_time, p.delete_time,
+          p.operate_time, p.operate_type, p.operate_name, p.remark, sys_dept.dept_name
+        from police_enforcement_recorder p
+        inner join sys_dept on p.dept_id = sys_dept.dept_id
     </sql>
 
     <select id="selectPoliceEnforcementRecorderList" parameterType="PoliceEnforcementRecorder" resultMap="PoliceEnforcementRecorderResult">
@@ -43,14 +37,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="manufacturer != null  and manufacturer != ''"> and instr(manufacturer,#{manufacturer})</if>
             <if test="model != null  and model != ''"> and instr(model,#{model})</if>
             <if test="deptId != null "> and instr(dept_id,#{deptId})</if>
-            <if test="nightVision != null "> and instr(night_vision,#{nightVision})</if>
-            <if test="imageResolution != null  and imageResolution != ''"> and instr(image_resolution,#{imageResolution})</if>
-            <if test="recordingResolution != null  and recordingResolution != ''"> and instr(recording_resolution,#{recordingResolution})</if>
-            <if test="memory != null "> and instr(memory,#{memory})</if>
-            <if test="maxWorkingHours != null  and maxWorkingHours != ''"> and instr(max_working_hours,#{maxWorkingHours})</if>
-            <if test="networking != null "> and instr(networking,#{networking})</if>
-            <if test="batteryCapacity != null  and batteryCapacity != ''"> and instr(battery_capacity,#{batteryCapacity})</if>
-            <if test="statue != null "> and statue = #{statue}</if>
             <if test="deleteTime != null "> and instr(delete_time,#{deleteTime})</if>
             <if test="operateTime != null "> and instr(operate_time,#{operateTime})</if>
             <if test="operateType != null "> and operate_type = #{operateType}</if>
@@ -63,6 +49,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectPoliceEnforcementRecorderVo"/>
         where id = #{id}
     </select>
+
+    <select id="getPoliceEnforcementRecorderByDeviceCode" parameterType="String" resultMap="PoliceEnforcementRecorderResult">
+        <include refid="selectPoliceEnforcementRecorderVo"/>
+        where device_code = #{deviceCode}
+    </select>
         
     <insert id="insertPoliceEnforcementRecorder" parameterType="PoliceEnforcementRecorder" useGeneratedKeys="true" keyProperty="id">
         insert into police_enforcement_recorder
@@ -72,14 +63,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="manufacturer != null and manufacturer != ''">manufacturer,</if>
             <if test="model != null and model != ''">model,</if>
             <if test="deptId != null">dept_id,</if>
-            <if test="nightVision != null">night_vision,</if>
-            <if test="imageResolution != null">image_resolution,</if>
-            <if test="recordingResolution != null">recording_resolution,</if>
-            <if test="memory != null">memory,</if>
-            <if test="maxWorkingHours != null">max_working_hours,</if>
-            <if test="networking != null">networking,</if>
-            <if test="batteryCapacity != null">battery_capacity,</if>
-            <if test="statue != null">statue,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="deleteTime != null">delete_time,</if>
             <if test="operateName != null and operateName != ''">operate_name,</if>
@@ -94,14 +77,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="manufacturer != null and manufacturer != ''">#{manufacturer},</if>
             <if test="model != null and model != ''">#{model},</if>
             <if test="deptId != null">#{deptId},</if>
-            <if test="nightVision != null">#{nightVision},</if>
-            <if test="imageResolution != null">#{imageResolution},</if>
-            <if test="recordingResolution != null">#{recordingResolution},</if>
-            <if test="memory != null">#{memory},</if>
-            <if test="maxWorkingHours != null">#{maxWorkingHours},</if>
-            <if test="networking != null">#{networking},</if>
-            <if test="batteryCapacity != null">#{batteryCapacity},</if>
-            <if test="statue != null">#{statue},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="deleteTime != null">#{deleteTime},</if>
             <if test="operateName != null and operateName != ''">#{operateName},</if>
@@ -120,14 +95,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="manufacturer != null and manufacturer != ''">manufacturer = #{manufacturer},</if>
             <if test="model != null and model != ''">model = #{model},</if>
             <if test="deptId != null">dept_id = #{deptId},</if>
-            <if test="nightVision != null">night_vision = #{nightVision},</if>
-            <if test="imageResolution != null">image_resolution = #{imageResolution},</if>
-            <if test="recordingResolution != null">recording_resolution = #{recordingResolution},</if>
-            <if test="memory != null">memory = #{memory},</if>
-            <if test="maxWorkingHours != null">max_working_hours = #{maxWorkingHours},</if>
-            <if test="networking != null">networking = #{networking},</if>
-            <if test="batteryCapacity != null">battery_capacity = #{batteryCapacity},</if>
-            <if test="statue != null">statue = #{statue},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="deleteTime != null">delete_time = #{deleteTime},</if>
             <if test="operateName != null and operateName != ''">operate_name = #{operateName},</if>

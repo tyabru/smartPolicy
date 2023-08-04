@@ -107,4 +107,7 @@ public class PoliceCars extends BaseEntity
     /** 备注 */
     @Excel(name = "备注")
     private String remark;
+
+    /** 部门名称 */
+    private String deptName;
 }

@@ -163,20 +163,28 @@ public class SysUserController extends BaseController
         {
             return error("修改用户'" + user.getUserName() + "'失败，登录账号已存在");
         }
-        else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user))
-        {
-            return error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
-        }
         else if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user))
         {
             return error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
         user.setUpdateBy(getUsername());
-        if (user.getIdCard().equals("**")) {
-            PoliceInformation oldPoliceInformation = policeInformationService.selectPoliceInformationById(user.getUserId());
-            user.setIdCard(AESUtil.decrypt(oldPoliceInformation.getIdCard()));
-        } else if (StringUtils.isNotNull(policeInformationService.selectPoliceInformationByIdCard(user.getIdCard()))){
-            return error("修改用户'" + user.getIdCard() + "'失败，公民身份证已存在");
+        user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
+        PoliceInformation policeInformation = policeInformationService.selectPoliceInformationByUserId(user.getUserId());
+        if (user.getIdCard().contains("**")) {
+            user.setIdCard(AESUtil.decrypt(policeInformation.getIdCard()));
+        } else if (StringUtils.isNotNull(policeInformation) && policeInformation.getUserId().longValue() != user.getUserId().longValue()){
+            return error("修改用户'" + AESUtil.decrypt(user.getIdCard()) + "'失败，公民身份证已存在");
+        }
+        SysUser sysUser = userService.selectUserById(user.getUserId());
+        if (user.getPhonenumber().contains("**")) {
+            user.setPhonenumber(sysUser.getPhonenumber());
+        } else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user)){
+            return error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
+        } else {
+            user.setPhonenumber(AESUtil.encrypt(user.getPhonenumber()));
+        }
+        if (user.getNickName().contains("*")) {
+            user.setNickName(sysUser.getNickName());
         }
         return toAjax(userService.updateUser(user));
     }

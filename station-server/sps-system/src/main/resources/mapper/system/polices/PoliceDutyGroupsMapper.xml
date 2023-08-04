@@ -27,7 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectPoliceDutyGroupsList" parameterType="PoliceDutyGroups" resultMap="PoliceDutyGroupsResult">
         <include refid="selectPoliceDutyGroupsVo"/>
-        <where>  
+        <where>
+            operate_type != 2
             <if test="groupName != null  and groupName != ''"> and instr(group_name, #{groupName})</if>
             <if test="teamMembers != null  and teamMembers != ''"> and instr(team_members, #{teamMembers})</if>
         </where>
