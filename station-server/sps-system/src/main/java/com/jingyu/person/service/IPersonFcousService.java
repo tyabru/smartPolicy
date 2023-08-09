@@ -58,4 +58,12 @@ public interface IPersonFcousService
      * @return 结果
      */
     public int deletePersonFcousById(Long id);
+
+    /**
+     * 删除重点关注人口信息
+     *
+     * @param personId 重点关注人口主键, personType 人员类型
+     * @return 结果
+     */
+    public int deletePersonFcousByPersonId(Long personId, Long personType);
 }

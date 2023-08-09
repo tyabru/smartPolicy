@@ -427,18 +427,14 @@ export default {
           { required: true, message: "用户名称不能为空", trigger: "blur" },
           { min: 6, max: 6, message: "警号长度为6位", trigger: "blur" }
         ],
-        nickName: [
-          { required: true, message: "用户昵称不能为空", trigger: "blur" }
-        ],
+        nickName: [{ required: true, message: "用户昵称不能为空", trigger: "blur" }],
         userName: [{ required: true, message: "警员警号不能为空", trigger: "blur" }],
         password: [
           { required: true, message: "用户密码不能为空", trigger: "blur" },
           { min: 5, max: 20, message: '用户密码长度必须介于 5 和 20 之间', trigger: 'blur' },
           { validator: validatePassword, trigger: "blur" }
         ],
-        email: [
-          { type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}
-        ],
+        email: [{ type: "email", message: "请输入正确的邮箱地址", trigger: ["blur", "change"]}],
         phonenumber: [
           { required: true, message: "手机号不能为空", trigger: "blur" },
           { min: 11, max: 11, message: "手机号长度为11", trigger: "blur" },

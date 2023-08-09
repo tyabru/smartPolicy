@@ -3,16 +3,21 @@ package com.jingyu.community.service.impl;
 import java.util.List;
 
 import com.jingyu.common.config.RuoYiConfig;
+import com.jingyu.common.exception.CustomException;
 import com.jingyu.common.utils.DateUtils;
 import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.common.utils.StringUtils;
+import com.jingyu.common.utils.encryption_decryption.SensitiveNewsHander;
 import com.jingyu.common.utils.file.FileUtils;
+import com.jingyu.common.utils.sign.AESUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jingyu.community.mapper.CommunityWuyeMapper;
 import com.jingyu.community.domain.CommunityWuye;
 import com.jingyu.community.service.ICommunityWuyeService;
 import org.springframework.transaction.annotation.Transactional;
+
+import javax.annotation.Resource;
 
 /**
  * 物业信息管理Service业务层处理
@@ -23,7 +28,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class CommunityWuyeServiceImpl implements ICommunityWuyeService 
 {
-    @Autowired
+    @Resource
     private CommunityWuyeMapper communityWuyeMapper;
 
     /**
@@ -62,6 +67,11 @@ public class CommunityWuyeServiceImpl implements ICommunityWuyeService
         try {
             communityWuye.setCreateBy(SecurityUtils.getUsername());
             communityWuye.setCreateTime(DateUtils.getNowDate());
+            //判重
+            List<CommunityWuye> communityWuyeList = getCommunityWuyeList(communityWuye);
+            if (communityWuyeList.size() > 0) {
+                throw new CustomException("该小区物业人员已存在,请勿重复添加！");
+            }
             return communityWuyeMapper.insertCommunityWuye(communityWuye);
         } catch (Exception e) {
             if(StringUtils.isNotEmpty(communityWuye.getFaceImgUrl())){
@@ -83,10 +93,19 @@ public class CommunityWuyeServiceImpl implements ICommunityWuyeService
         try {
             communityWuye.setUpdateTime(DateUtils.getNowDate());
             communityWuye.setUpdateBy(SecurityUtils.getUsername());
-            if(StringUtils.isNotEmpty(communityWuye.getFaceImgUrl())){
-                CommunityWuye old = selectCommunityWuyeById(communityWuye.getId());
-                if(!communityWuye.getFaceImgUrl().equals(old.getFaceImgUrl())) {
-                    FileUtils.deleteFileByProfileUrl(old.getFaceImgUrl());
+            CommunityWuye old = selectCommunityWuyeById(communityWuye.getId());
+            if(StringUtils.isNotEmpty(communityWuye.getFaceImgUrl()) && !communityWuye.getFaceImgUrl().equals(old.getFaceImgUrl())){
+                FileUtils.deleteFileByProfileUrl(old.getFaceImgUrl());
+            }
+            old.setPhone(AESUtil.decrypt(old.getPhone()));
+            old.setCertNo(AESUtil.decrypt(old.getCertNo()));
+            SensitiveNewsHander.revertNotEditAttrs(communityWuye,old);
+            SensitiveNewsHander.revertEncryptAttrs(communityWuye);
+            //判重
+            if (communityWuye.getCommunityId() != old.getCommunityId()) {
+                List<CommunityWuye> communityWuyeList = getCommunityWuyeList(communityWuye);
+                if (communityWuyeList.size() > 0) {
+                    throw new CustomException("该小区物业人员已存在,请勿重复添加！");
                 }
             }
             return communityWuyeMapper.updateCommunityWuye(communityWuye);
@@ -100,6 +119,17 @@ public class CommunityWuyeServiceImpl implements ICommunityWuyeService
             throw new RuntimeException(e);
         }
 
+    }
+
+    /**
+     * 判重
+     * */
+    public List<CommunityWuye> getCommunityWuyeList(CommunityWuye communityWuye) {
+        CommunityWuye comWuye = new CommunityWuye();
+        comWuye.setCommunityId(communityWuye.getCommunityId());
+        comWuye.setCertNo(communityWuye.getCertNo());
+        List<CommunityWuye> communityWuyes = communityWuyeMapper.selectCommunityWuyeList(comWuye);
+        return communityWuyes;
     }
 
     /**

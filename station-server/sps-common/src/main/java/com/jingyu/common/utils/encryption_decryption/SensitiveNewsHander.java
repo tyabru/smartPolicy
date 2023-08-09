@@ -11,6 +11,9 @@ import java.lang.reflect.Method;
 
 public class SensitiveNewsHander {
 
+    /**
+     * 页面显示加密
+     * */
     public static <T> T parseRequestParams(T params) {
         SwitchChange switchChange = SpringUtils.getBean(SwitchChange.class);
         Class<?> cls = params.getClass();
@@ -68,6 +71,9 @@ public class SensitiveNewsHander {
         }
     }
 
+    /**
+     * 添加数据库之前加密
+     * */
     public static <T> T revertEncryptAttrs(T source) {
         Class<?> cls = source.getClass();
         Field[] fields = cls.getDeclaredFields();

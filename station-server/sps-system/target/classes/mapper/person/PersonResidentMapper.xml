@@ -12,6 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="certNo"    column="cert_no"    />
         <result property="phone"    column="phone"    />
         <result property="nativePlace"    column="native_place"    />
+        <result property="nation"    column="nation"    />
         <result property="faceImgUrl"    column="face_img_url"    />
         <result property="features"    column="features"    />
         <result property="company"    column="company"    />
@@ -26,7 +27,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPersonResidentVo">
-        select id, bm, name, cert_type, cert_no, phone, native_place, face_img_url, features, company, career, create_by, create_time, update_time, update_by, is_important, attention_level, source_platform from sq_person_resident
+        select id, bm, name, cert_type, cert_no, phone, native_place, nation, face_img_url, features, company, career, create_by,
+          create_time, update_time, update_by, is_important, attention_level, source_platform
+        from sq_person_resident
     </sql>
 
     <select id="selectPersonResidentList" parameterType="PersonResident" resultMap="PersonResidentResult">
@@ -38,6 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="certNo != null  and certNo != ''"> and cert_no = #{certNo}</if>
             <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
             <if test="nativePlace != null  and nativePlace != ''"> and native_place = #{nativePlace}</if>
+            <if test="nation != null  and nation != ''"> and nation = #{nation}</if>
             <if test="faceImgUrl != null  and faceImgUrl != ''"> and face_img_url = #{faceImgUrl}</if>
             <if test="features != null  and features != ''"> and features = #{features}</if>
             <if test="company != null  and company != ''"> and company = #{company}</if>
@@ -52,6 +56,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectPersonResidentVo"/>
         where id = #{id}
     </select>
+
+    <select id="selectPersonResidentByCerNo" parameterType="String" resultMap="PersonResidentResult">
+        <include refid="selectPersonResidentVo"/>
+        where cert_no = #{certNo}
+    </select>
         
     <insert id="insertPersonResident" parameterType="PersonResident" useGeneratedKeys="true" keyProperty="id">
         insert into sq_person_resident
@@ -63,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="certNo != null and certNo != ''">cert_no,</if>
             <if test="phone != null and phone != ''">phone,</if>
             <if test="nativePlace != null">native_place,</if>
+            <if test="nation != null">nation,</if>
             <if test="faceImgUrl != null">face_img_url,</if>
             <if test="features != null">features,</if>
             <if test="company != null">company,</if>
@@ -83,6 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="certNo != null and certNo != ''">#{certNo},</if>
             <if test="phone != null and phone != ''">#{phone},</if>
             <if test="nativePlace != null">#{nativePlace},</if>
+            <if test="nation != null">#{nation},</if>
             <if test="faceImgUrl != null">#{faceImgUrl},</if>
             <if test="features != null">#{features},</if>
             <if test="company != null">#{company},</if>
@@ -106,6 +117,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="certNo != null and certNo != ''">cert_no = #{certNo},</if>
             <if test="phone != null and phone != ''">phone = #{phone},</if>
             <if test="nativePlace != null">native_place = #{nativePlace},</if>
+            <if test="nation != null">nation = #{nation},</if>
             <if test="faceImgUrl != null">face_img_url = #{faceImgUrl},</if>
             <if test="features != null">features = #{features},</if>
             <if test="company != null">company = #{company},</if>

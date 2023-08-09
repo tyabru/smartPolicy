@@ -1,123 +1,64 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="mini" :inline="true" v-show="showSearch" label-width="110 px">
-      <el-form-item label="名称" prop="name">
-        <el-input
-          v-model="queryParams.name"
-          placeholder="请输入名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="身份证号" prop="certNo">
-        <el-input
-          v-model="queryParams.certNo"
-          placeholder="请输入身份证号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="手机号" prop="phone">
-        <el-input
-          v-model="queryParams.phone"
-          placeholder="请输入手机号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="民族" prop="nation">
-        <el-input
-          v-model="queryParams.nation"
-          placeholder="请输入民族"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="入住日期" prop="livingDate">
-        <el-date-picker clearable
-          v-model="queryParams.livingDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择入住日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="是否是重点人员" prop="isImportant">
-        <el-select v-model="queryParams.isImportant" placeholder="请选择是否是重点人员" clearable>
-          <el-option
-            v-for="dict in dict.type.sys_yes_no"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="关注级别" prop="attentionLevel">
-        <el-select v-model="queryParams.attentionLevel" class="width-100Rate" placeholder="请选择关注的级别">
-          <el-option v-for="dict in dict.type.important_level"
-                     :key="dict.value"
-                     :label="dict.label"
-                     :value="dict.value"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item>
+    <search-form-bar>
+      <el-form :model="queryParams" ref="queryForm" size="mini" :inline="true" v-show="showSearch" label-width="110 px">
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="queryParams.name" placeholder="请输入名称" clearable/>
+        </el-form-item>
+        <el-form-item label="身份证号" prop="certNo">
+          <el-input v-model="queryParams.certNo" placeholder="请输入身份证号" clearable/>
+        </el-form-item>
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="queryParams.phone" placeholder="请输入手机号" clearable/>
+        </el-form-item>
+        <el-form-item label="是否是重点人员" prop="isImportant">
+          <el-select v-model="queryParams.isImportant" placeholder="请选择是否是重点人员" clearable>
+            <el-option v-for="dict in dict.type.sys_yes_no" :key="dict.value" :label="dict.label" :value="dict.value"/>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="关注级别" prop="attentionLevel">
+          <el-select v-model="queryParams.attentionLevel" class="width-100Rate" placeholder="请选择关注的级别">
+            <el-option v-for="dict in dict.type.important_level" :key="dict.value" :label="dict.label" :value="dict.value"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #btn>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+      </template>
+    </search-form-bar>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['person:flow:add']"
-        >新增</el-button>
+        <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
+          v-hasPermi="['person:flow:add']">新增</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['person:flow:edit']"
-        >修改</el-button>
+        <el-button type="success" plain icon="el-icon-edit" size="mini" :disabled="single" @click="handleUpdate"
+          v-hasPermi="['person:flow:edit']">修改</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['person:flow:remove']"
-        >删除</el-button>
+        <el-button type="danger" plain icon="el-icon-delete" size="mini" :disabled="multiple" @click="handleDelete"
+          v-hasPermi="['person:flow:remove']">删除</el-button>
       </el-col>
       <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['person:flow:export']"
-        >导出</el-button>
+        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
+          v-hasPermi="['person:flow:export']">导出</el-button>
       </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
+      <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="名称" align="center" prop="name" />
+      <el-table-column label="姓名" align="center" prop="name" />
+      <el-table-column label="民族" align="center" prop="nation" >
+        <template v-slot="{row}">
+          <dict-tag :options="dict.type['sys_nation']" :value="row.nation" />
+        </template>
+      </el-table-column>
       <el-table-column label="身份证号" align="center" prop="certNo" />
       <el-table-column label="手机号" align="center" prop="phone" />
-      <el-table-column label="来此的原因或目的" align="center" prop="remark" />
       <el-table-column label="人像图片" align="center" prop="faceImgUrl" width="100">
         <template slot-scope="scope">
           <image-preview :src="scope.row.faceImgUrl" :width="60" :height="80"/>
@@ -133,38 +74,24 @@
           <dict-tag :options="dict.type['important_level']" :value="row.attentionLevel" />
         </template>
       </el-table-column>
+      <el-table-column label="来此的原因" align="center" prop="remark" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['person:flow:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['person:flow:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-view"  @click="handleView(scope.row)"
+            v-hasPermi="['person:flow:query']">查看</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit"  @click="handleUpdate(scope.row)"
+            v-hasPermi="['person:flow:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['person:flow:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="queryChanged"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="queryChanged"/>
 
     <!-- 添加或修改流动人口对话框 -->
     <el-dialog :visible.sync="open" :close-on-click-modal="false" append-to-body
                width="80%"  :title="title" custom-class="dialog-mini">
-      <el-form ref="form" :model="form" :rules="rules" label-width="110px">
+      <el-form ref="form" :model="form" :rules="rules" label-width="110px" :disabled="disabled">
         <el-row style="padding: 10px 23px">
           <el-col :span="8">
             <el-form-item label="姓名" prop="name">
@@ -196,7 +123,9 @@
           </el-col>
           <el-col :span="8">
             <el-form-item label="民族" prop="nation">
-              <el-input v-model="form.nation" placeholder="请输入民族" />
+              <el-select v-model="form.nation" class="width-100Rate" placeholder="请选择民族">
+                <el-option v-for="dict in dict.type.sys_nation" :key="dict.value" :label="dict.label" :value="dict.value"></el-option>
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
@@ -212,28 +141,33 @@
           <el-col :span="8">
             <el-form-item label="重点人员" prop="isImportant">
               <el-select v-model="form.isImportant" class="width-100Rate" placeholder="请选择是否是重点人员">
-                <el-option
-                  v-for="dict in dict.type.sys_yes_no"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                ></el-option>
+                <el-option v-for="dict in dict.type.sys_yes_no" :key="dict.value" :label="dict.label" :value="dict.value"></el-option>
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="关注级别" prop="attentionLevel">
               <el-select v-model="form.attentionLevel" class="width-100Rate" placeholder="请选择关注的级别">
-                <el-option v-for="dict in dict.type.important_level"
-                           :key="dict.value"
-                           :label="dict.label"
-                           :value="dict.value"
+                <el-option v-for="dict in dict.type.important_level" :key="dict.value" :label="dict.label" :value="dict.value"
                 ></el-option>
               </el-select>
             </el-form-item>
           </el-col>
+          <el-col :span="8">
+            <el-form-item label="关注原因" class="width-100Rate" prop="focusReason" v-show="form.isImportant == 'Y'"
+              :rules="[{ required: form.isImportant == 'Y', message: '当该人员是重点关注人员时,关注原因不能为空', trigger: 'blur' }]">
+              <el-select v-model="form.focusReason" class="width-100Rate" placeholder="请选择关注原因">
+                <el-option v-for="dict in dict.type.sys_is_important" :key="dict.value" :label="dict.label" :value="dict.value"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="补充描述" class="width-100Rate" prop="reasonDesc" v-show="form.isImportant == 'Y'">
+              <el-input v-model="form.reasonDesc" placeholder="请输入补充描述" />
+            </el-form-item>
+          </el-col>
           <el-col :span="24">
-            <el-form-item label="来此的原因或目的" prop="remark">
+            <el-form-item label="来此的原因" prop="remark">
               <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
             </el-form-item>
           </el-col>
@@ -244,14 +178,12 @@
           </el-col>
           <el-col :span="24" style="--el-table-min-height: auto">
             <h4 class="title-h4">管理房屋地址</h4>
-            <el-button type="primary" plain @click="addAddress"
-                       style="margin-bottom: 8px" size="mini">新增地址</el-button>
+            <el-button type="primary" plain @click="addAddress" style="margin-bottom: 8px" size="mini">新增地址</el-button>
             <el-table size="mini" :data="houseListData" >
               <el-table-column type="selection" />
               <el-table-column prop="communityName" label="所属小区" width="150px" show-overflow-tooltip />
               <el-table-column prop="shortName" label="地址简称" width="160px" />
-              <el-table-column prop="fullAddress" label="地址全称"
-                               show-overflow-tooltip />
+              <el-table-column prop="fullAddress" label="地址全称" show-overflow-tooltip />
               <el-table-column prop="relationshipWithOwner" label="与房东关系" width="150px" >
                 <template v-slot="{row}">
                   <dict-tag :options="dict.type['family_member_relationship']" :value="row.relationshipWithOwner" />
@@ -263,52 +195,41 @@
                 </template>
               </el-table-column>
             </el-table>
-            <el-dialog :visible.sync="addrVisible" width="500px"
-                       title="新增关联地址" append-to-body :close-on-click-modal="false">
+            <el-dialog :visible.sync="addrVisible" width="500px" title="新增关联地址" append-to-body :close-on-click-modal="false">
               <el-row style="padding: 10px 15px">
                 <el-form ref="addressForm" :model="addressForm" label-width="100px" :rules="rules" size="mini">
                   <el-form-item label="所属小区" prop="communityId">
-                    <se-community v-model="addressForm.communityId"  class="width-100Rate"
-                                  @change="communityChange" />
+                    <se-community v-model="addressForm.communityId"  class="width-100Rate" @change="communityChange" />
                   </el-form-item>
                   <el-form-item label="关联地址" prop="metaAddrId">
                     <se-room-select ref="roomSelect" @change="addressChanged" :disabled="!addressForm.communityCode"
                                     :community-code="addressForm.communityCode" class="width-100Rate" />
                   </el-form-item>
                   <el-form-item label="地址全称" prop="fullAddress">
-                    <el-input :value="addressForm.fullAddress" class="width-100Rate" readonly
-                              placeholder="选择关联地址以填充地址全称" />
+                    <el-input :value="addressForm.fullAddress" class="width-100Rate" readonlyplaceholder="选择关联地址以填充地址全称" />
                   </el-form-item>
                   <el-form-item label="与房主关系" prop="relationshipWithOwner">
                     <el-select v-model="addressForm.relationshipWithOwner" class="width-100Rate" placeholder="请输入与房主的人际关系">
-                      <el-option v-for="dict in dict.type.family_member_relationship"
-                                 :key="dict.value"
-                                 :label="dict.label"
-                                 :value="dict.value"
+                      <el-option v-for="dict in dict.type.family_member_relationship" :key="dict.value" :label="dict.label" :value="dict.value"
                       ></el-option>
                     </el-select>
                   </el-form-item>
                   <el-form-item label="入住日期" prop="startTime">
-                    <el-date-picker clearable class="width-100Rate"
-                                    v-model="addressForm.startTime"
-                                    type="date"
-                                    value-format="yyyy-MM-dd"
-                                    placeholder="请选择入职日期">
+                    <el-date-picker clearable class="width-100Rate" v-model="addressForm.startTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择入职日期">
                     </el-date-picker>
                   </el-form-item>
                 </el-form>
               </el-row>
               <template #footer>
-                <el-button size="mini" type="primary" icon="el-icon-plus"
-                           @click="confirmAddress">确定</el-button>
+                <el-button size="mini" type="primary" icon="el-icon-plus" @click="confirmAddress">确定</el-button>
               </template>
             </el-dialog>
           </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button v-show="isDisplay" type="primary" @click="submitForm">保存并关闭</el-button>
+        <el-button @click="cancel">关闭表单</el-button>
       </div>
     </el-dialog>
   </div>
@@ -317,15 +238,18 @@
 <script>
 import { listFlow, getFlow, delFlow, addFlow, updateFlow } from "@/api/person/flow";
 import TableListMixins from '@/mixins/tableListMixins'
-import { validIdCodeByType } from '@/utils/validate'
+import { validIdCodeByType, validPhone } from '@/utils/validate'
 import { listResident } from '@/api/person/resident'
 import { queryFlowPHouseList, queryResidentHouseList } from '@/api/person/house'
 export default {
   name: "Flow",
-  dicts: ['sys_yes_no', 'important_level', 'family_member_relationship'],
+  dicts: ['sys_yes_no', 'important_level', 'family_member_relationship', 'sys_is_important', 'sys_nation',],
   mixins: [ TableListMixins ],
   data() {
     const validIdCode = async (rule, value, callback)=>  {
+      if(value && value.includes("**")) {
+        callback();
+      }
       if(!value || value.length < 1){
         callback("身份证号为必填项！");
       }else {
@@ -343,6 +267,8 @@ export default {
       }
     }
     return {
+      disabled: false,
+      isDisplay: false,
       // 弹出层标题
       title: "",
       // 是否显示弹出层
@@ -353,7 +279,8 @@ export default {
         isImportant: 'N',
         certType: 'CN_CARD',
         attentionLevel: 'green',
-        houseList: []
+        houseList: [],
+        nation: '01',
       },
       houseList: [],
       addressForm: {},
@@ -374,11 +301,8 @@ export default {
         ],
         phone: [
           { required: true, message: "联系方式不能为空", trigger: "blur" },
-          {
-            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-            message: "请输入正确的手机号码",
-            trigger: "blur"
-          }
+          { min: 11, max: 11, message: "手机号长度为11", trigger: "blur" },
+          {validator : validPhone, trigger: "blur"}
         ],
         startTime: [
           { required: true, message: "入住日期不能为空", trigger: "blur" }
@@ -399,7 +323,7 @@ export default {
           { required: true, message: "是否重点人员不能为空", trigger: "blur" }
         ],
         attentionLevel: [
-          { required: true, message: "关注的级别 0绿 1黄 2红不能为空", trigger: "blur" }
+          { required: true, message: "关注的级别不能为空", trigger: "blur" }
         ]
       }
     };
@@ -427,7 +351,8 @@ export default {
         isImportant: 'N',
         certType: 'CN_CARD',
         attentionLevel: 'green',
-        houseList: []
+        houseList: [],
+        nation: '01',
       };
       this.houseList = []
       this.resetForm("form");
@@ -452,6 +377,8 @@ export default {
     /** 新增按钮操作 */
     handleAdd() {
       this.reset();
+      this.disabled = false;
+      this.isDisplay = true;
       this.open = true;
       this.title = "添加流动人口";
     },
@@ -462,7 +389,25 @@ export default {
       getFlow(id).then(response => {
         this.form = response.data;
         this.open = true;
+        this.disabled = false;
+        this.isDisplay = true;
         this.title = "修改流动人口";
+      });
+      // TODO
+      queryFlowPHouseList(id).then(response => {
+        this.houseList = response.data
+      })
+    },
+    /** 查看按钮操作 */
+    handleView(row) {
+      this.reset();
+      const id = row.id || this.ids
+      getFlow(id).then(response => {
+        this.form = response.data;
+        this.open = true;
+        this.disabled = true;
+        this.isDisplay = false;
+        this.title = "查看流动人口";
       });
       // TODO
       queryFlowPHouseList(id).then(response => {
@@ -535,7 +480,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除流动人口编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除流动人口名为"' + row.name + '"的数据项？').then(function() {
         return delFlow(ids);
       }).then(() => {
         this.queryChanged();

@@ -2,6 +2,11 @@ package com.jingyu.person.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jingyu.common.utils.encryption_decryption.SensitiveNew;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
@@ -13,6 +18,10 @@ import com.jingyu.common.core.domain.BaseEntity;
  * @author jingyu
  * @date 2023-07-21
  */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class CompanyEmployee extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -26,10 +35,12 @@ public class CompanyEmployee extends BaseEntity
 
     /** 名称 */
     @Excel(name = "名称")
+    @SensitiveNew(setterEncrypt = "setName", getterDncrypt = "getName", EncryptMethod = "nameEncrypt", notEncryptByResponse = true)
     private String name;
 
     /** 联系方式 */
     @Excel(name = "联系方式")
+    @SensitiveNew(setterEncrypt = "setPhone", getterDncrypt = "getPhone", neeDecrypt = true, neeEecrypt = true)
     private String phone;
 
     /** 证件类型 */
@@ -38,6 +49,7 @@ public class CompanyEmployee extends BaseEntity
 
     /** 证件编号 */
     @Excel(name = "证件编号")
+    @SensitiveNew(setterEncrypt = "setIdentityCode", getterDncrypt = "getIdentityCode", neeDecrypt = true, neeEecrypt = true)
     private String identityCode;
 
     /** 居住地址 */
@@ -61,124 +73,6 @@ public class CompanyEmployee extends BaseEntity
     @Excel(name = "人像图片")
     private String faceImgUrl;
 
-    public void setId(Long id) 
-    {
-        this.id = id;
-    }
-
-    public Long getId() 
-    {
-        return id;
-    }
-    public void setCompanyId(Long companyId) 
-    {
-        this.companyId = companyId;
-    }
-
-    public Long getCompanyId() 
-    {
-        return companyId;
-    }
-    public void setName(String name) 
-    {
-        this.name = name;
-    }
-
-    public String getName() 
-    {
-        return name;
-    }
-    public void setPhone(String phone) 
-    {
-        this.phone = phone;
-    }
-
-    public String getPhone() 
-    {
-        return phone;
-    }
-    public void setIdentityType(String identityType) 
-    {
-        this.identityType = identityType;
-    }
-
-    public String getIdentityType() 
-    {
-        return identityType;
-    }
-    public void setIdentityCode(String identityCode) 
-    {
-        this.identityCode = identityCode;
-    }
-
-    public String getIdentityCode() 
-    {
-        return identityCode;
-    }
-    public void setLivingAddres(String livingAddres) 
-    {
-        this.livingAddres = livingAddres;
-    }
-
-    public String getLivingAddres() 
-    {
-        return livingAddres;
-    }
-    public void setNativePalce(String nativePalce) 
-    {
-        this.nativePalce = nativePalce;
-    }
-
-    public String getNativePalce() 
-    {
-        return nativePalce;
-    }
-    public void setPositionType(String positionType) 
-    {
-        this.positionType = positionType;
-    }
-
-    public String getPositionType() 
-    {
-        return positionType;
-    }
-    public void setJoinedDate(Date joinedDate) 
-    {
-        this.joinedDate = joinedDate;
-    }
-
-    public Date getJoinedDate() 
-    {
-        return joinedDate;
-    }
-    public void setFaceImgUrl(String faceImgUrl) 
-    {
-        this.faceImgUrl = faceImgUrl;
-    }
-
-    public String getFaceImgUrl() 
-    {
-        return faceImgUrl;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("companyId", getCompanyId())
-            .append("name", getName())
-            .append("phone", getPhone())
-            .append("identityType", getIdentityType())
-            .append("identityCode", getIdentityCode())
-            .append("livingAddres", getLivingAddres())
-            .append("nativePalce", getNativePalce())
-            .append("positionType", getPositionType())
-            .append("joinedDate", getJoinedDate())
-            .append("faceImgUrl", getFaceImgUrl())
-            .append("createTime", getCreateTime())
-            .append("createBy", getCreateBy())
-            .append("updateTime", getUpdateTime())
-            .append("updateBy", getUpdateBy())
-            .toString();
-    }
+    /** 所属单位 */
+    private String companyName;
 }

@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jingyu.common.utils.encryption_decryption.SensitiveNew;
 import lombok.Data;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -30,6 +31,7 @@ public class PersonFlow extends BaseEntity
 
     /** 名称 */
     @Excel(name = "名称")
+    @SensitiveNew(setterEncrypt = "setName", getterDncrypt = "getName", EncryptMethod = "nameEncrypt", notEncryptByResponse = true)
     private String name;
 
     /** 证件类型 */
@@ -37,10 +39,12 @@ public class PersonFlow extends BaseEntity
 
     /** 身份证号 */
     @Excel(name = "身份证号")
+    @SensitiveNew(setterEncrypt = "setCertNo", getterDncrypt = "getCertNo", neeDecrypt = true, neeEecrypt = true)
     private String certNo;
 
     /** 手机号 */
     @Excel(name = "手机号")
+    @SensitiveNew(setterEncrypt = "setPhone", getterDncrypt = "getPhone", neeDecrypt = true, neeEecrypt = true)
     private String phone;
 
     /** 籍贯 */
@@ -77,6 +81,18 @@ public class PersonFlow extends BaseEntity
     /** 关注的级别 0绿 1黄 2红 */
     @Excel(name = "关注的级别 0绿 1黄 2红")
     private String attentionLevel;
+
+    /** 数据来源平台（群众自主、警员录入、网页、三方） */
+    @Excel(name = "数据来源平台", readConverterExp = "群=众自主、警员录入、网页、三方")
+    private String sourcePlatform;
+
+    /** 关注原因 */
+    @Excel(name = "关注原因")
+    private String focusReason;
+
+    /** 注原因-补充描述 */
+    @Excel(name = "注原因-补充描述")
+    private String reasonDesc;
 
     private List<PersonHouse> houseList = new ArrayList<>();
 

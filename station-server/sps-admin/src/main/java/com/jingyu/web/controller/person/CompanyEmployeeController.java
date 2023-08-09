@@ -2,6 +2,8 @@ package com.jingyu.web.controller.person;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.jingyu.common.utils.encryption_decryption.SensitiveNewsHander;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,7 +68,7 @@ public class CompanyEmployeeController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return success(companyEmployeeService.selectCompanyEmployeeById(id));
+        return toAjax(companyEmployeeService.selectCompanyEmployeeById(id));
     }
 
     /**
@@ -77,6 +79,7 @@ public class CompanyEmployeeController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody CompanyEmployee companyEmployee)
     {
+        SensitiveNewsHander.revertEncryptAttrs(companyEmployee);
         return toAjax(companyEmployeeService.insertCompanyEmployee(companyEmployee));
     }
 

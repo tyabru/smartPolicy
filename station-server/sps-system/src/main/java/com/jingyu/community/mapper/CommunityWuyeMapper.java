@@ -60,4 +60,12 @@ public interface CommunityWuyeMapper
      * @return 结果
      */
     public int deleteCommunityWuyeByIds(Long[] ids);
+
+    /**
+     * 查询物业信息管理
+     *
+     * @param certNo 身份证号码
+     * @return 物业信息管理
+     */
+    public CommunityWuye selectCommunityWuyeByCertNo(String certNo);
 }

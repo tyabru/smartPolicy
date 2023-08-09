@@ -5,44 +5,32 @@
         <el-row>
           <el-col  :span="6" :xs="24">
             <el-form-item label="单位编码" prop="companyCode" class="width-100Rate">
-              <el-input v-model="queryParams.companyCode" placeholder="请输入单位编码"
-                        clearable />
+              <el-input v-model="queryParams.companyCode" placeholder="请输入单位编码" clearable />
             </el-form-item>
           </el-col>
           <el-col  :span="6" :xs="24">
             <el-form-item label="单位名称" prop="companyName" class="width-100Rate">
-              <el-input v-model="queryParams.companyName" placeholder="请输入单位名称"
-                        clearable />
+              <el-input v-model="queryParams.companyName" placeholder="请输入单位名称" clearable />
             </el-form-item>
           </el-col>
           <el-col  :span="6" :xs="24">
             <el-form-item  label="联系电话" prop="phone" class="width-100Rate">
-              <el-input v-model="queryParams.phone" placeholder="请输入联系电话"
-                        clearable />
+              <el-input v-model="queryParams.phone" placeholder="请输入联系电话" clearable />
             </el-form-item>
           </el-col>
           <el-col  :span="6" :xs="24">
             <el-form-item  label="营业执照号" prop="tradeCode" class="width-100Rate">
-              <el-input v-model="queryParams.tradeCode" placeholder="请输入营业执照号"
-                        clearable />
+              <el-input v-model="queryParams.tradeCode" placeholder="请输入营业执照号" clearable />
             </el-form-item>
           </el-col>
           <el-col  :span="6" :xs="24">
             <el-form-item label="组织机构代码" prop="organizationCode" class="width-100Rate">
-              <el-input
-                v-model="queryParams.organizationCode"
-                placeholder="请输入组织机构代码"
-                clearable
-              />
+              <el-input v-model="queryParams.organizationCode" placeholder="请输入组织机构代码" clearable/>
             </el-form-item>
           </el-col>
           <el-col  :span="6" :xs="24">
             <el-form-item label="信用编号" prop="creditCode" class="width-100Rate">
-              <el-input
-                v-model="queryParams.creditCode"
-                placeholder="请输入信用编号"
-                clearable
-              />
+              <el-input v-model="queryParams.creditCode" placeholder="请输入信用编号" clearable/>
             </el-form-item>
           </el-col>
         </el-row>
@@ -77,21 +65,15 @@
       <el-table-column label="相关文件" align="center" prop="fileCount" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button size="mini" type="text"
-            icon="el-icon-edit"
-            @click="goToEditPage(scope.row)"
-            v-hasPermi="['community:company:edit']"
-          >修改</el-button>
-          <el-button size="mini" type="text"
-            icon="el-icon-delete" @click="handleDelete(scope.row)"
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="goToEditPage(scope.row)"
+            v-hasPermi="['community:company:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
             v-hasPermi="['community:company:remove']" >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination
-      :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize"
-      :pageSizes="pageSizes" @pagination="queryChanged" #page></pagination>
+    <pagination :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" :pageSizes="pageSizes" @pagination="queryChanged" #page></pagination>
   </table-panel>
 </template>
 
@@ -134,7 +116,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除单位基本信息编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除单位名称为"' + row.companyName + '"的数据项？').then(function() {
         return delCompany(ids);
       }).then(() => {
         this.getList();

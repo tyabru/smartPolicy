@@ -7,7 +7,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="PersonFcous" id="PersonFcousResult">
         <result property="id"    column="id"    />
         <result property="xqId"    column="xq_id"    />
+        <result property="communityName"    column="community_name"    />
         <result property="personType"    column="person_type"    />
+        <result property="personId"    column="person_id"    />
         <result property="focusReason"    column="focus_reason"    />
         <result property="level"    column="level"    />
         <result property="reasonDesc"    column="reason_desc"    />
@@ -30,7 +32,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPersonFcousVo">
-        select id, xq_id, person_type, focus_reason, level, reason_desc, address, meta_addr_id, native_palce, living_date, nation, name, cert_type, cert_no, phone, face_img_url, features, create_by, create_time, source_platform, update_by, update_time from sq_person_fcous
+        select p.id, p.xq_id, p.person_type, p.person_id, p.focus_reason, p.level, p.reason_desc, p.address, p.meta_addr_id,
+          p.native_palce, p.living_date, p.nation, p.name, p.cert_type, p.cert_no, p.phone, p.face_img_url, p.features, p.create_by,
+          p.create_time, p.source_platform, p.update_by, p.update_time, sq_community.name community_name
+        from sq_person_fcous p
+        inner join sq_community on p.xq_id = sq_community.id
     </sql>
 
     <select id="selectPersonFcousList" parameterType="PersonFcous" resultMap="PersonFcousResult">
@@ -58,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectPersonFcousById" parameterType="Long" resultMap="PersonFcousResult">
         <include refid="selectPersonFcousVo"/>
-        where id = #{id}
+        where p.id = #{id}
     </select>
         
     <insert id="insertPersonFcous" parameterType="PersonFcous" useGeneratedKeys="true" keyProperty="id">
@@ -66,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="xqId != null">xq_id,</if>
             <if test="personType != null">person_type,</if>
+            <if test="personId != null">person_id,</if>
             <if test="focusReason != null">focus_reason,</if>
             <if test="level != null">level,</if>
             <if test="reasonDesc != null">reason_desc,</if>
@@ -89,6 +96,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="xqId != null">#{xqId},</if>
             <if test="personType != null">#{personType},</if>
+            <if test="personId != null">#{personId},</if>
             <if test="focusReason != null">#{focusReason},</if>
             <if test="level != null">#{level},</if>
             <if test="reasonDesc != null">#{reasonDesc},</if>
@@ -116,6 +124,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="xqId != null">xq_id = #{xqId},</if>
             <if test="personType != null">person_type = #{personType},</if>
+            <if test="personId != null">person_id = #{personId},</if>
             <if test="focusReason != null">focus_reason = #{focusReason},</if>
             <if test="level != null">level = #{level},</if>
             <if test="reasonDesc != null">reason_desc = #{reasonDesc},</if>
@@ -138,6 +147,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where id = #{id}
     </update>
+
+    <delete id="deletePersonFcousByPersonId">
+        delete from sq_person_fcous where person_id = #{personId} and person_type = #{personType}
+    </delete>
 
     <delete id="deletePersonFcousById" parameterType="Long">
         delete from sq_person_fcous where id = #{id}

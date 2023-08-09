@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="CompanyEmployee" id="CompanyEmployeeResult">
         <result property="id"    column="id"    />
         <result property="companyId"    column="company_id"    />
+        <result property="companyName"    column="company_name"    />
         <result property="name"    column="name"    />
         <result property="phone"    column="phone"    />
         <result property="identityType"    column="identity_type"    />
@@ -23,7 +24,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCompanyEmployeeVo">
-        select id, company_id, name, phone, identity_type, identity_code, living_addres, native_palce, position_type, joined_date, face_img_url, create_time, create_by, update_time, update_by from sq_company_employee
+        select c.id, c.company_id, c.name, c.phone, c.identity_type, c.identity_code, c.living_addres, c.native_palce, c.position_type, c.joined_date,
+          c.face_img_url, c.create_time, c.create_by, c.update_time, c.update_by, sq_company.company_name
+        from sq_company_employee c
+        inner join sq_company on c.company_id = sq_company.id
     </sql>
 
     <select id="selectCompanyEmployeeList" parameterType="CompanyEmployee" resultMap="CompanyEmployeeResult">
@@ -33,7 +37,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
             <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
             <if test="identityType != null  and identityType != ''"> and identity_type = #{identityType}</if>
-            <if test="identityCode != null  and identityCode != ''"> and identity_code = #{identityCode}</if>
+            <if test="identityCode != null  and identityCode != ''"> and c.identity_code = #{identityCode}</if>
             <if test="livingAddres != null  and livingAddres != ''"> and living_addres = #{livingAddres}</if>
             <if test="nativePalce != null  and nativePalce != ''"> and native_palce = #{nativePalce}</if>
             <if test="positionType != null  and positionType != ''"> and position_type = #{positionType}</if>
@@ -44,7 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectCompanyEmployeeById" parameterType="Long" resultMap="CompanyEmployeeResult">
         <include refid="selectCompanyEmployeeVo"/>
-        where id = #{id}
+        where c.id = #{id}
     </select>
         
     <insert id="insertCompanyEmployee" parameterType="CompanyEmployee" useGeneratedKeys="true" keyProperty="id">

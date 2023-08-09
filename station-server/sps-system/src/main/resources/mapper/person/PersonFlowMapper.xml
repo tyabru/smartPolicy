@@ -55,6 +55,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectPersonFlowVo"/>
         where id = #{id}
     </select>
+
+    <select id="selectPersonFlowByCerNo" parameterType="String" resultMap="PersonFlowResult">
+        <include refid="selectPersonFlowVo"/>
+        where cert_no = #{certNo}
+    </select>
         
     <insert id="insertPersonFlow" parameterType="PersonFlow" useGeneratedKeys="true" keyProperty="id">
         insert into sq_person_flow

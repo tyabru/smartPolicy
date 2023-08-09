@@ -2,6 +2,10 @@ package com.jingyu.web.controller.community;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
+
+import com.jingyu.common.utils.StringUtils;
+import com.jingyu.common.utils.encryption_decryption.SensitiveNewsHander;
+import com.jingyu.common.utils.sign.AESUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,7 +70,7 @@ public class CommunityWuyeController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-        return success(communityWuyeService.selectCommunityWuyeById(id));
+        return toAjax(communityWuyeService.selectCommunityWuyeById(id));
     }
 
     /**
@@ -77,6 +81,7 @@ public class CommunityWuyeController extends BaseController
     @PostMapping
     public AjaxResult add(@RequestBody CommunityWuye communityWuye)
     {
+        SensitiveNewsHander.revertEncryptAttrs(communityWuye);
         return toAjax(communityWuyeService.insertCommunityWuye(communityWuye));
     }
 

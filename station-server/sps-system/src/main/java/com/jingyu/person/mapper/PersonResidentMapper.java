@@ -60,4 +60,12 @@ public interface PersonResidentMapper
      * @return 结果
      */
     public int deletePersonResidentByIds(Long[] ids);
+
+    /**
+     * 查询社区常驻人口
+     *
+     * @param certNo 人员身份证号码
+     * @return 社区常驻人口
+     */
+    public PersonResident selectPersonResidentByCerNo(String certNo);
 }

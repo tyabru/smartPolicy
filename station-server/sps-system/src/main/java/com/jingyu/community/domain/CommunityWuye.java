@@ -2,6 +2,7 @@ package com.jingyu.community.domain;
 
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jingyu.common.utils.encryption_decryption.SensitiveNew;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -40,14 +41,17 @@ public class CommunityWuye extends BaseEntity
 
     /** 人员姓名 */
     @Excel(name = "人员姓名")
+    @SensitiveNew(setterEncrypt = "setName", getterDncrypt = "getName", EncryptMethod = "nameEncrypt", notEncryptByResponse = true)
     private String name;
 
     /** 身份证号 */
     @Excel(name = "身份证号")
+    @SensitiveNew(setterEncrypt = "setCertNo", getterDncrypt = "getCertNo", neeDecrypt = true, neeEecrypt = true)
     private String certNo;
 
     /** 手机号 */
     @Excel(name = "手机号")
+    @SensitiveNew(setterEncrypt = "setPhone", getterDncrypt = "getPhone", neeDecrypt = true, neeEecrypt = true)
     private String phone;
 
     /** 现居地址 */

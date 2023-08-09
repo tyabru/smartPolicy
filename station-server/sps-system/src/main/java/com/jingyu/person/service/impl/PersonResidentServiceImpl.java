@@ -8,21 +8,22 @@ import com.jingyu.common.exception.CustomException;
 import com.jingyu.common.utils.DateUtils;
 import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.common.utils.StringUtils;
+import com.jingyu.common.utils.encryption_decryption.SensitiveNewsHander;
 import com.jingyu.common.utils.file.FileUtils;
-import com.jingyu.person.PersonConstants;
-import com.jingyu.person.domain.PersonFlow;
+import com.jingyu.common.utils.sign.AESUtil;
+import com.jingyu.person.domain.PersonFcous;
 import com.jingyu.person.domain.PersonHouse;
+import com.jingyu.person.service.IPersonFcousService;
 import com.jingyu.person.service.IPersonHouseService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.time.DateFormatUtils;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Service;
 import com.jingyu.person.mapper.PersonResidentMapper;
 import com.jingyu.person.domain.PersonResident;
 import com.jingyu.person.service.IPersonResidentService;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.jingyu.person.PersonConstants.PERSON_TYPE_FLOW;
+import static com.jingyu.person.PersonConstants.PERSON_IS_IMPORTANT;
 import static com.jingyu.person.PersonConstants.PERSON_TYPE_RESIDENT;
 
 /**
@@ -36,7 +37,11 @@ import static com.jingyu.person.PersonConstants.PERSON_TYPE_RESIDENT;
 public class PersonResidentServiceImpl implements IPersonResidentService 
 {
     private final PersonResidentMapper personResidentMapper;
+
     private final IPersonHouseService personHouseService;
+
+    private final IPersonFcousService personFcousService;
+
     /**
      * 查询社区常驻人口
      * 
@@ -46,7 +51,16 @@ public class PersonResidentServiceImpl implements IPersonResidentService
     @Override
     public PersonResident selectPersonResidentById(Long id)
     {
-        return personResidentMapper.selectPersonResidentById(id);
+        PersonResident personResident = personResidentMapper.selectPersonResidentById(id);
+        if (personResident.getIsImportant().equals("Y")) {
+            PersonFcous person = new PersonFcous();
+            person.setPersonId(personResident.getId());
+            person.setPersonType(1L);
+            List<PersonFcous> personFcous = personFcousService.selectPersonFcousList(person);
+            personResident.setFocusReason(personFcous.get(0).getFocusReason());
+            personResident.setReasonDesc(personFcous.get(0).getReasonDesc());
+        }
+        return personResident;
     }
 
     /**
@@ -90,9 +104,53 @@ public class PersonResidentServiceImpl implements IPersonResidentService
         }
         int i = personResidentMapper.insertPersonResident(personResident);
         if(i > 0) {
+            //添加位重点关注人员
+            if (personResident.getIsImportant().equals(PERSON_IS_IMPORTANT)) {
+                PersonResident person = personResidentMapper.selectPersonResidentByCerNo(personResident.getCertNo());
+                personResident.setId(person.getId());
+                PersonFcous personFcous = addPersonFcous(personResident);
+                List<PersonHouse> houseList = personResident.getHouseList();
+                for (PersonHouse personHouse : houseList) {
+                    addPersonFcousHouse(personFcous,personHouse);
+                    personFcousService.insertPersonFcous(personFcous);
+                }
+            }
             handleHouseList(personResident);
         }
         return i;
+    }
+
+    /**
+     * 添加为重点关注人员
+     * */
+    public PersonFcous addPersonFcous(PersonResident personResident) {
+        PersonFcous personFcous = new PersonFcous();
+        personFcous.setPersonId(personResident.getId());
+        personFcous.setPersonType(PERSON_TYPE_RESIDENT);
+        personFcous.setFocusReason(personResident.getFocusReason());
+        personFcous.setLevel(personResident.getAttentionLevel());
+        personFcous.setReasonDesc(personResident.getReasonDesc());
+        personFcous.setNativePalce(personResident.getNativePlace());
+        personFcous.setName(personResident.getName());
+        personFcous.setCertType(personResident.getCertType());
+        personFcous.setCertNo(personResident.getCertNo());
+        personFcous.setPhone(personResident.getPhone());
+        personFcous.setFaceImgUrl(personResident.getFaceImgUrl());
+        personFcous.setFeatures(personResident.getFeatures());
+        personFcous.setCreateBy(personResident.getCreateBy());
+        personFcous.setSourcePlatform(personResident.getSourcePlatform());
+        return personFcous;
+    }
+
+    /**
+     * 添加居住房屋信息
+     * */
+    public PersonFcous addPersonFcousHouse(PersonFcous personFcous,PersonHouse personHouse) {
+        personFcous.setXqId(personHouse.getCommunityId());
+        personFcous.setAddress(personHouse.getFullAddress());
+        personFcous.setMetaAddrId(personHouse.getMetaAddrId());
+        personFcous.setLivingDate(personHouse.getStartTime());
+        return personFcous;
     }
 
     /**
@@ -108,11 +166,23 @@ public class PersonResidentServiceImpl implements IPersonResidentService
         personResident.setUpdateTime(DateUtils.getNowDate());
         personResident.setUpdateBy(SecurityUtils.getUsername());
         PersonResident old = selectPersonResidentById(personResident.getId());
+        old.setCertNo(AESUtil.decrypt(old.getCertNo()));
+        old.setPhone(AESUtil.decrypt(old.getPhone()));
+        SensitiveNewsHander.revertNotEditAttrs(personResident,old);
+        SensitiveNewsHander.revertEncryptAttrs(personResident);
         boolean needDelOldFile = !Objects.equals(personResident.getFaceImgUrl(), old.getFaceImgUrl());
         int i = personResidentMapper.updatePersonResident(personResident);
         if(i > 0) {
             if(needDelOldFile) {
                 FileUtils.deleteFile(old.getFaceImgUrl());
+            }
+            if (personResident.getIsImportant().equals(PERSON_IS_IMPORTANT)) {
+                PersonFcous personFcous = addPersonFcous(personResident);
+                List<PersonHouse> houseList = personResident.getHouseList();
+                for (PersonHouse personHouse : houseList) {
+                    addPersonFcousHouse(personFcous,personHouse);
+                    personFcousService.updatePersonFcous(personFcous);
+                }
             }
             handleHouseList(personResident);
         }
@@ -151,6 +221,9 @@ public class PersonResidentServiceImpl implements IPersonResidentService
     public int deletePersonResidentById(Long id)
     {
         PersonResident resident = selectPersonResidentById(id);
+        if (resident.getIsImportant().equals(PERSON_IS_IMPORTANT)) {
+            personFcousService.deletePersonFcousByPersonId(id,PERSON_TYPE_RESIDENT);
+        }
         if(StringUtils.isNotEmpty(resident.getFaceImgUrl())) {
             FileUtils.deleteFileByProfileUrl(resident.getFaceImgUrl());
         }

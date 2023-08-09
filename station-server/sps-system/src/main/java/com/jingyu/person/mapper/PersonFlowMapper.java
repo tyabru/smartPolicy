@@ -58,4 +58,12 @@ public interface PersonFlowMapper
      * @return 结果
      */
     public int deletePersonFlowByIds(Long[] ids);
+
+    /**
+     * 查询流动人口
+     *
+     * @param certNo 流动人口身份证号码
+     * @return 流动人口
+     */
+    public PersonFlow selectPersonFlowByCerNo(String certNo);
 }

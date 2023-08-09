@@ -3,45 +3,24 @@
     <template #search-form>
       <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
         <el-form-item label="小区编码" prop="communityCode">
-          <el-input
-            v-model="queryParams.communityCode"
-            placeholder="请输入小区编码"
-            clearable
-          />
+          <el-input v-model="queryParams.communityCode" placeholder="请输入小区编码" clearable/>
         </el-form-item>
         <el-form-item label="小区名称" prop="communityName">
-          <el-input
-            v-model="queryParams.communityName"
-            placeholder="请输入小区名称"
-            clearable
-          />
+          <el-input v-model="queryParams.communityName" placeholder="请输入小区名称" clearable/>
         </el-form-item>
         <el-form-item label="地址编码" prop="metaAddrId">
-          <el-input
-            v-model="queryParams.metaAddrId"
-            placeholder="请输入地址编码"
-            clearable
-          />
+          <el-input v-model="queryParams.metaAddrId" placeholder="请输入地址编码" clearable/>
         </el-form-item>
         <el-form-item label="地址全称" prop="fullAddress">
-          <el-input
-            v-model="queryParams.fullAddress"
-            placeholder="请输入地址全称"
-            clearable
-          />
+          <el-input v-model="queryParams.fullAddress" placeholder="请输入地址全称" clearable/>
         </el-form-item>
         <el-form-item label="地址级别" prop="metaLevel">
           <el-select v-model="queryParams.metaLevel" clearable placeholder="请输入地址级别">
-            <el-option v-for="item in dict.type['structure_level']"
-                       :key="item.value" :value="item.value" :label="item.label" />
+            <el-option v-for="item in dict.type['structure_level']" :key="item.value" :value="item.value" :label="item.label" />
           </el-select>
         </el-form-item>
         <el-form-item label="所属区域" prop="region">
-          <el-input
-            v-model="queryParams.region"
-            placeholder="请输入所属区域"
-            clearable
-          />
+          <el-input v-model="queryParams.region" placeholder="请输入所属区域" clearable/>
         </el-form-item>
       </el-form>
     </template>
@@ -75,36 +54,20 @@
       <el-table-column label="地址简称" align="left" prop="shortName" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['community:structure:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['community:structure:remove']"
-          >删除</el-button>
+          <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope.row)"
+            v-hasPermi="['community:structure:query']">查看</el-button>
+          <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
+            v-hasPermi="['community:structure:edit']">修改</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
+            v-hasPermi="['community:structure:remove']">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="queryChanged"
-    />
+    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="queryChanged"/>
 
     <!-- 添加或修改小区房屋结构和地址信息对话框 -->
-    <el-dialog :title="title" :visible.sync="open" @close="reset"
-               width="50vw" append-to-body :close-on-click-modal="false">
-      <el-form ref="form" :loading="dialogLoading" :model="form" :rules="rules" label-width="110px">
+    <el-dialog :title="title" :visible.sync="open" @close="reset" width="50vw" append-to-body :close-on-click-modal="false">
+      <el-form ref="form" :loading="dialogLoading" :model="form" :rules="rules" label-width="110px" :disabled="disabled">
         <el-row>
           <el-col :span="24">
             <el-form-item label="地址全称" prop="fullAddress">
@@ -113,9 +76,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="所属小区" prop="communityId">
-              <se-community  ref="form-community" v-model="form.communityId"
-                             @change="communityChange"
-                             placeholder="请输入小区外键" class="width-100Rate" />
+              <se-community  ref="form-community" v-model="form.communityId" @change="communityChange" placeholder="请输入小区外键" class="width-100Rate" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -143,32 +104,28 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="楼栋" prop="dong">
-              <el-input v-model="form.dong"
-                        placeholder="请输入地址楼栋" />
+              <el-input v-model="form.dong" placeholder="请输入地址楼栋" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="单元" prop="unit">
-              <el-input v-model="form.unit"
-                        placeholder="请输入地址单元" />
+              <el-input v-model="form.unit" placeholder="请输入地址单元" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="楼层" prop="ceng">
-              <el-input v-model="form.ceng"
-                        placeholder="请输入地址楼层" />
+              <el-input v-model="form.ceng" placeholder="请输入地址楼层" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="门牌" prop="room">
-              <el-input v-model="form.room"
-                        placeholder="请输入地址门牌号" />
+              <el-input v-model="form.room" placeholder="请输入地址门牌号" />
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button v-show="isDisplay" type="primary" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -177,9 +134,7 @@
                    drag :file-size="30" :file-type="['xls', 'xlsx', 'csv']" />
       <div style="background-color: #e8e8e8; margin-top: 20px; border-radius: 4px; padding: 10px">
         导入文件类型为Excel表格或CSV文件，文档导入的Excel模板可以
-        <el-button type="text"
-                   @click="downloadExample"
-                   style="text-decoration: underline">点此下载</el-button>。列标题不可更改以免导入失败。
+        <el-button type="text" @click="downloadExample" style="text-decoration: underline">点此下载</el-button>。列标题不可更改以免导入失败。
       </div>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" :disabled="btnVisible" :loading="btnVisible" @click="importForm">确 定</el-button>
@@ -227,6 +182,10 @@ export default {
       }
     }
     return {
+      //是否显示
+      isDisplay: false,
+      //是否禁用修改
+      disabled: true,
       importDialog: false,
       // 选中数组
       ids: [],
@@ -313,7 +272,30 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
+      this.disabled = false;
+      this.isDisplay = true;
       this.title = "添加小区房屋结构和地址信息";
+    },
+    /** 查看按钮操作 */
+    handleView(row) {
+      this.reset();
+      const id = row.id || this.ids
+      getStructure(id).then(response => {
+        this.open = true;
+        this.title = "查看小区房屋结构和地址信息";
+        this.form = response.data;
+        this.dialogLoading = true
+        this.disabled = true;
+        this.isDisplay = false;
+        listCommunity({ code: this.form.communityCode }).then(({ code, rows }) => {
+          if(code === 200 && rows && rows.length > 0) {
+            const data = rows[0]
+            this.form.communityId = data.id
+            this.form.pcsId = data.pcsId
+            this.form.pcsName = data.pcsName
+          }
+        }).finally(() => { this.dialogLoading = false })
+      });
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -323,7 +305,9 @@ export default {
         this.open = true;
         this.title = "修改小区房屋结构和地址信息";
         this.form = response.data;
-        this.dialogLoading = true
+        this.dialogLoading = true;
+        this.disabled = false;
+        this.isDisplay = true;
         listCommunity({ code: this.form.communityCode }).then(({ code, rows }) => {
           if(code === 200 && rows && rows.length > 0) {
             const data = rows[0]
@@ -391,7 +375,7 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除小区房屋结构和地址信息编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm('是否确认删除小区房屋结构和地址编号为"' + row.metaAddrId + '"的数据项？').then(function() {
         return delStructure(ids);
       }).then(() => {
         this.queryChanged();

@@ -97,4 +97,15 @@ public class PersonFcousServiceImpl implements IPersonFcousService
         return personFcousMapper.deletePersonFcousById(id);
     }
 
+    /**
+     * 删除重点关注人口信息
+     *
+     * @param personId 重点关注人口主键, personTypeResident 人员类型
+     * @return 结果
+     */
+    @Override
+    public int deletePersonFcousByPersonId(Long personId, Long personType) {
+        return personFcousMapper.deletePersonFcousByPersonId(personId,personType);
+    }
+
 }

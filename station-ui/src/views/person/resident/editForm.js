@@ -1,11 +1,14 @@
 
 import { addResident, getResident, listResident, updateResident } from '@/api/person/resident'
-import { validIdCodeByType } from '@/utils/validate'
+import { validIdCodeByType, validPhone } from '@/utils/validate'
 import { queryResidentHouseList } from '@/api/person/house'
 
 export default {
   data() {
     const validIdCode = async (rule, value, callback)=>  {
+      if(value && value.includes("**")) {
+        callback();
+      }
       if(!value || value.length < 1){
         callback("身份证号为必填项！");
       }else {
@@ -29,6 +32,7 @@ export default {
         isImportant: 'N',
         certType: 'CN_CARD',
         attentionLevel: 'green',
+        nation: '01',
       },
       houseList: [],
       addressForm: {},
@@ -47,15 +51,14 @@ export default {
           { required: true, message: "身份证件类型不能为空", trigger: "blur" }
         ],
         certNo: [
+          { required: true, message: "身份证号码不能为空", trigger: "blur" },
+          { min: 18, max: 18, message: "身份证长度为18", trigger: "blur" },
           { validator: validIdCode, trigger: 'blur' }
         ],
         phone: [
           { required: true, message: "联系方式不能为空", trigger: "blur" },
-          {
-            pattern: /^1[3|4|5|6|7|8|9][0-9]\d{8}$/,
-            message: "请输入正确的手机号码",
-            trigger: "blur"
-          }
+          { min: 11, max: 11, message: "手机号长度为11", trigger: "blur" },
+          {validator : validPhone, trigger: "blur"}
         ],
         fullAddress: [
           { required: true, message: "居住地址不能为空", trigger: "blur" }
@@ -68,7 +71,13 @@ export default {
         ],
         isImportant: [
           { required: true, message: "是否重点人员不能为空", trigger: "blur" }
-        ]
+        ],
+        attentionLevel: [
+          { required: true, message: "关注级别不能为空", trigger: "blur" }
+        ],
+        livingDate: [
+          { required: true, message: "入住时间不能为空", trigger: "blur" }
+        ],
       }
     };
   },
@@ -94,7 +103,8 @@ export default {
         isImportant: 'N',
         certType: 'CN_CARD',
         attentionLevel: 'green',
-        houseList: []
+        houseList: [],
+        nation: '01',
       }
       this.houseList = []
       this.$refs['form']?.resetFields();

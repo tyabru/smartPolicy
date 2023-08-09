@@ -247,7 +247,6 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
     public void deletePolicePhoto (Long userId) {
         PoliceInformation policeInformation = policeInformationMapper.selectPoliceInformationByuserId(userId);
         String fileUrlPath = filePath + policeInformation.getPolicePhoto();
-        System.out.println(fileUrlPath);
         File file = new File(fileUrlPath);
         if (file.exists()) {
             file.delete();

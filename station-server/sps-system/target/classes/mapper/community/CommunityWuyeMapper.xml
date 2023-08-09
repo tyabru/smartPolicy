@@ -57,6 +57,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectCommunityWuyeVo"/>
         where id = #{id}
     </select>
+
+    <select id="selectCommunityWuyeByCertNo" parameterType="String" resultMap="CommunityWuyeResult">
+        <include refid="selectCommunityWuyeVo"/>
+        where cert_no = #{certNo}
+    </select>
         
     <insert id="insertCommunityWuye" parameterType="CommunityWuye" useGeneratedKeys="true" keyProperty="id">
         insert into sq_community_wuye

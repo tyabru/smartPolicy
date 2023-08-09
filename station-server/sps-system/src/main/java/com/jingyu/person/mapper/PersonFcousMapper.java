@@ -2,6 +2,7 @@ package com.jingyu.person.mapper;
 
 import java.util.List;
 import com.jingyu.person.domain.PersonFcous;
+import org.apache.ibatis.annotations.Param;
 
 /**
  * 重点关注人口Mapper接口
@@ -58,4 +59,12 @@ public interface PersonFcousMapper
      * @return 结果
      */
     public int deletePersonFcousByIds(Long[] ids);
+
+    /**
+     * 删除重点关注人口信息
+     *
+     * @param personId 重点关注人口主键, personType 人员类型
+     * @return 结果
+     */
+    public int deletePersonFcousByPersonId(@Param("personId") Long personId,@Param("personType") Long personType);
 }
