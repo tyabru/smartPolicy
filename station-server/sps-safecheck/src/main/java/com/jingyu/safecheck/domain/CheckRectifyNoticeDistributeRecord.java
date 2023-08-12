@@ -36,6 +36,14 @@ public class CheckRectifyNoticeDistributeRecord extends BaseEntity
     @Excel(name = "被检查单位负责人")
     private String checkedUnitDirector;
 
+    /** 用户id */
+    @Excel(name = "用户id")
+    private Long userId;
+
+    /** 部门id */
+    @Excel(name = "部门id")
+    private Long deptId;
+
     /** 被检查人账号 */
     @Excel(name = "被检查人账号")
     private Long checkedUnitDirectorAcccoutNumber;
@@ -61,10 +69,12 @@ public class CheckRectifyNoticeDistributeRecord extends BaseEntity
     @Excel(name = "完成时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date finishDate;
 
-    /** 完成状态(0:正常1：超期） */
+    /** 完成状态(0:未下发1：已下发未超期2：已下发已超期） */
+    @Excel(name = "完成状态(0:未下发1：已下发未超期2：已下发已超期）")
     private String finishStatus;
 
     /** 短信提醒状态（0:未提醒1：已提醒） */
+    @Excel(name = "短信提醒状态", readConverterExp = "0=:未提醒1：已提醒")
     private String noticeStatus;
 
     public void setId(Long id)
@@ -111,6 +121,24 @@ public class CheckRectifyNoticeDistributeRecord extends BaseEntity
     public String getCheckedUnitDirector()
     {
         return checkedUnitDirector;
+    }
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+    public void setDeptId(Long deptId)
+    {
+        this.deptId = deptId;
+    }
+
+    public Long getDeptId()
+    {
+        return deptId;
     }
     public void setCheckedUnitDirectorAcccoutNumber(Long checkedUnitDirectorAcccoutNumber)
     {
@@ -193,6 +221,8 @@ public class CheckRectifyNoticeDistributeRecord extends BaseEntity
                 .append("placeId", getPlaceId())
                 .append("checkDate", getCheckDate())
                 .append("checkedUnitDirector", getCheckedUnitDirector())
+                .append("userId", getUserId())
+                .append("deptId", getDeptId())
                 .append("checkedUnitDirectorAcccoutNumber", getCheckedUnitDirectorAcccoutNumber())
                 .append("phoneNumber", getPhoneNumber())
                 .append("checkPolice", getCheckPolice())

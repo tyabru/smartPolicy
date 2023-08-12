@@ -4,6 +4,7 @@ import request from '@/utils/request'
 export function listRectifyresultreview(query) {
   return request({
     url: '/safecheck/rectifyresultreview/list',
+    // url: '/safecheck/CheckRectifyDistributeReview/list',
     method: 'get',
     params: query
   })
@@ -13,6 +14,7 @@ export function listRectifyresultreview(query) {
 export function getRectifyresultreview(id) {
   return request({
     url: '/safecheck/rectifyresultreview/' + id,
+    // url: '/safecheck/CheckRectifyDistributeReview/' + id,
     method: 'get'
   })
 }
@@ -21,6 +23,7 @@ export function getRectifyresultreview(id) {
 export function addRectifyresultreview(data) {
   return request({
     url: '/safecheck/rectifyresultreview',
+    // url: '/safecheck/CheckRectifyDistributeReview',
     method: 'post',
     data: data
   })
@@ -30,6 +33,7 @@ export function addRectifyresultreview(data) {
 export function updateRectifyresultreview(data) {
   return request({
     url: '/safecheck/rectifyresultreview',
+    // url: '/safecheck/CheckRectifyDistributeReview',
     method: 'put',
     data: data
   })
@@ -39,6 +43,7 @@ export function updateRectifyresultreview(data) {
 export function delRectifyresultreview(id) {
   return request({
     url: '/safecheck/rectifyresultreview/' + id,
+    // url: '/safecheck/CheckRectifyDistributeReview/' + id,
     method: 'delete'
   })
 }

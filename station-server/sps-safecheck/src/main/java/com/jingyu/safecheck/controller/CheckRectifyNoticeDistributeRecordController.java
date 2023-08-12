@@ -8,8 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import com.jingyu.safecheck.domain.CheckDangerRecord;
 import com.jingyu.safecheck.domain.CheckPlaceDict;
 import com.jingyu.safecheck.domain.CheckRectifyNoticeDistributeRecord;
+import com.jingyu.safecheck.domain.CheckRectifyNoticeDistributeReview;
 import com.jingyu.safecheck.service.ICheckPlaceDictService;
 import com.jingyu.safecheck.service.ICheckRectifyNoticeDistributeRecordService;
+import com.jingyu.safecheck.service.ICheckRectifyNoticeDistributeReviewService;
 import com.jingyu.safecheck.utils.WordUtil;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,12 +42,13 @@ public class CheckRectifyNoticeDistributeRecordController extends BaseController
 {
     @Autowired
     private ICheckRectifyNoticeDistributeRecordService checkRectifyNoticeDistributeRecordService;
+    @Autowired
     private ICheckPlaceDictService checkPlaceDictService;
 
     /**
      * 查询整改通知书下发列表
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:list')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:list')")
     @GetMapping("/list")
     public TableDataInfo list(CheckRectifyNoticeDistributeRecord checkRectifyNoticeDistributeRecord)
     {
@@ -67,17 +70,18 @@ public class CheckRectifyNoticeDistributeRecordController extends BaseController
 //        util.exportExcel(response, list, "整改通知书下发数据");
 //    }
 
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:exportWord')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:exportWord')")
     @GetMapping("/exportWord")
     public AjaxResult exportWord(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getQueryString().split("=")[1]);
         Map<String, Object> map = new HashMap<>();
 
-        CheckRectifyNoticeDistributeRecord checkRectifyNoticeDistributeRecord = null;
+        CheckPlaceDict checkPlaceDict = new CheckPlaceDict();
+        List<CheckPlaceDict> placeDicts = checkPlaceDictService.selectCheckPlaceDictList(checkPlaceDict);
+        CheckRectifyNoticeDistributeRecord checkRectifyNoticeDistributeRecord = new CheckRectifyNoticeDistributeRecord();
         List<CheckRectifyNoticeDistributeRecord> list = checkRectifyNoticeDistributeRecordService.selectCheckRectifyNoticeDistributeRecordList(checkRectifyNoticeDistributeRecord);
 
-//        CheckPlaceDict checkPlaceDict = null;
-//        List<CheckPlaceDict> placeDicts = checkPlaceDictService.selectCheckPlaceDictList(new CheckPlaceDict());
+
 
         for(int i=0;i<list.size();i++){
             if(list.get(i).getId()==id){
@@ -91,6 +95,8 @@ public class CheckRectifyNoticeDistributeRecordController extends BaseController
         Calendar finishCalendar = Calendar.getInstance();
         finishCalendar.setTime(list.get(id).getFinishDate());
 
+//        System.out.println(list.get(id).getPlaceId()-1);
+//        System.out.println(placeDicts.get((int) (list.get(id).getPlaceId()-1)));
 //        System.out.println(placeDicts.get((int) (list.get(id).getPlaceId()-1)).getRectifyNoticeTemplateParams());
 
         map.put("chected_unit", list.get(id).getChectedUnit());
@@ -99,8 +105,9 @@ public class CheckRectifyNoticeDistributeRecordController extends BaseController
         map.put("cd", checkCalendar.get(Calendar.DATE));
         map.put("police", list.get(id).getCheckPolice());
         map.put("check_safty_danger", list.get(id).getCheckSaftyDanger());
-//        map.put("rectify_notice_template_params",placeDicts.get((int) (list.get(id).getPlaceId()-1)).getRectifyNoticeTemplateParams());
-        map.put("rectify_notice_template_params","《中华人民共和国治安管理处罚法》《陕西省消防监督检查条例》《中华人民共和国消防法》《陕西省消防监督检查条例》《企事业单位内部治安保卫条例》《公安机关监督检查企事业单位内部治安保卫工作规定》");
+        map.put("rectify_notice_template_params",placeDicts.get((int) (list.get(id).getPlaceId()-1)).getRectifyNoticeTemplateParams());
+//        map.put("rectify_notice_template_params","《中华人民共和国治安管理处罚法》《陕西省消防监督检查条例》《中华人民共和国消防法》《陕西省消防监督检查条例》《企事业单位内部治安保卫条例》《公安机关监督检查企事业单位内部治安保卫工作规定》");
+//        map.put("rectify_notice_template_params",placeDicts.getRectifyNoticeTemplateParams());
         map.put("finish_date_year", finishCalendar.get(Calendar.YEAR));
         map.put("finish_date_month", finishCalendar.get(Calendar.MONTH)+1);
         map.put("finish_date_day", finishCalendar.get(Calendar.DATE));
@@ -117,7 +124,7 @@ public class CheckRectifyNoticeDistributeRecordController extends BaseController
     /**
      * 获取整改通知书下发详细信息
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:query')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -127,7 +134,7 @@ public class CheckRectifyNoticeDistributeRecordController extends BaseController
     /**
      * 新增整改通知书下发
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:add')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:add')")
     @Log(title = "整改通知书下发", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CheckRectifyNoticeDistributeRecord checkRectifyNoticeDistributeRecord)
@@ -138,7 +145,7 @@ public class CheckRectifyNoticeDistributeRecordController extends BaseController
     /**
      * 修改整改通知书下发
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:edit')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:edit')")
     @Log(title = "整改通知书下发", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CheckRectifyNoticeDistributeRecord checkRectifyNoticeDistributeRecord)
@@ -149,7 +156,7 @@ public class CheckRectifyNoticeDistributeRecordController extends BaseController
     /**
      * 删除整改通知书下发
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:remove')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifynoticedistribute:remove')")
     @Log(title = "整改通知书下发", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

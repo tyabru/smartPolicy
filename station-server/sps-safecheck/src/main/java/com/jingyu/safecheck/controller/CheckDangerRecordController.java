@@ -37,7 +37,7 @@ public class CheckDangerRecordController extends BaseController
     /**
      * 查询安全隐患检查登记列表
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:list')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:list')")
     @GetMapping("/list")
     public TableDataInfo list(CheckDangerRecord checkDangerRecord)
     {
@@ -67,13 +67,14 @@ public class CheckDangerRecordController extends BaseController
 //    }
 
 //    @Log(title = "根据模板导出word", businessType = BusinessType.IMPORT)
-    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:exportWord')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:exportWord')")
     @GetMapping("/exportWord")
     public AjaxResult exportWord(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getQueryString().split("=")[1]);
         Map<String, Object> map = new HashMap<>();
 
-        CheckDangerRecord checkDangerRecord = null;
+        CheckDangerRecord checkDangerRecord = new CheckDangerRecord();
+        System.out.println(checkDangerRecord);
         List<CheckDangerRecord> list = checkDangerRecordService.selectCheckDangerRecordList(checkDangerRecord);
         for(int i=0;i<list.size();i++){
             if(list.get(i).getId()==id){
@@ -109,7 +110,7 @@ public class CheckDangerRecordController extends BaseController
         if(list.get(id).getPlaceId()==1){
             name = WordUtil.easyPoiExport("mapper/safecheck/static/word/加油站检查模板.docx", tempDir, str, map, request, response);
         }else if(list.get(id).getPlaceId()==2){
-            name = WordUtil.easyPoiExport("mapper/safecheck/static/word/液化汽站检查模板.docx", tempDir, str, map, request, response);
+            name = WordUtil.easyPoiExport("mapper/safecheck/static/word/液化气站检查模板.docx", tempDir, str, map, request, response);
         }else if(list.get(id).getPlaceId()==3){
             name = WordUtil.easyPoiExport("mapper/safecheck/static/word/培训机构检查模板.docx", tempDir, str, map, request, response);
         }else if(list.get(id).getPlaceId()==4){
@@ -135,7 +136,7 @@ public class CheckDangerRecordController extends BaseController
     /**
      * 获取安全隐患检查登记详细信息
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:query')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -145,7 +146,7 @@ public class CheckDangerRecordController extends BaseController
     /**
      * 新增安全隐患检查登记
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:add')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:add')")
     @Log(title = "安全隐患检查登记", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CheckDangerRecord checkDangerRecord)
@@ -156,7 +157,7 @@ public class CheckDangerRecordController extends BaseController
     /**
      * 修改安全隐患检查登记
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:edit')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:edit')")
     @Log(title = "安全隐患检查登记", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CheckDangerRecord checkDangerRecord)
@@ -167,7 +168,7 @@ public class CheckDangerRecordController extends BaseController
     /**
      * 删除安全隐患检查登记
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:remove')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkdanger:remove')")
     @Log(title = "安全隐患检查登记", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

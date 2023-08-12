@@ -1,55 +1,74 @@
 <template>
-  <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-      <el-form-item label="被检查单位" prop="chectedUnit">
-        <el-input
-          v-model="queryParams.chectedUnit"
-          placeholder="请输入被检查单位"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="场所" prop="placeId">
-        <el-select v-model="queryParams.placeId" placeholder="请选择场所" clearable>
-          <el-option
-            v-for="dict in dict.type.place_list"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="检查日期" prop="checkDate">
-        <el-date-picker clearable
-          v-model="queryParams.checkDate"
-          type="date"
-          value-format="yyyy-MM-dd"
-          placeholder="请选择检查日期">
-        </el-date-picker>
-      </el-form-item>
-      <el-form-item label="被检查单位负责人" prop="checkedUnitDirector">
-        <el-input
-          v-model="queryParams.checkedUnitDirector"
-          placeholder="请输入被检查单位负责人"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="检查人员" prop="checkPerson">
-        <el-input
-          v-model="queryParams.checkPerson"
-          placeholder="请输入检查人员"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
-
-    <el-row :gutter="10" class="mb8">
+  <!-- <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px"> -->
+  <table-panel :show-search="showSearch">
+    <template #search-form>
+      <el-form size="mini" :model="queryParams" ref="queryForm" label-width="100px" inline>
+        <el-row>
+          
+          <el-col :span="6">    
+            <el-form-item label="被检查单位" prop="chectedUnit">
+              <el-input v-model="queryParams.chectedUnit" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="被检查单位负责人" prop="checkedUnitDirector">
+              <el-input
+                v-model="queryParams.checkedUnitDirector"
+              />
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="场所" prop="placeId">
+              <el-select v-model="queryParams.placeId">
+                <el-option
+                    v-for="dict in dict.type.place_list"
+                    :key="dict.value"
+                    :label="dict.label"
+                    :value="dict.value"
+                  />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="6">
+            <el-form-item label="检查人员" prop="checkPerson">
+              <el-input
+                v-model="queryParams.checkPerson"
+              />
+            </el-form-item>
+          </el-col>
+          <!-- <el-col :span="6">
+            <el-form-item label="检查日期" prop="checkDate">
+              <el-date-picker clearable
+                v-model="queryParams.checkDate"
+                type="date"
+                value-format="yyyy-MM-dd">
+              </el-date-picker>
+            </el-form-item>
+          </el-col> -->
+          
+        </el-row>
+      </el-form>
+    </template>
+    <template #search-form-btn>
+      <el-button size="mini" type="primary" @click="handleQuery">查询</el-button>
+      <el-button size="mini" type="info"  @click="resetQuery">重置</el-button>
+    </template>
+          <!-- <el-col :span="6">
+          <el-form-item>
+            <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
+            <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+          </el-form-item>
+         </el-col> -->
+         <!-- </el-row>
+      </el-form> -->
+    <template #btn>
+      <el-button size="mini" type="primary" @click="handleAdd">新增</el-button>
+      <el-button size="mini" type="success"  :disabled="single" @click="handleUpdate">修改</el-button>
+      <el-button size="mini" type="danger" :disabled="multiple" @click="handleDelete">删除</el-button>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+    </template>
+    <!-- <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
         <el-button
           type="primary"
@@ -81,7 +100,7 @@
           @click="handleDelete"
           v-hasPermi="['safecheck:checkdanger:remove']"
         >删除</el-button>
-      </el-col>
+      </el-col> -->
       <!-- <el-col :span="1.5">
         <el-button
           type="warning"
@@ -92,24 +111,26 @@
           v-hasPermi="['safecheck:checkdanger:exportWord']"
         >导出</el-button>
       </el-col> -->
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+      <!-- <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+    </el-row> -->
 
     <el-table v-loading="loading" :data="checkdangerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <!-- <el-table-column label="序号" align="center" prop="id" /> -->
       <el-table-column label="被检查单位" align="center" prop="chectedUnit" />
+       <el-table-column label="被检查单位负责人" align="center" prop="checkedUnitDirector" />
       <el-table-column label="场所" align="center" prop="placeId">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.place_list" :value="scope.row.placeId"/>
         </template>
       </el-table-column>
-      <el-table-column label="检查日期" align="center" prop="checkDate" width="180">
+     
+     
+       <el-table-column label="检查日期" align="center" prop="checkDate" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.checkDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="被检查单位负责人" align="center" prop="checkedUnitDirector" />
       <el-table-column label="检查人员" align="center" prop="checkPerson" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -132,14 +153,12 @@
           plain
           size="mini"
           @click="handleExport(scope.row.id)"
-          v-hasPermi="['safecheck:checkdanger:exportWord']"
         >预览</el-button>
         <el-button
           type="text"
           plain
           size="mini"
           @click="uploadForm(scope.row,scope.index)"
-          v-hasPermi="['safecheck:checkdanger:exportWord']"
         >上传</el-button>
         </template>
       </el-table-column>
@@ -166,6 +185,9 @@
         <el-form-item label="被检查单位" prop="chectedUnit">
           <el-input v-model="form.chectedUnit" placeholder="请输入被检查单位" />
         </el-form-item>
+        <el-form-item label="被检查单位负责人" prop="checkedUnitDirector">
+          <el-input v-model="form.checkedUnitDirector" placeholder="请输入被检查单位负责人" />
+        </el-form-item>
         <el-form-item label="场所" prop="placeId">
           <el-select v-model="placeValue" placeholder="请选择场所">
             <el-option
@@ -176,7 +198,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <div v-show="isShow">
+        <div v-show="placeValue">
           <PlaceType :placeId="placeValue" :checkItemsChoice="checkItemsChoice"  ref="PlaceType"/>
         </div>
         
@@ -193,7 +215,11 @@
           <br/>
            <el-input v-model="form.checkItemResults" placeholder="请输入检查项填写结果" /> 
         </el-form-item>-->
-        <el-form-item label="检查日期" prop="checkDate">
+       <el-form-item label="其他安全隐患" prop="otherSaftyDanger">
+          <el-input v-model="form.otherSaftyDanger" type="textarea" placeholder="请输入内容" />
+        </el-form-item>
+        
+         <el-form-item label="检查日期" prop="checkDate">
           <el-date-picker clearable
             v-model="form.checkDate"
             type="date"
@@ -201,15 +227,10 @@
             placeholder="请选择检查日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="被检查单位负责人" prop="checkedUnitDirector">
-          <el-input v-model="form.checkedUnitDirector" placeholder="请输入被检查单位负责人" />
-        </el-form-item>
         <el-form-item label="检查人员" prop="checkPerson">
           <el-input v-model="form.checkPerson" placeholder="请输入检查人员" />
         </el-form-item>
-        <el-form-item label="其他安全隐患" prop="otherSaftyDanger">
-          <el-input v-model="form.otherSaftyDanger" type="textarea" placeholder="请输入内容" />
-        </el-form-item>
+        
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -218,7 +239,7 @@
     </el-dialog>
 
 
-     <el-dialog title="场所检查项列表" :visible.sync="open1" width="700px" append-to-body>
+     <el-dialog title="检查记录表签名文件" :visible.sync="open1" width="700px" append-to-body>
       <el-form ref="form1" :model="form1" label-width="100px" size="mini">
         <el-row>
            <el-form-item label="检查记录表签名文件" prop="checkResult">
@@ -234,10 +255,12 @@
 
 
 
-  </div>
+  <!-- </div> -->
+   </table-panel>
 </template>
 
 <script>
+import TablePanel from '@/components/TablePanel/index.vue'
 import PlaceType from "@/components/PlaceType";
 import { listCheckdanger, getCheckdanger, delCheckdanger, addCheckdanger, updateCheckdanger,exportWord } from "@/api/safecheck/checkdanger";
 import { saveAs } from 'file-saver'
@@ -249,7 +272,7 @@ export default {
     return {
       updateStates:0,
       isShow:false,
-      placeValue:"",
+      placeValue:null,
       checkItemsChoice:[],
       // 遮罩层
       loading: true,
@@ -314,7 +337,7 @@ export default {
         this.form.placeId=newvalue;
         // console.log(newvalue,oldvalue)
         // this.$refs.PlaceType.$on('checkItemsResults',this.getcheckItemsResults)
-        this.isShow=true && this.placeValue!=''
+        // this.isShow=true && this.placeValue!=''
           // console.log(this.$refs.PlaceType)
           this.$nextTick(()=>{
                this.$refs.PlaceType.$on('checkItemsResults',this.getcheckItemsResults)
@@ -333,8 +356,21 @@ export default {
 
   },
   methods: {
+    getCheckDate() {
+      var now = new Date();
+      var year = now.getFullYear(); //得到年份
+      var month = now.getMonth(); //得到月份
+      var date = now.getDate(); //得到日期
+      var hour = " 00:00:00"; //默认时分秒 如果传给后台的格式为年月日时分秒，就需要加这个，如若不需要，此行可忽略
+      month = month + 1;
+      month = month.toString().padStart(2, "0");
+      date = date.toString().padStart(2, "0");
+      var defaultDate = `${year}-${month}-${date}`;//
+      return defaultDate;
+    },
     handlePreview(row) {
-       window.open(this.$store.state.settings.base_url+row)
+      window.open(process.env.VUE_APP_BASE_API+row)
+      //  window.open(this.$store.state.settings.base_url+row)
     },
     getcheckItemsResults(PlaceTypeCheckItemsResults){
       // console.log(checkItemsResults)
@@ -364,7 +400,7 @@ export default {
     },
     cancel1() {
       this.open1 = false;
-      // this.reset();
+      this.reset();
       // this.placeValue=''
       
     },
@@ -378,11 +414,11 @@ export default {
         checkedUnitDirector: null,
         checkPerson: null,
         checkItemResults: null,
-        otherSaftyDanger: null
+        otherSaftyDanger: null,
       };
       this.resetForm("form");
-      // this.placeValue=''
-      // this.checkItemsChoice=''
+      this.placeValue=null
+      this.checkItemsChoice=[]
     },
     /** 搜索按钮操作 */
     handleQuery() {
@@ -402,14 +438,14 @@ export default {
     },
     /** 新增按钮操作 */
     handleAdd() {
-      this.isShow=false
       this.reset();
+      this.form.checkDate = this.getCheckDate();
+      this.form.checkPerson =  this.$store.state.user.name;
       this.open = true;
       this.title = "添加安全隐患检查登记";
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset();
       const id = row.id || this.ids
       // this.updateUnitId =  row.id || this.ids
       // const id = this.updateUnitId
@@ -424,6 +460,7 @@ export default {
         this.checkItemsChoice=this.form.checkItemResults.split(',')
         this.isShow=true
       });
+      // this.reset();
     },
     /** 提交按钮 */
     submitForm() {
@@ -446,21 +483,26 @@ export default {
           }
         }
       });
+      // this.reset();
     },
     /** 提交按钮 */
     submitForm1() {
-      this.$refs["form1"].validate(valid => {
-        if (valid) {
-          if (this.form1.id != null) {
-            updateCheckdanger(this.form1).then(response => {
-              this.$modal.msgSuccess("上传成功");
-              this.open1 = false;
-              // this.getList();
-              // this.isShow=false
-            })
+      if((!this.form1.checkResult) || this.form1.checkResult.split(",").length>1)
+        alert("文件上传错误")
+      else{
+        this.$refs["form1"].validate(valid => {
+          if (valid) {
+            if (this.form1.id != null) {
+              updateCheckdanger(this.form1).then(response => {
+                this.$modal.msgSuccess("上传成功");
+                this.open1 = false;
+                // this.getList();
+                // this.isShow=false
+              })
+            }
           }
-        }
-      })
+        })
+      }
     },
     /** 删除按钮操作 */
     handleDelete(row) {
@@ -491,7 +533,8 @@ export default {
         return exportWord(queryParams);
       }).then(response => {
         // console.log(this.$store.state.settings.base_url)
-         window.open(this.$store.state.settings.base_url+"/profile/upload/"+response.msg)
+        window.open(process.env.VUE_APP_BASE_API+"/profile/upload/"+response.msg)
+        //  window.open(this.$store.state.settings.base_url+"/profile/upload/"+response.msg)
         // window.open("http://10.181.155.115:8080/profile/upload/"+response.msg)
         }).catch(() => {});
     //     const isBlob = blobValidate(data);
@@ -515,12 +558,12 @@ export default {
     uploadForm(row) {
       this.open1 = true;
       this.form1 = row;
-      console.log(this.form1)
+      // console.log(this.form1)
       // console.log("qqqqqqq   "+row)
       // this.form1 = Array(this.form1.checkItems.split(","))
     }
 
   },
-  components:{PlaceType}
+  components:{PlaceType,TablePanel}
 };
 </script>

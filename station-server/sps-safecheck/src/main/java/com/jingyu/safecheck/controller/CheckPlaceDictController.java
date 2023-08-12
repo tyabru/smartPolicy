@@ -38,7 +38,7 @@ public class CheckPlaceDictController extends BaseController
     /**
      * 查询安全隐患检查场所字典列表
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:list')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:list')")
     @GetMapping("/list")
     public TableDataInfo list(CheckPlaceDict checkPlaceDict)
     {
@@ -50,7 +50,7 @@ public class CheckPlaceDictController extends BaseController
     /**
      * 导出安全隐患检查场所字典列表
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:export')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:export')")
     @Log(title = "安全隐患检查场所字典", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CheckPlaceDict checkPlaceDict)
@@ -63,7 +63,7 @@ public class CheckPlaceDictController extends BaseController
     /**
      * 获取安全隐患检查场所字典详细信息
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:query')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -73,7 +73,7 @@ public class CheckPlaceDictController extends BaseController
     /**
      * 新增安全隐患检查场所字典
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:add')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:add')")
     @Log(title = "安全隐患检查场所字典", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CheckPlaceDict checkPlaceDict)
@@ -84,7 +84,7 @@ public class CheckPlaceDictController extends BaseController
     /**
      * 修改安全隐患检查场所字典
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:edit')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:edit')")
     @Log(title = "安全隐患检查场所字典", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CheckPlaceDict checkPlaceDict)
@@ -95,7 +95,7 @@ public class CheckPlaceDictController extends BaseController
     /**
      * 删除安全隐患检查场所字典
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:remove')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:checkplacedict:remove')")
     @Log(title = "安全隐患检查场所字典", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
