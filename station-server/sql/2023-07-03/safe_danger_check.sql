@@ -98,53 +98,6 @@ INSERT INTO `sys_dict_data` (`dict_code`, `dict_sort`, `dict_label`, `dict_value
 INSERT INTO `sys_dict_type` (`dict_id`, `dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (11, '场所列表', 'place_list', '0', 'admin', '2023-06-27 18:27:51', '', NULL, '场所列表');
 INSERT INTO `sys_dict_type` (`dict_id`, `dict_name`, `dict_type`, `status`, `create_by`, `create_time`, `update_by`, `update_time`, `remark`) VALUES (12, '安全隐患检查项列表', 'check_items', '0', 'admin', '2023-06-28 21:38:23', '', NULL, '安全隐患检查项列表');
 
-/*
- Navicat Premium Data Transfer
-
- Source Server         : localhost_3306
- Source Server Type    : MySQL
- Source Server Version : 50710
- Source Host           : localhost:3306
- Source Schema         : ry-vue
-
- Target Server Type    : MySQL
- Target Server Version : 50710
- File Encoding         : 65001
-
- Date: 08/07/2023 09:53:48
-*/
-
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for check_rectify_result_review_record
--- ----------------------------
-DROP TABLE IF EXISTS `check_rectify_result_review_record`;
-CREATE TABLE `check_rectify_result_review_record`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '序号',
-  `chected_unit` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '被检查单位',
-  `place_id` int(11) NOT NULL COMMENT '场所',
-  `check_date` datetime NOT NULL COMMENT '检查日期',
-  `checked_unit_director` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '被检查单位负责人',
-  `checked_unit_director_acccout_number` bigint(20) NOT NULL COMMENT '被检查人账号',
-  `check_police` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '责任民警',
-  `check_safty_danger` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '问题隐患',
-  `rectify_measure` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '整改措施',
-  `finish_date` datetime NOT NULL COMMENT '完成时间',
-  `rectify_notice_photo` blob NOT NULL COMMENT '整改通知书签字照片',
-  `rectify_result_site_photo` blob NOT NULL COMMENT '整改结果现场照片',
-  `review_status` enum('0','1','2') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '审核状态（0：待审核1：审核通过2：审核不通过）',
-  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '整改结果审核记录表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of check_rectify_result_review_record
--- ----------------------------
-INSERT INTO `check_rectify_result_review_record` VALUES (1, '急急急', 1, '2023-07-05 00:00:00', '花开花落', 124536457357, '还款记录', '回家了', '一路UN', '2023-07-29 00:00:00', 0x2F70726F66696C652F75706C6F61642F323032332F30372F30372FE695B4E694B9E9809AE79FA5E4B9A65F3230323330373037323135343433413030312E646F63, 0x2F70726F66696C652F75706C6F61642F323032332F30372F30372FE5BEAEE4BFA1E59BBEE789875F32303233303232333137353934325F3230323330373037313234323437413030322E6A7067);
-
-SET FOREIGN_KEY_CHECKS = 1;
 
 /*
  Navicat Premium Data Transfer
@@ -175,20 +128,14 @@ CREATE TABLE `check_danger_record`  (
   `place_id` int(11) NOT NULL COMMENT '场所',
   `check_date` datetime NOT NULL COMMENT '检查日期',
   `checked_unit_director` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '被检查单位负责人',
+  `dept_id` bigint(20) NULL DEFAULT NULL COMMENT '部门id',
   `user_id` bigint(20) NULL DEFAULT NULL COMMENT '用户id',
   `check_person` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '检查人员',
   `check_item_results` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '检查项填写结果',
   `other_safty_danger` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '其他安全隐患',
   `check_result` blob NULL COMMENT '检查记录表签名文件',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '安全隐患检查记录表' ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of check_danger_record
--- ----------------------------
-INSERT INTO `check_danger_record` VALUES (1, '阿里巴巴集团', 9, '2023-06-01 00:00:00', '蔡崇信', '张三', '0,1,1,1,1,1,1,1,1', NULL);
-INSERT INTO `check_danger_record` VALUES (2, '中石油', 1, '2023-06-08 00:00:00', '马化腾', '王健林', '0,0,0,1,1,1,1,1,1', NULL);
-INSERT INTO `check_danger_record` VALUES (3, '急急急', 1, '2023-07-06 00:00:00', '看看', '力量', '1,1,1,1,1,1,1,1,1', NULL);
+) ENGINE = InnoDB AUTO_INCREMENT = 108 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '安全隐患检查记录表' ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -240,50 +187,41 @@ INSERT INTO `check_place_dict` VALUES (11, 11, '11,12,13,14,15,16,17,18,19,20,21
 
 SET FOREIGN_KEY_CHECKS = 1;
 
-/*
- Navicat Premium Data Transfer
 
- Source Server         : localhost_3306
- Source Server Type    : MySQL
- Source Server Version : 50710
- Source Host           : localhost:3306
- Source Schema         : ry-vue
 
- Target Server Type    : MySQL
- Target Server Version : 50710
- File Encoding         : 65001
-
- Date: 08/07/2023 09:53:38
-*/
-
-SET NAMES utf8mb4;
-SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for check_rectify_notice_distribute_record
--- ----------------------------
-DROP TABLE IF EXISTS `check_rectify_notice_distribute_record`;
-CREATE TABLE `check_rectify_notice_distribute_record`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '序号',
+DROP TABLE IF EXISTS `check_rectify_notice_distribute_review`;
+CREATE TABLE `check_rectify_notice_distribute_review`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '序号',
   `chected_unit` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '被检查单位',
   `place_id` int(11) NOT NULL COMMENT '场所',
   `check_date` datetime NOT NULL COMMENT '检查日期',
   `checked_unit_director` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '被检查单位负责人',
-  `checked_unit_director_acccout_number` bigint(20) NOT NULL COMMENT '被检查人账号',
-  `phone_number` bigint(20) NULL DEFAULT NULL COMMENT '被检查人电话号码',
+  `user_id` bigint(20) NOT NULL COMMENT '用户id',
+  `dept_id` bigint(20) NOT NULL COMMENT '部门id',
+  `checked_unit_director_acccout_number` bigint(20) NULL DEFAULT NULL COMMENT '被检查人账号',
+  `phone_number` bigint(20) NOT NULL COMMENT '被检查人电话号码',
   `check_police` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '责任民警',
   `check_safty_danger` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '问题隐患',
   `rectify_measure` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL COMMENT '整改措施',
   `finish_date` datetime NOT NULL COMMENT '完成时间',
-  `finish_status` enum('0','1') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '完成状态(0:正常1：超期）',
-  `notice_status` enum('0','1') CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '0' COMMENT '短信提醒状态（0:未提醒1：已提醒）',
+  `finish_status` enum('0','1','2','3') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '完成状态(0:未下发1：已下发2：已提交3：未提交）',
+  `notice_status` enum('0','1') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '短信提醒状态（0:未提醒1：已提醒）',
+  `rectify_notice` blob NULL COMMENT '整改通知书',
+  `rectify_notice_signed` blob NULL COMMENT '整改通知书签字文件',
+  `rectify_result_site_photo` blob NULL COMMENT '整改结果现场照片',
+  `review_status` enum('0','1','2') CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '0' COMMENT '审核状态（0：待审核1：审核通过2：审核不通过）',
+  `remark` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '整改通知书下发记录表' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '整改通知书下发审核表' ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
--- Records of check_rectify_notice_distribute_record
+-- Records of check_rectify_notice_distribute_review
 -- ----------------------------
-INSERT INTO `check_rectify_notice_distribute_record` VALUES (1, '四川大学', 11, '2023-06-02 00:00:00', '马化腾', 13581379325, '刘强东', '思政教育不到位', '限期整改', '2023-06-30 00:00:00', '超期');
-INSERT INTO `check_rectify_notice_distribute_record` VALUES (2, '新东方', 3, '2023-07-07 00:00:00', '俞敏洪', 676858585855, '马云', '消防设备陈旧', '限期整改', '2023-07-29 00:00:00', '正常');
+INSERT INTO `check_rectify_notice_distribute_review` VALUES (5, 'admin', 1, '2023-07-22 00:00:00', 'admin', 1, 100, 11111111, 1111111, 'admin', 'admin', 'admin', '2023-07-31 00:00:00', '2', '0', NULL, 0x2F70726F66696C652F75706C6F61642F323032332F30372F32322F726563746966796E6F74696365666F726D5F3230323330373232313535343032413030392E706466, 0x2F70726F66696C652F75706C6F61642F323032332F30372F32322FE5BEAEE4BFA1E59BBEE789875F32303233303232333137353935305F3230323330373232313533323433413030322E6A70672C2F70726F66696C652F75706C6F61642F323032332F30372F32322FE591B8E591B8E591B85F3230323330373232313535333436413030382E504E47, '1', NULL);
+INSERT INTO `check_rectify_notice_distribute_review` VALUES (6, 'demo', 2, '2023-07-22 00:00:00', 'demo', 102, 117, 22222, 13581379325, 'demo', 'demo', 'demo', '2023-08-26 00:00:00', '0', '0', NULL, 0x2F70726F66696C652F75706C6F61642F323032332F30372F32322F726563746966796E6F74696365666F726D5F3230323330373232313630373330413030312E706466, 0x2F70726F66696C652F75706C6F61642F323032332F30372F32322FE591B8E591B8E591B85F3230323330373232313631313333413030332E504E472C2F70726F66696C652F75706C6F61642F323032332F30372F32352FE5BEAEE4BFA1E59BBEE789875F32303233303232333137353935305F3230323330373235313535333530413030362E6A70672C2F70726F66696C652F75706C6F61642F323032332F30372F32352FE5BEAEE4BFA1E59BBEE789875F32303233303232333137353935305F3230323330373235313535333533413030372E6A7067, '0', NULL);
+INSERT INTO `check_rectify_notice_distribute_review` VALUES (7, 'test', 8, '2023-07-22 00:00:00', 'test', 103, 118, 3333, 333333, 'test', 'test', 'tes', '2024-07-30 00:00:00', '0', '0', NULL, 0x2F70726F66696C652F75706C6F61642F323032332F30372F32322F726563746966796E6F74696365666F726D5F3230323330373232313730323439413030312E706466, 0x2F70726F66696C652F75706C6F61642F323032332F30372F32322FE591B8E591B8E591B85F3230323330373232313730323535413030322E504E47, '0', NULL);
+INSERT INTO `check_rectify_notice_distribute_review` VALUES (8, 'no', 4, '2023-07-22 00:00:00', 'no', 1, 100, 444, 4444, 'no', 'no', 'no', '2023-09-09 00:00:00', '3', '0', NULL, NULL, NULL, '0', NULL);
+INSERT INTO `check_rectify_notice_distribute_review` VALUES (9, 'photo', 6, '2023-07-23 00:00:00', 'photo', 1, 100, 1111, 111111, 'admin', 'photo', 'photo', '2023-07-26 00:00:00', '2', '0', NULL, 0x2F70726F66696C652F75706C6F61642F323032332F30372F32332F726563746966796E6F74696365666F726D5F3230323330373233313631373535413030342E706466, 0x2F70726F66696C652F75706C6F61642F323032332F30372F32332FE5BEAEE4BFA1E59BBEE789875F32303233303232333137353935305F3230323330373233313631373431413030312E6A70672C2F70726F66696C652F75706C6F61642F323032332F30372F32332FE5BEAEE4BFA1E59BBEE789875F32303233303232333137353935305F3230323330373233313631373435413030322E6A70672C2F70726F66696C652F75706C6F61642F323032332F30372F32332FE5BEAEE4BFA1E59BBEE789875F32303233303232333137353935305F3230323330373233313631373438413030332E6A7067, '0', NULL);
 
 SET FOREIGN_KEY_CHECKS = 1;
+

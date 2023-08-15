@@ -1,8 +1,11 @@
 package com.jingyu.safecheck.utils;
 
+import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.safecheck.domain.CheckRectifyNoticeDistributeRecord;
+import com.jingyu.safecheck.domain.CheckRectifyNoticeDistributeReview;
 import com.jingyu.safecheck.mapper.CheckRectifyNoticeDistributeRecordMapper;
 import com.jingyu.safecheck.service.ICheckRectifyNoticeDistributeRecordService;
+import com.jingyu.safecheck.service.ICheckRectifyNoticeDistributeReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -15,28 +18,25 @@ import java.util.*;
 @EnableScheduling   // 2.开启定时任务
 public class SaticScheduleTask {
     @Autowired
-    private ICheckRectifyNoticeDistributeRecordService checkRectifyNoticeDistributeRecordService;
-    private CheckRectifyNoticeDistributeRecord checkRectifyNoticeDistributeRecord;
-
-    private CheckRectifyNoticeDistributeRecordMapper checkRectifyNoticeDistributeRecordMapper;
+    private ICheckRectifyNoticeDistributeReviewService checkRectifyNoticeDistributeReviewService;
     //3.添加定时任务
-    @Scheduled(cron = "* * * * 1 ?")
+    @Scheduled(cron = "0/5 * * * * ?")
     //或直接指定时间间隔，例如：5秒
     //@Scheduled(fixedRate=5000)
     private void configureTasks() throws Exception {
-        List<CheckRectifyNoticeDistributeRecord> list = checkRectifyNoticeDistributeRecordService.selectCheckRectifyNoticeDistributeRecordList(checkRectifyNoticeDistributeRecord);
+        List<CheckRectifyNoticeDistributeReview> list = checkRectifyNoticeDistributeReviewService.selectCheckRectifyNoticeDistributeReviewList(new CheckRectifyNoticeDistributeReview());
 
         // 获取当前时间
-        Date date = new Date();
+        Date date1 = new Date();
         Calendar calendar = new GregorianCalendar();
-        calendar.setTime(date);
+        calendar.setTime(date1);
         // 把日期往后增加一天,整数  往后推,负数往前移动
         calendar.add(Calendar.DATE, 1);
         // 这个时间就是日期往后推一天的结果
-        date = calendar.getTime();
+        Date date2 = calendar.getTime();
 
         for(int i=0;i<list.size();i++){
-            if((date.compareTo(list.get(i).getCheckDate())>=0)&&(list.get(i).getNoticeStatus().equals("0"))){
+            if((date2.compareTo(list.get(i).getFinishDate())>=0)&&(list.get(i).getNoticeStatus().equals("0"))&&(list.get(i).getFinishStatus().equals("1"))){
                 System.out.println(list.get(i).getPhoneNumber());
 //                List<String> mobiles = new ArrayList<>();
 //                mobiles.add("15*******13");
@@ -47,9 +47,12 @@ public class SaticScheduleTask {
 //                HuaWeiCloudSendSms.sendSms((list.get(i).getPhoneNumber().toString()));
                 list.get(i).setNoticeStatus("1");
 //                System.out.println(list.get(i));
-                checkRectifyNoticeDistributeRecordService.updateCheckRectifyNoticeDistributeRecord(list.get(i));
+                checkRectifyNoticeDistributeReviewService.updateCheckRectifyNoticeDistributeReview(list.get(i));
 //                checkRectifyNoticeDistributeRecordMapper.updateCheckRectifyNoticeDistributeRecord(list.get(i));
-
+            }
+            if((date1.compareTo(list.get(i).getFinishDate())>=0)&&(list.get(i).getFinishStatus().equals("1"))){
+                list.get(i).setFinishStatus("3");
+                checkRectifyNoticeDistributeReviewService.updateCheckRectifyNoticeDistributeReview(list.get(i));
             }
         }
 

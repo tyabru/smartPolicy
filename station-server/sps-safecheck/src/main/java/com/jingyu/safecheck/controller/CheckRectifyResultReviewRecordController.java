@@ -38,7 +38,7 @@ public class CheckRectifyResultReviewRecordController extends BaseController
     /**
      * 查询整改结果审核列表
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:list')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:list')")
     @GetMapping("/list")
     public TableDataInfo list(CheckRectifyResultReviewRecord checkRectifyResultReviewRecord)
     {
@@ -50,7 +50,7 @@ public class CheckRectifyResultReviewRecordController extends BaseController
     /**
      * 导出整改结果审核列表
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:export')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:export')")
     @Log(title = "整改结果审核", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CheckRectifyResultReviewRecord checkRectifyResultReviewRecord)
@@ -63,7 +63,7 @@ public class CheckRectifyResultReviewRecordController extends BaseController
     /**
      * 获取整改结果审核详细信息
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:query')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -73,7 +73,7 @@ public class CheckRectifyResultReviewRecordController extends BaseController
     /**
      * 新增整改结果审核
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:add')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:add')")
     @Log(title = "整改结果审核", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CheckRectifyResultReviewRecord checkRectifyResultReviewRecord)
@@ -84,7 +84,7 @@ public class CheckRectifyResultReviewRecordController extends BaseController
     /**
      * 修改整改结果审核
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:edit')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:edit')")
     @Log(title = "整改结果审核", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CheckRectifyResultReviewRecord checkRectifyResultReviewRecord)
@@ -95,7 +95,7 @@ public class CheckRectifyResultReviewRecordController extends BaseController
     /**
      * 删除整改结果审核
      */
-    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:remove')")
+//    @PreAuthorize("@ss.hasPermi('safecheck:rectifyresultreview:remove')")
     @Log(title = "整改结果审核", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

@@ -37,6 +37,10 @@ public class CheckDangerRecord extends BaseEntity
     @Excel(name = "被检查单位负责人")
     private String checkedUnitDirector;
 
+    /** 部门id */
+    @Excel(name = "部门id")
+    private Long deptId;
+
     /** 用户id */
     @Excel(name = "用户id")
     private Long userId;
@@ -102,6 +106,15 @@ public class CheckDangerRecord extends BaseEntity
     {
         return checkedUnitDirector;
     }
+    public void setDeptId(Long deptId)
+    {
+        this.deptId = deptId;
+    }
+
+    public Long getDeptId()
+    {
+        return deptId;
+    }
     public void setUserId(Long userId)
     {
         this.userId = userId;
@@ -156,6 +169,7 @@ public class CheckDangerRecord extends BaseEntity
                 .append("placeId", getPlaceId())
                 .append("checkDate", getCheckDate())
                 .append("checkedUnitDirector", getCheckedUnitDirector())
+                .append("deptId", getDeptId())
                 .append("userId", getUserId())
                 .append("checkPerson", getCheckPerson())
                 .append("checkItemResults", getCheckItemResults())

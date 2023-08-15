@@ -4,6 +4,7 @@ import request from '@/utils/request'
 export function listRectifynoticedistribute(query) {
   return request({
     url: '/safecheck/rectifynoticedistribute/list',
+    // url: '/safecheck/CheckRectifyDistributeReview/list',
     method: 'get',
     params: query
   })
@@ -13,6 +14,7 @@ export function listRectifynoticedistribute(query) {
 export function getRectifynoticedistribute(id) {
   return request({
     url: '/safecheck/rectifynoticedistribute/' + id,
+    // url: '/safecheck/CheckRectifyDistributeReview/' + id,
     method: 'get'
   })
 }
@@ -21,6 +23,7 @@ export function getRectifynoticedistribute(id) {
 export function addRectifynoticedistribute(data) {
   return request({
     url: '/safecheck/rectifynoticedistribute',
+    // url: '/safecheck/CheckRectifyDistributeReview',
     method: 'post',
     data: data
   })
@@ -30,6 +33,7 @@ export function addRectifynoticedistribute(data) {
 export function updateRectifynoticedistribute(data) {
   return request({
     url: '/safecheck/rectifynoticedistribute',
+    // url: '/safecheck/CheckRectifyDistributeReview',
     method: 'put',
     data: data
   })
@@ -39,6 +43,7 @@ export function updateRectifynoticedistribute(data) {
 export function delRectifynoticedistribute(id) {
   return request({
     url: '/safecheck/rectifynoticedistribute/' + id,
+    // url: '/safecheck/CheckRectifyDistributeReview/' + id,
     method: 'delete'
   })
 }
@@ -47,6 +52,7 @@ export function delRectifynoticedistribute(id) {
 export function exportWord(query) {
   return request({
     url: '/safecheck/rectifynoticedistribute/exportWord',
+    // url: '/safecheck/CheckRectifyDistributeReview/exportWord',
     method: 'get',
     params: query
   })

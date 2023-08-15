@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="placeId"    column="place_id"    />
         <result property="checkDate"    column="check_date"    />
         <result property="checkedUnitDirector"    column="checked_unit_director"    />
+        <result property="deptId"    column="dept_id"    />
         <result property="userId"    column="user_id"    />
         <result property="checkPerson"    column="check_person"    />
         <result property="checkItemResults"    column="check_item_results"    />
@@ -18,7 +19,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCheckDangerRecordVo">
-        select c.id, c.chected_unit, c.place_id, c.check_date, c.checked_unit_director, c.user_id, c.check_person, c.check_item_results, c.other_safty_danger, c.check_result
+        select c.id, c.chected_unit, c.place_id, c.check_date, c.checked_unit_director, c.dept_id, c.user_id, c.check_person, c.check_item_results, c.other_safty_danger, c.check_result
         from check_danger_record c
         left join sys_user u on u.user_id = c.user_id
         left join sys_dept d on d.dept_id = u.dept_id
@@ -26,14 +27,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectCheckDangerRecordList" parameterType="CheckDangerRecord" resultMap="CheckDangerRecordResult">
         <include refid="selectCheckDangerRecordVo"/>
-        <where>  
-            <if test="chectedUnit != null  and chectedUnit != ''"> and chected_unit like concat('%', #{chectedUnit}, '%')</if>
-            <if test="placeId != null "> and place_id like concat('%', #{placeId}, '%')</if>
+        <where>
+            <if test="chectedUnit != null  and chectedUnit != ''"> and chected_unit = #{chectedUnit}</if>
+            <if test="placeId != null "> and place_id = #{placeId}</if>
             <if test="checkDate != null "> and check_date = #{checkDate}</if>
-            <if test="checkedUnitDirector != null  and checkedUnitDirector != ''"> and checked_unit_director like concat('%', #{checkedUnitDirector}, '%')</if>
-            <if test="checkPerson != null  and checkPerson != ''"> and check_person like concat('%', #{checkPerson}, '%')</if>
+            <if test="checkedUnitDirector != null  and checkedUnitDirector != ''"> and checked_unit_director = #{checkedUnitDirector}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="checkPerson != null  and checkPerson != ''"> and check_person = #{checkPerson}</if>
+            <if test="checkItemResults != null  and checkItemResults != ''"> and check_item_results = #{checkItemResults}</if>
+            <if test="otherSaftyDanger != null  and otherSaftyDanger != ''"> and other_safty_danger = #{otherSaftyDanger}</if>
+            <if test="checkResult != null  and checkResult != ''"> and check_result = #{checkResult}</if>
+            ${params.dataScope}
         </where>
-<!--        ${params.dataScope}-->
     </select>
 
     <select id="selectCheckDangerRecordById" parameterType="Long" resultMap="CheckDangerRecordResult">
@@ -48,6 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="placeId != null">place_id,</if>
             <if test="checkDate != null">check_date,</if>
             <if test="checkedUnitDirector != null and checkedUnitDirector != ''">checked_unit_director,</if>
+            <if test="deptId != null">dept_id,</if>
             <if test="userId != null">user_id,</if>
             <if test="checkPerson != null and checkPerson != ''">check_person,</if>
             <if test="checkItemResults != null and checkItemResults != ''">check_item_results,</if>
@@ -59,6 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="placeId != null">#{placeId},</if>
             <if test="checkDate != null">#{checkDate},</if>
             <if test="checkedUnitDirector != null and checkedUnitDirector != ''">#{checkedUnitDirector},</if>
+            <if test="deptId != null">#{deptId},</if>
             <if test="userId != null">#{userId},</if>
             <if test="checkPerson != null and checkPerson != ''">#{checkPerson},</if>
             <if test="checkItemResults != null and checkItemResults != ''">#{checkItemResults},</if>
@@ -74,6 +82,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="placeId != null">place_id = #{placeId},</if>
             <if test="checkDate != null">check_date = #{checkDate},</if>
             <if test="checkedUnitDirector != null and checkedUnitDirector != ''">checked_unit_director = #{checkedUnitDirector},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
             <if test="userId != null">user_id = #{userId},</if>
             <if test="checkPerson != null and checkPerson != ''">check_person = #{checkPerson},</if>
             <if test="checkItemResults != null and checkItemResults != ''">check_item_results = #{checkItemResults},</if>
