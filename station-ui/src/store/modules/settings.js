@@ -13,7 +13,7 @@ const state = {
   fixedHeader: storageSetting.fixedHeader === undefined ? fixedHeader : storageSetting.fixedHeader,
   sidebarLogo: storageSetting.sidebarLogo === undefined ? sidebarLogo : storageSetting.sidebarLogo,
   dynamicTitle: storageSetting.dynamicTitle === undefined ? dynamicTitle : storageSetting.dynamicTitle,
-  base_url:"http://36.133.97.150:9094/prod-api/"//使用前需要将ip和端口修改为后端对应的ip和端口
+  // base_url:"http://10.181.155.115:8080"//使用前需要将ip和端口修改为后端对应的ip和端口
 }
 const mutations = {
   CHANGE_SETTING: (state, { key, value }) => {

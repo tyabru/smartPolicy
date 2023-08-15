@@ -25,6 +25,7 @@ public class CheckRectifyResultReviewRecord extends BaseEntity
     private String chectedUnit;
 
     /** 场所 */
+    @Excel(name = "场所")
     private Long placeId;
 
     /** 检查日期 */
@@ -44,6 +45,14 @@ public class CheckRectifyResultReviewRecord extends BaseEntity
     @Excel(name = "责任民警")
     private String checkPolice;
 
+    /** 用户id */
+    @Excel(name = "用户id")
+    private Long userId;
+
+    /** 部门id */
+    @Excel(name = "部门id")
+    private Long deptId;
+
     /** 问题隐患 */
     @Excel(name = "问题隐患")
     private String checkSaftyDanger;
@@ -59,136 +68,195 @@ public class CheckRectifyResultReviewRecord extends BaseEntity
 
     /** 整改通知书签字照片 */
     @Excel(name = "整改通知书签字照片")
-    private String rectifyNoticePhoto;
+    private String rectifyNoticeSigned;
 
     /** 整改结果现场照片 */
     @Excel(name = "整改结果现场照片")
     private String rectifyResultSitePhoto;
 
-    public void setId(Long id) 
+    public Long getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    @Excel(name = "被检查人电话号码")
+    private Long phoneNumber;
+
+    /** 审核状态（0：待审核1：审核通过2：审核不通过） */
+    @Excel(name = "审核状态", readConverterExp = "0=：待审核1：审核通过2：审核不通过")
+    private String reviewStatus;
+
+    public String getFinishStatus() {
+        return finishStatus;
+    }
+
+    public void setFinishStatus(String finishStatus) {
+        this.finishStatus = finishStatus;
+    }
+
+    @Excel(name = "完成状态(0:未下发1：已下发2：已提交3：未提交）")
+    private String finishStatus;
+
+    public void setId(Long id)
     {
         this.id = id;
     }
 
-    public Long getId() 
+    public Long getId()
     {
         return id;
     }
-    public void setChectedUnit(String chectedUnit) 
+    public void setChectedUnit(String chectedUnit)
     {
         this.chectedUnit = chectedUnit;
     }
 
-    public String getChectedUnit() 
+    public String getChectedUnit()
     {
         return chectedUnit;
     }
-    public void setPlaceId(Long placeId) 
+    public void setPlaceId(Long placeId)
     {
         this.placeId = placeId;
     }
 
-    public Long getPlaceId() 
+    public Long getPlaceId()
     {
         return placeId;
     }
-    public void setCheckDate(Date checkDate) 
+    public void setCheckDate(Date checkDate)
     {
         this.checkDate = checkDate;
     }
 
-    public Date getCheckDate() 
+    public Date getCheckDate()
     {
         return checkDate;
     }
-    public void setCheckedUnitDirector(String checkedUnitDirector) 
+    public void setCheckedUnitDirector(String checkedUnitDirector)
     {
         this.checkedUnitDirector = checkedUnitDirector;
     }
 
-    public String getCheckedUnitDirector() 
+    public String getCheckedUnitDirector()
     {
         return checkedUnitDirector;
     }
-    public void setCheckedUnitDirectorAcccoutNumber(Long checkedUnitDirectorAcccoutNumber) 
+    public void setCheckedUnitDirectorAcccoutNumber(Long checkedUnitDirectorAcccoutNumber)
     {
         this.checkedUnitDirectorAcccoutNumber = checkedUnitDirectorAcccoutNumber;
     }
 
-    public Long getCheckedUnitDirectorAcccoutNumber() 
+    public Long getCheckedUnitDirectorAcccoutNumber()
     {
         return checkedUnitDirectorAcccoutNumber;
     }
-    public void setCheckPolice(String checkPolice) 
+    public void setCheckPolice(String checkPolice)
     {
         this.checkPolice = checkPolice;
     }
 
-    public String getCheckPolice() 
+    public String getCheckPolice()
     {
         return checkPolice;
     }
-    public void setCheckSaftyDanger(String checkSaftyDanger) 
+    public void setUserId(Long userId)
+    {
+        this.userId = userId;
+    }
+
+    public Long getUserId()
+    {
+        return userId;
+    }
+    public void setDeptId(Long deptId)
+    {
+        this.deptId = deptId;
+    }
+
+    public Long getDeptId()
+    {
+        return deptId;
+    }
+    public void setCheckSaftyDanger(String checkSaftyDanger)
     {
         this.checkSaftyDanger = checkSaftyDanger;
     }
 
-    public String getCheckSaftyDanger() 
+    public String getCheckSaftyDanger()
     {
         return checkSaftyDanger;
     }
-    public void setRectifyMeasure(String rectifyMeasure) 
+    public void setRectifyMeasure(String rectifyMeasure)
     {
         this.rectifyMeasure = rectifyMeasure;
     }
 
-    public String getRectifyMeasure() 
+    public String getRectifyMeasure()
     {
         return rectifyMeasure;
     }
-    public void setFinishDate(Date finishDate) 
+    public void setFinishDate(Date finishDate)
     {
         this.finishDate = finishDate;
     }
 
-    public Date getFinishDate() 
+    public Date getFinishDate()
     {
         return finishDate;
     }
-    public void setRectifyNoticePhoto(String rectifyNoticePhoto) 
+    public void setrectifyNoticeSigned(String rectifyNoticeSigned)
     {
-        this.rectifyNoticePhoto = rectifyNoticePhoto;
+        this.rectifyNoticeSigned = rectifyNoticeSigned;
     }
 
-    public String getRectifyNoticePhoto() 
+    public String getrectifyNoticeSigned()
     {
-        return rectifyNoticePhoto;
+        return rectifyNoticeSigned;
     }
-    public void setRectifyResultSitePhoto(String rectifyResultSitePhoto) 
+    public void setRectifyResultSitePhoto(String rectifyResultSitePhoto)
     {
         this.rectifyResultSitePhoto = rectifyResultSitePhoto;
     }
 
-    public String getRectifyResultSitePhoto() 
+    public String getRectifyResultSitePhoto()
     {
         return rectifyResultSitePhoto;
+    }
+    public void setReviewStatus(String reviewStatus)
+    {
+        this.reviewStatus = reviewStatus;
+    }
+
+    public String getReviewStatus()
+    {
+        return reviewStatus;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("id", getId())
-            .append("chectedUnit", getChectedUnit())
-            .append("placeId", getPlaceId())
-            .append("checkDate", getCheckDate())
-            .append("checkedUnitDirector", getCheckedUnitDirector())
-            .append("checkedUnitDirectorAcccoutNumber", getCheckedUnitDirectorAcccoutNumber())
-            .append("checkPolice", getCheckPolice())
-            .append("checkSaftyDanger", getCheckSaftyDanger())
-            .append("rectifyMeasure", getRectifyMeasure())
-            .append("finishDate", getFinishDate())
-            .append("rectifyNoticePhoto", getRectifyNoticePhoto())
-            .append("rectifyResultSitePhoto", getRectifyResultSitePhoto())
-            .toString();
+                .append("id", getId())
+                .append("chectedUnit", getChectedUnit())
+                .append("placeId", getPlaceId())
+                .append("checkDate", getCheckDate())
+                .append("checkedUnitDirector", getCheckedUnitDirector())
+                .append("checkedUnitDirectorAcccoutNumber", getCheckedUnitDirectorAcccoutNumber())
+                .append("checkPolice", getCheckPolice())
+                .append("userId", getUserId())
+                .append("deptId", getDeptId())
+                .append("checkSaftyDanger", getCheckSaftyDanger())
+                .append("rectifyMeasure", getRectifyMeasure())
+                .append("finishDate", getFinishDate())
+                .append("rectifyNoticeSigned", getrectifyNoticeSigned())
+                .append("rectifyResultSitePhoto", getRectifyResultSitePhoto())
+                .append("reviewStatus", getReviewStatus())
+                .append("remark", getRemark())
+                .append("finishStatus", getFinishStatus())
+                .append("phoneNumber", getPhoneNumber())
+                .toString();
     }
 }

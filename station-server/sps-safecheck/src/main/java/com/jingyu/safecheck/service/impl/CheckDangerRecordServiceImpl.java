@@ -29,6 +29,7 @@ public class CheckDangerRecordServiceImpl implements ICheckDangerRecordService
      * @return 安全隐患检查登记
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public CheckDangerRecord selectCheckDangerRecordById(Long id)
     {
         return checkDangerRecordMapper.selectCheckDangerRecordById(id);
@@ -41,7 +42,7 @@ public class CheckDangerRecordServiceImpl implements ICheckDangerRecordService
      * @return 安全隐患检查登记
      */
     @Override
-//    @DataScope(deptAlias = "d", userAlias = "u")
+    @DataScope(deptAlias = "d", userAlias = "u")
     public List<CheckDangerRecord> selectCheckDangerRecordList(CheckDangerRecord checkDangerRecord)
     {
         return checkDangerRecordMapper.selectCheckDangerRecordList(checkDangerRecord);
@@ -58,6 +59,7 @@ public class CheckDangerRecordServiceImpl implements ICheckDangerRecordService
     {
 //        checkDangerRecord.setCreateBy(SecurityUtils.getUsername());
         checkDangerRecord.setUserId(SecurityUtils.getUserId());
+        checkDangerRecord.setDeptId(SecurityUtils.getDeptId());
         return checkDangerRecordMapper.insertCheckDangerRecord(checkDangerRecord);
     }
 

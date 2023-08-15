@@ -2,6 +2,8 @@ package com.jingyu.safecheck.service.impl;
 
 import java.util.List;
 
+import com.jingyu.common.annotation.DataScope;
+import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.safecheck.domain.CheckRectifyNoticeDistributeRecord;
 import com.jingyu.safecheck.mapper.CheckRectifyNoticeDistributeRecordMapper;
 import com.jingyu.safecheck.service.ICheckRectifyNoticeDistributeRecordService;
@@ -27,6 +29,7 @@ public class CheckRectifyNoticeDistributeRecordServiceImpl implements ICheckRect
      * @return 整改通知书下发
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public CheckRectifyNoticeDistributeRecord selectCheckRectifyNoticeDistributeRecordById(Long id)
     {
         return checkRectifyNoticeDistributeRecordMapper.selectCheckRectifyNoticeDistributeRecordById(id);
@@ -39,6 +42,7 @@ public class CheckRectifyNoticeDistributeRecordServiceImpl implements ICheckRect
      * @return 整改通知书下发
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public List<CheckRectifyNoticeDistributeRecord> selectCheckRectifyNoticeDistributeRecordList(CheckRectifyNoticeDistributeRecord checkRectifyNoticeDistributeRecord)
     {
         return checkRectifyNoticeDistributeRecordMapper.selectCheckRectifyNoticeDistributeRecordList(checkRectifyNoticeDistributeRecord);
@@ -53,6 +57,8 @@ public class CheckRectifyNoticeDistributeRecordServiceImpl implements ICheckRect
     @Override
     public int insertCheckRectifyNoticeDistributeRecord(CheckRectifyNoticeDistributeRecord checkRectifyNoticeDistributeRecord)
     {
+        checkRectifyNoticeDistributeRecord.setUserId(SecurityUtils.getUserId());
+        checkRectifyNoticeDistributeRecord.setDeptId(SecurityUtils.getDeptId());
         return checkRectifyNoticeDistributeRecordMapper.insertCheckRectifyNoticeDistributeRecord(checkRectifyNoticeDistributeRecord);
     }
 

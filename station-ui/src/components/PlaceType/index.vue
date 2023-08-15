@@ -17,12 +17,20 @@
               :label="dict.value">
               {{dict.label}}</el-radio>
          </el-radio-group> -->
-          <template v-for="(item,index) in form1.checkItems.split(',')">
-            <dict-tag :options="dict.type.check_items" :value="item ? item : [] " :key="item.nanoid"/>
-            <input type="radio" :name="'choice'+index" value="1" v-model="checkItemsChoice[index]" :key="item.nanoid">是
-            <input type="radio" :name="'choice'+index" value="0" v-model="checkItemsChoice[index]" :key="item.nanoid ">否
-            <br :key="index+item"/>
+         <div v-if="placeId">
+         <div style="height: 300px; overflow-y:scroll;" :key="nanoid" v-if="form1.checkItems">
+          <template v-for="(item,index) in form1.checkItems.split(',')" >
+            <div :key="item.nanoid" style="padding:5px 5px 5px 40px;width:90%;border: 1px solid #DCDFE6;border-radius: 3px;">
+            <dict-tag :options="dict.type.check_items" :value="item ? item : [] " :key="item.nanoid" style="" />
+            
+               <input type="radio" :name="'choice'+index" value="1" v-model="checkItemsChoice[index]" :key="item.nanoid">是
+              <input type="radio" :name="'choice'+index" value="0" v-model="checkItemsChoice[index]" :key="item.nanoid ">否          
+            </div>
+            <!-- <br :key="index+item"/> -->
+        
           </template>
+            </div>
+            </div>
       </el-form>
     <!-- </el-table-column>
   </el-table> -->
@@ -37,7 +45,6 @@ export default {
   dicts: ['check_items'],
   data() {
     return {
-      tmp:[0,1,1,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1],
       nanoid: nanoid(),
       // 遮罩层
       loading: true,
@@ -61,13 +68,13 @@ export default {
       // 查询参数
       queryParams: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 10000,
         placeName: null,
       },
       // 表单参数
       form: {},
       form1:{
-        checkItems:"0,1,2,3,4,5,6,7,8"
+        // checkItems:null
       },
       // 表单校验
       rules: {
@@ -80,7 +87,9 @@ export default {
   props:['placeId','checkItemsChoice'],
   created() {
     this.getList();
-    
+    // console.log(this.checkItemsChoice)
+    // this.form1=this.checkplacedictList[this.placeId-1]
+    // console.log(this.checkplacedictList)
   },
    watch:{
     placeId:{
@@ -88,7 +97,8 @@ export default {
         // this.getList();
         try{
           if(newvalue)
-           this.form1=this.checkplacedictList[this.placeId]
+          // console.log(this.checkplacedictList)
+           this.form1=this.checkplacedictList[this.placeId-1]
         }catch{}
         // this.form1=this.checkplacedictList[this.placeId]
         // console.log(this.checkItemsChoice)
@@ -107,11 +117,12 @@ export default {
       }
     }
   },
-  // mounted(){
+  mounted(){
+    //  this.form1=this.checkplacedictList[this.placeId-1]
   //   this.form1 = this.checkplacedictList;
   //   console.log("ttttt    "+this.checkplacedictList)
   //   console.log("我是placetype"+this.placeId)
-  // },
+  },
   methods: {
     /** 查询安全隐患检查场所字典列表 */
     getList() {
@@ -120,7 +131,7 @@ export default {
         this.checkplacedictList = response.rows;
         this.total = response.total;
         this.loading = false;
-        // console.log(this.checkplacedictList[this.placeId])
+        this.form1=this.checkplacedictList[this.placeId-1]
       });
     },
     // 取消按钮
@@ -136,6 +147,8 @@ export default {
         checkItems: []
       };
       this.resetForm("form");
+      this.checkItemsChoice=[];
+      this.placeId=null
     },
     /** 搜索按钮操作 */
     handleQuery() {

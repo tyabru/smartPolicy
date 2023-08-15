@@ -1,6 +1,9 @@
 package com.jingyu.safecheck.service.impl;
 
 import java.util.List;
+
+import com.jingyu.common.annotation.DataScope;
+import com.jingyu.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jingyu.safecheck.mapper.CheckRectifyResultReviewRecordMapper;
@@ -26,6 +29,7 @@ public class CheckRectifyResultReviewRecordServiceImpl implements ICheckRectifyR
      * @return 整改结果审核
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public CheckRectifyResultReviewRecord selectCheckRectifyResultReviewRecordById(Long id)
     {
         return checkRectifyResultReviewRecordMapper.selectCheckRectifyResultReviewRecordById(id);
@@ -38,6 +42,7 @@ public class CheckRectifyResultReviewRecordServiceImpl implements ICheckRectifyR
      * @return 整改结果审核
      */
     @Override
+    @DataScope(deptAlias = "d", userAlias = "u")
     public List<CheckRectifyResultReviewRecord> selectCheckRectifyResultReviewRecordList(CheckRectifyResultReviewRecord checkRectifyResultReviewRecord)
     {
         return checkRectifyResultReviewRecordMapper.selectCheckRectifyResultReviewRecordList(checkRectifyResultReviewRecord);
@@ -52,6 +57,9 @@ public class CheckRectifyResultReviewRecordServiceImpl implements ICheckRectifyR
     @Override
     public int insertCheckRectifyResultReviewRecord(CheckRectifyResultReviewRecord checkRectifyResultReviewRecord)
     {
+        checkRectifyResultReviewRecord.setUserId(SecurityUtils.getUserId());
+        checkRectifyResultReviewRecord.setDeptId(SecurityUtils.getDeptId());
+        checkRectifyResultReviewRecord.setFinishStatus("2");
         return checkRectifyResultReviewRecordMapper.insertCheckRectifyResultReviewRecord(checkRectifyResultReviewRecord);
     }
 
@@ -64,6 +72,7 @@ public class CheckRectifyResultReviewRecordServiceImpl implements ICheckRectifyR
     @Override
     public int updateCheckRectifyResultReviewRecord(CheckRectifyResultReviewRecord checkRectifyResultReviewRecord)
     {
+//        checkRectifyResultReviewRecord.setFinishStatus("2");
         return checkRectifyResultReviewRecordMapper.updateCheckRectifyResultReviewRecord(checkRectifyResultReviewRecord);
     }
 

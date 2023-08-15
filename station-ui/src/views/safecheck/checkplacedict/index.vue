@@ -1,17 +1,42 @@
 <template>
-  <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+  <!-- <div class="app-container">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px"> -->
       <!-- <el-form-item label="场所行业名称" prop="placeName"> -->
-        <el-select v-model="queryParams.placeName" placeholder="请选择场所行业名称" clearable>
-          <el-option
-            v-for="dict in dict.type.place_list"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
+  <table-panel :show-search="showSearch">
+    <template #search-form>
+      <el-form size="mini" :model="queryParams" ref="queryForm" label-width="100px" inline>
+        <el-row>
+          <el-col :span="6">
+            <el-form-item label="场所行业名称" prop="placeName">
+              <el-select v-model="queryParams.placeName">
+                <el-option
+                  v-for="dict in dict.type.place_list"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </template>
+
+
+     <template #search-form-btn>
+      <el-button size="mini" type="primary" @click="handleQuery">查询</el-button>
+      <el-button size="mini" type="info"  @click="resetQuery">重置</el-button>
+    </template>
+
+
+     <template #btn>
+      <el-button size="mini" type="primary" @click="handleAdd">新增</el-button>
+      <el-button size="mini" type="success"  :disabled="single" @click="handleUpdate">修改</el-button>
+      <el-button size="mini" type="danger" :disabled="multiple" @click="handleDelete">删除</el-button>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+    </template>
       <!-- </el-form-item> -->
-      <el-form-item>
+      <!-- <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </el-form-item>
@@ -27,7 +52,7 @@
           @click="handleAdd"
           v-hasPermi="['safecheck:checkplacedict:add']"
         >新增</el-button>
-      </el-col>
+      </el-col> -->
       <!-- <el-col :span="1.5">
         <el-button
           type="success"
@@ -49,7 +74,7 @@
           @click="handleDelete"
           v-hasPermi="['safecheck:checkplacedict:remove']"
         >删除</el-button>
-      </el-col> -->
+      </el-col>
       <el-col :span="1.5">
         <el-button
           type="warning"
@@ -61,7 +86,7 @@
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+    </el-row>-->
 
     <el-table v-loading="loading" :data="checkplacedictList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
@@ -97,24 +122,22 @@
 
       </el-table-column>
       <el-table-column label="整改通知书模板参数" align="center" prop="rectifyNoticeTemplateParams" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <!-- <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['safecheck:checkplacedict:edit']"
           >更新</el-button>
           <el-button
             size="mini"
             type="text"
-            icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['safecheck:checkplacedict:remove']"
           >删除</el-button>
         </template>
-      </el-table-column>
+      </el-table-column> -->
     </el-table>
 
     <pagination
@@ -141,16 +164,19 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="检查项列表" prop="checkItems">
-          <el-checkbox-group v-model="form.checkItems">
-            <el-checkbox
-              v-for="dict in dict.type.check_items"
-              :key="dict.value"
-              :label="dict.value">
-              {{dict.label}}
-            </el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>
+          <el-form-item label="检查项列表" prop="checkItems">
+             <div style="height: 500px; overflow-y:scroll;">
+            <el-checkbox-group v-model="form.checkItems">
+              <el-checkbox class="el-checkbox-width"
+                v-for="dict in dict.type.check_items"
+                :key="dict.value"
+                :label="dict.value">
+                {{dict.label}}
+              </el-checkbox>
+            </el-checkbox-group>
+            </div>
+          </el-form-item>
+
         <el-form-item label="整改通知书模板参数" prop="rectifyNoticeTemplateParams">
           <el-input v-model="form.rectifyNoticeTemplateParams" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -184,11 +210,14 @@
         <el-button @click="open1 = false">关 闭</el-button>
       </div>
     </el-dialog>
-  </div>
+  <!-- </div> -->
+
+  </table-panel>
 </template>
 
 <script>
 import { listCheckplacedict, getCheckplacedict, delCheckplacedict, addCheckplacedict, updateCheckplacedict } from "@/api/safecheck/checkplacedict";
+import TablePanel from '@/components/TablePanel/index.vue'
 
 export default {
   name: "Checkplacedict",
@@ -224,7 +253,7 @@ export default {
       // 表单参数
       form: {},
       form1:{
-        checkItems:"0,1,2,3,4,5,6,7,8"
+        checkItems:"1,2,3,4,5,6,7,8"
       },
       // 表单校验
       rules: {
@@ -345,10 +374,23 @@ export default {
       // console.log("qqqqqqq   "+row)
       // this.form1 = Array(this.form1.checkItems.split(","))
     }
-
-
-
-
-  }
+  },
+  components:{TablePanel}
 };
 </script>
+
+<style lang="scss" scoped>
+.el-checkbox-width{
+  // width: 400px;
+  // height: 25px;
+  border: 1px solid #DCDFE6;
+
+  border-radius: 3px;
+
+  padding: 5px;
+  width: 90%;
+  word-break: break-all;
+  word-wrap: break-word;
+  white-space: pre-wrap !important;
+}
+</style>
