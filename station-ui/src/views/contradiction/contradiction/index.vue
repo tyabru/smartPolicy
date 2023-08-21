@@ -83,7 +83,7 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope.row)"
-            v-hasPermi="['contradiction:contradiction:query']">查看</el-button>
+            v-hasPermi="['contradiction:contradiction:query']">详情</el-button>
           <el-button size="mini" type="text" icon="el-icon-edit" @click="handleUpdate(scope.row)"
             v-hasPermi="['contradiction:contradiction:edit']">修改</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
@@ -98,145 +98,145 @@
     <el-dialog :title="title" :visible.sync="open" width="50%" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <h4 class="title-h4">矛盾纠纷基本信息</h4>
-          <el-row>
-            <el-col :span="24">
-              <el-form-item label="标题内容" prop="title">
-                <el-input v-model="form.title" type="textarea" placeholder="请输入纠纷内容" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="案件编码" prop="caseCode">
-                <el-input v-model="form.caseCode" placeholder="请输入案件编码" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="调节警员" prop="policeNum">
-                <el-select  v-model="form.policeNum" placeholder="请选择调节警员" style="width: 100%">
-                  <el-option v-for="item in policeInformationList" :key="item.policeNumber" :label="item.policeName" :value="item.policeNumber">
-                  {{item.policeName+"----------"+item.policeNumber}}
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="纠纷级别" prop="disputeLevel">
-                <el-select v-model="form.disputeLevel" class="width-100Rate" placeholder="请选择纠纷级别" >
-                  <el-option v-for="item in dict.type['important_level']" :key="item.value" :value="item.value" :label="item.label"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="纠纷类型" prop="disputeType">
-                <el-select v-model="form.disputeType" class="width-100Rate" placeholder="请选择纠纷级别" >
-                  <el-option v-for="item in dict.type['dispute_type']" :key="item.value" :value="item.value" :label="item.label"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="发生时间" prop="startTime">
-                <el-date-picker style="width: 100%;" clearable v-model="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择发生时间">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="结束时间" prop="endTime">
-                <el-date-picker style="width: 100%;" clearable v-model="form.endTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择结束时间">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="发生地点" prop="place">
-                <el-input v-model="form.place" placeholder="请输入纠纷发生地点" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="报警方式" prop="alarmMode">
-                <el-select v-model="form.alarmMode" class="width-100Rate" placeholder="请选择报警方式" >
-                  <el-option v-for="item in dict.type['alarm_mode']" :key="item.value" :value="item.value" :label="item.label"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="参与人数" prop="partakeNum">
-                <el-input v-model="form.partakeNum" placeholder="请输入参与人数" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="调解进度" prop="mediationProgress">
-                <el-select v-model="form.mediationProgress" class="width-100Rate" placeholder="请选择调解进度" >
-                  <el-option v-for="item in dict.type['mediation_progress']" :key="item.value" :value="item.value" :label="item.label"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="经度" prop="longitude">
-                <el-input v-model="form.longitude" placeholder="请输入经度" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="纬度" prop="latitude">
-                <el-input v-model="form.latitude" placeholder="请输入纬度" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="是否转办" prop="isTransfer">
-                <el-select v-model="form.isTransfer" class="width-100Rate" placeholder="请选择是否转办" >
-                  <el-option v-for="item in dict.type['sys_yes_no']" :key="item.value" :value="item.value" :label="item.label"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="转办人" prop="transferPoliceNum"
-                :rules="[{ required: form.isTransfer == 'Y', message: '当纠纷转办时,转办人不能为空', trigger: 'blur' }]">
-                <el-select  v-model="form.transferPoliceNum" placeholder="请选择转办人" style="width: 100%" :disabled="form.isTransfer != 'Y'">
-                  <el-option v-for="item in policeInformationList" :key="item.policeNumber" :label="item.policeName" :value="item.policeNumber">
-                  {{item.policeName+"----------"+item.policeNumber}}
-                  </el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="转办时间" prop="transferTime"
-                :rules="[{ required: form.isTransfer == 'Y', message: '当纠纷转办时,转办时间不能为空', trigger: 'blur' }]">
-                <el-date-picker style="width: 100%" :disabled="form.isTransfer != 'Y'" clearable v-model="form.transferTime" 
-                  type="date" value-format="yyyy-MM-dd" placeholder="请选择转办时间">
-                </el-date-picker>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="是否成功" prop="isMediateSuccessful">
-                <el-select v-model="form.isMediateSuccessful" class="width-100Rate" placeholder="请选择是否成功调解" >
-                  <el-option v-for="item in dict.type['sys_yes_no']" :key="item.value" :value="item.value" :label="item.label"/>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="结果描述" prop="mediateResultDescription">
-                <el-input v-model="form.mediateResultDescription" placeholder="请输入调解最终结果描述" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="部门" prop="deptId">
-                <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择案件归属部门" />
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="选择文件" prop="filePath">
-                <el-upload  class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple
-                  :accept="accept" :http-request="uploadFile" :on-success="handleSuccess" :on-error="handleError" :on-progress="handleProgress" 
-                  :on-change="handleChange" :auto-upload="true" :on-exceed="handleExceed" :before-upload="beforeUpload" 
-                  :limit="1" :on-preview="handlePreview" :show-file-list="true">
-                  <i class="el-icon-upload"></i>
-                  <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-                </el-upload>
-              </el-form-item>
-            </el-col>
-            <el-col :span="span">
-              <el-form-item label="备注" prop="remark">
-                <el-input v-model="form.remark" placeholder="请输入备注" />
-              </el-form-item>
-            </el-col>
-          </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="标题内容" prop="title">
+              <el-input v-model="form.title" type="textarea" placeholder="请输入纠纷内容" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="案件编码" prop="caseCode">
+              <el-input v-model="form.caseCode" placeholder="请输入案件编码" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="调节警员" prop="policeNum">
+              <el-select  v-model="form.policeNum" placeholder="请选择调节警员" style="width: 100%">
+                <el-option v-for="item in policeInformationList" :key="item.policeNumber" :label="item.policeName" :value="item.policeNumber">
+                {{item.policeName+"----------"+item.policeNumber}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="纠纷级别" prop="disputeLevel">
+              <el-select v-model="form.disputeLevel" class="width-100Rate" placeholder="请选择纠纷级别" >
+                <el-option v-for="item in dict.type['important_level']" :key="item.value" :value="item.value" :label="item.label"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="纠纷类型" prop="disputeType">
+              <el-select v-model="form.disputeType" class="width-100Rate" placeholder="请选择纠纷级别" >
+                <el-option v-for="item in dict.type['dispute_type']" :key="item.value" :value="item.value" :label="item.label"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="发生时间" prop="startTime">
+              <el-date-picker style="width: 100%;" clearable v-model="form.startTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择发生时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="结束时间" prop="endTime">
+              <el-date-picker style="width: 100%;" clearable v-model="form.endTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请选择结束时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="发生地点" prop="place">
+              <el-input v-model="form.place" placeholder="请输入纠纷发生地点" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="报警方式" prop="alarmMode">
+              <el-select v-model="form.alarmMode" class="width-100Rate" placeholder="请选择报警方式" >
+                <el-option v-for="item in dict.type['alarm_mode']" :key="item.value" :value="item.value" :label="item.label"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="参与人数" prop="partakeNum">
+              <el-input v-model="form.partakeNum" placeholder="请输入参与人数" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="调解进度" prop="mediationProgress">
+              <el-select v-model="form.mediationProgress" class="width-100Rate" placeholder="请选择调解进度" >
+                <el-option v-for="item in dict.type['mediation_progress']" :key="item.value" :value="item.value" :label="item.label"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="经度" prop="longitude">
+              <el-input v-model="form.longitude" placeholder="请输入经度" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="纬度" prop="latitude">
+              <el-input v-model="form.latitude" placeholder="请输入纬度" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="是否转办" prop="isTransfer">
+              <el-select v-model="form.isTransfer" class="width-100Rate" placeholder="请选择是否转办" >
+                <el-option v-for="item in dict.type['sys_yes_no']" :key="item.value" :value="item.value" :label="item.label"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="转办人" prop="transferPoliceNum"
+              :rules="[{ required: form.isTransfer == 'Y', message: '当纠纷转办时,转办人不能为空', trigger: 'blur' }]">
+              <el-select  v-model="form.transferPoliceNum" placeholder="请选择转办人" style="width: 100%" :disabled="form.isTransfer != 'Y'">
+                <el-option v-for="item in policeInformationList" :key="item.policeNumber" :label="item.policeName" :value="item.policeNumber">
+                {{item.policeName+"----------"+item.policeNumber}}
+                </el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="转办时间" prop="transferTime"
+              :rules="[{ required: form.isTransfer == 'Y', message: '当纠纷转办时,转办时间不能为空', trigger: 'blur' }]">
+              <el-date-picker style="width: 100%" :disabled="form.isTransfer != 'Y'" clearable v-model="form.transferTime" 
+                type="date" value-format="yyyy-MM-dd" placeholder="请选择转办时间">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="是否成功" prop="isMediateSuccessful">
+              <el-select v-model="form.isMediateSuccessful" class="width-100Rate" placeholder="请选择是否成功调解" >
+                <el-option v-for="item in dict.type['sys_yes_no']" :key="item.value" :value="item.value" :label="item.label"/>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="结果描述" prop="mediateResultDescription">
+              <el-input v-model="form.mediateResultDescription" placeholder="请输入调解最终结果描述" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="部门" prop="deptId">
+              <treeselect v-model="form.deptId" :options="deptOptions" :show-count="true" placeholder="请选择案件归属部门" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="选择文件" prop="filePath">
+              <el-upload  class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" multiple
+                :accept="accept" :http-request="uploadFile" :on-success="handleSuccess" :on-error="handleError" :on-progress="handleProgress" 
+                :on-change="handleChange" :auto-upload="true" :on-exceed="handleExceed" :before-upload="beforeUpload" 
+                :limit="1" :on-preview="handlePreview" :show-file-list="true">
+                <i class="el-icon-upload"></i>
+                <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+          <el-col :span="span">
+            <el-form-item label="备注" prop="remark">
+              <el-input v-model="form.remark" placeholder="请输入备注" />
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -585,7 +585,7 @@ export default {
       let title = "查看矛盾纠纷信息详情"
       const params = { };
       params['sq_pk'] = Encrypt(JSON.stringify({id: row.id | 'unknown'}));
-      this.$tab.openPage(title, '/contradiction/details', params);
+      this.$tab.openPage(title, '/contradiction/contradictionDetails', params);
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
