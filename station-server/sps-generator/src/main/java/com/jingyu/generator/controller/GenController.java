@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,10 +38,10 @@ import com.jingyu.generator.service.IGenTableService;
 @RequestMapping("/tool/gen")
 public class GenController extends BaseController
 {
-    @Autowired
+    @Resource(name = "genTableServiceImpl")
     private IGenTableService genTableService;
 
-    @Autowired
+    @Resource(name = "genTableColumnServiceImpl")
     private IGenTableColumnService genTableColumnService;
 
     /**

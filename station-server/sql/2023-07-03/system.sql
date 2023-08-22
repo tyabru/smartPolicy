@@ -377,7 +377,7 @@ CREATE TABLE `sys_menu`  (
 -- ----------------------------
 -- Records of sys_menu
 -- ----------------------------
-INSERT INTO `sys_menu` VALUES (1, '系统管理', 0, 99, 'system', NULL, '', 1, 0, 'M', '0', '0', '', 'system', 'admin', '2023-06-20 15:41:46', 'admin', '2023-06-21 16:51:18', '系统管理目录');
+INSERT INTO `sys_menu`(menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark) VALUES (1, '系统管理', 0, 99, 'system', NULL, '', 1, 0, 'M', '0', '0', '', 'system', 'admin', '2023-06-20 15:41:46', 'admin', '2023-06-21 16:51:18', '系统管理目录');
 INSERT INTO `sys_menu` VALUES (2, '系统监控', 0, 98, 'monitor', NULL, '', 1, 0, 'M', '0', '0', '', 'monitor', 'admin', '2023-06-20 15:41:46', 'admin', '2023-06-21 16:51:23', '系统监控目录');
 INSERT INTO `sys_menu` VALUES (3, '系统工具', 0, 3, 'tool', NULL, '', 1, 0, 'M', '0', '0', '', 'tool', 'admin', '2023-06-25 17:18:27', '', NULL, '系统工具目录');
 INSERT INTO `sys_menu` VALUES (100, '用户管理', 1, 1, 'user', 'system/user/index', '', 1, 0, 'C', '0', '0', 'system:user:list', 'user', 'admin', '2023-06-20 15:41:46', '', NULL, '用户管理菜单');

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.equipment.mapper.PoliceOnboardEquipmentMapper">
+    
+    <resultMap type="PoliceOnboardEquipment" id="PoliceOnboardEquipmentResult">
+        <result property="id"    column="id"    />
+        <result property="deviceName"    column="device_name"    />
+        <result property="deviceCode"    column="device_code"    />
+        <result property="model"    column="model"    />
+        <result property="manufacturer"    column="manufacturer"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="deptName"    column="dept_name"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleteTime"    column="delete_time"    />
+        <result property="operateTime"    column="operate_time"    />
+        <result property="operateType"    column="operate_type"    />
+        <result property="operateName"    column="operate_name"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectPoliceOnboardEquipmentVo">
+        select p.id, p.device_name, p.device_code, p.model, p.manufacturer, p.dept_id, p.create_time, p.update_time, p.delete_time,
+          p.operate_time, p.operate_type, p.operate_name, p.remark, sys_dept.dept_name
+        from police_onboard_equipment p
+        inner join sys_dept on p.dept_id = sys_dept.dept_id
+    </sql>
+
+    <select id="selectPoliceOnboardEquipmentList" parameterType="PoliceOnboardEquipment" resultMap="PoliceOnboardEquipmentResult">
+        <include refid="selectPoliceOnboardEquipmentVo"/>
+        <where>
+            operate_type != 2
+            <if test="deviceName != null  and deviceName != ''"> and instr(device_name,#{deviceName})</if>
+            <if test="deviceCode != null  and deviceCode != ''"> and instr(device_code,#{deviceCode})</if>
+            <if test="model != null  and model != ''"> and instr(model,#{model})</if>
+            <if test="manufacturer != null  and manufacturer != ''"> and instr(manufacturer,#{manufacturer})</if>
+            <if test="deptId != null "> and instr(dept_id,#{deptId})</if>
+            <if test="deleteTime != null "> and instr(delete_time,#{deleteTime})</if>
+            <if test="operateTime != null "> and instr(operate_time,#{operateTime})</if>
+            <if test="operateType != null "> and operate_type = #{operateType}</if>
+            <if test="operateName != null  and operateName != ''"> and instr(operate_name,#{operateName})</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+    
+    <select id="selectPoliceOnboardEquipmentById" parameterType="Long" resultMap="PoliceOnboardEquipmentResult">
+        <include refid="selectPoliceOnboardEquipmentVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="getPoliceOnboardEquipmentByDeviceCode" parameterType="String" resultMap="PoliceOnboardEquipmentResult">
+        <include refid="selectPoliceOnboardEquipmentVo"/>
+        where device_code = #{deviceCode}
+    </select>
+        
+    <insert id="insertPoliceOnboardEquipment" parameterType="PoliceOnboardEquipment" useGeneratedKeys="true" keyProperty="id">
+        insert into police_onboard_equipment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="deviceName != null and deviceName != ''">device_name,</if>
+            <if test="deviceCode != null and deviceCode != ''">device_code,</if>
+            <if test="model != null and model != ''">model,</if>
+            <if test="manufacturer != null and manufacturer != ''">manufacturer,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deleteTime != null">delete_time,</if>
+            <if test="operateName != null and operateName != ''">operate_name,</if>
+            <if test="remark != null">remark,</if>
+            create_time,
+            operate_time,
+            operate_type
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="deviceName != null and deviceName != ''">#{deviceName},</if>
+            <if test="deviceCode != null and deviceCode != ''">#{deviceCode},</if>
+            <if test="model != null and model != ''">#{model},</if>
+            <if test="manufacturer != null and manufacturer != ''">#{manufacturer},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deleteTime != null">#{deleteTime},</if>
+            <if test="operateName != null and operateName != ''">#{operateName},</if>
+            <if test="remark != null">#{remark},</if>
+            NOW(),
+            NOW(),
+            0
+         </trim>
+    </insert>
+
+    <update id="updatePoliceOnboardEquipment" parameterType="PoliceOnboardEquipment">
+        update police_onboard_equipment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deviceName != null and deviceName != ''">device_name = #{deviceName},</if>
+            <if test="deviceCode != null and deviceCode != ''">device_code = #{deviceCode},</if>
+            <if test="model != null and model != ''">model = #{model},</if>
+            <if test="manufacturer != null and manufacturer != ''">manufacturer = #{manufacturer},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+            <if test="operateName != null and operateName != ''">operate_name = #{operateName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            operate_time = NOW(),
+            update_time = NOW(),
+            operate_type = 1
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePoliceOnboardEquipmentById" parameterType="Long">
+        update police_onboard_equipment set operate_type = 2, delete_time = NOW(), operate_time = NOW() where id = #{id}
+    </delete>
+
+    <delete id="deletePoliceOnboardEquipmentByIds" parameterType="String">
+        update police_onboard_equipment set operate_type = 2, delete_time = NOW(), operate_time = NOW() where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

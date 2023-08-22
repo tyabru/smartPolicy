@@ -53,6 +53,17 @@
             <groupId>com.jingyu</groupId>
             <artifactId>sps-generator</artifactId>
         </dependency>
+
+        <!-- 安全隐患检查模块-->
+        <dependency>
+            <groupId>com.jingyu</groupId>
+            <artifactId>sps-safecheck</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

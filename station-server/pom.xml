@@ -166,6 +166,12 @@
                 <artifactId>sps-qunfang</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>com.jingyu</groupId>
+                <artifactId>sps-safecheck</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -176,6 +182,7 @@
         <module>sps-framework</module>
         <module>sps-system</module>
         <module>sps-qunfang</module>
+        <module>sps-safecheck</module>
     </modules>
     <packaging>pom</packaging>
 

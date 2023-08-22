@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.polices.mapper.PoliceWorkforceManagementsMapper">
+    
+    <resultMap type="PoliceWorkforceManagements" id="PoliceWorkforceManagementsResult">
+        <result property="id"    column="id"    />
+        <result property="dutyGroupId"    column="duty_group_id"    />
+        <result property="policeNumber"    column="police_number"    />
+        <result property="dutyType"    column="duty_type"    />
+        <result property="dutyDate"    column="duty_date"    />
+        <result property="shiftLeaderPoliceNumber"    column="shift_leader_police_number"    />
+        <result property="dutySituation"    column="duty_situation"    />
+        <result property="handoverMatters"    column="handover_matters"    />
+        <result property="successorGroupId"    column="successor_group_id"    />
+        <result property="successorPoliceNumber"    column="successor_police_number"    />
+        <result property="successionTime"    column="succession_time"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleteTime"    column="delete_time"    />
+        <result property="operateName"    column="operate_name"    />
+        <result property="operateTime"    column="operate_time"    />
+        <result property="operateType"    column="operate_type"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectPoliceWorkforceManagementsVo">
+        select id, duty_group_id, police_number, duty_type, duty_date, shift_leader_police_number, duty_situation,
+          handover_matters, successor_group_id, successor_police_number, succession_time, create_time, update_time, delete_time,
+          operate_name, operate_time, operate_type, remark
+        from police_workforce_managements
+    </sql>
+
+    <select id="selectPoliceWorkforceManagementsList" parameterType="PoliceWorkforceManagements" resultMap="PoliceWorkforceManagementsResult">
+        <include refid="selectPoliceWorkforceManagementsVo"/>
+        <where>
+            AND operate_type != 2
+            <if test="dutyGroupId != null "> and duty_group_id = #{dutyGroupId}</if>
+            <if test="policeNumber != null  and policeNumber != ''"> and instr(police_number,#{policeNumber})</if>
+            <if test="dutyType != null  and dutyType != ''"> and duty_type = #{dutyType}</if>
+            <if test="dutyDate != null "> and duty_date = #{dutyDate}</if>
+            <if test="shiftLeaderPoliceNumber != null  and shiftLeaderPoliceNumber != ''"> and instr(shift_leader_police_number,#{shiftLeaderPoliceNumber})</if>
+            <if test="dutySituation != null  and dutySituation != ''"> and instr(duty_situation,#{dutySituation})</if>
+            <if test="handoverMatters != null  and handoverMatters != ''"> and handover_matters = #{handoverMatters}</if>
+            <if test="successorGroupId != null "> and successor_group_id = #{successorGroupId}</if>
+            <if test="successorPoliceNumber != null  and successorPoliceNumber != ''"> and instr(successor_police_number,#{successorPoliceNumber})</if>
+            <if test="successionTime != null "> and succession_time = #{successionTime}</if>
+            <if test="deleteTime != null "> and delete_time = #{deleteTime}</if>
+            <if test="operateName != null  and operateName != ''"> and instr(operate_name,#{operateName})</if>
+            <if test="operateTime != null "> and operate_time = #{operateTime}</if>
+            <if test="operateType != null "> and operate_type = #{operateType}</if>
+        </where>
+        ORDER BY operate_time DESC
+    </select>
+    
+    <select id="selectPoliceWorkforceManagementsById" parameterType="Long" resultMap="PoliceWorkforceManagementsResult">
+        <include refid="selectPoliceWorkforceManagementsVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectPoliceWorkforceManagementsByDutyDate" parameterType="String" resultMap="PoliceWorkforceManagementsResult">
+        <include refid="selectPoliceWorkforceManagementsVo"/>
+        where duty_date = #{dutyDate}
+    </select>
+        
+    <insert id="insertPoliceWorkforceManagements" parameterType="PoliceWorkforceManagements" useGeneratedKeys="true" keyProperty="id">
+        insert into police_workforce_managements
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="dutyGroupId != null ">duty_group_id,</if>
+            <if test="policeNumber != null and policeNumber != ''">police_number,</if>
+            <if test="dutyType != null">duty_type,</if>
+            <if test="dutyDate != null">duty_date,</if>
+            <if test="shiftLeaderPoliceNumber != null and shiftLeaderPoliceNumber != ''">shift_leader_police_number,</if>
+            <if test="dutySituation != null and dutySituation != ''">duty_situation,</if>
+            <if test="handoverMatters != null">handover_matters,</if>
+            <if test="successorGroupId != null ">successor_group_id,</if>
+            <if test="successorPoliceNumber != null and successorPoliceNumber != ''">successor_police_number,</if>
+            <if test="successionTime != null">succession_time,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deleteTime != null">delete_time,</if>
+            <if test="operateName != null and operateName != ''">operate_name,</if>
+            <if test="remark != null">remark,</if>
+            create_time,
+            operate_time,
+            operate_type
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="dutyGroupId != null ">#{dutyGroupId},</if>
+            <if test="policeNumber != null and policeNumber != ''">#{policeNumber},</if>
+            <if test="dutyType != null">#{dutyType},</if>
+            <if test="dutyDate != null">#{dutyDate},</if>
+            <if test="shiftLeaderPoliceNumber != null and shiftLeaderPoliceNumber != ''">#{shiftLeaderPoliceNumber},</if>
+            <if test="dutySituation != null and dutySituation != ''">#{dutySituation},</if>
+            <if test="handoverMatters != null">#{handoverMatters},</if>
+            <if test="successorGroupId != null ">#{successorGroupId},</if>
+            <if test="successorPoliceNumber != null and successorPoliceNumber != ''">#{successorPoliceNumber},</if>
+            <if test="successionTime != null">#{successionTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deleteTime != null">#{deleteTime},</if>
+            <if test="operateName != null and operateName != ''">#{operateName},</if>
+            <if test="remark != null">#{remark},</if>
+            NOW(),
+            NOW(),
+            0
+         </trim>
+    </insert>
+
+    <update id="updatePoliceWorkforceManagements" parameterType="PoliceWorkforceManagements">
+        update police_workforce_managements
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="dutyGroupId != null ">duty_group_id = #{dutyGroupId},</if>
+            <if test="policeNumber != null and policeNumber != ''">police_number = #{policeNumber},</if>
+            <if test="dutyType != null">duty_type = #{dutyType},</if>
+            <if test="dutyDate != null">duty_date = #{dutyDate},</if>
+            <if test="shiftLeaderPoliceNumber != null and shiftLeaderPoliceNumber != ''">shift_leader_police_number = #{shiftLeaderPoliceNumber},</if>
+            <if test="dutySituation != null and dutySituation != ''">duty_situation = #{dutySituation},</if>
+            <if test="handoverMatters != null">handover_matters = #{handoverMatters},</if>
+            <if test="successorGroupId != null ">successor_group_id = #{successorGroupId},</if>
+            <if test="successorPoliceNumber != null and successorPoliceNumber != ''">successor_police_number = #{successorPoliceNumber},</if>
+            <if test="successionTime != null">succession_time = #{successionTime},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+            <if test="operateName != null and operateName != ''">operate_name = #{operateName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            operate_time = NOW(),
+            update_time = NOW(),
+            operate_type = 1
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePoliceWorkforceManagementsById" parameterType="Long">
+        update police_workforce_managements set operate_type = 2, delete_time = NOW(), operate_time = NOW() where id = #{id}
+    </delete>
+
+    <delete id="deletePoliceWorkforceManagementsByIds" parameterType="String">
+        update police_workforce_managements set operate_type = 2, delete_time = NOW(), operate_time = NOW() where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

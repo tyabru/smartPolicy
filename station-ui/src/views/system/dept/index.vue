@@ -100,21 +100,31 @@
     <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-row>
-          <el-col :span="24" v-if="form.parentId !== 0">
+          <el-col :span="12" v-if="form.parentId !== 0">
             <el-form-item label="上级部门" prop="parentId">
               <treeselect v-model="form.parentId" :options="deptOptions" :normalizer="normalizer" placeholder="选择上级部门" />
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
           <el-col :span="12">
             <el-form-item label="部门名称" prop="deptName">
               <el-input v-model="form.deptName" placeholder="请输入部门名称" />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="部门类型" prop="deptName">
+              <el-select v-model="form.deptType">
+                <el-option v-for="dict in deptTypeDicts"
+                  :key="dict.value" :value="dict.value"
+                  :label="dict.label" ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
           <el-col :span="12">
             <el-form-item label="显示排序" prop="orderNum">
-              <el-input-number v-model="form.orderNum" controls-position="right" :min="0" />
+              <el-input-number v-model="form.orderNum" class="width-100Rate"
+                               controls-position="right" :min="0" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -164,7 +174,7 @@ import "@riophae/vue-treeselect/dist/vue-treeselect.css";
 
 export default {
   name: "Dept",
-  dicts: ['sys_normal_disable'],
+  dicts: ['sys_normal_disable', 'sys_dept_type'],
   components: { Treeselect },
   data() {
     return {
@@ -190,7 +200,9 @@ export default {
         status: undefined
       },
       // 表单参数
-      form: {},
+      form: {
+        deptType: '0'
+      },
       // 表单校验
       rules: {
         parentId: [
@@ -218,6 +230,18 @@ export default {
         ]
       }
     };
+  },
+  computed: {
+    deptTypeDicts() {
+      const dictList = this.dict.type['sys_dept_type']
+      if(!dictList || dictList.length < 1) {
+        return []
+      } else if(!this.form.parentId){
+        return dictList.filter(item => item.value.length === 1)
+      } else {
+        return dictList.filter(item => item.raw.remark === this.form.parentType)
+      }
+    }
   },
   created() {
     this.getList();
@@ -275,6 +299,7 @@ export default {
       this.reset();
       if (row != undefined) {
         this.form.parentId = row.deptId;
+        this.form.parentType = row.deptType;
       }
       this.open = true;
       this.title = "添加部门";
@@ -295,6 +320,11 @@ export default {
       this.reset();
       getDept(row.deptId).then(response => {
         this.form = response.data;
+        const dictList = this.dict.type['sys_dept_type']
+        const typeFilter = dictList.filter(item => item.value === row.deptType);
+        if(typeFilter && typeFilter.length > 0) {
+          this.form.parentType = typeFilter[0].raw.remark;
+        }
         this.open = true;
         this.title = "修改部门";
         listDeptExcludeChild(row.deptId).then(response => {

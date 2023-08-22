@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.polices.mapper.PoliceDutyGroupsMapper">
+    
+    <resultMap type="PoliceDutyGroups" id="PoliceDutyGroupsResult">
+        <result property="id"    column="id"    />
+        <result property="groupName"    column="group_name"    />
+        <result property="teamMembers"    column="team_members"    />
+        <result property="responsibleArea"    column="responsible_area"    />
+        <result property="dutyType"    column="duty_type"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="deleteTime"    column="delete_time"    />
+        <result property="operateTime"    column="operate_time"    />
+        <result property="operateType"    column="operate_type"    />
+        <result property="operateName"    column="operate_name"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectPoliceDutyGroupsVo">
+        select id, group_name, team_members, responsible_area, duty_type, create_time, update_time, delete_time,
+           operate_time, operate_type, operate_name, remark
+        from police_duty_groups
+    </sql>
+
+    <select id="selectPoliceDutyGroupsList" parameterType="PoliceDutyGroups" resultMap="PoliceDutyGroupsResult">
+        <include refid="selectPoliceDutyGroupsVo"/>
+        <where>
+            operate_type != 2
+            <if test="groupName != null  and groupName != ''"> and instr(group_name, #{groupName})</if>
+            <if test="teamMembers != null  and teamMembers != ''"> and instr(team_members, #{teamMembers})</if>
+        </where>
+        ORDER BY operate_time DESC
+    </select>
+    
+    <select id="selectPoliceDutyGroupsById" parameterType="Long" resultMap="PoliceDutyGroupsResult">
+        <include refid="selectPoliceDutyGroupsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertPoliceDutyGroups" parameterType="PoliceDutyGroups" useGeneratedKeys="true" keyProperty="id">
+        insert into police_duty_groups
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="groupName != null and groupName != ''">group_name,</if>
+            <if test="teamMembers != null and teamMembers != ''">team_members,</if>
+            <if test="responsibleArea != null">responsible_area,</if>
+            <if test="dutyType != null and dutyType != ''">duty_type,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="deleteTime != null">delete_time,</if>
+            <if test="operateName != null and operateName != ''">operate_name,</if>
+            <if test="remark != null">remark,</if>
+            create_time,
+            operate_time,
+            operate_type
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="groupName != null and groupName != ''">#{groupName},</if>
+            <if test="teamMembers != null and teamMembers != ''">#{teamMembers},</if>
+            <if test="responsibleArea != null">#{responsibleArea},</if>
+            <if test="dutyType != null and dutyType != ''">#{dutyType},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="deleteTime != null">#{deleteTime},</if>
+            <if test="operateName != null and operateName != ''">#{operateName},</if>
+            <if test="remark != null">#{remark},</if>
+            NOW(),
+            NOW(),
+            0
+         </trim>
+    </insert>
+
+    <update id="updatePoliceDutyGroups" parameterType="PoliceDutyGroups">
+        update police_duty_groups
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="groupName != null and groupName != ''">group_name = #{groupName},</if>
+            <if test="teamMembers != null and teamMembers != ''">team_members = #{teamMembers},</if>
+            <if test="responsibleArea != null">responsible_area = #{responsibleArea},</if>
+            <if test="dutyType != null and dutyType != ''">duty_type = #{dutyType},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="deleteTime != null">delete_time = #{deleteTime},</if>
+            <if test="operateName != null and operateName != ''">operate_name = #{operateName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            create_time = NOW(),
+            operate_time = NOW(),
+            operate_type = 1
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePoliceDutyGroupsById" parameterType="Long">
+        update police_duty_groups set operate_type = 2, delete_time = NOW(), operate_time = NOW() where id = #{id}
+    </delete>
+
+    <delete id="deletePoliceDutyGroupsByIds" parameterType="String">
+        update police_duty_groups set operate_type = 2, delete_time = NOW(), operate_time = NOW() where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

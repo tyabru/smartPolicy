@@ -2,6 +2,9 @@ package com.jingyu.common.core.domain.entity;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.jingyu.common.annotation.NotSqlInject;
+import com.jingyu.common.xss.Xss;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
@@ -31,10 +34,14 @@ public class SysDictData extends BaseEntity
     private String dictLabel;
 
     /** 字典键值 */
+    @Xss
+    @NotSqlInject
     @Excel(name = "字典键值")
     private String dictValue;
 
     /** 字典类型 */
+    @Xss
+    @NotSqlInject
     @Excel(name = "字典类型")
     private String dictType;
 
@@ -73,7 +80,7 @@ public class SysDictData extends BaseEntity
     }
 
     @NotBlank(message = "字典标签不能为空")
-    @Size(min = 0, max = 100, message = "字典标签长度不能超过100个字符")
+    @Size(min = 0, max = 500, message = "字典标签长度不能超过100个字符")
     public String getDictLabel()
     {
         return dictLabel;

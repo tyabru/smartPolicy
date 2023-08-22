@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.community.mapper.CompanyDescMapper">
+    
+    <resultMap type="CompanyDesc" id="CompanyDescResult">
+        <result property="id"    column="id"    />
+        <result property="companyId"    column="company_id"    />
+        <result property="groupTitle"    column="group_title"    />
+        <result property="fileDesc"    column="file_desc"    />
+        <result property="fileUrl"    column="file_url"    />
+        <result property="fileFormat"    column="file_format"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+    </resultMap>
+
+    <sql id="selectCompanyDescVo">
+        select id, company_id, group_title, file_desc, file_url, file_format, create_time, create_by from sq_company_desc
+    </sql>
+
+    <select id="selectCompanyDescList" parameterType="CompanyDesc" resultMap="CompanyDescResult">
+        <include refid="selectCompanyDescVo"/>
+        <where>  
+            <if test="companyId != null "> and company_id = #{companyId}</if>
+            <if test="groupTitle != null  and groupTitle != ''"> and group_title = #{groupTitle}</if>
+            <if test="fileDesc != null  and fileDesc != ''"> and file_desc = #{fileDesc}</if>
+            <if test="fileUrl != null  and fileUrl != ''"> and file_url = #{fileUrl}</if>
+            <if test="fileFormat != null  and fileFormat != ''"> and file_format = #{fileFormat}</if>
+        </where>
+    </select>
+    
+    <select id="selectCompanyDescById" parameterType="Long" resultMap="CompanyDescResult">
+        <include refid="selectCompanyDescVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertCompanyDesc" parameterType="CompanyDesc" useGeneratedKeys="true" keyProperty="id">
+        insert into sq_company_desc
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyId != null">company_id,</if>
+            <if test="groupTitle != null">group_title,</if>
+            <if test="fileDesc != null and fileDesc != ''">file_desc,</if>
+            <if test="fileUrl != null and fileUrl != ''">file_url,</if>
+            <if test="fileFormat != null and fileFormat != ''">file_format,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyId != null">#{companyId},</if>
+            <if test="groupTitle != null">#{groupTitle},</if>
+            <if test="fileDesc != null and fileDesc != ''">#{fileDesc},</if>
+            <if test="fileUrl != null and fileUrl != ''">#{fileUrl},</if>
+            <if test="fileFormat != null and fileFormat != ''">#{fileFormat},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCompanyDesc" parameterType="CompanyDesc">
+        update sq_company_desc
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyId != null">company_id = #{companyId},</if>
+            <if test="groupTitle != null">group_title = #{groupTitle},</if>
+            <if test="fileDesc != null and fileDesc != ''">file_desc = #{fileDesc},</if>
+            <if test="fileUrl != null and fileUrl != ''">file_url = #{fileUrl},</if>
+            <if test="fileFormat != null and fileFormat != ''">file_format = #{fileFormat},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <update id="updateCompanyIdById">
+        update sq_company_desc set company_id = #{companyId} where id = #{id}
+    </update>
+
+    <delete id="deleteCompanyDescById" parameterType="Long">
+        delete from sq_company_desc where id = #{id}
+    </delete>
+
+    <delete id="deleteCompanyDescByIds" parameterType="String">
+        delete from sq_company_desc where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

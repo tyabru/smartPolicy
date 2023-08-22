@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="container" v-loading="loading">
     <el-row class="panel">
       <search-form-bar :class="{ 'search-bar': true, 'hidden': !showSearch }">
         <slot name="search-form"></slot>
@@ -22,6 +22,11 @@
 <script>
   export default {
     props: {
+      loading: {
+        default() {
+          return false
+        }
+      },
       showSearch: {
         default() {
           return true
@@ -32,6 +37,7 @@
 </script>
 <style scoped lang="scss">
 .container {
+  --el-table-min-height: 400px;
   overflow: auto;
   padding: 10px 10px 10px 10px;
   background-color: var(--page-background-color);
@@ -43,7 +49,7 @@
     background-color: var(--page-panel-background-color);
 
     & ::v-deep .el-table {
-      min-height: 400px;
+      min-height: var(--el-table-min-height);
     }
   }
 

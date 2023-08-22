@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.community.mapper.CommunityWuyeMapper">
+    
+    <resultMap type="CommunityWuye" id="CommunityWuyeResult">
+        <result property="id"    column="id"    />
+        <result property="communityId"    column="community_id"    />
+        <result property="company"    column="company"    />
+        <result property="workType"    column="work_type"    />
+        <result property="name"    column="name"    />
+        <result property="certNo"    column="cert_no"    />
+        <result property="phone"    column="phone"    />
+        <result property="address"    column="address"    />
+        <result property="nativePlace"    column="native_place"    />
+        <result property="startTime"    column="start_time"    />
+        <result property="isTemp"    column="is_temp"    />
+        <result property="endTime"    column="end_time"    />
+        <result property="isLeaving"    column="is_leaving"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="faceImgUrl"    column="face_img_url"    />
+        <association property="community" column="community_id"
+                      select="com.jingyu.community.mapper.CommunityMapper.selectSqCommunityById" />
+    </resultMap>
+
+    <sql id="selectCommunityWuyeVo">
+        select id, community_id, company, work_type, name, cert_no, phone, address,
+               native_place, start_time, is_temp, end_time, is_leaving, create_time,
+               create_by, update_time, update_by, face_img_url
+        from sq_community_wuye
+    </sql>
+
+    <select id="selectCommunityWuyeList" parameterType="CommunityWuye" resultMap="CommunityWuyeResult">
+        <include refid="selectCommunityWuyeVo"/>
+        <where>  
+            <if test="communityId != null "> and community_id = #{communityId}</if>
+            <if test="company != null  and company != ''"> and company = #{company}</if>
+            <if test="workType != null  and workType != ''"> and work_type = #{workType}</if>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="certNo != null  and certNo != ''"> and cert_no = #{certNo}</if>
+            <if test="phone != null  and phone != ''"> and phone = #{phone}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="nativePlace != null  and nativePlace != ''"> and native_place = #{nativePlace}</if>
+            <if test="startTime != null "> and start_time = #{startTime}</if>
+            <if test="isTemp != null  and isTemp != ''"> and is_temp = #{isTemp}</if>
+            <if test="endTime != null "> and end_time = #{endTime}</if>
+            <if test="isLeaving != null  and isLeaving != ''"> and is_leaving = #{isLeaving}</if>
+        </where>
+        order by update_time desc
+    </select>
+    
+    <select id="selectCommunityWuyeById" parameterType="Long" resultMap="CommunityWuyeResult">
+        <include refid="selectCommunityWuyeVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectCommunityWuyeByCertNo" parameterType="String" resultMap="CommunityWuyeResult">
+        <include refid="selectCommunityWuyeVo"/>
+        where cert_no = #{certNo}
+    </select>
+        
+    <insert id="insertCommunityWuye" parameterType="CommunityWuye" useGeneratedKeys="true" keyProperty="id">
+        insert into sq_community_wuye
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="communityId != null">community_id,</if>
+            <if test="company != null and company != ''">company,</if>
+            <if test="workType != null and workType != ''">work_type,</if>
+            <if test="name != null and name != ''">name,</if>
+            <if test="certNo != null and certNo != ''">cert_no,</if>
+            <if test="phone != null and phone != ''">phone,</if>
+            <if test="address != null and address != ''">address,</if>
+            <if test="nativePlace != null">native_place,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="isTemp != null">is_temp,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="isLeaving != null and isLeaving != ''">is_leaving,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="faceImgUrl != null">face_img_url,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="communityId != null">#{communityId},</if>
+            <if test="company != null and company != ''">#{company},</if>
+            <if test="workType != null and workType != ''">#{workType},</if>
+            <if test="name != null and name != ''">#{name},</if>
+            <if test="certNo != null and certNo != ''">#{certNo},</if>
+            <if test="phone != null and phone != ''">#{phone},</if>
+            <if test="address != null and address != ''">#{address},</if>
+            <if test="nativePlace != null">#{nativePlace},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="isTemp != null">#{isTemp},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="isLeaving != null and isLeaving != ''">#{isLeaving},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="faceImgUrl != null">#{faceImgUrl},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCommunityWuye" parameterType="CommunityWuye">
+        update sq_community_wuye
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="communityId != null">community_id = #{communityId},</if>
+            <if test="company != null and company != ''">company = #{company},</if>
+            <if test="workType != null and workType != ''">work_type = #{workType},</if>
+            <if test="name != null and name != ''">name = #{name},</if>
+            <if test="certNo != null and certNo != ''">cert_no = #{certNo},</if>
+            <if test="phone != null and phone != ''">phone = #{phone},</if>
+            <if test="address != null and address != ''">address = #{address},</if>
+            <if test="nativePlace != null">native_place = #{nativePlace},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="isTemp != null">is_temp = #{isTemp},</if>
+            <if test="endTime != null">end_time = #{endTime},</if>
+            <if test="isLeaving != null and isLeaving != ''">is_leaving = #{isLeaving},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="faceImgUrl != null">face_img_url = #{faceImgUrl},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCommunityWuyeById" parameterType="Long">
+        delete from sq_community_wuye where id = #{id}
+    </delete>
+
+    <delete id="deleteCommunityWuyeByIds" parameterType="String">
+        delete from sq_community_wuye where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

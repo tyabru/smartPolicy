@@ -305,6 +305,21 @@ public class ExcelUtil<T>
         return importExcel(StringUtils.EMPTY, is, titleNum);
     }
 
+    public List<T> importExcel(int sheetIndex, InputStream is, int titleNum) throws Exception {
+        this.type = Type.IMPORT;
+        if(this.wb == null) {
+            this.wb = WorkbookFactory.create(is);
+        }
+        int i = wb.getNumberOfSheets();
+        if(sheetIndex < i) {
+            // 如果指定sheet名,则取指定sheet中的内容 否则默认指向第1个sheet
+            Sheet sheet = wb.getSheetAt(sheetIndex);
+            return importExcel(sheet, titleNum);
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
     /**
      * 对excel表单指定表格索引名转换成list
      * 
@@ -313,13 +328,15 @@ public class ExcelUtil<T>
      * @param is 输入流
      * @return 转换后集合
      */
-    public List<T> importExcel(String sheetName, InputStream is, int titleNum) throws Exception
-    {
+    public List<T> importExcel(String sheetName, InputStream is, int titleNum) throws Exception {
         this.type = Type.IMPORT;
         this.wb = WorkbookFactory.create(is);
-        List<T> list = new ArrayList<T>();
         // 如果指定sheet名,则取指定sheet中的内容 否则默认指向第1个sheet
         Sheet sheet = StringUtils.isNotEmpty(sheetName) ? wb.getSheet(sheetName) : wb.getSheetAt(0);
+        return importExcel(sheet, titleNum);
+    }
+    public List<T> importExcel(Sheet sheet, int titleNum) throws Exception {
+        List<T> list = new ArrayList<T>();
         if (sheet == null)
         {
             throw new IOException("文件sheet不存在");
