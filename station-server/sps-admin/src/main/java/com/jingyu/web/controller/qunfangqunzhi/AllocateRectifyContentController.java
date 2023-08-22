@@ -1,4 +1,4 @@
-package com.jingyu.qunfangqunzhi.controller;
+package com.jingyu.web.controller.qunfangqunzhi;
 
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -38,7 +38,7 @@ public class AllocateRectifyContentController extends BaseController
     /**
      * 查询下发任务修改列表
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocateRectify:list')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @GetMapping("/list")
     public TableDataInfo list(AllocateRectifyContent allocateRectifyContent)
     {
@@ -50,7 +50,7 @@ public class AllocateRectifyContentController extends BaseController
     /**
      * 导出下发任务修改列表
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocateRectify:export')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @Log(title = "下发任务修改", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, AllocateRectifyContent allocateRectifyContent)
@@ -63,7 +63,7 @@ public class AllocateRectifyContentController extends BaseController
     /**
      * 获取下发任务修改详细信息
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocateRectify:query')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -73,7 +73,7 @@ public class AllocateRectifyContentController extends BaseController
     /**
      * 新增下发任务修改
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocateRectify:add')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @Log(title = "下发任务修改", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody AllocateRectifyContent allocateRectifyContent)
@@ -84,7 +84,7 @@ public class AllocateRectifyContentController extends BaseController
     /**
      * 修改下发任务修改
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocateRectify:edit')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @Log(title = "下发任务修改", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody AllocateRectifyContent allocateRectifyContent)
@@ -95,7 +95,7 @@ public class AllocateRectifyContentController extends BaseController
     /**
      * 删除下发任务修改
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocateRectify:remove')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @Log(title = "下发任务修改", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

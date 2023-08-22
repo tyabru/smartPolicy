@@ -184,7 +184,7 @@
                 v-if="scope.row.usersApplication!=null"
                 icon="el-icon-delete"
                 @click="handleApplication(scope.row)"
-                v-hasPermi="['qunfangqunzhi:CommonUsers:remove']"
+                v-hasPermi="['qunfangqunzhi:CommonUsers:query']"
               >查看申请信息</el-button>
             </template>
           </el-table-column>

@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 01/08/2023 23:27:48
+ Date: 22/08/2023 17:33:12
 */
 
 SET NAMES utf8mb4;
@@ -50,10 +50,11 @@ CREATE TABLE `event_info`  (
 -- Records of event_info
 -- ----------------------------
 INSERT INTO `event_info` VALUES (465504256, 106, '普通用户', '0', '456', '15320250549', '786', NULL, NULL, '666', '2023-07-31 00:15:18', '/profile/upload/2023/07/31/吴京_20230731001447A001.png', NULL, '2', 'ok', '2023-07-21 11:03:17', NULL, '2023-07-23 20:39:36', NULL, NULL, 218);
+INSERT INTO `event_info` VALUES (17267777536, 102, '管理员', '1', '2', '15320250549', '重庆市', NULL, NULL, '1213', '2023-08-15 00:00:00', '/profile/upload/2023/08/22/OIP-C_20230822163324A001.jpg', NULL, '1', NULL, '2023-08-22 16:33:31', NULL, NULL, NULL, NULL, 217);
 INSERT INTO `event_info` VALUES (29272059906, 107, '普通用户', '1', '123123', '15320250549', NULL, NULL, 'BBB', '发生什么事了！', NULL, '/profile/photo/a.jpg,/profile/photo/c.jpg', '/profile/video/VID20230709113934.mp4', '2', '123', '2023-07-04 11:41:49', NULL, '2023-07-23 20:39:40', NULL, NULL, 201);
 INSERT INTO `event_info` VALUES (29272059907, 106, '普通用户', '2', '7857', '5875', '25425', NULL, 'ccc', NULL, NULL, NULL, NULL, '2', '1', '2023-07-04 11:45:14', NULL, '2023-07-12 20:39:43', NULL, NULL, 201);
-INSERT INTO `event_info` VALUES (29272059908, 106, '普通用户', '3', 'sass', 'sas', 'sas1', NULL, 'ddd', NULL, NULL, NULL, NULL, '0', NULL, '2023-07-04 11:48:15', NULL, '2023-07-19 20:39:46', NULL, NULL, 201);
+INSERT INTO `event_info` VALUES (29272059908, 106, '普通用户', '3', 'sass', 'sas', 'sas1', NULL, 'ddd', NULL, NULL, NULL, NULL, '1', NULL, '2023-07-04 11:48:15', NULL, '2023-07-19 20:39:46', NULL, NULL, 201);
 INSERT INTO `event_info` VALUES (37147518976, 1, '管理员', '1', '小王', '15320250549', '重庆市', NULL, '15', '123123', '2023-08-01 09:00:16', '/profile/upload/2023/08/01/吴京_20230801090026A004.png,/profile/upload/2023/08/01/OIP-C_20230801090026A005.jpg', '/profile/upload/2023/08/01/VID20221130141435_20230801090300A006.mp4', '2', '1', '2023-08-01 09:03:10', NULL, NULL, NULL, NULL, 220);
-INSERT INTO `event_info` VALUES (80421836800, 106, '普通用户', '0', 'dsad', 'sd', 'dsa', 'sd', 'AAA', NULL, NULL, NULL, NULL, '0', NULL, '2023-07-04 11:51:16', NULL, '2023-07-04 20:39:48', NULL, NULL, 202);
+INSERT INTO `event_info` VALUES (80421836800, 106, '普通用户', '0', '53354', '15320250549', '重庆市', 'sd', 'AAA', '1', '2023-08-22 16:41:15', '/profile/upload/2023/08/22/OIP-C_20230822172943A001.jpg', NULL, '1', NULL, '2023-07-04 11:51:16', NULL, '2023-07-04 20:39:48', NULL, NULL, 202);
 
 SET FOREIGN_KEY_CHECKS = 1;

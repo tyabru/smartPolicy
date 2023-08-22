@@ -85,7 +85,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['threat:threatmanagement:add']"
+          v-hasPermi="['qunfangqunzhi:threatmanagement:add']"
         >新增
         </el-button>
       </el-col>
@@ -97,7 +97,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['threat:threatmanagement:remove']"
+          v-hasPermi="['qunfangqunzhi:threatmanagement:remove']"
         >删除
         </el-button>
       </el-col>
@@ -220,7 +220,7 @@
                           placeholder="请选择发生时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item  label="图片说明" prop="photoUrl" required>
+        <el-form-item  label="图片说明" prop="photoUrl" >
           <my-image-up-load  v-model="form.photoUrl" ></my-image-up-load>
         </el-form-item>
         <el-form-item  label="视频信息" prop="videoUrl"  >
@@ -433,6 +433,10 @@
           ],
           occurTime: [
             { required: true, message: "事件发生时间不能为空", trigger: "blur" },
+          ],
+          photoUrl:[
+            {required: true, message: "至少上传一张图片", trigger: "change"},
+            { min: 18, message: '至少上传一张图片', trigger: 'blur' }
           ]
         },
         updateOpen: false,

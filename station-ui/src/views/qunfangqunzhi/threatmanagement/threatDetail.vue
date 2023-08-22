@@ -30,7 +30,7 @@
       </el-form-item>
 
       <el-form-item v-if="this.photoUrls &&this.photoUrls.length!==0" label="图片说明" prop="photoUrls">
-        <el-image v-for="url in photoUrls" :src="url" style="width: 300px; height: 180px;margin-right: 20px" :preview-src-list="[url]"/>
+        <el-image v-for="url in photoUrls" :src="url" style="width: 300px; height: 180px;margin-right: 20px" :key='url' :preview-src-list="[url]"/>
       </el-form-item>
       <!--      <el-form-item label="照片地址" prop="photoUrl">-->
       <!--        <el-input v-model="form.photoUrl" placeholder="请输入照片地址" />-->
@@ -53,7 +53,7 @@
 
 
       <el-divider content-position="center">处理信息</el-divider>
-      <el-row :gutter="10" class="mb8" v-if="form.status !== '2' ">
+      <el-row :gutter="10" class="mb8" v-if="form.status !== '2'"  v-hasPermi="['qunfangqunzhi:threatmanagement:query']">
         <el-col :span="1.5">
           <el-button type="danger" icon="el-icon-delete" size="mini" @click="handleDeleteEventUserAllocated">批量取消
           </el-button>
@@ -93,7 +93,7 @@
               type="text"
               icon="el-icon-zoom-in"
               @click="handleAllocateDetail(scope.row.id)"
-              v-hasPermi="['threat:allocated:query']"
+              v-hasPermi="['qunfangqunzhi:threatmanagement:query']"
             >详情
             </el-button>
             <el-button
@@ -101,7 +101,8 @@
               type="text"
               icon="el-icon-delete"
               @click="handleCancel(scope.row.id)"
-              v-hasPermi="['threat:allocated:remove']"
+              v-if="form.status !== '2'"
+              v-hasPermi="['qunfangqunzhi:threatmanagement:query']"
             >取消
             </el-button>
           </template>
@@ -205,7 +206,7 @@
           <el-input v-model="allocatedForm.rectifyResult"  type="textarea" readonly></el-input>
         </el-form-item >
         <el-form-item v-if="this.detailPhotoUrl &&this.detailPhotoUrl.length!==0" label="图片说明" prop="detailPhotoUrl">
-          <el-image v-for="url in detailPhotoUrl" :src="url" style="width: 200px; height: 120px;margin-right: 20px" :preview-src-list="[url]"/>
+          <el-image v-for="url in detailPhotoUrl" :src="url" :key='url' style="width: 200px; height: 120px;margin-right: 20px" :preview-src-list="[url]"/>
         </el-form-item>
         <el-form-item v-if="this.detailVideoUrl && this.detailVideoUrl!==''"   label="视频信息" prop="detailVideoUrl" style="width: 600px; ">
           <vue-aliplayer-v2
@@ -286,12 +287,13 @@
         <el-form-item label="整改结果" prop="rectifyResult">
           <el-input v-model="dealForm.rectifyResult"  type="textarea" ></el-input>
         </el-form-item >
-        <el-form-item  label="图片说明" prop="photoUrl" required>
+        <el-form-item  label="图片说明" prop="photoUrl" >
           <my-image-up-load  v-model="dealForm.photoUrl" ></my-image-up-load>
         </el-form-item>
         <el-form-item  label="视频信息" prop="videoUrl" style="width: 600px;" >
           <file-upload v-model="dealForm.videoUrl" :file-size="20" :file-type="fileType" :limit="1" ></file-upload>
         </el-form-item>
+
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitDealForm">确 定</el-button>
@@ -372,7 +374,9 @@
           existProblem:[
             {required: true, message: "存在问题不能为空", trigger: "change"},
           ],
-
+          photoUrl:[
+            {required: true, message: "至少上传一张图片", trigger: "change"},
+          ]
         },
         title: '下发时间',
         deptName: '',
@@ -493,9 +497,7 @@
       /** 复选框选中数据 */
       handleEventUserAllocatedSelectionChange(selection) {
         this.checkedEventUserAllocated = selection.map(item => {
-          if (item.status !=="3"){
-            return item.id;
-          }
+          return item.id;
 
         })
       },
@@ -600,17 +602,21 @@
             return dict.label;
           }
         }
+        return val;
       },
       //获取用户类型处理标签内容
       getUserTypeLabel(val){
         if(val == null || val ==""){
           return "管理员";
-        }
-        for(let dict of this.dict.type.common_user_type){
-          if(dict.value === val){
-            return dict.label;
+        }else{
+          for(let dict of this.dict.type.common_user_type){
+            if(dict.value === val){
+              return dict.label;
+            }
           }
         }
+        return val;
+
       },
       //单个取消
       handleCancel(id){
@@ -665,13 +671,17 @@
       },
       // 提交处置信息
       submitDealForm(){
-        this.dealForm.eventId = this.id;
-        addAllocated(this.dealForm).then(res=>{
-          this.$message.success("提交处置信息成功");
-        }).then(()=>{
-          this.getDetail(this.id);
-        });
-        this.dealFormOpen = false;
+        this.$refs['form'].validate(valid=>{
+          if (valid){
+            this.dealForm.eventId = this.id;
+            addAllocated(this.dealForm).then(res=>{
+              this.$message.success("提交处置信息成功");
+            }).then(()=>{
+              this.getDetail(this.id);
+            });
+            this.dealFormOpen = false;
+          }
+        })
       },
       cancelDealForm(){
         this.dealFormOpen = false;

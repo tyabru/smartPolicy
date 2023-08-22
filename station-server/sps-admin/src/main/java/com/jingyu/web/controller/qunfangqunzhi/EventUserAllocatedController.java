@@ -61,7 +61,7 @@ public class EventUserAllocatedController extends BaseController
     /**
      * 查询事件分配列表
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocated:list')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @GetMapping("/list")
     public TableDataInfo list(EventUserAllocated eventUserAllocated)
     {
@@ -80,7 +80,7 @@ public class EventUserAllocatedController extends BaseController
     /**
      * 导出事件分配列表
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocated:export')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @Log(title = "事件分配", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, EventUserAllocated eventUserAllocated)
@@ -93,7 +93,7 @@ public class EventUserAllocatedController extends BaseController
     /**
      * 获取事件分配详细信息
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocated:query')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
@@ -119,6 +119,7 @@ public class EventUserAllocatedController extends BaseController
      * @param eventId
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @GetMapping("/downloadEvent/{userIds}/{eventId}")
     public AjaxResult downloadEvent(@PathVariable("userIds") Long[] userIds ,@PathVariable("eventId")Long eventId){
         Date date = new Date();
@@ -148,13 +149,14 @@ public class EventUserAllocatedController extends BaseController
      * 取消下发事件
      * @return
      */
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @GetMapping("/cancelEvent/{ids}")
     public AjaxResult cancelEvent(@PathVariable("ids") Long[] ids){
         for(Long id : ids){
             EventUserAllocated alterAllocated = new EventUserAllocated();
             alterAllocated.setId(id);
             alterAllocated.setStatus(QFConstants.AllocatedEventStatus.CANCELED.getValue());
-            System.out.println(alterAllocated);
+            System.out.println(id+"777");
             eventUserAllocatedService.updateEventUserAllocated(alterAllocated);
         }
         return AjaxResult.success("取消成功");
@@ -164,7 +166,7 @@ public class EventUserAllocatedController extends BaseController
     /**
      * 处置事件
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocated:add')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @Log(title = "事件分配", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody EventUserAllocated eventUserAllocated)
@@ -188,7 +190,7 @@ public class EventUserAllocatedController extends BaseController
     /**
      * 修改事件分配
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocated:edit')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @Log(title = "事件分配", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody EventUserAllocated eventUserAllocated)
@@ -199,7 +201,8 @@ public class EventUserAllocatedController extends BaseController
     /**
      * 删除事件分配
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:allocated:remove')")
+
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
     @Log(title = "事件分配", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)

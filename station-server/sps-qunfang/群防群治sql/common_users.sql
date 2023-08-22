@@ -11,7 +11,7 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
- Date: 01/08/2023 23:28:00
+ Date: 22/08/2023 17:32:51
 */
 
 SET NAMES utf8mb4;
@@ -50,7 +50,7 @@ CREATE TABLE `common_users`  (
 -- Records of common_users
 -- ----------------------------
 INSERT INTO `common_users` VALUES (102, 219, '152121212121', 'tatata', '1', '12123123', NULL, '15823698458', '', '0', '/profile/upload/2023/07/13/OIP-C_20230713092734A001.jpg', '$2a$10$kKmYxRWlvKaYsTlkw9fviuW9ONc7nwX4MNrpx7xxn370/o9fHdljG', '0', '0', '', NULL, '', '2023-07-02 16:26:14', 'admin', '2023-07-22 14:33:00', NULL);
-INSERT INTO `common_users` VALUES (103, 218, 'wanggyuanzhang1', '45', '2', '524254', NULL, '', NULL, '0', '', '', '0', '0', '', NULL, '', '2023-07-04 21:02:30', '', '2023-07-04 21:05:03', NULL);
+INSERT INTO `common_users` VALUES (103, 218, 'wanggyuanzhang1', '45', '2', '524254', '', '', NULL, '1', '', '', '0', '0', '', NULL, '', '2023-07-04 21:02:30', '', '2023-08-22 15:41:04', NULL);
 INSERT INTO `common_users` VALUES (104, 220, '752785270', '4545', '2', '453435', NULL, '', NULL, '0', '', '', '0', '0', '', NULL, '', '2023-07-04 21:06:01', '', '2023-07-22 14:52:40', NULL);
 INSERT INTO `common_users` VALUES (105, 219, '25424', '马云', '1', '', '245', '25424', NULL, '0', '', '', '0', '0', '', NULL, '', '2023-07-13 17:32:05', '', '2023-07-22 14:24:22', NULL);
 INSERT INTO `common_users` VALUES (106, 0, '群众2', '群众2', '0', '', '452', '15212', '1521', '0', '/profile/upload/2023/07/13/吴京_20230713173344A001.png', '', '0', '0', '', NULL, '', '2023-07-13 17:34:02', '', '2023-07-22 15:05:28', NULL);
