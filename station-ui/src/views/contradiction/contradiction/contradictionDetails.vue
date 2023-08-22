@@ -4,7 +4,7 @@
       <h4 class="title-h4">纠纷基本信息</h4>
       <el-container type="flex" justify="center" style="padding: 20px;overflow: hidden">
         <el-main class="no-padding no-scrollbar">
-          <el-form ref="form" :model="form" label-width="120px" size="mini">
+          <el-form ref="form" :model="form" label-width="120px">
             <el-descriptions class="margin-top" title="" :column="4" :size="size" border>
               <el-descriptions-item label="案件编码" prop="startTime">{{form.caseCode}}</el-descriptions-item>
               <el-descriptions-item label="调节警员警号" prop="policeNum">{{form.policeNum}}</el-descriptions-item>
@@ -18,20 +18,20 @@
                   <span v-if="form.disputeType == dict.value">{{dict.label}}</span>
                 </span>
               </el-descriptions-item>
-              <el-descriptions-item label="发生时间" prop="startTime">{{form.startTime}}</el-descriptions-item>
-              <el-descriptions-item label="结束时间" prop="endTime">{{form.endTime}}</el-descriptions-item>
-              <el-descriptions-item label="发生地点"  prop="place">{{form.place}}</el-descriptions-item>
-              <el-descriptions-item label="报警方式" prop="alarmMode">
-                <span v-for="dict in dict.type.alarm_mode" :key="dict.value" :label="dict.label" :value="dict.value">
-                  <span v-if="form.alarmMode == dict.value">{{dict.label}}</span>
-                </span>
-              </el-descriptions-item>
               <el-descriptions-item label="参与人数(人)" prop="partakeNum">{{form.partakeNum}}</el-descriptions-item>
               <el-descriptions-item label="调解进度"  prop="mediationProgress">
                 <span v-for="dict in dict.type.mediation_progress" :key="dict.value" :label="dict.label" :value="dict.value">
                   <span v-if="form.mediationProgress == dict.value">{{dict.label}}</span>
                 </span>
               </el-descriptions-item>
+              <el-descriptions-item label="发生地点"  prop="place">{{form.place}}</el-descriptions-item>
+              <el-descriptions-item label="报警方式" prop="alarmMode">
+                <span v-for="dict in dict.type.alarm_mode" :key="dict.value" :label="dict.label" :value="dict.value">
+                  <span v-if="form.alarmMode == dict.value">{{dict.label}}</span>
+                </span>
+              </el-descriptions-item>
+              <el-descriptions-item label="发生时间" prop="startTime">{{form.startTime}}</el-descriptions-item>
+              <el-descriptions-item label="结束时间" prop="endTime">{{form.endTime}}</el-descriptions-item>
               <el-descriptions-item label="经度" prop="longitude">{{form.longitude}}</el-descriptions-item>
               <el-descriptions-item label="纬度" prop="latitude">{{form.latitude}}</el-descriptions-item>
               <el-descriptions-item label="是否转办"  prop="isTransfer">
@@ -53,12 +53,11 @@
       </el-container>
     </el-row>
     <el-row class="">
-      <div class="split-container" style="min-height: 550px">
+      <div class="split-container" style="min-height: 520px">
         <div class="form-panel-item basic-info left-aside">
           <h4 class="title-h4">纠纷文件</h4>
           <el-table :data="fileManagementsList">
             <el-table-column label="文件名称" align="center" prop="fileName" />
-            <el-table-column label="文件存储路径" align="center" prop="filePath" />
             <el-table-column label="文件类型" align="center" prop="fileType">
               <template slot-scope="scope">
                 <dict-tag :options="dict.type.file_type" :value="scope.row.fileType"/>
@@ -118,7 +117,7 @@ export default {
   components: { DictTag, Treeselect },
   data() {
     return {
-      size: '',
+      size: 'medium',
       form: {},
       //警员信息集合
       policeInformationList: [],

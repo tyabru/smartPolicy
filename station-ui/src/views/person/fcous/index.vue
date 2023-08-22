@@ -27,8 +27,8 @@
       </template>
     </search-form-bar>
 
-    <!-- <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+    <el-row :gutter="10" class="mb8">
+      <!-- <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
           v-hasPermi="['person:fcous:add']">新增</el-button>
       </el-col>
@@ -43,9 +43,9 @@
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['person:fcous:export']">导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row> -->
+    </el-row>
 
     <el-table v-loading="loading" :data="fcousList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />

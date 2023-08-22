@@ -1,11 +1,6 @@
 <template>
   <div class="edit-form">
-    <el-form
-      ref="editForm"
-      :model="form"
-      :rules="rules"
-      label-width="125px"
-      size="small" >
+    <el-form ref="editForm" :model="form" :rules="rules" label-width="125px" size="small" >
       <el-row class="form-panel-item basic-info">
         <h4 class="title-h4">基本信息</h4>
         <el-row>
@@ -17,8 +12,7 @@
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="单位类型" prop="type">
               <el-select v-model="form.type" clearable class="width-100Rate" @change="createCompanyCode">
-                <el-option v-for="item in dict.type['place_list']"
-                           :key="item.value" :value="item.value" :label="item.label" />
+                <el-option v-for="item in dict.type['place_list']" :key="item.value" :value="item.value" :label="item.label" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -30,10 +24,7 @@
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="创建日期" prop="registrationTime">
               <el-date-picker clearable style="width: 100%" @change="createCompanyCode"
-                              v-model="form.registrationTime"
-                              type="date"
-                              value-format="yyyy-MM-dd"
-                              placeholder="请选择创建日期">
+                              v-model="form.registrationTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择创建日期">
               </el-date-picker>
             </el-form-item>
           </el-col>
@@ -43,7 +34,7 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="单位编码" prop="address">
+            <el-form-item label="单位编码" prop="companyCode">
               <el-input v-model="form.companyCode" placeholder="请输入单位编码" />
             </el-form-item>
           </el-col>
@@ -59,34 +50,27 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="营业执照号" prop="tradeCode"
-                :rules="[{required: !form.organizationCode && !form.creditCode,
+            <el-form-item label="营业执照号" prop="tradeCode" :rules="[{required: !form.organizationCode && !form.creditCode,
                   message: '执照号、机构代码、信用代码三选一' }]">
               <el-input v-model="form.tradeCode" placeholder="请输入营业执照号" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="组织机构代码" prop="organizationCode"
-                :rules="[{required: !form.tradeCode && !form.creditCode,
+            <el-form-item label="组织机构代码" prop="organizationCode" :rules="[{required: !form.tradeCode && !form.creditCode,
                   message: '执照号、机构代码、信用代码三选一' }]">
               <el-input v-model="form.organizationCode" placeholder="请输入组织机构代码" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="统一信用代码" prop="creditCode"
-                :rules="[{required: !form.tradeCode && !form.organizationCode,
+            <el-form-item label="统一信用代码" prop="creditCode" :rules="[{required: !form.tradeCode && !form.organizationCode,
                   message: '执照号、机构代码、信用代码三选一' }]">
               <el-input v-model="form.creditCode" placeholder="请输入统一信用代码" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="负责民警" prop="police">
-              <el-select v-model="form.police"
-                         @change="policeChange"
-                         class="width-100Rate">
-                <el-option v-for="item in policeList"
-                           :key="item.userId" :value="item.userId"
-                           :label="item.nickName" />
+              <el-select v-model="form.police" @change="policeChange" class="width-100Rate">
+                <el-option v-for="item in policeList" :key="item.userId" :value="item.userId" :label="item.nickName" />
               </el-select>
             </el-form-item>
           </el-col>
@@ -97,15 +81,14 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="负责人联系方式" prop="contactPhone"
-              :rules="[{required: form.headMaster && form.headMaster.length > 0,
+            <el-form-item label="负责人联系方式" prop="contactPhone" :rules="[{required: form.headMaster && form.headMaster.length > 0,
                 message: '在填写负责人后，联系电话为必填项。'}]">
               <el-input v-model="form.contactPhone" placeholder="请输入负责人联系方式" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="证件类型" prop="identityType"
-                          :required="form.headMaster && form.headMaster.length > 0" >
+            <el-form-item label="证件类型" prop="identityType" :rules="[{required: form.headMaster && form.headMaster.length > 0 ,
+                message: '在填写负责人后，证件类型为必填项。'}]">
               <el-select v-model="form.identityType" class="width-100Rate" placeholder="请输入身份证件类型">
                 <el-option value="CN_CARD" label="中国身份证"></el-option>
                 <el-option value="PASS_PORT" label="护照"></el-option>
@@ -113,8 +96,8 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="负责人证件号码" prop="identityCode"
-                          :required="form.headMaster && form.headMaster.length > 0" >
+            <el-form-item label="负责人证件号码" prop="identityCode" :rules="[{required: form.headMaster && form.headMaster.length > 0,
+                message: '在填写负责人后，负责人证件号码为必填项。'}]">
               <el-input v-model="form.identityCode" placeholder="请输入负责人证件号码" />
             </el-form-item>
           </el-col>
@@ -125,14 +108,12 @@
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="经度" prop="longitude">
-              <el-input-number :min="0" controls-position="right" class="width-100Rate"
-                               v-model="form.longitude" />
+              <el-input-number :min="0" controls-position="right" class="width-100Rate" v-model="form.longitude" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="纬度" prop="latitude">
-              <el-input-number :min="0" controls-position="right" class="width-100Rate"
-                               v-model="form.latitude" />
+              <el-input-number :min="0" controls-position="right" class="width-100Rate" v-model="form.latitude" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -158,10 +139,11 @@ import UploadGroup from '@/components/UploadGroup/index.vue'
 import { deleteByFileId, getDescListByCompanyId, uploadFileDesc } from '@/api/community/companyFile.js'
 import { addCompany, getCompany, updateCompany } from '@/api/community/company'
 import { queryBelongDeptByTypeAndId } from '@/api/system/dept'
-import { queryPcsPoliceUser } from '@/api/system/user'
+import { getUserProfile, queryPcsPoliceUser } from "@/api/system/user";
 import { fixedString } from '@/utils'
 import { formatDateByPattern } from '@/utils'
-import { validIdCodeByType } from '@/utils/validate'
+import { validIdCodeByType, validPhone } from '@/utils/validate'
+
 export default {
   name: 'edit-form',
   dicts: ['place_list'],
@@ -178,6 +160,7 @@ export default {
       }
     }
     return {
+      user: null,
       form: {
         id: null,
         identityType: 'CN_CARD',
@@ -186,9 +169,14 @@ export default {
       policeList: [],
       rules: {
         communityId: [ { required: true, message: '所属社区为必填项，不能为空！', trigger: 'blur'} ],
-        identityCode: [
-          { validator: validIdCode, trigger: "blur" }
-        ],
+        identityCode: [ { validator: validIdCode, trigger: "blur" } ],
+        companyName: [ { required: true, message: '单位名称为必填项，不能为空！', trigger: 'blur'} ],
+        companyCode: [ { required: true, message: '单位编码为必填项，不能为空！', trigger: 'blur'} ],
+        phone: [ { required: true, message: '单位联系电话为必填项，不能为空！', trigger: 'blur'} ],
+        address: [ { required: true, message: '单位注册地址为必填项，不能为空！', trigger: 'blur'} ],
+        police: [ { required: true, message: '负责民警为必填项，不能为空！', trigger: 'blur'} ],
+        headMaster: [ { required: true, message: '单位负责人为必填项，不能为空！', trigger: 'blur'} ],
+        contactPhone: [ { validator : validPhone, trigger: "blur"} ],
       }
     }
   },
@@ -221,6 +209,13 @@ export default {
         }
         this.getFormById(this.form.id);
       }
+      this.getUser();
+    },
+    getUser () {
+      getUserProfile().then(response => {
+        this.user = response.data;
+        this.queryPoliceById();
+      })
     },
     createCompanyCode() {
       if(this.form.type && this.form.registrationTime) {
@@ -359,15 +354,11 @@ export default {
         if(response.code === 200 && response.data) {
           this.$set(this.form, 'pcsId', response.data.deptId);
           this.$set(this.form, 'pcsName', response.data.deptName);
-          this.queryPoliceById();
         }
       });
     },
     queryPoliceById() {
-      if(!this.form.pcsId) {
-        return
-      }
-      queryPcsPoliceUser(this.form.pcsId).then(response => {
+      queryPcsPoliceUser(this.user.deptId ).then(response => {
         if(response.code === 200 && response.data) {
           this.policeList = response.data
           this.policeChange(this.form.police)

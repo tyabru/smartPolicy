@@ -1,22 +1,21 @@
 package com.jingyu.community.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jingyu.common.annotation.Excel;
+import com.jingyu.common.core.domain.BaseEntity;
+import com.jingyu.common.core.domain.entity.SysDept;
+import com.jingyu.common.utils.encryption_decryption.SensitiveNew;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.jingyu.common.core.domain.entity.SysDept;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import com.jingyu.common.annotation.Excel;
-import com.jingyu.common.core.domain.BaseEntity;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
 /**
  * 单位基本信息对象 sq_company
- * 
+ *
  * @author jingyu
  * @date 2023-07-12
  */
@@ -48,6 +47,7 @@ public class Company extends BaseEntity
 
     /** 联系电话 */
     @Excel(name = "联系电话")
+    @SensitiveNew(setterEncrypt = "setPhone", getterDncrypt = "getPhone", neeDecrypt = true, neeEecrypt = true)
     private String phone;
 
     /** 电子邮箱 */
@@ -77,14 +77,17 @@ public class Company extends BaseEntity
 
     /** 负责人姓名 */
     @Excel(name = "负责人姓名")
+    @SensitiveNew(setterEncrypt = "setHeadMaster", getterDncrypt = "getHeadMaster", EncryptMethod = "nameEncrypt", notEncryptByResponse = true)
     private String headMaster;
 
     /** 负责人联系方式 */
     @Excel(name = "负责人联系方式")
+    @SensitiveNew(setterEncrypt = "setContactPhone", getterDncrypt = "getContactPhone", neeDecrypt = true, neeEecrypt = true)
     private String contactPhone;
 
     /** 负责人证件号码 */
     @Excel(name = "负责人证件号码")
+    @SensitiveNew(setterEncrypt = "setIdentityCode", getterDncrypt = "getIdentityCode", neeDecrypt = true, neeEecrypt = true)
     private String identityCode;
 
     /** 证件号码类型 */

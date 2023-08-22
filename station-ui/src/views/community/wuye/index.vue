@@ -39,7 +39,7 @@
           v-hasPermi="['wuye:wuye:remove']">删除</el-button>
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['wuye:wuye:export']">导出</el-button>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar style="padding-right: 14px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </template>
 
     <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">

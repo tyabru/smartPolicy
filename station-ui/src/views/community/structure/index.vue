@@ -39,7 +39,7 @@
           v-hasPermi="['community:structure:export']">导出</el-button>
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleImport"
                  v-hasPermi="['community:structure:export']">批量导入</el-button>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
+      <right-toolbar style="padding-right: 14px;" :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
     </template>
     <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />

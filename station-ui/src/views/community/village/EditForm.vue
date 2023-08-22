@@ -1,11 +1,6 @@
 <template>
   <div class="edit-form">
-    <el-form
-      ref="editForm"
-      :model="form"
-      :rules="rules"
-      label-width="125px"
-      size="small" >
+    <el-form ref="editForm" :model="form" :rules="rules" label-width="125px" size="small" >
       <el-row class="form-panel-item basic-info">
         <h4 class="title-h4">基本信息</h4>
         <el-row>
@@ -40,11 +35,8 @@
         <el-row>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="小区（村）名称" prop="name">
-              <el-autocomplete v-model="form.name"
-                :fetch-suggestions="querySearchAsync"
-                placeholder="请输入内容"
-                @select="handleSelect" class="width-100Rate"
-              ></el-autocomplete>
+              <el-autocomplete v-model="form.name" :fetch-suggestions="querySearchAsync" placeholder="请输入内容" 
+                @select="handleSelect" class="width-100Rate"></el-autocomplete>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
@@ -66,16 +58,12 @@
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="命名机关"
-                          :rules="[{required: form.isSafeArea ===0,
-                            message: '当小区为安全小区时，该字段必填' }]"
-                          prop="namingOrgan">
+            <el-form-item label="命名机关" :rules="[{required: form.isSafeArea ===0, message: '当小区为安全小区时，该字段必填' }]" prop="namingOrgan">
               <el-input v-model="form.namingOrgan" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="命名时间" :rules="[{required: form.isSafeArea ===0,
-                            message: '当小区为安全小区时，该字段必填' }]" prop="namingTime">
+            <el-form-item label="命名时间" :rules="[{required: form.isSafeArea ===0, message: '当小区为安全小区时，该字段必填' }]" prop="namingTime">
               <el-date-picker v-model="form.namingTime" type="date" class="width-100Rate"
                 placeholder="选择日期">
               </el-date-picker>
@@ -83,47 +71,39 @@
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="负责民警" prop="police">
-              <el-select v-model="form.detail.police"
-                         @change="policeChange"
-                         class="width-100Rate">
-                <el-option v-for="item in policeList"
-                           :key="item.userId" :value="item.userId"
-                           :label="item.nickName" />
+              <el-select v-model="form.detail.police" @change="policeChange" class="width-100Rate">
+                <el-option v-for="item in policeList" :key="item.userId" :value="item.userId" :label="item.nickName" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="总面积" prop="fullArea">
-              <el-input-number :min="0" controls-position="right" class="width-100Rate"
-                               v-model="form.detail.fullArea"/>
+              <el-input-number :min="0" controls-position="right" class="width-100Rate" v-model="form.detail.fullArea"/>
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="楼栋数" prop="buildingCount">
-              <el-input-number :min="0" controls-position="right"
-                               v-model="form.detail.buildingCount" class="width-100Rate" />
+              <el-input-number :min="0" controls-position="right" v-model="form.detail.buildingCount" class="width-100Rate" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="负责人姓名" prop="police">
+            <el-form-item label="负责人姓名" prop="headMaster">
               <el-input v-model="form.detail.headMaster" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
-            <el-form-item label="负责人联系电话" prop="police">
+            <el-form-item label="负责人联系电话" prop="masterPhone">
               <el-input v-model="form.detail.masterPhone" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="经度" prop="longitude">
-              <el-input-number :min="0" controls-position="right" class="width-100Rate"
-                               v-model="form.detail.longitude" />
+              <el-input-number :min="0" controls-position="right" class="width-100Rate" v-model="form.detail.longitude" />
             </el-form-item>
           </el-col>
           <el-col :xs="24" :sm="24" :lg="6">
             <el-form-item label="纬度" prop="latitude">
-              <el-input-number :min="0" controls-position="right" class="width-100Rate"
-                               v-model="form.detail.latitude" />
+              <el-input-number :min="0" controls-position="right" class="width-100Rate" v-model="form.detail.latitude" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -156,7 +136,7 @@ import UploadGroup from '@/components/UploadGroup/index.vue'
 import { deleteByFileId, getDescListByVillageId, uploadFileDesc } from '@/api/community/communityFile'
 import { addCommunity, getCommunity, updateCommunity } from '@/api/community/community'
 import { queryBelongDeptByTypeAndId } from '@/api/system/dept'
-import { queryPcsPoliceUser } from '@/api/system/user'
+import { getUserProfile, queryPcsPoliceUser } from "@/api/system/user";
 import _ from 'lodash'
 import { loadXqxxByNameFormStructure } from '@/api/community/structure'
 export default {
@@ -164,6 +144,7 @@ export default {
   components: { UploadGroup },
   data() {
     return {
+      user: null,
       form: {
         id: null,
         detail: {},
@@ -177,6 +158,7 @@ export default {
         code: [ { required: true, message: '小区编码为必填项，不能为空！'},
           { min: 21, max: 21, message: '小区编码长度为21为长度的编码。'}],
         preventiveMeasures: [ { required: true, message: '防范措施为必填项，不能为空！'} ],
+        address: [ { required: true, message: '所属社区地址为必填项，不能为空！', trigger: 'blur'} ],
       }
     }
   },
@@ -195,7 +177,7 @@ export default {
     }
   },
   created() {
-    this.loadFormData()
+    this.loadFormData();
   },
   methods: {
     loadFormData() {
@@ -209,6 +191,13 @@ export default {
         }
         this.getFormById(this.form.id);
       }
+      this.getUser();
+    },
+    getUser () {
+      getUserProfile().then(response => {
+        this.user = response.data;
+        this.queryPoliceById();
+      })
     },
     getFormById(id) {
       getCommunity(id).then(response => {
@@ -346,15 +335,11 @@ export default {
           }
           this.form.pcsId = response.data.deptId;
           this.form.pcsName = response.data.deptName;
-          this.queryPoliceById();
         }
       });
     },
     queryPoliceById() {
-      if(!this.form.pcsId) {
-        return
-      }
-      queryPcsPoliceUser(this.form.pcsId).then(response => {
+      queryPcsPoliceUser(this.user.deptId).then(response => {
         if(response.code === 200 && response.data) {
           this.policeList = response.data
           this.policeChange(this.form.detail.police)

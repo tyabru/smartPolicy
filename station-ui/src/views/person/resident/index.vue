@@ -52,6 +52,7 @@
         size="mini" @click="openEditDialog" v-hasPermi="['person:resident:add']">新增</el-button>
       <el-button type="warning" plain icon="el-icon-download" size="mini"
         @click="handleExport" v-hasPermi="['person:resident:export']">导出</el-button>
+      <right-toolbar style="padding-right: 14px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </template>
     <el-table :data="tableData" emptyText="暂无数据">
       <el-table-column type="selection"></el-table-column>
