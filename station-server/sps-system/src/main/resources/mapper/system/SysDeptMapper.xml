@@ -9,8 +9,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result property="parentId"   column="parent_id"   />
 		<result property="ancestors"  column="ancestors"   />
 		<result property="deptName"   column="dept_name"   />
-		<result property="deptCode"   column="dept_code"   />
-		<result property="deptType"   column="dept_type"   />
 		<result property="orderNum"   column="order_num"   />
 		<result property="leader"     column="leader"      />
 		<result property="phone"      column="phone"       />
@@ -25,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<sql id="selectDeptVo">
-        select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.dept_code, d.dept_type, d.order_num, d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time
+        select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status, d.del_flag, d.create_by, d.create_time 
         from sys_dept d
     </sql>
     
@@ -40,9 +38,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		</if>
 		<if test="deptName != null and deptName != ''">
 			AND dept_name like concat('%', #{deptName}, '%')
-		</if>
-		<if test="deptType != null and deptType != ''">
-			AND dept_type = #{deptType}
 		</if>
 		<if test="status != null and status != ''">
 			AND status = #{status}
@@ -65,7 +60,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     
     <select id="selectDeptById" parameterType="Long" resultMap="SysDeptResult">
 		select d.dept_id, d.parent_id, d.ancestors, d.dept_name, d.order_num, d.leader, d.phone, d.email, d.status,
-			(select dept_name from sys_dept where dept_id = d.parent_id) parent_name, d.dept_type, d.dept_code
+			(select dept_name from sys_dept where dept_id = d.parent_id) parent_name
 		from sys_dept d
 		where d.dept_id = #{deptId}
 	</select>
@@ -91,42 +86,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	    <include refid="selectDeptVo"/>
 		where dept_name=#{deptName} and parent_id = #{parentId} and del_flag = '0' limit 1
 	</select>
-
-    <select id="queryMaxIdInThisLevel" resultType="java.lang.Long">
-		select Max(dept_id) from sys_dept where parent_id = #{parentId}
-	</select>
-	<select id="selectDeptTreeByAncestors" resultMap="SysDeptResult">
-		<bind name="ancestorsLike" value="ancestors + '%'"/>
-		select
-		    dept_id, parent_id, ancestors, dept_code, dept_name, dept_type
-		from sys_dept where ancestors like #{ancestorsLike}
-	</select>
-	<select id="queryBelongDeptByTypeAndId" resultMap="SysDeptResult">
-		select
-			dept_id, parent_id, ancestors, dept_code, dept_name, dept_type
-		from sys_dept
-		where dept_type = #{deptType}
-			and FIND_IN_SET(dept_id, (select ancestors from sys_dept where dept_id = #{deptId})) limit 1
-	</select>
-	<select id="queryChildIdsByTypeAndDeptId" resultType="java.lang.String">
-		<bind name="ancestorsLike" value="de + '%'"/>
-		select
-			GROUP_CONCAT(dept_id)
-		from sys_dept
-		where find_in_set(#{deptId}, ancestors)
-		<if test="deptType != null and deptType != ''">
-			and dept_type = #{deptType}
-		</if>
-	</select>
-
-	<insert id="insertDept" parameterType="SysDept">
+    
+    <insert id="insertDept" parameterType="SysDept">
  		insert into sys_dept(
  			<if test="deptId != null and deptId != 0">dept_id,</if>
  			<if test="parentId != null and parentId != 0">parent_id,</if>
  			<if test="deptName != null and deptName != ''">dept_name,</if>
  			<if test="ancestors != null and ancestors != ''">ancestors,</if>
- 			<if test="deptType != null and deptType != ''">dept_type,</if>
- 			<if test="deptCode != null and deptCode != ''">dept_code,</if>
  			<if test="orderNum != null">order_num,</if>
  			<if test="leader != null and leader != ''">leader,</if>
  			<if test="phone != null and phone != ''">phone,</if>
@@ -139,8 +105,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="parentId != null and parentId != 0">#{parentId},</if>
  			<if test="deptName != null and deptName != ''">#{deptName},</if>
  			<if test="ancestors != null and ancestors != ''">#{ancestors},</if>
-			<if test="deptType != null and deptType != ''">#{deptType},</if>
-			<if test="deptCode != null and deptCode != ''">#{deptCode},</if>
  			<if test="orderNum != null">#{orderNum},</if>
  			<if test="leader != null and leader != ''">#{leader},</if>
  			<if test="phone != null and phone != ''">#{phone},</if>
@@ -157,8 +121,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  			<if test="parentId != null and parentId != 0">parent_id = #{parentId},</if>
  			<if test="deptName != null and deptName != ''">dept_name = #{deptName},</if>
  			<if test="ancestors != null and ancestors != ''">ancestors = #{ancestors},</if>
-			<if test="deptType != null and deptType != ''">dept_type = #{deptType},</if>
-			<if test="deptCode != null and deptCode != ''">dept_code = #{deptCode},</if>
  			<if test="orderNum != null">order_num = #{orderNum},</if>
  			<if test="leader != null">leader = #{leader},</if>
  			<if test="phone != null">phone = #{phone},</if>
@@ -189,10 +151,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         	#{deptId}
         </foreach>
 	</update>
-	<update id="updateDeptId">
-		update sys_dept set dept_id = #{newDeptId} where dept_id = #{origin}
-	</update>
-
+	
 	<delete id="deleteDeptById" parameterType="Long">
 		update sys_dept set del_flag = '2' where dept_id = #{deptId}
 	</delete>

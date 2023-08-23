@@ -1,7 +1,6 @@
 package com.jingyu.community.mapper;
 
 import java.util.List;
-
 import com.jingyu.community.domain.Company;
 import org.apache.ibatis.annotations.Mapper;
 

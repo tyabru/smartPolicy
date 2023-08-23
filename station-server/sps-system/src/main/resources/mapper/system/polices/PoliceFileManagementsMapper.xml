@@ -11,7 +11,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="folderName"    column="folder_name"    />
         <result property="fileDescription"    column="file_description"    />
         <result property="deptId"    column="dept_id"    />
-        <result property="fileType"    column="file_type"    />
         <result property="deptName"    column="dept_name"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
@@ -23,8 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPoliceFileManagementsVo">
-        select p.id, p.file_name, p.file_path, p.folder_name, p.file_description, p.create_time, p.update_time, p.delete_time, p.operate_time,
-          p.dept_id, p.file_type, p.operate_name, p.operate_type, p.remark, sys_dept.dept_name
+        select p.id, p.file_name, p.file_path, p.folder_name, p.file_description, p.create_time, p.update_time, p.delete_time, p.operate_time, p.dept_id,
+          p.operate_name, p.operate_type, p.remark, sys_dept.dept_name
         from police_file_managements p
         inner join sys_dept on p.dept_id = sys_dept.dept_id
     </sql>
@@ -37,8 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="filePath != null  and filePath != ''"> and instr(file_path,#{filePath})</if>
             <if test="folderName != null  and folderName != ''"> and instr(folder_name,#{folderName})</if>
             <if test="fileDescription != null  and fileDescription != ''"> and instr(file_description,#{fileDescription})</if>
-            <if test="deptId != null "> and instr(p.dept_id,#{deptId})</if>
-            <if test="fileType != null "> and instr(file_type,#{fileType})</if>
+            <if test="deptId != null "> and instr(dept_id,#{deptId})</if>
             <if test="deleteTime != null "> and delete_time = #{deleteTime}</if>
             <if test="operateTime != null "> and operate_time = #{operateTime}</if>
             <if test="operateName != null  and operateName != ''"> and instr(operate_name,#{operateName})</if>
@@ -60,7 +58,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="folderName != null  and folderName != ''">folder_name,</if>
             <if test="fileDescription != null">file_description,</if>
             <if test="deptId != null">dept_id,</if>
-            <if test="fileType != null ">file_type,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="deleteTime != null">delete_time,</if>
             <if test="operateName != null">operate_name,</if>
@@ -75,7 +72,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="folderName != null  and folderName != ''">#{folderName},</if>
             <if test="fileDescription != null">#{fileDescription},</if>
             <if test="deptId != null">#{deptId},</if>
-            <if test="fileType != null ">#{fileType},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="deleteTime != null">#{deleteTime},</if>
             <if test="operateName != null">#{operateName},</if>
@@ -94,7 +90,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="folderName != null  and folderName != ''">folder_name = #{folderName},</if>
             <if test="fileDescription != null">file_description = #{fileDescription},</if>
             <if test="deptId != null">dept_id = #{deptId},</if>
-            <if test="fileType != null">file_type = #{fileType},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="deleteTime != null">delete_time = #{deleteTime},</if>
             <if test="operateTime != null">operate_time = #{operateTime},</if>

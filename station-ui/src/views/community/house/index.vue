@@ -1,23 +1,26 @@
 <template>
   <div class="app-container">
-    <search-form-bar>
-      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
-        <el-form-item label="所属小区">
-          <se-community v-model="queryParams.communityId" style="width: 193px" />
-        </el-form-item>
-      </el-form>
-      <template #btn>
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="68px">
+      <el-form-item label="所属小区">
+        <se-community v-model="queryParams.communityId" style="width: 193px" />
+      </el-form-item>
+      <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </template>
-    </search-form-bar>
+      </el-form-item>
+    </el-form>
 
     <el-row :gutter="10" class="mb8">
       <el-col :span="1.5">
-        <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
-          v-hasPermi="['system:house:export']">导出</el-button>
+        <el-button type="warning"
+          plain
+          icon="el-icon-download"
+          size="mini"
+          @click="handleExport"
+          v-hasPermi="['system:house:export']"
+        >导出</el-button>
       </el-col>
-      <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="houseList" @selection-change="handleSelectionChange">
@@ -30,7 +33,13 @@
       <el-table-column label="重点关注人口" align="center" prop="importants" />
     </el-table>
 
-    <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList"/>
+    <pagination
+      v-show="total>0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
     <!-- 添加或修改house对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>

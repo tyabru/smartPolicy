@@ -1,22 +1,23 @@
 package com.jingyu.community.service.impl;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.jingyu.common.exception.base.BaseException;
 import com.jingyu.common.utils.DateUtils;
 import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.common.utils.StringUtils;
-import com.jingyu.common.utils.encryption_decryption.SensitiveNewsHander;
-import com.jingyu.common.utils.sign.AESUtil;
-import com.jingyu.community.domain.Company;
-import com.jingyu.community.mapper.CompanyMapper;
+import com.jingyu.community.domain.Community;
+import com.jingyu.community.domain.CommunityDetail;
+import com.jingyu.community.domain.CompanyDesc;
 import com.jingyu.community.service.ICompanyDescService;
-import com.jingyu.community.service.ICompanyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.jingyu.community.mapper.CompanyMapper;
+import com.jingyu.community.domain.Company;
+import com.jingyu.community.service.ICompanyService;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Arrays;
-import java.util.List;
-
 
 /**
  * 单位基本信息Service业务层处理
@@ -26,7 +27,8 @@ import java.util.List;
  */
 @Service
 @RequiredArgsConstructor
-public class CompanyServiceImpl implements ICompanyService {
+public class CompanyServiceImpl implements ICompanyService 
+{
     private final CompanyMapper companyMapper;
     private final ICompanyDescService companyDescService;
 
@@ -70,7 +72,6 @@ public class CompanyServiceImpl implements ICompanyService {
         if(codeIsExists(company.getCompanyCode())) {
             throw new BaseException("单位编码已存在!");
         }
-        SensitiveNewsHander.revertEncryptAttrs(company);
         int i = companyMapper.insertCompany(company);
         if(i > 0) {
             String ids = company.getDescIds();
@@ -100,12 +101,6 @@ public class CompanyServiceImpl implements ICompanyService {
         if(codeIsExistsExcludeSelf(company.getId(), company.getCompanyCode())) {
             throw new BaseException("单位编码已存在!");
         }
-        Company old = selectCompanyById(company.getId());
-        old.setIdentityCode(AESUtil.decrypt(old.getIdentityCode()));
-        old.setPhone(AESUtil.decrypt(old.getPhone()));
-        old.setContactPhone(AESUtil.decrypt(old.getContactPhone()));
-        SensitiveNewsHander.revertNotEditAttrs(company,old);
-        SensitiveNewsHander.revertEncryptAttrs(company);
         int i = companyMapper.updateCompany(company);
         String ids = company.getDescIds();
         if(StringUtils.isNotEmpty(ids)) {

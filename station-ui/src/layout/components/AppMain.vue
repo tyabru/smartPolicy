@@ -28,7 +28,7 @@ export default {
 
 <style lang="scss" scoped>
 .app-main {
-  --page-content-min-height: calc(100vh - 85px);
+  --page-content-min-height: calc(100vh - 50px);
   /* 50= navbar  50  */
   min-height: calc(100vh - 50px);
   width: 100%;

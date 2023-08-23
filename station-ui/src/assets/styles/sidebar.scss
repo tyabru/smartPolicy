@@ -71,7 +71,7 @@
     }
 
     .el-menu-item, .el-submenu__title {
-      //overflow: hidden !important;
+      overflow: hidden !important;
       text-overflow: ellipsis !important;
       white-space: nowrap !important;
     }
