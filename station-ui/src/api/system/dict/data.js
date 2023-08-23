@@ -50,16 +50,3 @@ export function delData(dictCode) {
     method: 'delete'
   })
 }
-
-/** 检查某字典类型【dictType】是否存在？
- * 不存在则添加一组，并提供一组现成的字典
- * */
-export async function checkDictIsExists(form) {
-  const response = await request({
-    url: '/system/dict/data/checkDictIsExists',
-    data: form,
-    method: 'post'
-  });
-  return response.code === 200;
-
-}

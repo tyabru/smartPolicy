@@ -101,21 +101,6 @@ mybatis:
     # 加载全局的配置文件
     configLocation: classpath:mybatis/mybatis-config.xml
 
-ftpServer:
-  enable: false
-  ip: 10.10.10.3
-  # ftp服务器
-  port: 21
-  # ip地址
-  username: abc
-  # 端口号（默认为21）
-  password: abc123
-  # 用户名
-  vice_username: abcd
-  # 密码
-  vice_password: abcd1234
-  downloadPath: E:/downloadImages
-
 # PageHelper分页插件
 pagehelper: 
   helperDialect: mysql

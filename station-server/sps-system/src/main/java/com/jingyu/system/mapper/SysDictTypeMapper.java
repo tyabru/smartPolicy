@@ -2,14 +2,12 @@ package com.jingyu.system.mapper;
 
 import java.util.List;
 import com.jingyu.common.core.domain.entity.SysDictType;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * 字典表 数据层
  * 
  * @author ruoyi
  */
-@Mapper
 public interface SysDictTypeMapper
 {
     /**

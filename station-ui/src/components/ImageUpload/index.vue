@@ -19,7 +19,7 @@
     >
       <i class="el-icon-plus"></i>
     </el-upload>
-
+    
     <!-- 上传提示 -->
     <div class="el-upload__tip" slot="tip" v-if="showTip">
       请上传
@@ -67,8 +67,7 @@ export default {
     isShowTip: {
       type: Boolean,
       default: true
-    },
-    baseDir: String
+    }
   },
   data() {
     return {
@@ -105,15 +104,6 @@ export default {
         } else {
           this.fileList = [];
           return [];
-        }
-      },
-      deep: true,
-      immediate: true
-    },
-    baseDir: {
-      handler(newVal) {
-        if(newVal && newVal.length > 0) {
-          this.headers['file-dir-custom'] = newVal
         }
       },
       deep: true,
