@@ -2,8 +2,10 @@ package com.jingyu.common.core.domain.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.validation.constraints.*;
-
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.core.domain.BaseEntity;
@@ -49,10 +51,6 @@ public class SysDept extends BaseEntity
 
     /** 父部门名称 */
     private String parentName;
-    /** 公安内部组织编码 */
-    private String deptCode;
-    /** 组织类型 */
-    private String deptType;
     
     /** 子部门 */
     private List<SysDept> children = new ArrayList<SysDept>();
@@ -181,23 +179,6 @@ public class SysDept extends BaseEntity
     public void setChildren(List<SysDept> children)
     {
         this.children = children;
-    }
-
-    public String getDeptCode() {
-        return deptCode;
-    }
-
-    public void setDeptCode(String deptCode) {
-        this.deptCode = deptCode;
-    }
-
-    @NotEmpty(message = "部门类型不能为空")
-    public String getDeptType() {
-        return deptType;
-    }
-
-    public void setDeptType(String deptType) {
-        this.deptType = deptType;
     }
 
     @Override

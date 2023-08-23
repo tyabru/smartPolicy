@@ -133,11 +133,3 @@ export function deptTreeSelect() {
     method: 'get'
   })
 }
-
-export function queryPcsPoliceUser(deptId) {
-  return request({
-    url: '/system/user/queryPcsPoliceUser',
-    method: 'get',
-    params: { deptId }
-  })
-}

@@ -6,7 +6,6 @@
 @import './btn.scss';
 
 body {
-  --theme-color: #1890ff;
   --page-background-color: rgb(242,243,245);
   --page-panel-background-color: #fff;
   --table-header-background-color: rgb(242,243,245);
@@ -186,59 +185,3 @@ aside {
 }
 
 
-.title-h4 {
-  margin: 10px 0 20px 0;
-
-  font-weight: 700;
-  display: flex;
-  align-items: stretch;
-  justify-content: flex-start;
-  -webkit-justify-content: flex-start;
-  -webkit-align-items: stretch;
-  &:before {
-    content: '';
-    display: inline-block;
-    width: 5px;
-    margin-right: 10px;
-    background-color: var(--theme-color);
-  }
-}
-
-.width-100Rate {
-  width: 100%!important;
-}
-
-.split-container {
-  display: flex;
-  --aside-width: 300px;
-
-  .main-content {
-    flex: 1;
-    overflow: hidden;
-  }
-  .right-aside {
-    width: var(--aside-width);
-    margin-left: 15px;
-  }
-  .left-aside {
-    width: var(--aside-width);
-    margin-right: 15px;
-  }
-}
-
-.app-wrapper.mobile{
-  .split-container {
-    display: block;
-    .aside {
-      width: 100%;
-      margin-left: 0;
-      margin-top: 15px;
-    }
-  }
-
-}
-
-
-.dialog-mini .el-dialog__body {
-  padding: 0;
-}

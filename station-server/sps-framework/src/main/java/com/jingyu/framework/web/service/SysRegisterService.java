@@ -1,7 +1,5 @@
 package com.jingyu.framework.web.service;
 
-import com.jingyu.system.service.ISysConfigService;
-import com.jingyu.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.jingyu.common.constant.CacheConstants;
@@ -17,8 +15,8 @@ import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.common.utils.StringUtils;
 import com.jingyu.framework.manager.AsyncManager;
 import com.jingyu.framework.manager.factory.AsyncFactory;
-
-import javax.annotation.Resource;
+import com.jingyu.system.service.ISysConfigService;
+import com.jingyu.system.service.ISysUserService;
 
 /**
  * 注册校验方法
@@ -28,10 +26,10 @@ import javax.annotation.Resource;
 @Component
 public class SysRegisterService
 {
-    @Resource(name = "sysUserServiceImpl")
+    @Autowired
     private ISysUserService userService;
 
-    @Resource(name = "sysConfigServiceImpl")
+    @Autowired
     private ISysConfigService configService;
 
     @Autowired

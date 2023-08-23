@@ -9,14 +9,6 @@ export function listDept(query) {
   })
 }
 
-export function listCommunityDept(query) {
-  return request({
-    url: '/system/dept/listCommunityDept',
-    method: 'get',
-    params: query
-  })
-}
-
 // 查询部门列表（排除节点）
 export function listDeptExcludeChild(deptId) {
   return request({
@@ -56,21 +48,5 @@ export function delDept(deptId) {
   return request({
     url: '/system/dept/' + deptId,
     method: 'delete'
-  })
-}
-
-export function selectCommunityByDeptId() {
-  return request({
-    url: `/system/dept/selectCommunityByDeptId`,
-    method: 'get'
-  })
-}
-
-/** 根据部门id和上级部门类型确定一个上级部门
- * */
-export function queryBelongDeptByTypeAndId(deptId, deptType) {
-  return request({
-    url: `/system/dept/${deptId}/parent/${deptType}`,
-    method: 'get'
   })
 }

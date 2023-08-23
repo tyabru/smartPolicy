@@ -47,11 +47,3 @@ nbdist/
 !*/build/*.xml
 
 !*/target/
-
-/sps-admin/target/
-/sps-qunfang/target/
-/sps-system/target/
-/sps-safecheck/target/
-/sps-generator/target/
-/sps-framework/target/
-/sps-common/target/

@@ -1,8 +1,6 @@
 package com.jingyu.system.service;
 
 import java.util.List;
-import java.util.function.Function;
-
 import com.jingyu.common.core.domain.TreeSelect;
 import com.jingyu.common.core.domain.entity.SysDept;
 
@@ -52,14 +50,6 @@ public interface ISysDeptService
      * @return 选中部门列表
      */
     public List<Long> selectDeptListByRoleId(Long roleId);
-
-    /** 根据角色id查询部门树信息
-     * @param deptId 部门id
-     * @return 选中部门列表
-     * */
-    List<TreeSelect> selectDeptTreeByDeptId(Long deptId, Function<List<SysDept>, List<SysDept>> filter);
-
-    List<TreeSelect> selectCommunityByDeptId(Long deptId);
 
     /**
      * 根据部门ID查询信息
@@ -131,22 +121,4 @@ public interface ISysDeptService
      * @return 结果
      */
     public int deleteDeptById(Long deptId);
-
-    /**
-     * 根据部门id和上级部门类型确定一个上级部门
-     *
-     * @param deptId 部门ID
-     * @param deptType 上级部门类型
-     * @return 结果
-     */
-    SysDept queryBelongDeptByTypeAndId(Long deptId, String deptType);
-
-    /** 根据部门id和部门类型获取当前部门下符合部门类型的子级部门数据
-     * 如果想查询全部子部门，deptType置空
-     *
-     * @param deptId 部门id
-     * @param deptType 部门类型
-     *
-     * */
-    String queryChildIdsByTypeAndDeptId(Long deptId, String deptType);
 }

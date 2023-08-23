@@ -2,13 +2,7 @@ package com.jingyu.web.controller.system;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletResponse;
-
-import com.jingyu.common.exception.base.BaseException;
-import com.jingyu.system.domain.vo.DictExistsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -124,14 +118,4 @@ public class SysDictDataController extends BaseController
         dictDataService.deleteDictDataByIds(dictCodes);
         return success();
     }
-
-    @PreAuthorize("@ss.hasPermi('system:dict:add')")
-    @Log(title = "字典数据", businessType = BusinessType.INSERT)
-    @PostMapping("/checkDictIsExists")
-    public AjaxResult checkDictIsExists(@RequestBody DictExistsVo dictExistsVo) {
-        dictDataService.checkDictIsExists(dictExistsVo.getDictType(), dictExistsVo.getDictValue(),
-                dictExistsVo.getDictName(), dictExistsVo.getDictLabel());
-        return toAjax(true);
-    }
-
 }
