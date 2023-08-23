@@ -3,7 +3,11 @@ package com.jingyu.qunfangqunzhi.service.impl;
 import java.util.Date;
 import java.util.List;
 
+import com.jingyu.common.annotation.DataScope;
 import com.jingyu.common.utils.SecurityUtils;
+import com.jingyu.qunfangqunzhi.constant.QFConstants;
+import com.jingyu.qunfangqunzhi.domain.CommonUser;
+import com.jingyu.qunfangqunzhi.mapper.CommonUsersMapper;
 import com.jingyu.qunfangqunzhi.util.MyIdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,9 @@ public class EventInfoServiceImpl implements IEventInfoService
     @Autowired
     private EventInfoMapper eventInfoMapper;
 
+
+
+
     /**
      * 查询上报事件管理
      *
@@ -37,6 +44,8 @@ public class EventInfoServiceImpl implements IEventInfoService
     public EventInfo selectEventInfoById(Long id)
     {
         return eventInfoMapper.selectEventInfoById(id);
+
+
     }
 
     /**
@@ -46,6 +55,7 @@ public class EventInfoServiceImpl implements IEventInfoService
      * @return 上报事件管理
      */
     @Override
+    @DataScope(deptAlias = "c")
     public List<EventInfo> selectEventInfoList(EventInfo eventInfo)
     {
         return eventInfoMapper.selectEventInfoList(eventInfo);
@@ -64,6 +74,7 @@ public class EventInfoServiceImpl implements IEventInfoService
         eventInfo.setId(MyIdUtil.getRandomId());
         eventInfo.setUploadUserId(SecurityUtils.getUserId());
         eventInfo.setUploadTime(new Date());
+        eventInfo.setStatus(QFConstants.EventStatus.UNCONFIRMED.getValue());
         int rows = eventInfoMapper.insertEventInfo(eventInfo);
         insertEventUserAllocated(eventInfo);
         return rows;
@@ -79,8 +90,6 @@ public class EventInfoServiceImpl implements IEventInfoService
     @Override
     public int updateEventInfo(EventInfo eventInfo)
     {
-        eventInfoMapper.deleteEventUserAllocatedByUserId(eventInfo.getId());
-        insertEventUserAllocated(eventInfo);
         return eventInfoMapper.updateEventInfo(eventInfo);
     }
 
@@ -111,6 +120,12 @@ public class EventInfoServiceImpl implements IEventInfoService
         eventInfoMapper.deleteEventUserAllocatedByUserId(id);
         return eventInfoMapper.deleteEventInfoById(id);
     }
+
+    @Override
+    public Long selectSuperiorDeptIdById(Long userId) {
+        return eventInfoMapper.selectSuperiorDeptIdById(userId);
+    }
+
 
     /**
      * 新增${subTable.functionName}信息

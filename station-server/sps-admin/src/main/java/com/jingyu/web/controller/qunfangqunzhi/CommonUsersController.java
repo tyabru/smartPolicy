@@ -8,6 +8,7 @@ import com.jingyu.common.core.page.TableDataInfo;
 import com.jingyu.common.enums.BusinessType;
 import com.jingyu.common.utils.poi.ExcelUtil;
 import com.jingyu.qunfangqunzhi.constant.CommonUserConstants;
+import com.jingyu.qunfangqunzhi.constant.QFConstants;
 import com.jingyu.qunfangqunzhi.domain.CommonUser;
 import com.jingyu.qunfangqunzhi.domain.CommonUsersApplication;
 import com.jingyu.qunfangqunzhi.domain.EventUserAllocated;
@@ -50,7 +51,7 @@ public class CommonUsersController extends BaseController
     /**
      * 查询普通用户信息列表
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:list')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:CommonUsers:list')")
     @GetMapping("/list")
     public TableDataInfo list(CommonUser commonUser)
     {
@@ -63,7 +64,7 @@ public class CommonUsersController extends BaseController
     /**
      * 获取网格员列表
      */
-
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:CommonUsers:list')")
     @GetMapping("/listGridStaff")
     public TableDataInfo listGridStaff(CommonUser user, Long eventID)
     {
@@ -74,7 +75,9 @@ public class CommonUsersController extends BaseController
         EventUserAllocated allocated = new EventUserAllocated();
         allocated.setEventId(eventID);
         List<EventUserAllocated> eventUserAllocateds = allocatedService.selectEventUserAllocatedList(allocated);
-        List<Long> userIDs = eventUserAllocateds.stream().map(eventUserAllocated -> eventUserAllocated.getUserId()).collect(Collectors.toList());
+        List<Long> userIDs = eventUserAllocateds.stream().filter(eventUserAllocated ->
+                    !eventUserAllocated.getStatus().equals(QFConstants.AllocatedEventStatus.CANCELED.getValue()))
+                    .map(eventUserAllocated -> eventUserAllocated.getUserId()).collect(Collectors.toList());
         //过滤掉角色非网格员长用户
         for(Iterator<CommonUser> iterator = list.iterator(); iterator.hasNext();){
             CommonUser commonUser = iterator.next();
@@ -85,7 +88,7 @@ public class CommonUsersController extends BaseController
             };
             List<String> rolesList = Arrays.asList(commonUser.getUserType().split(","));
            //过滤掉非网格员角色
-            if(!rolesList.contains(CommonUserConstants.CommonUserType.WANGGEYUANZHANG.getValue())){
+            if(!rolesList.contains(CommonUserConstants.CommonUserType.WANGGEYUANZHANG.getValue())&&!rolesList.contains(CommonUserConstants.CommonUserType.WANGGEYUAN.getValue())){
                 iterator.remove();
             }
         }
@@ -96,7 +99,7 @@ public class CommonUsersController extends BaseController
 
 
 
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:edit')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:CommonUsers:edit')")
     @Log(title = "普通用户管理", businessType = BusinessType.UPDATE)
     @PutMapping("/changeStatus")
     public AjaxResult changeStatus(@RequestBody CommonUser user)
@@ -109,7 +112,7 @@ public class CommonUsersController extends BaseController
     /**
      * 导出普通用户信息列表
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:export')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:CommonUsers:export')")
     @Log(title = "普通用户信息", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, CommonUser commonUser)
@@ -122,7 +125,7 @@ public class CommonUsersController extends BaseController
     /**
      * 获取普通用户信息详细信息
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:query')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:CommonUsers:query')")
     @GetMapping(value = "/{userId}")
     public AjaxResult getInfo(@PathVariable("userId") Long userId)
     {
@@ -132,7 +135,7 @@ public class CommonUsersController extends BaseController
     /**
      * 新增普通用户信息
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:add')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:CommonUsers:add')")
     @Log(title = "普通用户信息", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody CommonUser commonUser)
@@ -143,7 +146,7 @@ public class CommonUsersController extends BaseController
     /**
      * 修改普通用户信息
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:edit')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:CommonUsers:edit')")
     @Log(title = "普通用户信息", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody CommonUser commonUser)
@@ -154,7 +157,7 @@ public class CommonUsersController extends BaseController
     /**
      * 处理网格员申请
      */
-    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:threatmanagement:edit')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:CommonUsers:edit')")
     @Log(title = "处理网格员申请", businessType = BusinessType.UPDATE)
     @PostMapping("/handleApplication")
     public AjaxResult handleApplication(@RequestBody CommonUser commonUser,Long applicationId,boolean flag)
@@ -175,7 +178,7 @@ public class CommonUsersController extends BaseController
     /**
      * 删除普通用户信息
      */
-    @PreAuthorize("@ss.hasPermi('system:users:remove')")
+    @PreAuthorize("@ss.hasPermi('qunfangqunzhi:CommonUsers:remove')")
     @Log(title = "普通用户信息", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{userIds}")
     public AjaxResult remove(@PathVariable Long[] userIds)
