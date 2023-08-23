@@ -11,7 +11,7 @@
     <name>smart-police-station</name>
     <url>https://www.jingyuinfo.com</url>
     <description>景煜-智慧派出所系统</description>
-    
+
     <properties>
         <ruoyi.version>1.0.0</ruoyi.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -162,6 +162,11 @@
                 <artifactId>sps-common</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
+            <dependency>
+                <groupId>com.jingyu</groupId>
+                <artifactId>sps-safecheck</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
@@ -171,6 +176,7 @@
         <module>sps-generator</module>
         <module>sps-framework</module>
         <module>sps-system</module>
+        <module>sps-safecheck</module>
     </modules>
     <packaging>pom</packaging>
 

@@ -53,6 +53,10 @@
             <groupId>com.jingyu</groupId>
             <artifactId>sps-generator</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jingyu</groupId>
+            <artifactId>sps-safecheck</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
