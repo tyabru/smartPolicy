@@ -1,8 +1,6 @@
 package com.jingyu.system.mapper;
 
 import java.util.List;
-
-import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.jingyu.common.core.domain.entity.SysDictData;
 
@@ -11,7 +9,6 @@ import com.jingyu.common.core.domain.entity.SysDictData;
  * 
  * @author ruoyi
  */
-@Mapper
 public interface SysDictDataMapper
 {
     /**

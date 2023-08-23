@@ -1,9 +1,6 @@
 package com.jingyu.framework.web.service;
 
 import javax.annotation.Resource;
-
-import com.jingyu.system.service.ISysConfigService;
-import com.jingyu.system.service.ISysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -29,6 +26,8 @@ import com.jingyu.common.utils.ip.IpUtils;
 import com.jingyu.framework.manager.AsyncManager;
 import com.jingyu.framework.manager.factory.AsyncFactory;
 import com.jingyu.framework.security.context.AuthenticationContextHolder;
+import com.jingyu.system.service.ISysConfigService;
+import com.jingyu.system.service.ISysUserService;
 
 /**
  * 登录校验方法
@@ -38,19 +37,19 @@ import com.jingyu.framework.security.context.AuthenticationContextHolder;
 @Component
 public class SysLoginService
 {
-    @Resource(name = "tokenService")
+    @Autowired
     private TokenService tokenService;
 
     @Resource
     private AuthenticationManager authenticationManager;
 
-    @Resource
+    @Autowired
     private RedisCache redisCache;
-
-    @Resource(name = "sysUserServiceImpl")
+    
+    @Autowired
     private ISysUserService userService;
 
-    @Resource(name = "sysConfigServiceImpl")
+    @Autowired
     private ISysConfigService configService;
 
     /**
