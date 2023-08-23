@@ -1,27 +1,18 @@
 package com.jingyu.contradiction.service.impl;
 
-import java.util.List;
-import java.util.Objects;
-
 import com.jingyu.common.exception.CustomException;
-import com.jingyu.common.utils.DateUtils;
 import com.jingyu.common.utils.StringUtils;
 import com.jingyu.common.utils.encryption_decryption.SensitiveNewsHander;
 import com.jingyu.common.utils.file.FileUtils;
 import com.jingyu.common.utils.sign.AESUtil;
-import com.jingyu.person.domain.CompanyEmployee;
-import com.jingyu.person.domain.PersonFcous;
-import com.jingyu.person.domain.PersonFlow;
-import com.jingyu.person.domain.PersonHouse;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import com.jingyu.contradiction.mapper.DisputingPersonnelMapper;
 import com.jingyu.contradiction.domain.DisputingPersonnel;
+import com.jingyu.contradiction.mapper.DisputingPersonnelMapper;
 import com.jingyu.contradiction.service.IDisputingPersonnelService;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-
-import static com.jingyu.person.PersonConstants.PERSON_IS_IMPORTANT;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * 参与人员信息Service业务层处理
@@ -91,7 +82,7 @@ public class DisputingPersonnelServiceImpl implements IDisputingPersonnelService
         SensitiveNewsHander.revertNotEditAttrs(disputingPersonnel,old);
         SensitiveNewsHander.revertEncryptAttrs(disputingPersonnel);
         //判重
-        if (disputingPersonnel.getCaseCode() != old.getCaseCode()) {
+        if (disputingPersonnel.getId() != old.getId()) {
             List<DisputingPersonnel> list = getDisputingPersonnelList(disputingPersonnel);
             if (list.size() > 0) {
                 throw new CustomException("该人员信息在该案件中已存在,请勿重复添加！");

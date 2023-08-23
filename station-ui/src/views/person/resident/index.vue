@@ -211,7 +211,7 @@
                       </el-select>
                     </el-form-item>
                     <el-form-item label="入住日期" prop="livingDate">
-                      <el-date-picker clearable class="width-100Rate" v-model="addressForm.startTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择入职日期">
+                      <el-date-picker clearable class="width-100Rate" v-model="addressForm.livingDate" type="date" value-format="yyyy-MM-dd" placeholder="请选择入职日期">
                       </el-date-picker>
                     </el-form-item>
                   </el-form>
