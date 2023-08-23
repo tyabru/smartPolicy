@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.contradiction.mapper.MediationRecordsMapper">
+    
+    <resultMap type="MediationRecords" id="MediationRecordsResult">
+        <result property="id"    column="id"    />
+        <result property="caseCode"    column="case_code"    />
+        <result property="mediateTime"    column="mediate_time"    />
+        <result property="participantsInDisputes"    column="participants_in_disputes"    />
+        <result property="participatingPolice"    column="participating_police"    />
+        <result property="mediationMode"    column="mediation_mode"    />
+        <result property="mediationLocation"    column="mediation_location"    />
+        <result property="mediationResults"    column="mediation_results"    />
+        <result property="mediationMeetingDescription"    column="mediation_meeting_description"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="operateType"    column="operate_type"    />
+        <result property="operateName"    column="operate_name"    />
+        <result property="operateTime"    column="operate_time"    />
+        <result property="remark"    column="remark"    />
+        <result property="fileId"    column="file_id"    />
+    </resultMap>
+
+    <sql id="selectMediationRecordsVo">
+        select id, case_code, mediate_time, participants_in_disputes, participating_police, mediation_mode, mediation_location, file_id,
+          mediation_results, mediation_meeting_description, create_time, update_time, operate_type, operate_name, operate_time, remark
+        from c_mediation_records
+    </sql>
+
+    <select id="selectMediationRecordsList" parameterType="MediationRecords" resultMap="MediationRecordsResult">
+        <include refid="selectMediationRecordsVo"/>
+        <where>  
+            <if test="caseCode != null  and caseCode != ''"> and case_code = #{caseCode}</if>
+            <if test="participantsInDisputes != null  and participantsInDisputes != ''"> and participants_in_disputes = #{participantsInDisputes}</if>
+            <if test="participatingPolice != null  and participatingPolice != ''"> and participating_police = #{participatingPolice}</if>
+            <if test="mediationMode != null  and mediationMode != ''"> and mediation_mode = #{mediationMode}</if>
+        </where>
+        ORDER BY operate_time DESC
+    </select>
+    
+    <select id="selectMediationRecordsById" parameterType="Long" resultMap="MediationRecordsResult">
+        <include refid="selectMediationRecordsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMediationRecords" parameterType="MediationRecords" useGeneratedKeys="true" keyProperty="id">
+        insert into c_mediation_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="caseCode != null and caseCode != ''">case_code,</if>
+            <if test="mediateTime != null">mediate_time,</if>
+            <if test="participantsInDisputes != null and participantsInDisputes != ''">participants_in_disputes,</if>
+            <if test="participatingPolice != null and participatingPolice != ''">participating_police,</if>
+            <if test="mediationMode != null">mediation_mode,</if>
+            <if test="mediationLocation != null">mediation_location,</if>
+            <if test="mediationResults != null">mediation_results,</if>
+            <if test="mediationMeetingDescription != null">mediation_meeting_description,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="operateName != null">operate_name,</if>
+            <if test="remark != null">remark,</if>
+            create_time,
+            operate_time,
+            operate_type
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="caseCode != null and caseCode != ''">#{caseCode},</if>
+            <if test="mediateTime != null">#{mediateTime},</if>
+            <if test="participantsInDisputes != null and participantsInDisputes != ''">#{participantsInDisputes},</if>
+            <if test="participatingPolice != null and participatingPolice != ''">#{participatingPolice},</if>
+            <if test="mediationMode != null">#{mediationMode},</if>
+            <if test="mediationLocation != null">#{mediationLocation},</if>
+            <if test="mediationResults != null">#{mediationResults},</if>
+            <if test="mediationMeetingDescription != null">#{mediationMeetingDescription},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="operateName != null">#{operateName},</if>
+            <if test="remark != null">#{remark},</if>
+            NOW(),
+            NOW(),
+            0
+         </trim>
+    </insert>
+
+    <update id="updateMediationRecords" parameterType="MediationRecords">
+        update c_mediation_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="caseCode != null and caseCode != ''">case_code = #{caseCode},</if>
+            <if test="mediateTime != null">mediate_time = #{mediateTime},</if>
+            <if test="participantsInDisputes != null and participantsInDisputes != ''">participants_in_disputes = #{participantsInDisputes},</if>
+            <if test="participatingPolice != null and participatingPolice != ''">participating_police = #{participatingPolice},</if>
+            <if test="mediationMode != null">mediation_mode = #{mediationMode},</if>
+            <if test="mediationLocation != null">mediation_location = #{mediationLocation},</if>
+            <if test="mediationResults != null">mediation_results = #{mediationResults},</if>
+            <if test="mediationMeetingDescription != null">mediation_meeting_description = #{mediationMeetingDescription},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="operateName != null">operate_name = #{operateName},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="fileId != null">file_id = #{fileId},</if>
+            update_time = NOW(),
+            operate_time = NOW(),
+            operate_type = 1
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMediationRecordsById" parameterType="Long">
+        delete from c_mediation_records where id = #{id}
+    </delete>
+
+    <delete id="deleteMediationRecordsByIds" parameterType="String">
+        delete from c_mediation_records where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

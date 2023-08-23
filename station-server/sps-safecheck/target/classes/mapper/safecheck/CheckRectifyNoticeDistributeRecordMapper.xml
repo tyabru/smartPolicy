@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.jingyu.safecheck.mapper.CheckRectifyNoticeDistributeRecordMapper">
+
+    <resultMap type="CheckRectifyNoticeDistributeRecord" id="CheckRectifyNoticeDistributeRecordResult">
+        <result property="id"    column="id"    />
+        <result property="chectedUnit"    column="chected_unit"    />
+        <result property="placeId"    column="place_id"    />
+        <result property="checkDate"    column="check_date"    />
+        <result property="checkedUnitDirector"    column="checked_unit_director"    />
+        <result property="userId"    column="user_id"    />
+        <result property="deptId"    column="dept_id"    />
+        <result property="checkedUnitDirectorAcccoutNumber"    column="checked_unit_director_acccout_number"    />
+        <result property="phoneNumber"    column="phone_number"    />
+        <result property="checkPolice"    column="check_police"    />
+        <result property="checkSaftyDanger"    column="check_safty_danger"    />
+        <result property="rectifyMeasure"    column="rectify_measure"    />
+        <result property="finishDate"    column="finish_date"    />
+        <result property="finishStatus"    column="finish_status"    />
+        <result property="noticeStatus"    column="notice_status"    />
+    </resultMap>
+
+    <sql id="selectCheckRectifyNoticeDistributeRecordVo">
+        select c.id, c.chected_unit, c.place_id, c.check_date, c.checked_unit_director, c.user_id, c.dept_id, c.checked_unit_director_acccout_number, c.phone_number, c.check_police, c.check_safty_danger, c.rectify_measure, c.finish_date, c.finish_status, c.notice_status
+<!--        from check_rectify_notice_distribute_record c-->
+        from check_rectify_notice_distribute_review c
+        left join sys_user u on u.user_id = c.user_id
+        left join sys_dept d on d.dept_id = u.dept_id
+    </sql>
+
+    <select id="selectCheckRectifyNoticeDistributeRecordList" parameterType="CheckRectifyNoticeDistributeRecord" resultMap="CheckRectifyNoticeDistributeRecordResult">
+        <include refid="selectCheckRectifyNoticeDistributeRecordVo"/>
+        <where>
+            <if test="chectedUnit != null  and chectedUnit != ''"> and chected_unit = #{chectedUnit}</if>
+            <if test="placeId != null "> and place_id = #{placeId}</if>
+            <if test="checkDate != null "> and check_date = #{checkDate}</if>
+            <if test="checkedUnitDirector != null  and checkedUnitDirector != ''"> and checked_unit_director = #{checkedUnitDirector}</if>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="deptId != null "> and dept_id = #{deptId}</if>
+            <if test="checkedUnitDirectorAcccoutNumber != null "> and checked_unit_director_acccout_number = #{checkedUnitDirectorAcccoutNumber}</if>
+            <if test="phoneNumber != null "> and phone_number = #{phoneNumber}</if>
+            <if test="checkPolice != null  and checkPolice != ''"> and check_police = #{checkPolice}</if>
+            <if test="checkSaftyDanger != null  and checkSaftyDanger != ''"> and check_safty_danger = #{checkSaftyDanger}</if>
+            <if test="rectifyMeasure != null  and rectifyMeasure != ''"> and rectify_measure = #{rectifyMeasure}</if>
+            <if test="finishDate != null "> and finish_date = #{finishDate}</if>
+            <if test="finishStatus != null  and finishStatus != ''"> and finish_status = #{finishStatus}</if>
+            <if test="noticeStatus != null  and noticeStatus != ''"> and notice_status = #{noticeStatus}</if>
+            ${params.dataScope}
+        </where>
+    </select>
+
+    <select id="selectCheckRectifyNoticeDistributeRecordById" parameterType="Long" resultMap="CheckRectifyNoticeDistributeRecordResult">
+        <include refid="selectCheckRectifyNoticeDistributeRecordVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertCheckRectifyNoticeDistributeRecord" parameterType="CheckRectifyNoticeDistributeRecord" useGeneratedKeys="true" keyProperty="id">
+<!--        insert into check_rectify_notice_distribute_record-->
+        insert into check_rectify_notice_distribute_review
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="chectedUnit != null and chectedUnit != ''">chected_unit,</if>
+            <if test="placeId != null">place_id,</if>
+            <if test="checkDate != null">check_date,</if>
+            <if test="checkedUnitDirector != null and checkedUnitDirector != ''">checked_unit_director,</if>
+            <if test="userId != null">user_id,</if>
+            <if test="deptId != null">dept_id,</if>
+            <if test="checkedUnitDirectorAcccoutNumber != null">checked_unit_director_acccout_number,</if>
+            <if test="phoneNumber != null">phone_number,</if>
+            <if test="checkPolice != null and checkPolice != ''">check_police,</if>
+            <if test="checkSaftyDanger != null">check_safty_danger,</if>
+            <if test="rectifyMeasure != null">rectify_measure,</if>
+            <if test="finishDate != null">finish_date,</if>
+            <if test="finishStatus != null">finish_status,</if>
+            <if test="noticeStatus != null">notice_status,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="chectedUnit != null and chectedUnit != ''">#{chectedUnit},</if>
+            <if test="placeId != null">#{placeId},</if>
+            <if test="checkDate != null">#{checkDate},</if>
+            <if test="checkedUnitDirector != null and checkedUnitDirector != ''">#{checkedUnitDirector},</if>
+            <if test="userId != null">#{userId},</if>
+            <if test="deptId != null">#{deptId},</if>
+            <if test="checkedUnitDirectorAcccoutNumber != null">#{checkedUnitDirectorAcccoutNumber},</if>
+            <if test="phoneNumber != null">#{phoneNumber},</if>
+            <if test="checkPolice != null and checkPolice != ''">#{checkPolice},</if>
+            <if test="checkSaftyDanger != null">#{checkSaftyDanger},</if>
+            <if test="rectifyMeasure != null">#{rectifyMeasure},</if>
+            <if test="finishDate != null">#{finishDate},</if>
+            <if test="finishStatus != null">#{finishStatus},</if>
+            <if test="noticeStatus != null">#{noticeStatus},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCheckRectifyNoticeDistributeRecord" parameterType="CheckRectifyNoticeDistributeRecord">
+<!--        update check_rectify_notice_distribute_record-->
+        update check_rectify_notice_distribute_review
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="chectedUnit != null and chectedUnit != ''">chected_unit = #{chectedUnit},</if>
+            <if test="placeId != null">place_id = #{placeId},</if>
+            <if test="checkDate != null">check_date = #{checkDate},</if>
+            <if test="checkedUnitDirector != null and checkedUnitDirector != ''">checked_unit_director = #{checkedUnitDirector},</if>
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="deptId != null">dept_id = #{deptId},</if>
+            <if test="checkedUnitDirectorAcccoutNumber != null">checked_unit_director_acccout_number = #{checkedUnitDirectorAcccoutNumber},</if>
+            <if test="phoneNumber != null">phone_number = #{phoneNumber},</if>
+            <if test="checkPolice != null and checkPolice != ''">check_police = #{checkPolice},</if>
+            <if test="checkSaftyDanger != null">check_safty_danger = #{checkSaftyDanger},</if>
+            <if test="rectifyMeasure != null">rectify_measure = #{rectifyMeasure},</if>
+            <if test="finishDate != null">finish_date = #{finishDate},</if>
+            <if test="finishStatus != null">finish_status = #{finishStatus},</if>
+            <if test="noticeStatus != null">notice_status = #{noticeStatus},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCheckRectifyNoticeDistributeRecordById" parameterType="Long">
+<!--        delete from check_rectify_notice_distribute_record where id = #{id}-->
+        delete from check_rectify_notice_distribute_review where id = #{id}
+    </delete>
+
+    <delete id="deleteCheckRectifyNoticeDistributeRecordByIds" parameterType="String">
+<!--        delete from check_rectify_notice_distribute_record where id in-->
+        delete from check_rectify_notice_distribute_review where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
