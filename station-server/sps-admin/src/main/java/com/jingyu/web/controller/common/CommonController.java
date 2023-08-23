@@ -1,5 +1,6 @@
 package com.jingyu.web.controller.common;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import com.jingyu.common.config.RuoYiConfig;
 import com.jingyu.common.constant.Constants;
 import com.jingyu.common.core.domain.AjaxResult;
@@ -19,6 +22,23 @@ import com.jingyu.common.utils.StringUtils;
 import com.jingyu.common.utils.file.FileUploadUtils;
 import com.jingyu.common.utils.file.FileUtils;
 import com.jingyu.framework.config.ServerConfig;
+<<<<<<< HEAD
+=======
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
+import java.util.List;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
 /**
  * 通用请求处理
@@ -72,6 +92,7 @@ public class CommonController
      * 通用上传请求（单个）
      */
     @PostMapping("/upload")
+<<<<<<< HEAD
     public AjaxResult uploadFile(HttpServletRequest request, MultipartFile file) throws Exception
     {
         try
@@ -84,6 +105,14 @@ public class CommonController
             } else {
                 filePath = RuoYiConfig.getUploadPath();
             }
+=======
+    public AjaxResult uploadFile(MultipartFile file) throws Exception
+    {
+        try
+        {
+            // 上传文件路径
+            String filePath = RuoYiConfig.getUploadPath();
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
             String url = serverConfig.getUrl() + fileName;
@@ -104,6 +133,7 @@ public class CommonController
      * 通用上传请求（多个）
      */
     @PostMapping("/uploads")
+<<<<<<< HEAD
     public AjaxResult uploadFiles(HttpServletRequest request, List<MultipartFile> files) throws Exception
     {
         try
@@ -116,6 +146,14 @@ public class CommonController
                 filePath = RuoYiConfig.getCustomPath(filePath);
             }
 
+=======
+    public AjaxResult uploadFiles(List<MultipartFile> files) throws Exception
+    {
+        try
+        {
+            // 上传文件路径
+            String filePath = RuoYiConfig.getUploadPath();
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
             List<String> urls = new ArrayList<String>();
             List<String> fileNames = new ArrayList<String>();
             List<String> newFileNames = new ArrayList<String>();
@@ -171,6 +209,7 @@ public class CommonController
             log.error("下载文件失败", e);
         }
     }
+<<<<<<< HEAD
 
     @DeleteMapping("deleteFileByResource")
     public AjaxResult deleteFileByResource(@RequestParam String resource) {
@@ -195,4 +234,6 @@ public class CommonController
         }
         return AjaxResult.success();
     }
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

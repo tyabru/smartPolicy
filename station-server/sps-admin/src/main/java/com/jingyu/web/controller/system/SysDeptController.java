@@ -1,10 +1,14 @@
 package com.jingyu.web.controller.system;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 
 import com.jingyu.common.constant.DeptConstants;
 import com.jingyu.common.core.domain.model.LoginUser;
+=======
+import java.util.List;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -48,6 +52,7 @@ public class SysDeptController extends BaseController
         List<SysDept> depts = deptService.selectDeptList(dept);
         return success(depts);
     }
+<<<<<<< HEAD
     @PreAuthorize("@ss.hasPermi('system:dept:list')")
     @GetMapping("/listCommunityDept")
     public AjaxResult listCommunityDept(SysDept dept)
@@ -59,6 +64,8 @@ public class SysDeptController extends BaseController
         List<SysDept> depts = deptService.selectDeptList(dept);
         return success(depts);
     }
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
     /**
      * 查询部门列表（排除节点）
@@ -83,6 +90,7 @@ public class SysDeptController extends BaseController
         return success(deptService.selectDeptById(deptId));
     }
 
+<<<<<<< HEAD
     @PreAuthorize("@ss.hasPermi('system:dept:query')")
     @GetMapping(value = "/selectCommunityByDeptId")
     public AjaxResult selectCommunityByDeptId()
@@ -104,6 +112,8 @@ public class SysDeptController extends BaseController
         return AjaxResult.success(deptService.queryBelongDeptByTypeAndId(deptId, deptType));
     }
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 新增部门
      */

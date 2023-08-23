@@ -125,6 +125,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
+<<<<<<< HEAD
         <dependency>
             <groupId>commons-net</groupId>
             <artifactId>commons-net</artifactId>
@@ -140,6 +141,9 @@
             <artifactId>pact-jvm-provider-spring</artifactId>
             <version>4.0.10</version>
         </dependency>
+=======
+
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     </dependencies>
 
 </project>

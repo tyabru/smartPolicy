@@ -149,12 +149,15 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+<<<<<<< HEAD
             <dependency>
                 <groupId>com.jingyu</groupId>
                 <artifactId>sps-qunfang</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
             <!-- 系统模块-->
             <dependency>
                 <groupId>com.jingyu</groupId>
@@ -183,7 +186,10 @@
         <module>sps-framework</module>
         <module>sps-system</module>
         <module>sps-safecheck</module>
+<<<<<<< HEAD
         <module>sps-qunfang</module>
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     </modules>
     <packaging>pom</packaging>
 

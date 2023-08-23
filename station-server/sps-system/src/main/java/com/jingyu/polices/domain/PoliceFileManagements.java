@@ -46,11 +46,15 @@ public class PoliceFileManagements extends BaseEntity
 
     /** 部门ID */
     @Excel(name = "部门ID")
+<<<<<<< HEAD
     private Long deptId;
 
     /** 文件类型0矛盾纠纷记录相关说明文件1矛盾纠纷调解记录文件2单位内部相关文件 */
     @Excel(name = "文件类型")
     private Long fileType;
+=======
+    private Integer deptId;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
     /** 创建时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")

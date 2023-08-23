@@ -1,5 +1,6 @@
 package com.jingyu.community.service;
 
+<<<<<<< HEAD
 import com.jingyu.community.domain.Company;
 
 import java.util.List;
@@ -15,6 +16,22 @@ public interface ICompanyService {
     /**
      * 查询单位基本信息
      *
+=======
+import java.util.List;
+import com.jingyu.community.domain.Company;
+
+/**
+ * 单位基本信息Service接口
+ * 
+ * @author jingyu
+ * @date 2023-07-12
+ */
+public interface ICompanyService
+{
+    /**
+     * 查询单位基本信息
+     * 
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param id 单位基本信息主键
      * @return 单位基本信息
      */
@@ -22,7 +39,11 @@ public interface ICompanyService {
 
     /**
      * 查询单位基本信息列表
+<<<<<<< HEAD
      *
+=======
+     * 
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param company 单位基本信息
      * @return 单位基本信息集合
      */
@@ -30,7 +51,11 @@ public interface ICompanyService {
 
     /**
      * 新增单位基本信息
+<<<<<<< HEAD
      *
+=======
+     * 
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param company 单位基本信息
      * @return 结果
      */
@@ -38,7 +63,11 @@ public interface ICompanyService {
 
     /**
      * 修改单位基本信息
+<<<<<<< HEAD
      *
+=======
+     * 
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param company 单位基本信息
      * @return 结果
      */
@@ -46,7 +75,11 @@ public interface ICompanyService {
 
     /**
      * 批量删除单位基本信息
+<<<<<<< HEAD
      *
+=======
+     * 
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param ids 需要删除的单位基本信息主键集合
      * @return 结果
      */
@@ -54,7 +87,11 @@ public interface ICompanyService {
 
     /**
      * 删除单位基本信息信息
+<<<<<<< HEAD
      *
+=======
+     * 
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param id 单位基本信息主键
      * @return 结果
      */

@@ -1,7 +1,10 @@
 package com.jingyu.community.mapper;
 
 import java.util.List;
+<<<<<<< HEAD
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import com.jingyu.community.domain.Company;
 import org.apache.ibatis.annotations.Mapper;
 

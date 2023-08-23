@@ -2,8 +2,15 @@ package com.jingyu.common.core.domain.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
 import javax.validation.constraints.*;
 
+=======
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.core.domain.BaseEntity;
@@ -49,10 +56,13 @@ public class SysDept extends BaseEntity
 
     /** 父部门名称 */
     private String parentName;
+<<<<<<< HEAD
     /** 公安内部组织编码 */
     private String deptCode;
     /** 组织类型 */
     private String deptType;
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     
     /** 子部门 */
     private List<SysDept> children = new ArrayList<SysDept>();
@@ -183,6 +193,7 @@ public class SysDept extends BaseEntity
         this.children = children;
     }
 
+<<<<<<< HEAD
     public String getDeptCode() {
         return deptCode;
     }
@@ -200,6 +211,8 @@ public class SysDept extends BaseEntity
         this.deptType = deptType;
     }
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

@@ -63,4 +63,12 @@ public interface IEventUserAllocatedService
      * 批量插入下发事件
      */
     public int insertBatchEventUserAllocated(List<EventUserAllocated> list);
+<<<<<<< HEAD
+=======
+
+    /**
+     * 归档取消未完成任务
+     */
+    public int cancelByEventId(Long eventId);
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

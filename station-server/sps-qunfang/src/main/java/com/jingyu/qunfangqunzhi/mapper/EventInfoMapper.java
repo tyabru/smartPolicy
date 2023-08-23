@@ -6,6 +6,7 @@ import com.jingyu.qunfangqunzhi.domain.EventUserAllocated;
 
 /**
  * 上报事件管理Mapper接口
+<<<<<<< HEAD
  * 
  * @author jingyu
  * @date 2023-07-03
@@ -15,6 +16,17 @@ public interface EventInfoMapper
     /**
      * 查询上报事件管理
      * 
+=======
+ *
+ * @author jingyu
+ * @date 2023-07-03
+ */
+public interface EventInfoMapper
+{
+    /**
+     * 查询上报事件管理
+     *
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param id 上报事件管理主键
      * @return 上报事件管理
      */
@@ -22,7 +34,11 @@ public interface EventInfoMapper
 
     /**
      * 查询上报事件管理列表
+<<<<<<< HEAD
      * 
+=======
+     *
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param eventInfo 上报事件管理
      * @return 上报事件管理集合
      */
@@ -30,7 +46,11 @@ public interface EventInfoMapper
 
     /**
      * 新增上报事件管理
+<<<<<<< HEAD
      * 
+=======
+     *
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param eventInfo 上报事件管理
      * @return 结果
      */
@@ -38,7 +58,11 @@ public interface EventInfoMapper
 
     /**
      * 修改上报事件管理
+<<<<<<< HEAD
      * 
+=======
+     *
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param eventInfo 上报事件管理
      * @return 结果
      */
@@ -46,7 +70,11 @@ public interface EventInfoMapper
 
     /**
      * 删除上报事件管理
+<<<<<<< HEAD
      * 
+=======
+     *
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param id 上报事件管理主键
      * @return 结果
      */
@@ -54,7 +82,11 @@ public interface EventInfoMapper
 
     /**
      * 批量删除上报事件管理
+<<<<<<< HEAD
      * 
+=======
+     *
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
@@ -62,26 +94,51 @@ public interface EventInfoMapper
 
     /**
      * 批量删除${subTable.functionName}
+<<<<<<< HEAD
      * 
+=======
+     *
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
     public int deleteEventUserAllocatedByUserIds(Long[] ids);
+<<<<<<< HEAD
     
     /**
      * 批量新增${subTable.functionName}
      * 
+=======
+
+    /**
+     * 批量新增${subTable.functionName}
+     *
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param eventUserAllocatedList ${subTable.functionName}列表
      * @return 结果
      */
     public int batchEventUserAllocated(List<EventUserAllocated> eventUserAllocatedList);
+<<<<<<< HEAD
     
 
     /**
      * 通过上报事件管理主键删除${subTable.functionName}信息
      * 
+=======
+
+
+    /**
+     * 通过上报事件管理主键删除${subTable.functionName}信息
+     *
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * @param id 上报事件管理ID
      * @return 结果
      */
     public int deleteEventUserAllocatedByUserId(Long id);
+<<<<<<< HEAD
+=======
+
+
+    public Long selectSuperiorDeptIdById(Long userId);
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

@@ -1,5 +1,6 @@
 package com.jingyu.web.controller.system;
 
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -13,11 +14,27 @@ import com.jingyu.common.utils.sign.AESUtil;
 import com.jingyu.polices.domain.PoliceInformation;
 import com.jingyu.polices.service.IPoliceInformationService;
 import lombok.val;
+=======
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletResponse;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
+<<<<<<< HEAD
 import org.springframework.web.bind.annotation.*;
+=======
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.springframework.web.multipart.MultipartFile;
 import com.jingyu.common.annotation.Log;
 import com.jingyu.common.core.controller.BaseController;
@@ -35,8 +52,11 @@ import com.jingyu.system.service.ISysPostService;
 import com.jingyu.system.service.ISysRoleService;
 import com.jingyu.system.service.ISysUserService;
 
+<<<<<<< HEAD
 import static com.jingyu.common.constant.DeptConstants.POLICE_COMMUNITY_AREA;
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 /**
  * 用户信息
  * 
@@ -58,9 +78,12 @@ public class SysUserController extends BaseController
     @Autowired
     private ISysPostService postService;
 
+<<<<<<< HEAD
     @Autowired
     private IPoliceInformationService policeInformationService;
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 获取用户列表
      */
@@ -117,7 +140,11 @@ public class SysUserController extends BaseController
         if (StringUtils.isNotNull(userId))
         {
             SysUser sysUser = userService.selectUserById(userId);
+<<<<<<< HEAD
             ajax.put(AjaxResult.DATA_TAG, SensitiveNewsHander.parseRequestParams(sysUser));
+=======
+            ajax.put(AjaxResult.DATA_TAG, sysUser);
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
             ajax.put("postIds", postService.selectPostListByUserId(userId));
             ajax.put("roleIds", sysUser.getRoles().stream().map(SysRole::getRoleId).collect(Collectors.toList()));
         }
@@ -163,11 +190,19 @@ public class SysUserController extends BaseController
         {
             return error("修改用户'" + user.getUserName() + "'失败，登录账号已存在");
         }
+<<<<<<< HEAD
+=======
+        else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user))
+        {
+            return error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
+        }
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         else if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user))
         {
             return error("修改用户'" + user.getUserName() + "'失败，邮箱账号已存在");
         }
         user.setUpdateBy(getUsername());
+<<<<<<< HEAD
         user.setPassword(SecurityUtils.encryptPassword(user.getPassword()));
         PoliceInformation policeInformation = policeInformationService.selectPoliceInformationByUserId(user.getUserId());
         if (user.getIdCard().contains("**")) {
@@ -186,6 +221,8 @@ public class SysUserController extends BaseController
         if (user.getNickName().contains("*")) {
             user.setNickName(sysUser.getNickName());
         }
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         return toAjax(userService.updateUser(user));
     }
 
@@ -270,6 +307,7 @@ public class SysUserController extends BaseController
     {
         return success(deptService.selectDeptTreeList(dept));
     }
+<<<<<<< HEAD
 
     @PreAuthorize("@ss.hasPermi('system:user:list')")
     @GetMapping("/queryPcsPoliceUser")
@@ -278,4 +316,6 @@ public class SysUserController extends BaseController
         sysUser.setDeptId(deptId);
         return AjaxResult.success(userService.selectUserList(sysUser));
     }
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

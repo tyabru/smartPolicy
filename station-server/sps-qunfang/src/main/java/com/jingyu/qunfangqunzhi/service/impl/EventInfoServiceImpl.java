@@ -3,7 +3,15 @@ package com.jingyu.qunfangqunzhi.service.impl;
 import java.util.Date;
 import java.util.List;
 
+<<<<<<< HEAD
 import com.jingyu.common.utils.SecurityUtils;
+=======
+import com.jingyu.common.annotation.DataScope;
+import com.jingyu.common.utils.SecurityUtils;
+import com.jingyu.qunfangqunzhi.constant.QFConstants;
+import com.jingyu.qunfangqunzhi.domain.CommonUser;
+import com.jingyu.qunfangqunzhi.mapper.CommonUsersMapper;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import com.jingyu.qunfangqunzhi.util.MyIdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +35,12 @@ public class EventInfoServiceImpl implements IEventInfoService
     @Autowired
     private EventInfoMapper eventInfoMapper;
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 查询上报事件管理
      *
@@ -37,6 +51,11 @@ public class EventInfoServiceImpl implements IEventInfoService
     public EventInfo selectEventInfoById(Long id)
     {
         return eventInfoMapper.selectEventInfoById(id);
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     }
 
     /**
@@ -46,6 +65,10 @@ public class EventInfoServiceImpl implements IEventInfoService
      * @return 上报事件管理
      */
     @Override
+<<<<<<< HEAD
+=======
+    @DataScope(deptAlias = "c")
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     public List<EventInfo> selectEventInfoList(EventInfo eventInfo)
     {
         return eventInfoMapper.selectEventInfoList(eventInfo);
@@ -64,6 +87,10 @@ public class EventInfoServiceImpl implements IEventInfoService
         eventInfo.setId(MyIdUtil.getRandomId());
         eventInfo.setUploadUserId(SecurityUtils.getUserId());
         eventInfo.setUploadTime(new Date());
+<<<<<<< HEAD
+=======
+        eventInfo.setStatus(QFConstants.EventStatus.UNCONFIRMED.getValue());
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         int rows = eventInfoMapper.insertEventInfo(eventInfo);
         insertEventUserAllocated(eventInfo);
         return rows;
@@ -79,8 +106,11 @@ public class EventInfoServiceImpl implements IEventInfoService
     @Override
     public int updateEventInfo(EventInfo eventInfo)
     {
+<<<<<<< HEAD
         eventInfoMapper.deleteEventUserAllocatedByUserId(eventInfo.getId());
         insertEventUserAllocated(eventInfo);
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         return eventInfoMapper.updateEventInfo(eventInfo);
     }
 
@@ -112,6 +142,15 @@ public class EventInfoServiceImpl implements IEventInfoService
         return eventInfoMapper.deleteEventInfoById(id);
     }
 
+<<<<<<< HEAD
+=======
+    @Override
+    public Long selectSuperiorDeptIdById(Long userId) {
+        return eventInfoMapper.selectSuperiorDeptIdById(userId);
+    }
+
+
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 新增${subTable.functionName}信息
      *

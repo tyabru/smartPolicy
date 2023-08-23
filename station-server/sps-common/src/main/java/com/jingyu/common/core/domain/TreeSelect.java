@@ -22,8 +22,11 @@ public class TreeSelect implements Serializable
     /** 节点名称 */
     private String label;
 
+<<<<<<< HEAD
     private String deptType;
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /** 子节点 */
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<TreeSelect> children;
@@ -37,7 +40,10 @@ public class TreeSelect implements Serializable
     {
         this.id = dept.getDeptId();
         this.label = dept.getDeptName();
+<<<<<<< HEAD
         this.deptType = dept.getDeptType();
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         this.children = dept.getChildren().stream().map(TreeSelect::new).collect(Collectors.toList());
     }
 
@@ -77,6 +83,7 @@ public class TreeSelect implements Serializable
     {
         this.children = children;
     }
+<<<<<<< HEAD
 
     public String getDeptType() {
         return deptType;
@@ -85,4 +92,6 @@ public class TreeSelect implements Serializable
     public void setDeptType(String deptType) {
         this.deptType = deptType;
     }
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

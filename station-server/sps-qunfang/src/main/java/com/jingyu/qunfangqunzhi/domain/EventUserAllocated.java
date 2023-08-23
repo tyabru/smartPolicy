@@ -6,6 +6,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
 import com.jingyu.common.core.domain.BaseEntity;
+<<<<<<< HEAD
+=======
+import org.springframework.format.annotation.DateTimeFormat;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
 /**
  * ${subTable.functionName}对象 event_user_allocated
@@ -46,6 +50,10 @@ public class EventUserAllocated extends BaseEntity
 
     /** 检查日期时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+<<<<<<< HEAD
+=======
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     @Excel(name = "检查日期时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date inspectDatetime;
 
@@ -73,10 +81,48 @@ public class EventUserAllocated extends BaseEntity
     @Excel(name = "分配任务用户的id")
     private Long allocateUserId;
 
+<<<<<<< HEAD
+=======
+
+
+    /** 下发时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date allocateTime;
+
+
+    /** 处置标志 */
+    private String dealFlag;
+
+
+
+    /** 下发用户类型 **/
+    private String userType;
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
+    }
+
+
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     public void setId(Long id)
     {
         this.id = id;
     }
+<<<<<<< HEAD
+=======
+    public Date getAllocateTime() {
+        return allocateTime;
+    }
+
+    public void setAllocateTime(Date allocateTime) {
+        this.allocateTime = allocateTime;
+    }
+
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
     public Long getId()
     {
@@ -200,6 +246,19 @@ public class EventUserAllocated extends BaseEntity
         return allocateUserId;
     }
 
+<<<<<<< HEAD
+=======
+    public String getDealFlag() {
+        return dealFlag;
+    }
+
+    public void setDealFlag(String dealFlag) {
+        this.dealFlag = dealFlag;
+    }
+
+
+
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

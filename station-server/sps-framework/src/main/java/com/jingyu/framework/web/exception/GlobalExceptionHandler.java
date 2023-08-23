@@ -1,8 +1,11 @@
 package com.jingyu.framework.web.exception;
 
 import javax.servlet.http.HttpServletRequest;
+<<<<<<< HEAD
 
 import com.jingyu.common.exception.MessageException;
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.access.AccessDeniedException;

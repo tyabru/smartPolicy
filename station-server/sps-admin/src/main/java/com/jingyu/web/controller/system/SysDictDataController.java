@@ -2,6 +2,7 @@ package com.jingyu.web.controller.system;
 
 import java.util.ArrayList;
 import java.util.List;
+<<<<<<< HEAD
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,6 +10,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.jingyu.common.exception.base.BaseException;
 import com.jingyu.system.domain.vo.DictExistsVo;
+=======
+import javax.servlet.http.HttpServletResponse;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -124,6 +128,7 @@ public class SysDictDataController extends BaseController
         dictDataService.deleteDictDataByIds(dictCodes);
         return success();
     }
+<<<<<<< HEAD
 
     @PreAuthorize("@ss.hasPermi('system:dict:add')")
     @Log(title = "字典数据", businessType = BusinessType.INSERT)
@@ -134,4 +139,6 @@ public class SysDictDataController extends BaseController
         return toAjax(true);
     }
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

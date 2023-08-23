@@ -1,8 +1,11 @@
 package com.jingyu.system.mapper;
 
 import java.util.List;
+<<<<<<< HEAD
 
 import org.apache.ibatis.annotations.Mapper;
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.apache.ibatis.annotations.Param;
 import com.jingyu.common.core.domain.entity.SysDictData;
 
@@ -11,7 +14,10 @@ import com.jingyu.common.core.domain.entity.SysDictData;
  * 
  * @author ruoyi
  */
+<<<<<<< HEAD
 @Mapper
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 public interface SysDictDataMapper
 {
     /**

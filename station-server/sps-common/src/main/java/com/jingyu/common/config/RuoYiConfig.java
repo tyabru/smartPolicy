@@ -132,9 +132,12 @@ public class RuoYiConfig
     {
         return getProfile() + "/upload";
     }
+<<<<<<< HEAD
 
     public static String getCustomPath(String customDir)
     {
         return getProfile() + "/" + customDir;
     }
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

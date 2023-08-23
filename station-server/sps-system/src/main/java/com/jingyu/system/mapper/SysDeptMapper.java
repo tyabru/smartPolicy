@@ -3,7 +3,10 @@ package com.jingyu.system.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.jingyu.common.core.domain.entity.SysDept;
+<<<<<<< HEAD
 import org.springframework.security.core.parameters.P;
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
 /**
  * 部门管理 数据层
@@ -45,6 +48,7 @@ public interface SysDeptMapper
      */
     public List<SysDept> selectChildrenDeptById(Long deptId);
 
+<<<<<<< HEAD
     String queryChildIdsByTypeAndDeptId(@Param("deptId") Long deptId,@Param("deptType") String deptType);
 
     /**
@@ -56,6 +60,8 @@ public interface SysDeptMapper
      */
     List<SysDept> selectDeptTreeByAncestors(@Param("ancestors") String ancestors);
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 根据ID查询所有子部门（正常状态）
      * 
@@ -120,8 +126,11 @@ public interface SysDeptMapper
      */
     public int updateDeptChildren(@Param("depts") List<SysDept> depts);
 
+<<<<<<< HEAD
     public int updateDeptId(@Param("origin")Long origin, @Param("newDeptId")Long deptId);
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 删除部门管理信息
      * 
@@ -129,6 +138,7 @@ public interface SysDeptMapper
      * @return 结果
      */
     public int deleteDeptById(Long deptId);
+<<<<<<< HEAD
 
     /**
      * 查询当前部门下deptId最大的id
@@ -139,4 +149,6 @@ public interface SysDeptMapper
     SysDept queryBelongDeptByTypeAndId(@Param("deptId") Long deptId,@Param("deptType") String deptType);
 
 
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

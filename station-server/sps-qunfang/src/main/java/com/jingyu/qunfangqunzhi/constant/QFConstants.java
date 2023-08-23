@@ -105,4 +105,37 @@ public class QFConstants {
             return this.value;
         }
     }
+<<<<<<< HEAD
+=======
+
+    /**
+     *  事件处置类型,是否为处置
+     */
+    public enum EventDealType{
+        DEAL("1"),
+        ALLOCATE("0");
+        private final String value;
+        EventDealType(String value){
+            this.value = value;
+        }
+        public String getValue(){
+            return this.value;
+        }
+    }
+
+    /**
+     *  事件上传用户类型
+     */
+    public enum UploadUserType{
+        COMMON_USER("普通用户"),
+        MANAGER("管理员");
+        private final String value;
+        UploadUserType(String value){
+            this.value = value;
+        }
+        public String getValue(){
+            return this.value;
+        }
+    }
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

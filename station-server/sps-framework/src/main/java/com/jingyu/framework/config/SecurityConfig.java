@@ -1,9 +1,13 @@
 package com.jingyu.framework.config;
 
+<<<<<<< HEAD
 import com.jingyu.framework.qunfang.QFsecurity.pwd.PhoneNumberPwdAuthenticationProvider;
 import com.jingyu.framework.qunfang.QFsecurity.sms.SmsCodeAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+=======
+import org.springframework.beans.factory.annotation.Autowired;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +29,11 @@ import com.jingyu.framework.security.handle.LogoutSuccessHandlerImpl;
 
 /**
  * spring security配置
+<<<<<<< HEAD
  *
+=======
+ * 
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
  * @author ruoyi
  */
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
@@ -35,6 +43,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      * 自定义用户认证逻辑
      */
     @Autowired
+<<<<<<< HEAD
     @Qualifier("userDetailsService")
     private UserDetailsService userDetailsService;
 
@@ -46,6 +55,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Autowired
     @Qualifier("userDetailsByPhoneNumberPwd")
     private UserDetailsService phoneNumberPwdUserDetailService;
+=======
+    private UserDetailsService userDetailsService;
+    
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 认证失败处理类
      */
@@ -63,7 +76,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
      */
     @Autowired
     private JwtAuthenticationTokenFilter authenticationTokenFilter;
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 跨域过滤器
      */
@@ -123,7 +140,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 // 过滤请求
                 .authorizeRequests()
                 // 对于登录login 注册register 验证码captchaImage 允许匿名访问
+<<<<<<< HEAD
                 .antMatchers("/login", "/register", "/captchaImage","/qf/SMSCode","/qf/register","/qf/login").permitAll()
+=======
+                .antMatchers("/login", "/register", "/captchaImage").permitAll()
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
                 // 静态资源，可匿名访问
                 .antMatchers(HttpMethod.GET, "/", "/*.html", "/**/*.html", "/**/*.css", "/**/*.js", "/profile/**").permitAll()
                 .antMatchers("/swagger-ui.html", "/swagger-resources/**", "/webjars/**", "/*/api-docs", "/druid/**").permitAll()
@@ -155,8 +176,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception
     {
+<<<<<<< HEAD
         auth.authenticationProvider(new SmsCodeAuthenticationProvider(smsUserDetailService));
         auth.authenticationProvider(new PhoneNumberPwdAuthenticationProvider(phoneNumberPwdUserDetailService));
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 }
