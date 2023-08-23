@@ -57,6 +57,10 @@
             <groupId>com.jingyu</groupId>
             <artifactId>sps-safecheck</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.jingyu</groupId>
+            <artifactId>sps-qunfang</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

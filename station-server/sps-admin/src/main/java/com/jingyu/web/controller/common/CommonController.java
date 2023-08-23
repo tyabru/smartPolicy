@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.aspectj.weaver.loadtime.Aj;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import com.jingyu.common.config.RuoYiConfig;
 import com.jingyu.common.constant.Constants;
@@ -73,12 +72,18 @@ public class CommonController
      * 通用上传请求（单个）
      */
     @PostMapping("/upload")
-    public AjaxResult uploadFile(MultipartFile file) throws Exception
+    public AjaxResult uploadFile(HttpServletRequest request, MultipartFile file) throws Exception
     {
         try
         {
+            String header = request.getHeader("file-dir-custom");
             // 上传文件路径
-            String filePath = RuoYiConfig.getUploadPath();
+            String filePath;
+            if(StringUtils.isNotEmpty(header)) {
+                filePath = RuoYiConfig.getCustomPath(header);
+            } else {
+                filePath = RuoYiConfig.getUploadPath();
+            }
             // 上传并返回新文件名称
             String fileName = FileUploadUtils.upload(filePath, file);
             String url = serverConfig.getUrl() + fileName;
@@ -99,12 +104,18 @@ public class CommonController
      * 通用上传请求（多个）
      */
     @PostMapping("/uploads")
-    public AjaxResult uploadFiles(List<MultipartFile> files) throws Exception
+    public AjaxResult uploadFiles(HttpServletRequest request, List<MultipartFile> files) throws Exception
     {
         try
         {
+            // 此header应该是一个文件夹的名称
+            String header = request.getHeader("file-dir-custom");
             // 上传文件路径
             String filePath = RuoYiConfig.getUploadPath();
+            if(StringUtils.isNotEmpty(header)) {
+                filePath = RuoYiConfig.getCustomPath(filePath);
+            }
+
             List<String> urls = new ArrayList<String>();
             List<String> fileNames = new ArrayList<String>();
             List<String> newFileNames = new ArrayList<String>();
@@ -159,5 +170,29 @@ public class CommonController
         {
             log.error("下载文件失败", e);
         }
+    }
+
+    @DeleteMapping("deleteFileByResource")
+    public AjaxResult deleteFileByResource(@RequestParam String resource) {
+        if(StringUtils.isNotEmpty(resource)) {
+            try
+            {
+                if (!FileUtils.checkAllowDownload(resource))
+                {
+                    throw new Exception(StringUtils.format("资源文件({})非法，不允许下载。 ", resource));
+                }
+                // 本地资源路径
+                String localPath = RuoYiConfig.getProfile();
+                // 数据库资源地址
+                String downloadPath = localPath + StringUtils.substringAfter(resource, Constants.RESOURCE_PREFIX);
+                FileUtils.deleteFile(downloadPath);
+            }
+            catch (Exception e)
+            {
+                log.error("删除文件失败", e);
+                return AjaxResult.error(500, "删除文件失败!");
+            }
+        }
+        return AjaxResult.success();
     }
 }

@@ -3,6 +3,13 @@ package com.jingyu.common.core.domain.entity;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.*;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.jingyu.common.utils.encryption_decryption.SensitiveNew;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
@@ -17,6 +24,9 @@ import com.jingyu.common.xss.Xss;
  * 
  * @author ruoyi
  */
+@Data
+@ToString
+@AllArgsConstructor
 public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -35,6 +45,7 @@ public class SysUser extends BaseEntity
 
     /** 用户昵称 */
     @Excel(name = "用户名称")
+    @SensitiveNew(setterEncrypt = "setNickName", getterDncrypt = "getNickName", EncryptMethod = "nameEncrypt", notEncryptByResponse = true)
     private String nickName;
 
     /** 用户邮箱 */
@@ -43,6 +54,7 @@ public class SysUser extends BaseEntity
 
     /** 手机号码 */
     @Excel(name = "手机号码")
+    @SensitiveNew(setterEncrypt = "setPhonenumber", getterDncrypt = "getPhonenumber", neeDecrypt = true, neeEecrypt = true)
     private String phonenumber;
 
     /** 用户性别 */
@@ -88,6 +100,68 @@ public class SysUser extends BaseEntity
 
     /** 角色ID */
     private Long roleId;
+
+    /** 警号 */
+    @Excel(name = "警号")
+    private String policeNumber;
+
+    /** 年龄 */
+    @Excel(name = "年龄")
+    private Long policeAge;
+
+    /** 民族 */
+    @Excel(name = "民族")
+    private String nation;
+
+    /** 出生日期 */
+    @Excel(name = "出生日期")
+    private String birthday;
+
+    /** 身份证号码 */
+    @Excel(name = "身份证号码")
+    @SensitiveNew(setterEncrypt = "setIdCard", getterDncrypt = "getIdCard", neeDecrypt = true, neeEecrypt = true)
+    private String idCard;
+
+    /** 政治面貌0党员1团员2群众 */
+    @Excel(name = "政治面貌0党员1团员2群众")
+    private Long identityType;
+
+    /** 学历 */
+    @Excel(name = "学历")
+    private Long education;
+
+    /** 毕业院校 */
+    @Excel(name = "毕业院校")
+    private String graduationSchool;
+
+    /** 所属岗位 */
+    @Excel(name = "所属岗位")
+    private Long policeType;
+
+    /** 技能专长 */
+    @Excel(name = "技能专长")
+    private String speciality;
+
+    /** 警员照片 */
+    @Excel(name = "警员照片")
+    private String policePhoto;
+
+    /** 居住地址 */
+    @Excel(name = "居住地址")
+    private String addressCode;
+
+    /** 入职时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "入职时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date entryTime;
+
+    /** 是否配备执法记录仪 */
+    @Excel(name = "是否配备执法记录仪")
+    private String isVehicle;
+
+    /** 设备编码 */
+    @Excel(name = "设备编码")
+    private String equipmentNumber;
 
     public SysUser()
     {

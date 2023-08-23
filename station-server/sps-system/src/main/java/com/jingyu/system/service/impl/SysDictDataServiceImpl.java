@@ -1,6 +1,13 @@
 package com.jingyu.system.service.impl;
 
 import java.util.List;
+
+import com.github.pagehelper.util.StringUtil;
+import com.jingyu.common.core.domain.entity.SysDictType;
+import com.jingyu.common.exception.base.BaseException;
+import com.jingyu.common.utils.StringUtils;
+import com.jingyu.system.mapper.SysDictTypeMapper;
+import com.jingyu.system.service.ISysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jingyu.common.core.domain.entity.SysDictData;
@@ -18,6 +25,9 @@ public class SysDictDataServiceImpl implements ISysDictDataService
 {
     @Autowired
     private SysDictDataMapper dictDataMapper;
+
+    @Autowired
+    private ISysDictTypeService dictTypeService;
 
     /**
      * 根据条件分页查询字典数据
@@ -107,5 +117,33 @@ public class SysDictDataServiceImpl implements ISysDictDataService
             DictUtils.setDictCache(data.getDictType(), dictDatas);
         }
         return row;
+    }
+
+    @Override
+    public synchronized void checkDictIsExists(String dictType, String key, String typeLabel, String label) {
+        SysDictType dictTypeItem = dictTypeService.selectDictTypeByType(dictType);
+        if(dictTypeItem == null || dictTypeItem.getDictId() == null) {
+            if(StringUtils.isEmpty(typeLabel)) {
+                throw new BaseException("缺失字典项【"+dictType+"】, 无法执行新增字典项。");
+            } else {
+                dictTypeItem = new SysDictType();
+                dictTypeItem.setDictName(typeLabel);
+                dictTypeItem.setDictType(dictType);
+                int i = dictTypeService.insertDictType(dictTypeItem);
+            }
+
+        }
+        if(StringUtils.isNotEmpty(key)) {
+            String dictLabel = dictDataMapper.selectDictLabel(dictType, key);
+            if(StringUtils.isEmpty(dictLabel)) {
+                SysDictData sysDictData = new SysDictData();
+                sysDictData.setDictType(dictType);
+                sysDictData.setDictSort(0L);
+                sysDictData.setDictValue(key);
+                sysDictData.setListClass("default");
+                sysDictData.setDictLabel(StringUtils.isEmpty(label)? key: label);
+                this.insertDictData(sysDictData);
+            }
+        }
     }
 }
