@@ -1,11 +1,8 @@
 package com.jingyu.system.service;
 
 import java.util.List;
-<<<<<<< HEAD
 import java.util.function.Function;
 
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import com.jingyu.common.core.domain.TreeSelect;
 import com.jingyu.common.core.domain.entity.SysDept;
 
@@ -56,7 +53,6 @@ public interface ISysDeptService
      */
     public List<Long> selectDeptListByRoleId(Long roleId);
 
-<<<<<<< HEAD
     /** 根据角色id查询部门树信息
      * @param deptId 部门id
      * @return 选中部门列表
@@ -65,8 +61,6 @@ public interface ISysDeptService
 
     List<TreeSelect> selectCommunityByDeptId(Long deptId);
 
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 根据部门ID查询信息
      * 
@@ -137,7 +131,6 @@ public interface ISysDeptService
      * @return 结果
      */
     public int deleteDeptById(Long deptId);
-<<<<<<< HEAD
 
     /**
      * 根据部门id和上级部门类型确定一个上级部门
@@ -156,6 +149,4 @@ public interface ISysDeptService
      *
      * */
     String queryChildIdsByTypeAndDeptId(Long deptId, String deptType);
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

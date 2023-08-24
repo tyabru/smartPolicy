@@ -1,6 +1,5 @@
 package com.jingyu.web.controller.community;
 
-<<<<<<< HEAD
 import com.jingyu.common.annotation.Log;
 import com.jingyu.common.constant.DeptConstants;
 import com.jingyu.common.core.controller.BaseController;
@@ -16,24 +15,10 @@ import com.jingyu.system.service.ISysDeptService;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
-=======
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.http.HttpServletResponse;
-
-import com.jingyu.common.constant.DeptConstants;
-import com.jingyu.common.utils.SecurityUtils;
-import com.jingyu.common.utils.StringUtils;
-import com.jingyu.community.domain.Community;
-import com.jingyu.system.service.ISysDeptService;
-import lombok.val;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -42,15 +27,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.jingyu.common.annotation.Log;
-import com.jingyu.common.core.controller.BaseController;
-import com.jingyu.common.core.domain.AjaxResult;
-import com.jingyu.common.enums.BusinessType;
-import com.jingyu.community.domain.Company;
-import com.jingyu.community.service.ICompanyService;
-import com.jingyu.common.utils.poi.ExcelUtil;
-import com.jingyu.common.core.page.TableDataInfo;
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
 /**
  * 单位基本信息Controller
@@ -114,11 +90,7 @@ public class CompanyController extends BaseController
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id)
     {
-<<<<<<< HEAD
         return toAjax(companyService.selectCompanyById(id));
-=======
-        return success(companyService.selectCompanyById(id));
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     }
 
     /**

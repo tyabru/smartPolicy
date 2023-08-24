@@ -3,11 +3,8 @@ package com.jingyu.common.core.controller;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
 import java.util.List;
-<<<<<<< HEAD
 
 import com.jingyu.common.utils.encryption_decryption.SensitiveNewsHander;
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.WebDataBinder;
@@ -90,12 +87,9 @@ public class BaseController
         TableDataInfo rspData = new TableDataInfo();
         rspData.setCode(HttpStatus.SUCCESS);
         rspData.setMsg("查询成功");
-<<<<<<< HEAD
         for (Object object : list) {
             SensitiveNewsHander.parseRequestParams(object);
         }
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         rspData.setRows(list);
         rspData.setTotal(new PageInfo(list).getTotal());
         return rspData;

@@ -57,7 +57,6 @@ public interface ISysDictDataService
      * @return 结果
      */
     public int updateDictData(SysDictData dictData);
-<<<<<<< HEAD
 
     /**
      * 根据条件分页查询字典数据
@@ -71,6 +70,4 @@ public interface ISysDictDataService
      * @return 字典数据集合信息
      */
     void checkDictIsExists(String dictType, String key, String defaultTypeLabel, String label);
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

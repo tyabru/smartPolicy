@@ -1,12 +1,9 @@
 package com.jingyu.framework.web.service;
 
 import javax.annotation.Resource;
-<<<<<<< HEAD
 
 import com.jingyu.system.service.ISysConfigService;
 import com.jingyu.system.service.ISysUserService;
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,11 +29,6 @@ import com.jingyu.common.utils.ip.IpUtils;
 import com.jingyu.framework.manager.AsyncManager;
 import com.jingyu.framework.manager.factory.AsyncFactory;
 import com.jingyu.framework.security.context.AuthenticationContextHolder;
-<<<<<<< HEAD
-=======
-import com.jingyu.system.service.ISysConfigService;
-import com.jingyu.system.service.ISysUserService;
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
 /**
  * 登录校验方法
@@ -46,17 +38,12 @@ import com.jingyu.system.service.ISysUserService;
 @Component
 public class SysLoginService
 {
-<<<<<<< HEAD
     @Resource(name = "tokenService")
-=======
-    @Autowired
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     private TokenService tokenService;
 
     @Resource
     private AuthenticationManager authenticationManager;
 
-<<<<<<< HEAD
     @Resource
     private RedisCache redisCache;
 
@@ -64,15 +51,6 @@ public class SysLoginService
     private ISysUserService userService;
 
     @Resource(name = "sysConfigServiceImpl")
-=======
-    @Autowired
-    private RedisCache redisCache;
-    
-    @Autowired
-    private ISysUserService userService;
-
-    @Autowired
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     private ISysConfigService configService;
 
     /**

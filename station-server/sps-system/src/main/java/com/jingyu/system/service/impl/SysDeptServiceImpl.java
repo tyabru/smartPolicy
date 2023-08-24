@@ -3,16 +3,8 @@ package com.jingyu.system.service.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-<<<<<<< HEAD
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.compress.utils.Lists;
-=======
-import java.util.stream.Collectors;
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jingyu.common.annotation.DataScope;
@@ -29,12 +21,11 @@ import com.jingyu.common.utils.spring.SpringUtils;
 import com.jingyu.system.mapper.SysDeptMapper;
 import com.jingyu.system.mapper.SysRoleMapper;
 import com.jingyu.system.service.ISysDeptService;
-<<<<<<< HEAD
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
 import static com.jingyu.common.constant.DeptConstants.*;
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
 /**
  * 部门管理 服务实现
@@ -44,10 +35,10 @@ import static com.jingyu.common.constant.DeptConstants.*;
 @Service
 public class SysDeptServiceImpl implements ISysDeptService
 {
-    @Autowired
+    @Resource
     private SysDeptMapper deptMapper;
 
-    @Autowired
+    @Resource
     private SysRoleMapper roleMapper;
 
     /**
@@ -129,10 +120,8 @@ public class SysDeptServiceImpl implements ISysDeptService
         return deptMapper.selectDeptListByRoleId(roleId, role.isDeptCheckStrictly());
     }
 
-<<<<<<< HEAD
     @Override
-    public List<TreeSelect> selectDeptTreeByDeptId(Long deptId,
-                                                Function<List<SysDept>, List<SysDept>> filter) {
+    public List<TreeSelect> selectDeptTreeByDeptId(Long deptId, Function<List<SysDept>, List<SysDept>> filter) {
         SysDept dept = deptMapper.selectDeptById(deptId);
         if(dept == null) {
             return new ArrayList<>();
@@ -155,8 +144,6 @@ public class SysDeptServiceImpl implements ISysDeptService
         }).collect(Collectors.toList()));
     }
 
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 根据部门ID查询信息
      * 
@@ -271,10 +258,7 @@ public class SysDeptServiceImpl implements ISysDeptService
      * @return 结果
      */
     @Override
-<<<<<<< HEAD
     @Transactional
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     public int updateDept(SysDept dept)
     {
         SysDept newParentDept = deptMapper.selectDeptById(dept.getParentId());
@@ -382,7 +366,6 @@ public class SysDeptServiceImpl implements ISysDeptService
     {
         return getChildList(list, t).size() > 0;
     }
-<<<<<<< HEAD
 
     @Override
     public SysDept queryBelongDeptByTypeAndId(Long deptId, String deptType) {
@@ -393,6 +376,4 @@ public class SysDeptServiceImpl implements ISysDeptService
     public String queryChildIdsByTypeAndDeptId(Long deptId, String deptType) {
         return deptMapper.queryChildIdsByTypeAndDeptId(deptId, deptType);
     }
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

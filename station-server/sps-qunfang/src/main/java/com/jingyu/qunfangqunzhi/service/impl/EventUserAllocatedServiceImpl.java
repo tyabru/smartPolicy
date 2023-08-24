@@ -112,12 +112,9 @@ public class EventUserAllocatedServiceImpl implements IEventUserAllocatedService
     public int insertBatchEventUserAllocated(List<EventUserAllocated> list) {
         return eventInfoMapper.batchEventUserAllocated(list);
     }
-<<<<<<< HEAD
-=======
 
     @Override
     public int cancelByEventId(Long eventId) {
         return eventUserAllocatedMapper.cancelByEventId(eventId);
     }
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

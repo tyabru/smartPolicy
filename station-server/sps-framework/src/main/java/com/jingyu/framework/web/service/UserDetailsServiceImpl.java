@@ -19,22 +19,14 @@ import com.jingyu.system.service.ISysUserService;
  *
  * @author ruoyi
  */
-<<<<<<< HEAD
 @Service("userDetailsService")
-=======
-@Service
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 public class UserDetailsServiceImpl implements UserDetailsService
 {
     private static final Logger log = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
 
     @Autowired
     private ISysUserService userService;
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     @Autowired
     private SysPasswordService passwordService;
 

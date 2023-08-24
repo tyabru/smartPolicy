@@ -3,18 +3,11 @@ package com.jingyu.qunfangqunzhi.domain;
 import java.util.List;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
-<<<<<<< HEAD
-=======
 import com.jingyu.common.core.domain.entity.SysDept;
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
 import com.jingyu.common.core.domain.BaseEntity;
-<<<<<<< HEAD
-=======
-import org.springframework.beans.factory.annotation.Autowired;
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
 /**
  * 上报事件管理对象 event_info
@@ -83,8 +76,6 @@ public class EventInfo extends BaseEntity
     @Excel(name = "事件上传时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date uploadTime;
 
-<<<<<<< HEAD
-=======
     /** 事件结束事件 **/
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date finishTime;
@@ -103,7 +94,6 @@ public class EventInfo extends BaseEntity
 
     private SysDept dept;
 
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
     /**
      * 事件概述
@@ -114,16 +104,11 @@ public class EventInfo extends BaseEntity
     //备注
     private String remark;
 
-<<<<<<< HEAD
-=======
     //上报用户名
     private String userName;
 
-
     //上报用户类型
     private String uploadUserType;
-
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
     /** $table.subTable.functionName信息 */
     private List<EventUserAllocated> eventUserAllocatedList;
@@ -273,8 +258,6 @@ public class EventInfo extends BaseEntity
         this.eventSummarize = eventSummarize;
     }
 
-<<<<<<< HEAD
-=======
     public Date getFinishTime() {
         return finishTime;
     }
@@ -299,7 +282,6 @@ public class EventInfo extends BaseEntity
         this.finishUserId = finishUserId;
     }
 
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     @Override
     public String getRemark() {
         return remark;
@@ -310,8 +292,6 @@ public class EventInfo extends BaseEntity
         this.remark = remark;
     }
 
-<<<<<<< HEAD
-=======
     public Long getDeptId() {
         return deptId;
     }
@@ -345,7 +325,6 @@ public class EventInfo extends BaseEntity
         this.uploadUserType = uploadUserType;
     }
 
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)

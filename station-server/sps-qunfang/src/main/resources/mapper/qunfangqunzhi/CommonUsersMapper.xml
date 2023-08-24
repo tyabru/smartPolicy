@@ -73,23 +73,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ${params.dataScope}
     </select>
 
-<<<<<<< HEAD
-=======
     <select id="selectCommonUsersUserNameByUserId" parameterType="Long" resultType="String">
         select user_name from common_users c
         where user_id = #{userId}
     </select>
 
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     <select id="selectCommonUsersByUserId" parameterType="Long" resultMap="CommonUsersResult">
         <include refid="selectCommonUsersVo"/>
         where user_id = #{userId}
     </select>
-<<<<<<< HEAD
 
-
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     <select id="selectCommonUsersByPhoneNumber" parameterType="String" resultMap="CommonUsersResult">
         <include refid="selectCommonUsersVo"/>
         where phonenumber = #{phoneNumber} and del_flag = "0"

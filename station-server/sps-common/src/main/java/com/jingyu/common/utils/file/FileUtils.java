@@ -11,11 +11,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-<<<<<<< HEAD
 
 import com.jingyu.common.constant.Constants;
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import com.jingyu.common.config.RuoYiConfig;
@@ -126,14 +123,11 @@ public class FileUtils
         return flag;
     }
 
-<<<<<<< HEAD
     public static boolean deleteFileByProfileUrl(String profileUrl) {
         String downloadPath = RuoYiConfig.getProfile() + StringUtils.substringAfter(profileUrl, Constants.RESOURCE_PREFIX);
         return deleteFile(downloadPath);
     }
 
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 文件名称验证
      * 

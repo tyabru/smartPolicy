@@ -45,7 +45,7 @@ import com.jingyu.common.core.page.TableDataInfo;
 
 /**
  * 小区房屋结构和地址信息Controller
- * 
+ *
  * @author jingyu
  * @date 2023-07-17
  */
@@ -126,7 +126,7 @@ public class CommunityStructureController extends BaseController
      */
     @PreAuthorize("@ss.hasPermi('community:structure:remove')")
     @Log(title = "小区房屋结构和地址信息", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
+    @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids)
     {
         return toAjax(structureService.deleteCommunityStructureByIds(ids));
@@ -159,7 +159,7 @@ public class CommunityStructureController extends BaseController
         boolean circleFlag = true;
         while (true) {
             try {
-                List<StructureImportVo> list =  excelUtil.importExcel(i, in, 0);
+                List<StructureImportVo> list =  excelUtil.importExcel(String.valueOf(i), in, 0);
                 int size = list.size();
                 total += size;
                 if(size > 0) {

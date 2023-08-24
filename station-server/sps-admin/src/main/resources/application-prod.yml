@@ -19,27 +19,10 @@ spring:
         druid:
             master:
                 # 主库数据源
-<<<<<<< HEAD
                 url: jdbc:mysql://192.168.100.3:3306/sq_database?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
                 username: root
                 password: jd8f#VNG
-=======
-<<<<<<< HEAD
-                url: jdbc:mysql://localhost:3306/sq_database?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: root
-                password: XAjy@2020
-=======
-<<<<<<< HEAD
-                url: jdbc:mysql://192.168.100.3:3306/sq_database?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: root
-                password: jd8f#VNG
-=======
-                url: jdbc:mysql://localhost:3308/sq_database?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: root
-                password: root
->>>>>>> master
->>>>>>> pofaa
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
+
 
 # Swagger配置
 swagger:

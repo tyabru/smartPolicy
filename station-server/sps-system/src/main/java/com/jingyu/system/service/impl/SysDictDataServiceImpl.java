@@ -1,22 +1,19 @@
 package com.jingyu.system.service.impl;
 
 import java.util.List;
-<<<<<<< HEAD
 
-import com.github.pagehelper.util.StringUtil;
 import com.jingyu.common.core.domain.entity.SysDictType;
 import com.jingyu.common.exception.base.BaseException;
 import com.jingyu.common.utils.StringUtils;
-import com.jingyu.system.mapper.SysDictTypeMapper;
 import com.jingyu.system.service.ISysDictTypeService;
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jingyu.common.core.domain.entity.SysDictData;
 import com.jingyu.common.utils.DictUtils;
 import com.jingyu.system.mapper.SysDictDataMapper;
 import com.jingyu.system.service.ISysDictDataService;
+
+import javax.annotation.Resource;
 
 /**
  * 字典 业务层处理
@@ -26,15 +23,12 @@ import com.jingyu.system.service.ISysDictDataService;
 @Service
 public class SysDictDataServiceImpl implements ISysDictDataService
 {
-    @Autowired
+    @Resource
     private SysDictDataMapper dictDataMapper;
 
-<<<<<<< HEAD
-    @Autowired
+    @Resource
     private ISysDictTypeService dictTypeService;
 
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 根据条件分页查询字典数据
      * 
@@ -124,7 +118,6 @@ public class SysDictDataServiceImpl implements ISysDictDataService
         }
         return row;
     }
-<<<<<<< HEAD
 
     @Override
     public synchronized void checkDictIsExists(String dictType, String key, String typeLabel, String label) {
@@ -153,6 +146,4 @@ public class SysDictDataServiceImpl implements ISysDictDataService
             }
         }
     }
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

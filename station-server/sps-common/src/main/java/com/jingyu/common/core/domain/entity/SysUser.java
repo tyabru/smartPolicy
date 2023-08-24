@@ -3,7 +3,6 @@ package com.jingyu.common.core.domain.entity;
 import java.util.Date;
 import java.util.List;
 import javax.validation.constraints.*;
-<<<<<<< HEAD
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jingyu.common.utils.encryption_decryption.SensitiveNew;
@@ -11,8 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
@@ -27,12 +24,9 @@ import com.jingyu.common.xss.Xss;
  * 
  * @author ruoyi
  */
-<<<<<<< HEAD
 @Data
 @ToString
 @AllArgsConstructor
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 public class SysUser extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -51,10 +45,7 @@ public class SysUser extends BaseEntity
 
     /** 用户昵称 */
     @Excel(name = "用户名称")
-<<<<<<< HEAD
     @SensitiveNew(setterEncrypt = "setNickName", getterDncrypt = "getNickName", EncryptMethod = "nameEncrypt", notEncryptByResponse = true)
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     private String nickName;
 
     /** 用户邮箱 */
@@ -63,10 +54,7 @@ public class SysUser extends BaseEntity
 
     /** 手机号码 */
     @Excel(name = "手机号码")
-<<<<<<< HEAD
     @SensitiveNew(setterEncrypt = "setPhonenumber", getterDncrypt = "getPhonenumber", neeDecrypt = true, neeEecrypt = true)
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     private String phonenumber;
 
     /** 用户性别 */
@@ -113,7 +101,6 @@ public class SysUser extends BaseEntity
     /** 角色ID */
     private Long roleId;
 
-<<<<<<< HEAD
     /** 警号 */
     @Excel(name = "警号")
     private String policeNumber;
@@ -176,8 +163,6 @@ public class SysUser extends BaseEntity
     @Excel(name = "设备编码")
     private String equipmentNumber;
 
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     public SysUser()
     {
 

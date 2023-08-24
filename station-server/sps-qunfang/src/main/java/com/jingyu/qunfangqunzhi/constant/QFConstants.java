@@ -105,8 +105,6 @@ public class QFConstants {
             return this.value;
         }
     }
-<<<<<<< HEAD
-=======
 
     /**
      *  事件处置类型,是否为处置
@@ -137,5 +135,4 @@ public class QFConstants {
             return this.value;
         }
     }
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 }

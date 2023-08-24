@@ -20,15 +20,9 @@ spring:
         druid:
             master:
                 # 主库数据源
-<<<<<<< HEAD
                 url: jdbc:mysql://localhost:3306/sq_database?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
                 username: root
                 password: admin
-=======
-                url: jdbc:mysql://localhost:3308/sq_database?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: root
-                password: root
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
 # Swagger配置
 swagger:
@@ -38,8 +32,4 @@ swagger:
     pathMapping: /dev-api
 
 server:
-<<<<<<< HEAD
     port: 8080
-=======
-    port: 8080
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590

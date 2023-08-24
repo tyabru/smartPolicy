@@ -3,17 +3,16 @@ package com.jingyu.system.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-<<<<<<< HEAD
 import javax.annotation.Resource;
 import javax.validation.Validator;
 
+import com.jingyu.common.utils.bean.BeanValidators;
 import com.jingyu.common.utils.sign.AESUtil;
 import com.jingyu.polices.domain.PoliceInformation;
 import com.jingyu.polices.mapper.PoliceInformationMapper;
 import com.jingyu.polices.service.IPoliceInformationService;
-=======
-import javax.validation.Validator;
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
+import com.jingyu.system.domain.SysUserPost;
+import com.jingyu.system.domain.SysUserRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +26,8 @@ import com.jingyu.common.core.domain.entity.SysUser;
 import com.jingyu.common.exception.ServiceException;
 import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.common.utils.StringUtils;
-import com.jingyu.common.utils.bean.BeanValidators;
 import com.jingyu.common.utils.spring.SpringUtils;
 import com.jingyu.system.domain.SysPost;
-import com.jingyu.system.domain.SysUserPost;
-import com.jingyu.system.domain.SysUserRole;
 import com.jingyu.system.mapper.SysPostMapper;
 import com.jingyu.system.mapper.SysRoleMapper;
 import com.jingyu.system.mapper.SysUserMapper;
@@ -40,11 +36,8 @@ import com.jingyu.system.mapper.SysUserRoleMapper;
 import com.jingyu.system.service.ISysConfigService;
 import com.jingyu.system.service.ISysUserService;
 
-<<<<<<< HEAD
 import static com.jingyu.common.utils.SecurityUtils.getUsername;
 
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 /**
  * 用户 业务层处理
  * 
@@ -55,7 +48,6 @@ public class SysUserServiceImpl implements ISysUserService
 {
     private static final Logger log = LoggerFactory.getLogger(SysUserServiceImpl.class);
 
-<<<<<<< HEAD
     @Resource
     private SysUserMapper userMapper;
 
@@ -69,21 +61,6 @@ public class SysUserServiceImpl implements ISysUserService
     private SysUserRoleMapper userRoleMapper;
 
     @Resource
-=======
-    @Autowired
-    private SysUserMapper userMapper;
-
-    @Autowired
-    private SysRoleMapper roleMapper;
-
-    @Autowired
-    private SysPostMapper postMapper;
-
-    @Autowired
-    private SysUserRoleMapper userRoleMapper;
-
-    @Autowired
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     private SysUserPostMapper userPostMapper;
 
     @Autowired
@@ -92,15 +69,12 @@ public class SysUserServiceImpl implements ISysUserService
     @Autowired
     protected Validator validator;
 
-<<<<<<< HEAD
     @Autowired
     protected IPoliceInformationService policeInformationService;
 
     @Resource
     protected PoliceInformationMapper policeInformationMapper;
 
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 根据条件分页查询用户列表
      * 
@@ -111,16 +85,12 @@ public class SysUserServiceImpl implements ISysUserService
     @DataScope(deptAlias = "d", userAlias = "u")
     public List<SysUser> selectUserList(SysUser user)
     {
-<<<<<<< HEAD
         user.setPhonenumber(AESUtil.encrypt(user.getPhonenumber()));
         List<SysUser> sysUsers = userMapper.selectUserList(user);
         for (SysUser sysUser : sysUsers) {
             policeInformationToSysUser(sysUser);
         }
         return sysUsers;
-=======
-        return userMapper.selectUserList(user);
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     }
 
     /**
@@ -170,7 +140,6 @@ public class SysUserServiceImpl implements ISysUserService
     @Override
     public SysUser selectUserById(Long userId)
     {
-<<<<<<< HEAD
         SysUser sysUser = userMapper.selectUserById(userId);
         return policeInformationToSysUser(sysUser);
     }
@@ -195,9 +164,6 @@ public class SysUserServiceImpl implements ISysUserService
             sysUser.setEquipmentNumber(policeInformation.getEquipmentNumber());
         }
         return sysUser;
-=======
-        return userMapper.selectUserById(userId);
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     }
 
     /**
@@ -262,11 +228,7 @@ public class SysUserServiceImpl implements ISysUserService
     public boolean checkPhoneUnique(SysUser user)
     {
         Long userId = StringUtils.isNull(user.getUserId()) ? -1L : user.getUserId();
-<<<<<<< HEAD
         SysUser info = userMapper.checkPhoneUnique(AESUtil.encrypt(user.getPhonenumber()));
-=======
-        SysUser info = userMapper.checkPhoneUnique(user.getPhonenumber());
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         if (StringUtils.isNotNull(info) && info.getUserId().longValue() != userId.longValue())
         {
             return UserConstants.NOT_UNIQUE;
@@ -336,17 +298,13 @@ public class SysUserServiceImpl implements ISysUserService
     @Transactional
     public int insertUser(SysUser user)
     {
-<<<<<<< HEAD
         user.setPhonenumber(AESUtil.encrypt(user.getPhonenumber()));
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         // 新增用户信息
         int rows = userMapper.insertUser(user);
         // 新增用户岗位关联
         insertUserPost(user);
         // 新增用户与角色管理
         insertUserRole(user);
-<<<<<<< HEAD
         if (rows > 0) {
             //新增警员信息
             policeInformationService.insertPoliceInformation(handlePoliceInformation(user));
@@ -378,11 +336,6 @@ public class SysUserServiceImpl implements ISysUserService
         return policeInformation;
     }
 
-=======
-        return rows;
-    }
-
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     /**
      * 注册用户信息
      * 
@@ -414,15 +367,11 @@ public class SysUserServiceImpl implements ISysUserService
         userPostMapper.deleteUserPostByUserId(userId);
         // 新增用户与岗位管理
         insertUserPost(user);
-<<<<<<< HEAD
         int i = userMapper.updateUser(user);
         if (i > 0) {
             policeInformationService.updatePoliceInformation(handlePoliceInformation(user));
         }
         return i;
-=======
-        return userMapper.updateUser(user);
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
     }
 
     /**
@@ -588,20 +537,13 @@ public class SysUserServiceImpl implements ISysUserService
         {
             checkUserAllowed(new SysUser(userId));
             checkUserDataScope(userId);
-<<<<<<< HEAD
-
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         }
         // 删除用户与角色关联
         userRoleMapper.deleteUserRole(userIds);
         // 删除用户与岗位关联
         userPostMapper.deleteUserPost(userIds);
-<<<<<<< HEAD
         // 删除用户与警员关联
         policeInformationService.deletePoliceInformationByUserIds(userIds);
-=======
->>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
         return userMapper.deleteUserByIds(userIds);
     }
 

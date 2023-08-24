@@ -66,7 +66,8 @@ export default {
     isShowTip: {
       type: Boolean,
       default: true
-    }
+    },
+    baseDir: String
   },
   data() {
     return {
@@ -98,6 +99,15 @@ export default {
         } else {
           this.fileList = [];
           return [];
+        }
+      },
+      deep: true,
+      immediate: true
+    },
+    baseDir: {
+      handler(newVal) {
+        if(newVal && newVal.length > 0) {
+          this.headers['file-dir-custom'] = newVal
         }
       },
       deep: true,
