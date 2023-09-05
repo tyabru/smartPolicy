@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.person.mapper.PersonFcousMapper;
 import com.jingyu.person.domain.PersonFcous;
 import com.jingyu.person.service.IPersonFcousService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 重点关注人口Service业务层处理
@@ -54,6 +55,7 @@ public class PersonFcousServiceImpl implements IPersonFcousService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertPersonFcous(PersonFcous personFcous)
     {
         personFcous.setCreateTime(DateUtils.getNowDate());
@@ -67,6 +69,7 @@ public class PersonFcousServiceImpl implements IPersonFcousService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePersonFcous(PersonFcous personFcous)
     {
         personFcous.setUpdateTime(DateUtils.getNowDate());
@@ -80,6 +83,7 @@ public class PersonFcousServiceImpl implements IPersonFcousService
      * @return 结果
      */
     @Override
+    @Transactional
     public int deletePersonFcousByIds(Long[] ids)
     {
         return personFcousMapper.deletePersonFcousByIds(ids);
@@ -104,6 +108,7 @@ public class PersonFcousServiceImpl implements IPersonFcousService
      * @return 结果
      */
     @Override
+    @Transactional
     public int deletePersonFcousByPersonId(Long personId, Long personType) {
         return personFcousMapper.deletePersonFcousByPersonId(personId,personType);
     }

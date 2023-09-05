@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.equipment.mapper.PoliceEquipmentMapper;
 import com.jingyu.equipment.domain.PoliceEquipment;
 import com.jingyu.equipment.service.IPoliceEquipmentService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -53,6 +54,7 @@ public class PoliceEquipmentServiceImpl implements IPoliceEquipmentService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertPoliceEquipment(PoliceEquipment policeEquipment)
     {
         return policeEquipmentMapper.insertPoliceEquipment(policeEquipment);
@@ -65,6 +67,7 @@ public class PoliceEquipmentServiceImpl implements IPoliceEquipmentService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePoliceEquipment(PoliceEquipment policeEquipment)
     {
         return policeEquipmentMapper.updatePoliceEquipment(policeEquipment);

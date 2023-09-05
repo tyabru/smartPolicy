@@ -22,6 +22,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="police"    column="police"    />
         <result property="policePhone"    column="police_phone"    />
         <result property="policeName"    column="police_name"    />
+        <result property="longitude"    column="longitude"    />
+        <result property="latitude"    column="latitude"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
         <result property="createBy"    column="create_by"    />
@@ -31,7 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectCommunityDetailVo">
         select id, community_id, village_id, village_code, full_area, center_point, xq_region, building_count,
                person, resident, flows, important, head_master, master_phone, police, police_phone, police_name,
-               create_time, update_time, create_by, update_by
+               create_time, update_time, create_by, update_by, longitude, latitude
         from sq_community_detail
     </sql>
 
@@ -85,6 +87,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="police != null">police,</if>
             <if test="policePhone != null">police_phone,</if>
             <if test="policeName != null">police_name,</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="createBy != null">create_by,</if>
@@ -107,6 +111,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="police != null">#{police},</if>
             <if test="policePhone != null">#{policePhone},</if>
             <if test="policeName != null">#{policeName},</if>
+            <if test="longitude != null">longitude,</if>
+            <if test="latitude != null">latitude,</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -133,6 +139,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="police != null">police = #{police},</if>
             <if test="policePhone != null">police_phone = #{policePhone},</if>
             <if test="policeName != null">police_name = #{policeName},</if>
+            <if test="longitude != null">longitude = #{longitude},</if>
+            <if test="latitude != null">latitude = #{latitude},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
             <if test="createBy != null">create_by = #{createBy},</if>

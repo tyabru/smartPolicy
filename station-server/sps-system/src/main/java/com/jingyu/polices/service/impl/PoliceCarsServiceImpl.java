@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.polices.mapper.PoliceCarsMapper;
 import com.jingyu.polices.domain.PoliceCars;
 import com.jingyu.polices.service.IPoliceCarsService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -63,6 +64,7 @@ public class PoliceCarsServiceImpl implements IPoliceCarsService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertPoliceCars(PoliceCars policeCars)
     {
         //数据校验
@@ -77,6 +79,7 @@ public class PoliceCarsServiceImpl implements IPoliceCarsService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePoliceCars(PoliceCars policeCars)
     {
         //数据校验

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.polices.mapper.PoliceFileManagementsMapper;
 import com.jingyu.polices.domain.PoliceFileManagements;
 import com.jingyu.polices.service.IPoliceFileManagementsService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -58,6 +59,7 @@ public class PoliceFileManagementsServiceImpl implements IPoliceFileManagementsS
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertPoliceFileManagements(PoliceFileManagements policeFileManagements)
     {
         return policeFileManagementsMapper.insertPoliceFileManagements(policeFileManagements);
@@ -70,6 +72,7 @@ public class PoliceFileManagementsServiceImpl implements IPoliceFileManagementsS
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePoliceFileManagements(PoliceFileManagements policeFileManagements)
     {
         return policeFileManagementsMapper.updatePoliceFileManagements(policeFileManagements);

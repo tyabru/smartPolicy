@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.contradiction.mapper.DisputingPersonnelMapper;
 import com.jingyu.contradiction.domain.DisputingPersonnel;
 import com.jingyu.contradiction.service.IDisputingPersonnelService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -66,6 +67,7 @@ public class DisputingPersonnelServiceImpl implements IDisputingPersonnelService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertDisputingPersonnel(DisputingPersonnel disputingPersonnel)
     {
         SensitiveNewsHander.revertEncryptAttrs(disputingPersonnel);
@@ -83,6 +85,7 @@ public class DisputingPersonnelServiceImpl implements IDisputingPersonnelService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateDisputingPersonnel(DisputingPersonnel disputingPersonnel)
     {
         DisputingPersonnel old = selectDisputingPersonnelById(disputingPersonnel.getId());
@@ -91,7 +94,7 @@ public class DisputingPersonnelServiceImpl implements IDisputingPersonnelService
         SensitiveNewsHander.revertNotEditAttrs(disputingPersonnel,old);
         SensitiveNewsHander.revertEncryptAttrs(disputingPersonnel);
         //判重
-        if (disputingPersonnel.getCaseCode() != old.getCaseCode()) {
+        if (!disputingPersonnel.getCaseCode().equals(old.getCaseCode())) {
             List<DisputingPersonnel> list = getDisputingPersonnelList(disputingPersonnel);
             if (list.size() > 0) {
                 throw new CustomException("该人员信息在该案件中已存在,请勿重复添加！");
@@ -133,6 +136,7 @@ public class DisputingPersonnelServiceImpl implements IDisputingPersonnelService
      * @return 结果
      */
     @Override
+    @Transactional
     public int deleteDisputingPersonnelById(Long id)
     {
         return disputingPersonnelMapper.deleteDisputingPersonnelById(id);

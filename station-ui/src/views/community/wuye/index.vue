@@ -39,9 +39,9 @@
           v-hasPermi="['wuye:wuye:remove']">删除</el-button>
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['wuye:wuye:export']">导出</el-button>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
+      <right-toolbar style="padding-right: 14px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </template>
-
+ 
     <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="所属小区" align="center" prop="community.name" />
@@ -76,10 +76,10 @@
         </template>
       </el-table-column>
     </el-table>
-
+ 
     <pagination :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" 
         :pageSizes="pageSizes" @pagination="queryChanged" #page></pagination>
-
+ 
     <!-- 添加或修改物业信息管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="850px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" :disabled="disabled">
@@ -176,13 +176,13 @@
     </el-dialog>
   </table-panel>
 </template>
-
+ 
 <script>
 import { listWuye, getWuye, delWuye, addWuye, updateWuye } from "@/api/community/wuye";
 import TablePanel from '@/components/TablePanel/index.vue';
 import tableListMixins from '@/mixins/tableListMixins.js';
 import { validPpliceIdCard, validPhone } from "@/utils/validate";
-
+ 
 export default {
   name: "Wuye",
   dicts: ['sys_yes_no'],

@@ -114,63 +114,7 @@ public class PoliceFileManagementsController extends BaseController
     }
 
     /**
-     * 文件下载(网络)
-     * */
-    @GetMapping( "/fileDownload/{id}" )
-    public void downloadLocal(@PathVariable("id") Long id, HttpServletResponse response) {
-        PoliceFileManagements policeFileManagements = policeFileManagementsService.selectPoliceFileManagementsById(id);
-        String path = "http://36.133.97.150:8081/image/内勤警务各表设计 (5).docx";
-        response.setContentType("application/octet-stream");
-        response.setHeader("content-disposition", "attachment;filename=" + policeFileManagements.getFileName());
-        response.setCharacterEncoding("UTF-8");
-        URL urlfile = null;
-//        String downPath = filePath + "/download";
-//        //默认下载文件夹
-//        File downloadPathFile = new File(downPath);
-//        if (!downloadPathFile.exists()) {
-//            // 若不存在文件夹，则创建一个文件夹
-//            downloadPathFile.mkdirs();
-//        }
-        BufferedInputStream bis = null;
-        BufferedOutputStream fis = null;
-        //判断文件是否存在
-            byte[] buffer = new byte[1024];
-            try {
-                urlfile = new URL(path);
-
-                String[] split = urlfile.getFile().split("/");
-                HttpURLConnection httpUrl = (HttpURLConnection) urlfile.openConnection();
-                InputStream inputStream = httpUrl.getInputStream();
-                bis = new BufferedInputStream(inputStream);
-//                OutputStream os = new FileOutputStream(downPath + "/"+ split[split.length-1]);
-                fis = new BufferedOutputStream(response.getOutputStream());
-                int i = bis.read(buffer);
-                while (i != -1) {
-                    fis.write(buffer, 0, i);
-                    i = bis.read(buffer);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                if (bis != null) {
-                    try {
-                        bis.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (fis != null) {
-                    try {
-                        fis.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-    }
-
-    /**
-     * 文件下载(本地)
+     * 文件下载
      * */
     @GetMapping( "/downloadFile/{id}" )
     public AjaxResult downloadFile(@PathVariable("id") Long id, HttpServletResponse response) {

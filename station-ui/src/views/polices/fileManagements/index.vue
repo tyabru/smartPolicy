@@ -110,8 +110,8 @@
 </template>
 
 <script>
-import { listFileManagements, getFileManagements, delFileManagements, addFileManagements, updateFileManagements, 
-  uploadFile, fileDownload, downloadFile } from "@/api/polices/fileManagements";
+import { listFileManagements, getFileManagements, delFileManagements, addFileManagements, 
+  updateFileManagements, uploadFile, downloadFile } from "@/api/polices/fileManagements";
 import { getUserProfile, deptTreeSelect } from "@/api/system/user";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
@@ -227,6 +227,7 @@ export default {
         id: null,
         deptId: null,
         fileName: null,
+        fileType: 2,
         filePath: null,
         folderName: null,
         fileDescription: null,
@@ -423,6 +424,7 @@ export default {
           //elink.download = "1b69ef520557348fda6ff3b8682adaea1669021837595.jpg";
           elink.style.display = 'none';
           var blob = new Blob([debug], { type: 'application/octet-stream' });
+          const URL = window.URL || window.webkitURL
           elink.href = URL.createObjectURL(blob);
           document.body.appendChild(elink);
           elink.click();

@@ -147,6 +147,7 @@ public class PersonFlowServiceImpl implements IPersonFlowService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePersonFlow(PersonFlow personFlow)
     {
         personFlow.setUpdateTime(DateUtils.getNowDate());
@@ -188,6 +189,7 @@ public class PersonFlowServiceImpl implements IPersonFlowService
      * @return 结果
      */
     @Override
+    @Transactional
     public int deletePersonFlowByIds(Long[] ids)
     {
         int i = 0;
@@ -204,6 +206,7 @@ public class PersonFlowServiceImpl implements IPersonFlowService
      * @return 结果
      */
     @Override
+    @Transactional
     public int deletePersonFlowById(Long id)
     {
         PersonFlow resident = selectPersonFlowById(id);

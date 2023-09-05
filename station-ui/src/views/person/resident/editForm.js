@@ -1,8 +1,7 @@
-
 import { addResident, getResident, listResident, updateResident } from '@/api/person/resident'
 import { validIdCodeByType, validPhone } from '@/utils/validate'
 import { queryResidentHouseList } from '@/api/person/house'
-
+ 
 export default {
   data() {
     const validIdCode = async (rule, value, callback)=>  {
@@ -196,4 +195,3 @@ export default {
     }
   }
 }
-

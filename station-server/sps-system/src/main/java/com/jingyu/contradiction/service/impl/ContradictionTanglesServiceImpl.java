@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.contradiction.mapper.ContradictionTanglesMapper;
 import com.jingyu.contradiction.domain.ContradictionTangles;
 import com.jingyu.contradiction.service.IContradictionTanglesService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -60,6 +61,7 @@ public class ContradictionTanglesServiceImpl implements IContradictionTanglesSer
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertContradictionTangles(ContradictionTangles contradictionTangles)
     {
         int i = contradictionTanglesMapper.insertContradictionTangles(contradictionTangles);
@@ -90,6 +92,7 @@ public class ContradictionTanglesServiceImpl implements IContradictionTanglesSer
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateContradictionTangles(ContradictionTangles contradictionTangles)
     {
         int i = contradictionTanglesMapper.updateContradictionTangles(contradictionTangles);

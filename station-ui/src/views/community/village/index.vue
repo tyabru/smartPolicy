@@ -45,7 +45,7 @@
     <template #btn>
       <el-button size="mini" type="primary" @click="goToEditPage">新增</el-button>
       <el-button size="mini" type="info">导出</el-button>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
+      <right-toolbar style="padding-right: 14px;" :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
     </template>
     <el-table :data="tableData" emptyText="暂无数据">
       <el-table-column type="selection"></el-table-column>
@@ -70,7 +70,7 @@
       :pageSizes="pageSizes" @pagination="queryChanged" #page></pagination>
   </table-panel>
 </template>
-
+ 
 <script>
 import { Encrypt } from '@/utils/Aescrypt'
 import TablePanel from '@/components/TablePanel/index.vue'
@@ -113,10 +113,9 @@ import tableListMixins from '@/mixins/tableListMixins.js'
               _that.changeLoading(false);
             })
           })
-
+ 
       },
-
+ 
     }
   }
 </script>
-

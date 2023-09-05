@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.person.mapper.CompanyEmployeeMapper;
 import com.jingyu.person.domain.CompanyEmployee;
 import com.jingyu.person.service.ICompanyEmployeeService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -58,6 +59,7 @@ public class CompanyEmployeeServiceImpl implements ICompanyEmployeeService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertCompanyEmployee(CompanyEmployee companyEmployee)
     {
         companyEmployee.setCreateTime(DateUtils.getNowDate());
@@ -76,6 +78,7 @@ public class CompanyEmployeeServiceImpl implements ICompanyEmployeeService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateCompanyEmployee(CompanyEmployee companyEmployee)
     {
         companyEmployee.setUpdateTime(DateUtils.getNowDate());
@@ -112,6 +115,7 @@ public class CompanyEmployeeServiceImpl implements ICompanyEmployeeService
      * @return 结果
      */
     @Override
+    @Transactional
     public int deleteCompanyEmployeeByIds(Long[] ids)
     {
         return companyEmployeeMapper.deleteCompanyEmployeeByIds(ids);
@@ -124,6 +128,7 @@ public class CompanyEmployeeServiceImpl implements ICompanyEmployeeService
      * @return 结果
      */
     @Override
+    @Transactional
     public int deleteCompanyEmployeeById(Long id)
     {
         return companyEmployeeMapper.deleteCompanyEmployeeById(id);

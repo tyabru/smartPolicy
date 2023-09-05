@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.contradiction.mapper.MediationRecordsMapper;
 import com.jingyu.contradiction.domain.MediationRecords;
 import com.jingyu.contradiction.service.IMediationRecordsService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.security.auth.login.Configuration;
@@ -95,6 +96,7 @@ public class MediationRecordsServiceImpl implements IMediationRecordsService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertMediationRecords(MediationRecords mediationRecords)
     {
         int i = mediationRecordsMapper.insertMediationRecords(mediationRecords);
@@ -123,6 +125,7 @@ public class MediationRecordsServiceImpl implements IMediationRecordsService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateMediationRecords(MediationRecords mediationRecords)
     {
         int i = mediationRecordsMapper.updateMediationRecords(mediationRecords);

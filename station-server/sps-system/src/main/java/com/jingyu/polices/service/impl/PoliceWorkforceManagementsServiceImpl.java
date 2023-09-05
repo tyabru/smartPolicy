@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.polices.mapper.PoliceWorkforceManagementsMapper;
 import com.jingyu.polices.domain.PoliceWorkforceManagements;
 import com.jingyu.polices.service.IPoliceWorkforceManagementsService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -57,7 +58,8 @@ public class PoliceWorkforceManagementsServiceImpl implements IPoliceWorkforceMa
      */
     @Override
     public PoliceWorkforceManagements selectPoliceWorkforceManagementsByDutyDate(String date) {
-        PoliceWorkforceManagements policeWorkforceManagements = policeWorkforceManagementsMapper.selectPoliceWorkforceManagementsByDutyDate(date);
+        PoliceWorkforceManagements policeWorkforceManagements =
+                policeWorkforceManagementsMapper.selectPoliceWorkforceManagementsByDutyDate(date);
         if (policeWorkforceManagements != null) {
             policeNumberToPoliceName(policeWorkforceManagements);
         } else {
@@ -83,7 +85,8 @@ public class PoliceWorkforceManagementsServiceImpl implements IPoliceWorkforceMa
     @Override
     public List<PoliceWorkforceManagements> selectPoliceWorkforceManagementsList(PoliceWorkforceManagements policeWorkforceManagements)
     {
-        List<PoliceWorkforceManagements> managementsList = policeWorkforceManagementsMapper.selectPoliceWorkforceManagementsList(policeWorkforceManagements);
+        List<PoliceWorkforceManagements> managementsList =
+                policeWorkforceManagementsMapper.selectPoliceWorkforceManagementsList(policeWorkforceManagements);
         for (PoliceWorkforceManagements workforceManagements : managementsList) {
             policeNumberToPoliceName(workforceManagements);
         }
@@ -112,13 +115,16 @@ public class PoliceWorkforceManagementsServiceImpl implements IPoliceWorkforceMa
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertPoliceWorkforceManagements(PoliceWorkforceManagements policeWorkforceManagements)
     {
-        PoliceDutyGroups dutyGroups = policeDutyGroupsService.selectPoliceDutyGroupsById(Long.parseLong(policeWorkforceManagements.getDutyGroupId().toString()));
+        PoliceDutyGroups dutyGroups = policeDutyGroupsService.selectPoliceDutyGroupsById(
+                Long.parseLong(policeWorkforceManagements.getDutyGroupId().toString()));
         if (StringUtils.isNotNull(dutyGroups)) {
             policeWorkforceManagements.setPoliceNumber(dutyGroups.getTeamMembers());
         }
-        PoliceDutyGroups SuccessorGroups = policeDutyGroupsService.selectPoliceDutyGroupsById(Long.parseLong(policeWorkforceManagements.getSuccessorGroupId().toString()));
+        PoliceDutyGroups SuccessorGroups = policeDutyGroupsService.selectPoliceDutyGroupsById(
+                Long.parseLong(policeWorkforceManagements.getSuccessorGroupId().toString()));
         if (StringUtils.isNotNull(dutyGroups)) {
             policeWorkforceManagements.setSuccessorPoliceNumber(SuccessorGroups.getTeamMembers());
         }
@@ -132,6 +138,7 @@ public class PoliceWorkforceManagementsServiceImpl implements IPoliceWorkforceMa
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePoliceWorkforceManagements(PoliceWorkforceManagements policeWorkforceManagements)
     {
         return policeWorkforceManagementsMapper.updatePoliceWorkforceManagements(policeWorkforceManagements);
