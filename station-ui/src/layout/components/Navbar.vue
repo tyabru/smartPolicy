@@ -48,6 +48,8 @@ import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 import RuoYiGit from '@/components/RuoYi/Git'
 import RuoYiDoc from '@/components/RuoYi/Doc'
+import crypto from "crypto";
+import userService from "@/utils/service/UserService";
 
 export default {
   components: {
@@ -83,6 +85,9 @@ export default {
       }
     }
   },
+  mounted() {
+    this.login();
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -97,7 +102,43 @@ export default {
           location.href = '/index';
         })
       }).catch(() => {});
-    }
+    },
+
+    //登录逻辑
+    login(){
+      this.toLogin();
+    },
+    //登录请求
+    toLogin(){
+      //需要想后端发送的登录参数
+      let loginParam = {
+        username: 'admin',
+        password: crypto.createHash('md5').update('admin', "utf8").digest('hex')
+      }
+      let that = this;
+      this.$axios({
+        method: 'get',
+        url:"/api/user/login",
+        params: loginParam
+      }).then(function (res) {
+        console.log(res);
+        console.log("登录成功");
+        if (res.data.code === 0 ) {
+          userService.setUser(res.data.data)
+        }else{
+          that.isLoging = false;
+          that.$message({
+            showClose: true,
+            message: '登录失败，用户名或密码错误',
+            type: 'error'
+          });
+        }
+      }).catch(function (error) {
+        console.log(error)
+        that.$message.error(error.response.data.msg);
+        that.isLoging = false;
+      });
+    },
   }
 }
 </script>

@@ -148,7 +148,36 @@ export const dynamicRoutes = [
       }
     ]
   },
-  //
+  {
+    path: '/wvp',
+    component: Layout,
+    hidden: true,
+    permissions: ['wvp:deviceList:list'],
+    children: [
+      {
+        path: 'channelList/:deviceId/:parentChannelId',
+        component: () => import('@/views/wvp/channelList'),
+        name: 'channelList',
+        meta: { title: '通道列表', activeMenu: '/wvp/deviceList' }
+      }
+    ]
+  },
+  {
+    path: '/wvp',
+    component: Layout,
+    hidden: true,
+    permissions: ['wvp:deviceList:list'],
+    children: [
+      {
+        path: 'recordDetail/:app/:stream',
+        component: () => import('@/views/wvp/CloudRecordDetail'),
+        name: 'recordDetail',
+        meta: { title: '通道列表', activeMenu: '/wvp/record' }
+      }
+    ]
+  },
+
+
   {
     path: '/qunfangqunzhi/threatManage',
     component: Layout,
@@ -163,6 +192,8 @@ export const dynamicRoutes = [
       }
     ]
   },
+
+
 ]
 
 // 防止连续点击多次路由报错

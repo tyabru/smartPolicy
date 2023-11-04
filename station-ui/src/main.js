@@ -23,11 +23,12 @@ import VueMeta from 'vue-meta'
 import DictData from '@/components/DictData'
 
 import componentsUse from './components'
-
+// wvp前端请求封装
+import wvpaxios from '@/utils/wvpRequest'
 
 // 全局组件和方法的挂载
 Vue.use(componentsUse);
-
+Vue.prototype.$axios = wvpaxios
 Vue.use(directive)
 Vue.use(plugins)
 Vue.use(VueMeta)
