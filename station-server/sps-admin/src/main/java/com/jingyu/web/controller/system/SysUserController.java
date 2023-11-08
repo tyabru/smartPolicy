@@ -1,23 +1,26 @@
 package com.jingyu.web.controller.system;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.servlet.http.HttpServletResponse;
 
-import com.alibaba.druid.sql.visitor.functions.If;
-import com.jingyu.common.core.domain.model.LoginUser;
 import com.jingyu.common.utils.encryption_decryption.SensitiveNewsHander;
 import com.jingyu.common.utils.sign.AESUtil;
 import com.jingyu.polices.domain.PoliceInformation;
 import com.jingyu.polices.service.IPoliceInformationService;
-import lombok.val;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import com.jingyu.common.annotation.Log;
 import com.jingyu.common.core.controller.BaseController;
@@ -34,8 +37,6 @@ import com.jingyu.system.service.ISysDeptService;
 import com.jingyu.system.service.ISysPostService;
 import com.jingyu.system.service.ISysRoleService;
 import com.jingyu.system.service.ISysUserService;
-
-import static com.jingyu.common.constant.DeptConstants.POLICE_COMMUNITY_AREA;
 
 /**
  * 用户信息
@@ -162,6 +163,10 @@ public class SysUserController extends BaseController
         if (!userService.checkUserNameUnique(user))
         {
             return error("修改用户'" + user.getUserName() + "'失败，登录账号已存在");
+        }
+        else if (StringUtils.isNotEmpty(user.getPhonenumber()) && !userService.checkPhoneUnique(user))
+        {
+            return error("修改用户'" + user.getUserName() + "'失败，手机号码已存在");
         }
         else if (StringUtils.isNotEmpty(user.getEmail()) && !userService.checkEmailUnique(user))
         {

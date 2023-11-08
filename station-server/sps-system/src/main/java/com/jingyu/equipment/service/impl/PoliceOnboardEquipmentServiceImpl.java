@@ -6,6 +6,7 @@ import com.jingyu.equipment.domain.PoliceOnboardEquipment;
 import com.jingyu.equipment.mapper.PoliceOnboardEquipmentMapper;
 import com.jingyu.equipment.service.IPoliceOnboardEquipmentService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -52,6 +53,7 @@ public class PoliceOnboardEquipmentServiceImpl implements IPoliceOnboardEquipmen
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertPoliceOnboardEquipment(PoliceOnboardEquipment policeOnboardEquipment)
     {
         policeOnboardEquipment.setCreateTime(DateUtils.getNowDate());
@@ -65,6 +67,7 @@ public class PoliceOnboardEquipmentServiceImpl implements IPoliceOnboardEquipmen
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePoliceOnboardEquipment(PoliceOnboardEquipment policeOnboardEquipment)
     {
         policeOnboardEquipment.setUpdateTime(DateUtils.getNowDate());

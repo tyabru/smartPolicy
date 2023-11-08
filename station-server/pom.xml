@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
+	
     <groupId>com.jingyu</groupId>
     <artifactId>smart-police-station</artifactId>
     <version>1.0.0</version>
@@ -31,10 +31,11 @@
         <velocity.version>2.3</velocity.version>
         <jwt.version>0.9.1</jwt.version>
     </properties>
-
+	
     <!-- 依赖声明 -->
     <dependencyManagement>
         <dependencies>
+
             <!-- SpringBoot的依赖配置-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
@@ -148,6 +149,12 @@
                 <version>${ruoyi.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.jingyu</groupId>
+                <artifactId>sps-qunfang</artifactId>
+                <version>${ruoyi.version}</version>
+            </dependency>
+
             <!-- 系统模块-->
             <dependency>
                 <groupId>com.jingyu</groupId>
@@ -163,12 +170,6 @@
             </dependency>
             <dependency>
                 <groupId>com.jingyu</groupId>
-                <artifactId>sps-qunfang</artifactId>
-                <version>${ruoyi.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.jingyu</groupId>
                 <artifactId>sps-safecheck</artifactId>
                 <version>${ruoyi.version}</version>
             </dependency>
@@ -181,8 +182,8 @@
         <module>sps-generator</module>
         <module>sps-framework</module>
         <module>sps-system</module>
-        <module>sps-qunfang</module>
         <module>sps-safecheck</module>
+        <module>sps-qunfang</module>
     </modules>
     <packaging>pom</packaging>
 

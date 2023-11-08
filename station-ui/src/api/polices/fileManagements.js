@@ -60,15 +60,6 @@ export function uploadFile(data,folderName,deptId) {
 }
 
 // 下载日常文件
-export function fileDownload(id) {
-  return request({
-    url: '/polices/fileManagements/fileDownload/' + id,
-    method: 'get',
-  })
-}
-
-
-// 下载日常文件
 export function downloadFile(id) {
   return request({
     url: '/polices/fileManagements/downloadFile/' + id,

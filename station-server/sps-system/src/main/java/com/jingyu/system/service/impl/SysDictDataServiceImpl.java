@@ -2,11 +2,9 @@ package com.jingyu.system.service.impl;
 
 import java.util.List;
 
-import com.github.pagehelper.util.StringUtil;
 import com.jingyu.common.core.domain.entity.SysDictType;
 import com.jingyu.common.exception.base.BaseException;
 import com.jingyu.common.utils.StringUtils;
-import com.jingyu.system.mapper.SysDictTypeMapper;
 import com.jingyu.system.service.ISysDictTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +12,8 @@ import com.jingyu.common.core.domain.entity.SysDictData;
 import com.jingyu.common.utils.DictUtils;
 import com.jingyu.system.mapper.SysDictDataMapper;
 import com.jingyu.system.service.ISysDictDataService;
+
+import javax.annotation.Resource;
 
 /**
  * 字典 业务层处理
@@ -23,10 +23,10 @@ import com.jingyu.system.service.ISysDictDataService;
 @Service
 public class SysDictDataServiceImpl implements ISysDictDataService
 {
-    @Autowired
+    @Resource
     private SysDictDataMapper dictDataMapper;
 
-    @Autowired
+    @Resource
     private ISysDictTypeService dictTypeService;
 
     /**

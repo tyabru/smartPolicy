@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.validation.constraints.*;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.core.domain.BaseEntity;

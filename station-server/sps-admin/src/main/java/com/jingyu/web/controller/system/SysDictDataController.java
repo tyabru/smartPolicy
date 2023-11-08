@@ -2,12 +2,8 @@ package com.jingyu.web.controller.system;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletResponse;
 
-import com.jingyu.common.exception.base.BaseException;
 import com.jingyu.system.domain.vo.DictExistsVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -133,5 +129,4 @@ public class SysDictDataController extends BaseController
                 dictExistsVo.getDictName(), dictExistsVo.getDictLabel());
         return toAjax(true);
     }
-
 }

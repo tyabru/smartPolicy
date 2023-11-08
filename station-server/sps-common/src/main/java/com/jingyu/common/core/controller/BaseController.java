@@ -166,6 +166,7 @@ public class BaseController
     }
 
     /**
+<<<<<<< HEAD
      * 响应返回结果
      *
      * @param list
@@ -193,6 +194,8 @@ public class BaseController
     }
 
     /**
+=======
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      * 页面跳转
      */
     public String redirect(String url)

@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.polices.mapper.PoliceInformationMapper;
 import com.jingyu.polices.domain.PoliceInformation;
 import com.jingyu.polices.service.IPoliceInformationService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -81,6 +82,7 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertPoliceInformation(PoliceInformation policeInformation)
     {
         policeInformation.setBirthday(StringReplaceUtil.idCardToBirthday(AESUtil.decrypt(policeInformation.getIdCard())));
@@ -99,6 +101,7 @@ public class PoliceInformationServiceImpl implements IPoliceInformationService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePoliceInformation(PoliceInformation policeInformation)
     {
         policeInformation.setBirthday(StringReplaceUtil.idCardToBirthday(AESUtil.decrypt(policeInformation.getIdCard())));

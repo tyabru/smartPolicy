@@ -7,18 +7,16 @@ import com.jingyu.common.exception.base.BaseException;
 import com.jingyu.common.utils.DateUtils;
 import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.common.utils.StringUtils;
+import com.jingyu.common.utils.sign.AESUtil;
+import com.jingyu.community.domain.Community;
 import com.jingyu.community.domain.CommunityDetail;
+import com.jingyu.community.mapper.CommunityMapper;
 import com.jingyu.community.service.ICommunityDescService;
 import com.jingyu.community.service.ICommunityDetailService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Service;
-import com.jingyu.community.mapper.CommunityMapper;
-import com.jingyu.community.domain.Community;
 import com.jingyu.community.service.ICommunityService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static com.jingyu.person.PersonConstants.*;
 
 /**
  * 小区（村）基本信息Service业务层处理
@@ -55,7 +53,12 @@ public class CommunityServiceImpl implements ICommunityService
     @Override
     public List<Community> selectSqCommunityList(Community community)
     {
-        return communityMapper.selectSqCommunityList(community);
+        List<Community> communities = communityMapper.selectSqCommunityList(community);
+        for (Community community1 : communities) {
+            CommunityDetail detail = community1.getDetail();
+            detail.setPolicePhone(AESUtil.decrypt(detail.getPolicePhone()));
+        }
+        return communities;
     }
 
     /**

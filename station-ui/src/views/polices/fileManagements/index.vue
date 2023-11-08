@@ -40,6 +40,11 @@
       <el-table-column label="部门名称" align="center" prop="deptName" />
       <el-table-column label="文件名称" align="center" prop="fileName" />
       <el-table-column label="文件存储路径" align="center" prop="filePath" />
+      <el-table-column label="文件类型" align="center" prop="fileType">
+        <template slot-scope="scope">
+          <dict-tag :options="dict.type.file_type" :value="scope.row.fileType"/>
+        </template>
+      </el-table-column>
       <el-table-column label="文件描述" align="center" prop="fileDescription" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
@@ -105,14 +110,17 @@
 </template>
 
 <script>
-import { listFileManagements, getFileManagements, delFileManagements, addFileManagements, updateFileManagements, uploadFile, fileDownload, downloadFile } from "@/api/polices/fileManagements";
+import { listFileManagements, getFileManagements, delFileManagements, addFileManagements, 
+  updateFileManagements, uploadFile, downloadFile } from "@/api/polices/fileManagements";
 import { getUserProfile, deptTreeSelect } from "@/api/system/user";
 import Treeselect from "@riophae/vue-treeselect";
 import "@riophae/vue-treeselect/dist/vue-treeselect.css";
+import DictTag from '@/components/DictTag';
 
 export default {
   name: "FileManagements",
-  components: { Treeselect},
+  dicts: [ 'file_type' ],
+  components: { DictTag, Treeselect },
   props: {
     accept: {
       type: String,
@@ -219,6 +227,7 @@ export default {
         id: null,
         deptId: null,
         fileName: null,
+        fileType: 2,
         filePath: null,
         folderName: null,
         fileDescription: null,
@@ -415,6 +424,7 @@ export default {
           //elink.download = "1b69ef520557348fda6ff3b8682adaea1669021837595.jpg";
           elink.style.display = 'none';
           var blob = new Blob([debug], { type: 'application/octet-stream' });
+          const URL = window.URL || window.webkitURL
           elink.href = URL.createObjectURL(blob);
           document.body.appendChild(elink);
           elink.click();

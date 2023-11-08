@@ -8,7 +8,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
 import com.jingyu.common.core.domain.BaseEntity;
-import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * 上报事件管理对象 event_info
@@ -108,10 +107,8 @@ public class EventInfo extends BaseEntity
     //上报用户名
     private String userName;
 
-
     //上报用户类型
     private String uploadUserType;
-
 
     /** $table.subTable.functionName信息 */
     private List<EventUserAllocated> eventUserAllocatedList;

@@ -114,16 +114,16 @@
               v-hasPermi="['qunfangqunzhi:CommonUsers:remove']"
             >删除</el-button>
           </el-col>
-<!--          <el-col :span="1.5">-->
-<!--            <el-button-->
-<!--              type="warning"-->
-<!--              plain-->
-<!--              icon="el-icon-download"-->
-<!--              size="mini"-->
-<!--              @click="handleExport"-->
-<!--              v-hasPermi="['qunfangqunzhi:CommonUsers:export']"-->
-<!--            >导出</el-button>-->
-<!--          </el-col>-->
+          <el-col :span="1.5">
+            <el-button
+              type="warning"
+              plain
+              icon="el-icon-download"
+              size="mini"
+              @click="handleExport"
+              v-hasPermi="['qunfangqunzhi:CommonUsers:export']"
+            >导出</el-button>
+          </el-col>
           <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"> </right-toolbar>
         </el-row>
 
@@ -184,7 +184,7 @@
                 v-if="scope.row.usersApplication!=null"
                 icon="el-icon-delete"
                 @click="handleApplication(scope.row)"
-                v-hasPermi="['qunfangqunzhi:CommonUsers:query']"
+                v-hasPermi="['qunfangqunzhi:CommonUsers:remove']"
               >查看申请信息</el-button>
             </template>
           </el-table-column>
@@ -299,7 +299,7 @@
             v-if="this.imgUrl"
             style="width: 300px; height: 300px"
             :src="imgUrl"
-            fit="fit"
+            :fit="fit"
             :preview-src-list="[imgUrl]">
           </el-image>
           <span v-show="!this.imgUrl" style="color: red">暂无照片</span>
@@ -416,14 +416,7 @@ export default {
           {required: true, message: "用户类型不能为空", trigger: "change"}
         ],
         userName:[
-          {required: true, message: "用户账号不能为空", trigger: "change"},
-          {pattern:/^[a-zA-Z0-9]{4,16}$/, message: '用户名长度在 4 到 16 个字符,包括字符和数字组合', trigger: 'blur' }
-        ],
-        phonenumber:[
-          {pattern:/^1[3-9][0-9]([0-9]){8}$/, message: '请输入正确的手机号码', trigger: 'blur'}
-        ],
-        idNumber:[
-          {pattern:/^[0-9]{15,17}[1-9xX]?$/, message: '请输入正确的身份证号码', trigger: 'blur'}
+          {required: true, message: "用户账号不能为空", trigger: "change"}
         ]
       },
       // 部门名称

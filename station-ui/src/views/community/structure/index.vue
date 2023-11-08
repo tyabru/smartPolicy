@@ -39,7 +39,7 @@
           v-hasPermi="['community:structure:export']">导出</el-button>
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleImport"
                  v-hasPermi="['community:structure:export']">批量导入</el-button>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
+      <right-toolbar style="padding-right: 14px;" :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
     </template>
     <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
@@ -64,7 +64,7 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="queryChanged"/>
-
+ 
     <!-- 添加或修改小区房屋结构和地址信息对话框 -->
     <el-dialog :title="title" :visible.sync="open" @close="reset" width="50vw" append-to-body :close-on-click-modal="false">
       <el-form ref="form" :loading="dialogLoading" :model="form" :rules="rules" label-width="110px" :disabled="disabled">
@@ -143,7 +143,7 @@
     </el-dialog>
   </table-panel>
 </template>
-
+ 
 <script>
 import {
   listStructure,
@@ -350,7 +350,7 @@ export default {
       } else {
         this.$message.success("还未上传需要导入的文件！");
       }
-
+ 
     },
     /** 提交按钮 */
     submitForm() {

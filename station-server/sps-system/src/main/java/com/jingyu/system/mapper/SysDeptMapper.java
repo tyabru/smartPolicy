@@ -3,7 +3,6 @@ package com.jingyu.system.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.jingyu.common.core.domain.entity.SysDept;
-import org.springframework.security.core.parameters.P;
 
 /**
  * 部门管理 数据层
@@ -137,6 +136,5 @@ public interface SysDeptMapper
 
 
     SysDept queryBelongDeptByTypeAndId(@Param("deptId") Long deptId,@Param("deptType") String deptType);
-
 
 }

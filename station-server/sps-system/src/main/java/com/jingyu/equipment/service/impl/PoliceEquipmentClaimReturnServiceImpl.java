@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.equipment.mapper.PoliceEquipmentClaimReturnMapper;
 import com.jingyu.equipment.domain.PoliceEquipmentClaimReturn;
 import com.jingyu.equipment.service.IPoliceEquipmentClaimReturnService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 警用设备管理Service业务层处理
@@ -51,6 +52,7 @@ public class PoliceEquipmentClaimReturnServiceImpl implements IPoliceEquipmentCl
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertPoliceEquipmentClaimReturn(PoliceEquipmentClaimReturn policeEquipmentClaimReturn)
     {
         return policeEquipmentClaimReturnMapper.insertPoliceEquipmentClaimReturn(policeEquipmentClaimReturn);
@@ -63,6 +65,7 @@ public class PoliceEquipmentClaimReturnServiceImpl implements IPoliceEquipmentCl
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePoliceEquipmentClaimReturn(PoliceEquipmentClaimReturn policeEquipmentClaimReturn)
     {
         return policeEquipmentClaimReturnMapper.updatePoliceEquipmentClaimReturn(policeEquipmentClaimReturn);

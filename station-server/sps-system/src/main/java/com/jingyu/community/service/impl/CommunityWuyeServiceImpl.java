@@ -62,6 +62,7 @@ public class CommunityWuyeServiceImpl implements ICommunityWuyeService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertCommunityWuye(CommunityWuye communityWuye)
     {
         try {
@@ -88,6 +89,7 @@ public class CommunityWuyeServiceImpl implements ICommunityWuyeService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateCommunityWuye(CommunityWuye communityWuye)
     {
         try {

@@ -47,7 +47,7 @@
          v-hasPermi="['community:company:remove']">删除</el-button>
       <el-button plain size="mini" type="info" icon="el-icon-download"
          v-hasPermi="['community:company:export']" @click="handleExport">导出</el-button>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
+      <right-toolbar style="padding-right: 14px;" :showSearch.sync="showSearch" @queryTable="queryChanged"></right-toolbar>
     </template>
     <el-table v-loading="loading" :data="tableData" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
@@ -66,17 +66,17 @@
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-edit" @click="goToEditPage(scope.row)"
-            v-hasPermi="['community:company:edit']">修改</el-button>
+            v-hasPermi="['community:company:edit']">更新</el-button>
           <el-button size="mini" type="text" icon="el-icon-delete" @click="handleDelete(scope.row)"
             v-hasPermi="['community:company:remove']" >删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-
+ 
     <pagination :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" :pageSizes="pageSizes" @pagination="queryChanged" #page></pagination>
   </table-panel>
 </template>
-
+ 
 <script>
 import { listCompany, delCompany } from "@/api/community/company";
 import TablePanel from '@/components/TablePanel/index.vue'

@@ -92,6 +92,14 @@ public class CommunityDetail extends BaseEntity
     @Excel(name = "负责民警姓名")
     private String policeName;
 
+    /** 经度 */
+    @Excel(name = "经度")
+    private String longitude;
+
+    /** 纬度 */
+    @Excel(name = "纬度")
+    private String latitude;
+
     public CommunityDetail() {
     }
 

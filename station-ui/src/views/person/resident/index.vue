@@ -52,6 +52,7 @@
         size="mini" @click="openEditDialog" v-hasPermi="['person:resident:add']">新增</el-button>
       <el-button type="warning" plain icon="el-icon-download" size="mini"
         @click="handleExport" v-hasPermi="['person:resident:export']">导出</el-button>
+      <right-toolbar style="padding-right: 14px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </template>
     <el-table :data="tableData" emptyText="暂无数据">
       <el-table-column type="selection"></el-table-column>
@@ -210,7 +211,7 @@
                       </el-select>
                     </el-form-item>
                     <el-form-item label="入住日期" prop="livingDate">
-                      <el-date-picker clearable class="width-100Rate" v-model="addressForm.startTime" type="date" value-format="yyyy-MM-dd" placeholder="请选择入职日期">
+                      <el-date-picker clearable class="width-100Rate" v-model="addressForm.livingDate" type="date" value-format="yyyy-MM-dd" placeholder="请选择入职日期">
                       </el-date-picker>
                     </el-form-item>
                   </el-form>
@@ -230,10 +231,10 @@
                    @click="cancel">关闭表单</el-button>
       </template>
     </el-dialog>
-
+ 
   </table-panel>
 </template>
-
+ 
 <script>
 import TablePanel from '@/components/TablePanel/index.vue'
 import TableListMixins from '@/mixins/tableListMixins'
@@ -300,7 +301,7 @@ export default {
   }
 }
 </script>
-
+ 
 <style scoped lang="scss">
-
+ 
 </style>

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.jingyu.polices.mapper.PoliceDutyGroupsMapper;
 import com.jingyu.polices.domain.PoliceDutyGroups;
 import com.jingyu.polices.service.IPoliceDutyGroupsService;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -87,6 +88,7 @@ public class PoliceDutyGroupsServiceImpl implements IPoliceDutyGroupsService
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertPoliceDutyGroups(PoliceDutyGroups policeDutyGroups)
     {
         return policeDutyGroupsMapper.insertPoliceDutyGroups(policeDutyGroups);
@@ -99,6 +101,7 @@ public class PoliceDutyGroupsServiceImpl implements IPoliceDutyGroupsService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePoliceDutyGroups(PoliceDutyGroups policeDutyGroups)
     {
         return policeDutyGroupsMapper.updatePoliceDutyGroups(policeDutyGroups);

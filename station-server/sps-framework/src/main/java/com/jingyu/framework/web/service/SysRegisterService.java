@@ -2,6 +2,7 @@ package com.jingyu.framework.web.service;
 
 import com.jingyu.system.service.ISysConfigService;
 import com.jingyu.system.service.ISysUserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.jingyu.common.constant.CacheConstants;

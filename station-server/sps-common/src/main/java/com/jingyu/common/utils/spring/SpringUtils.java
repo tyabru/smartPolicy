@@ -40,7 +40,11 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
      *
      * @param name
      * @return Object 一个以所给名字注册的bean的实例
+<<<<<<< HEAD
+     * @throws BeansException
+=======
      * @throws org.springframework.beans.BeansException
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      *
      */
     @SuppressWarnings("unchecked")
@@ -54,7 +58,11 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
      *
      * @param clz
      * @return
+<<<<<<< HEAD
+     * @throws BeansException
+=======
      * @throws org.springframework.beans.BeansException
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      *
      */
     public static <T> T getBean(Class<T> clz) throws BeansException
@@ -79,7 +87,11 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
      *
      * @param name
      * @return boolean
+<<<<<<< HEAD
+     * @throws NoSuchBeanDefinitionException
+=======
      * @throws org.springframework.beans.factory.NoSuchBeanDefinitionException
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      *
      */
     public static boolean isSingleton(String name) throws NoSuchBeanDefinitionException
@@ -90,7 +102,11 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
     /**
      * @param name
      * @return Class 注册对象的类型
+<<<<<<< HEAD
+     * @throws NoSuchBeanDefinitionException
+=======
      * @throws org.springframework.beans.factory.NoSuchBeanDefinitionException
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      *
      */
     public static Class<?> getType(String name) throws NoSuchBeanDefinitionException
@@ -103,7 +119,11 @@ public final class SpringUtils implements BeanFactoryPostProcessor, ApplicationC
      *
      * @param name
      * @return
+<<<<<<< HEAD
+     * @throws NoSuchBeanDefinitionException
+=======
      * @throws org.springframework.beans.factory.NoSuchBeanDefinitionException
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
      *
      */
     public static String[] getAliases(String name) throws NoSuchBeanDefinitionException

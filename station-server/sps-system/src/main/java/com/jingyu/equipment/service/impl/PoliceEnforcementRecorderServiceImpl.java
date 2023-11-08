@@ -6,6 +6,7 @@ import com.jingyu.equipment.domain.PoliceEnforcementRecorder;
 import com.jingyu.equipment.mapper.PoliceEnforcementRecorderMapper;
 import com.jingyu.equipment.service.IPoliceEnforcementRecorderService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -52,6 +53,7 @@ public class PoliceEnforcementRecorderServiceImpl implements IPoliceEnforcementR
      * @return 结果
      */
     @Override
+    @Transactional
     public int insertPoliceEnforcementRecorder(PoliceEnforcementRecorder policeEnforcementRecorder)
     {
         policeEnforcementRecorder.setCreateTime(DateUtils.getNowDate());
@@ -65,6 +67,7 @@ public class PoliceEnforcementRecorderServiceImpl implements IPoliceEnforcementR
      * @return 结果
      */
     @Override
+    @Transactional
     public int updatePoliceEnforcementRecorder(PoliceEnforcementRecorder policeEnforcementRecorder)
     {
         policeEnforcementRecorder.setUpdateTime(DateUtils.getNowDate());

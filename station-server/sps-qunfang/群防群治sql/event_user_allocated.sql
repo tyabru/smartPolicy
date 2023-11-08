@@ -11,7 +11,11 @@
  Target Server Version : 80018
  File Encoding         : 65001
 
+<<<<<<< HEAD
+ Date: 18/07/2023 16:56:21
+=======
  Date: 22/08/2023 17:33:19
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 */
 
 SET NAMES utf8mb4;
@@ -24,7 +28,10 @@ DROP TABLE IF EXISTS `event_user_allocated`;
 CREATE TABLE `event_user_allocated`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主id',
   `user_id` bigint(20) NOT NULL COMMENT '分配userid',
+<<<<<<< HEAD
+=======
   `user_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '处理这件事用户的类型',
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
   `event_id` bigint(20) NOT NULL COMMENT '事件id',
   `inspect_detail` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '检查情况',
   `rectify_opinion` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '整改意见',
@@ -35,16 +42,28 @@ CREATE TABLE `event_user_allocated`  (
   `photo_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '照片地址',
   `video_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '视频地址',
   `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT '事件处理状态，0未确认，1已确认，2已取消，3已完成',
+<<<<<<< HEAD
+  `allocated_user_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分配任务',
+  `allocate_user_id` bigint(20) NOT NULL COMMENT '分配任务用户的id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 88479174657 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+=======
   `allocated_user_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '分配任务用户类型',
   `allocate_user_id` bigint(20) NOT NULL COMMENT '分配任务用户的id',
   `allocate_time` datetime NULL DEFAULT NULL COMMENT '下发时间',
   `deal_flag` varchar(1) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT '0' COMMENT '处置标志0代表网格员处理。\"1\"代表管理员处置',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 96965699607 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
 -- ----------------------------
 -- Records of event_user_allocated
 -- ----------------------------
+<<<<<<< HEAD
+INSERT INTO `event_user_allocated` VALUES (25130344448, 103, 29272059906, 'ok', 'ok', 'ok', '123', '2023-07-09 21:29:46', 'ok', NULL, NULL, '2', '管理员', 1);
+INSERT INTO `event_user_allocated` VALUES (25130344449, 104, 29272059906, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2', '管理员', 1);
+INSERT INTO `event_user_allocated` VALUES (30461476864, 102, 29272059906, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '0', '管理员', 1);
+=======
 INSERT INTO `event_user_allocated` VALUES (3623270400, 102, NULL, 465504256, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2', '管理员', 1, '2023-07-25 17:24:10', '0');
 INSERT INTO `event_user_allocated` VALUES (13529245696, 102, NULL, 465504256, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2', '管理员', 1, NULL, '0');
 INSERT INTO `event_user_allocated` VALUES (13529245697, 103, NULL, 465504256, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2', '管理员', 1, NULL, '0');
@@ -118,5 +137,6 @@ INSERT INTO `event_user_allocated` VALUES (96965699603, 1, NULL, 29272059908, NU
 INSERT INTO `event_user_allocated` VALUES (96965699604, 1, NULL, 29272059908, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '3', '管理员', 1, '2023-08-22 17:07:17', '1');
 INSERT INTO `event_user_allocated` VALUES (96965699605, 1, NULL, 80421836800, '1', '1', '1', '1', '2023-08-22 17:12:08', '1', '/profile/upload/2023/08/22/OIP-C_20230822171204A009.jpg', NULL, '2', '管理员', 1, '2023-08-22 17:12:12', '1');
 INSERT INTO `event_user_allocated` VALUES (96965699606, 1, NULL, 80421836800, '123', '123', '123', '123', '2023-08-16 00:00:00', '123', '/profile/upload/2023/08/22/OIP-C_20230822171515A010.jpg', NULL, '2', '管理员', 1, '2023-08-22 17:15:25', '1');
+>>>>>>> fc1e3ed2add3bb98c2a2514c47a486213c442590
 
 SET FOREIGN_KEY_CHECKS = 1;

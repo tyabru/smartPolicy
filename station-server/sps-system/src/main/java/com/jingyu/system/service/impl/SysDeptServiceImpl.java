@@ -3,12 +3,8 @@ package com.jingyu.system.service.impl;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.compress.utils.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.jingyu.common.annotation.DataScope;
@@ -27,6 +23,8 @@ import com.jingyu.system.mapper.SysRoleMapper;
 import com.jingyu.system.service.ISysDeptService;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+
 import static com.jingyu.common.constant.DeptConstants.*;
 
 /**
@@ -37,10 +35,10 @@ import static com.jingyu.common.constant.DeptConstants.*;
 @Service
 public class SysDeptServiceImpl implements ISysDeptService
 {
-    @Autowired
+    @Resource
     private SysDeptMapper deptMapper;
 
-    @Autowired
+    @Resource
     private SysRoleMapper roleMapper;
 
     /**
@@ -123,8 +121,7 @@ public class SysDeptServiceImpl implements ISysDeptService
     }
 
     @Override
-    public List<TreeSelect> selectDeptTreeByDeptId(Long deptId,
-                                                Function<List<SysDept>, List<SysDept>> filter) {
+    public List<TreeSelect> selectDeptTreeByDeptId(Long deptId, Function<List<SysDept>, List<SysDept>> filter) {
         SysDept dept = deptMapper.selectDeptById(deptId);
         if(dept == null) {
             return new ArrayList<>();

@@ -26,9 +26,9 @@
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
       </template>
     </search-form-bar>
-
-    <!-- <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
+ 
+    <el-row :gutter="10" class="mb8">
+      <!-- <el-col :span="1.5">
         <el-button type="primary" plain icon="el-icon-plus" size="mini" @click="handleAdd"
           v-hasPermi="['person:fcous:add']">新增</el-button>
       </el-col>
@@ -43,10 +43,10 @@
       <el-col :span="1.5">
         <el-button type="warning" plain icon="el-icon-download" size="mini" @click="handleExport"
           v-hasPermi="['person:fcous:export']">导出</el-button>
-      </el-col>
+      </el-col> -->
       <right-toolbar style="padding-right: 19px;" :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row> -->
-
+    </el-row>
+ 
     <el-table v-loading="loading" :data="fcousList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="小区名称" align="center" prop="communityName" />
@@ -86,7 +86,7 @@
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList"/>
-
+ 
     <!-- 添加或修改重点关注人口对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="850px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="110px" :disabled="disabled">
@@ -189,12 +189,12 @@
     </el-dialog>
   </div>
 </template>
-
+ 
 <script>
 import { listFcous, getFcous, delFcous, addFcous, updateFcous } from "@/api/person/fcous";
 import DictTag from '@/components/DictTag';
 import { validPpliceIdCard, validPhone } from "@/utils/validate";
-
+ 
 export default {
   name: "Fcous",
   dicts: [ 'important_level', 'sys_is_important', 'sys_person_type', 'sys_nation' ],

@@ -6,10 +6,13 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import javax.validation.Validator;
 
+import com.jingyu.common.utils.bean.BeanValidators;
 import com.jingyu.common.utils.sign.AESUtil;
 import com.jingyu.polices.domain.PoliceInformation;
 import com.jingyu.polices.mapper.PoliceInformationMapper;
 import com.jingyu.polices.service.IPoliceInformationService;
+import com.jingyu.system.domain.SysUserPost;
+import com.jingyu.system.domain.SysUserRole;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +26,8 @@ import com.jingyu.common.core.domain.entity.SysUser;
 import com.jingyu.common.exception.ServiceException;
 import com.jingyu.common.utils.SecurityUtils;
 import com.jingyu.common.utils.StringUtils;
-import com.jingyu.common.utils.bean.BeanValidators;
 import com.jingyu.common.utils.spring.SpringUtils;
 import com.jingyu.system.domain.SysPost;
-import com.jingyu.system.domain.SysUserPost;
-import com.jingyu.system.domain.SysUserRole;
 import com.jingyu.system.mapper.SysPostMapper;
 import com.jingyu.system.mapper.SysRoleMapper;
 import com.jingyu.system.mapper.SysUserMapper;
@@ -537,7 +537,6 @@ public class SysUserServiceImpl implements ISysUserService
         {
             checkUserAllowed(new SysUser(userId));
             checkUserDataScope(userId);
-
         }
         // 删除用户与角色关联
         userRoleMapper.deleteUserRole(userIds);
