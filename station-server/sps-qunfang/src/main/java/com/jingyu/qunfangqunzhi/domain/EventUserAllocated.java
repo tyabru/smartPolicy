@@ -6,7 +6,6 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.jingyu.common.annotation.Excel;
 import com.jingyu.common.core.domain.BaseEntity;
-
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -76,6 +75,8 @@ public class EventUserAllocated extends BaseEntity
     @Excel(name = "分配任务用户的id")
     private Long allocateUserId;
 
+
+
     /** 下发时间 */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date allocateTime;
@@ -102,7 +103,6 @@ public class EventUserAllocated extends BaseEntity
     {
         this.id = id;
     }
-
     public Date getAllocateTime() {
         return allocateTime;
     }
@@ -110,6 +110,7 @@ public class EventUserAllocated extends BaseEntity
     public void setAllocateTime(Date allocateTime) {
         this.allocateTime = allocateTime;
     }
+
 
     public Long getId()
     {

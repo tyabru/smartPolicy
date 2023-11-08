@@ -10,10 +10,11 @@ import com.jingyu.qunfangqunzhi.domain.EventUserAllocated;
  * @author jingyu
  * @date 2023-07-03
  */
-public interface EventInfoMapper 
+public interface EventInfoMapper
 {
     /**
      * 查询上报事件管理
+     *
      * @param id 上报事件管理主键
      * @return 上报事件管理
      */
@@ -21,6 +22,7 @@ public interface EventInfoMapper
 
     /**
      * 查询上报事件管理列表
+     *
      * @param eventInfo 上报事件管理
      * @return 上报事件管理集合
      */
@@ -28,6 +30,7 @@ public interface EventInfoMapper
 
     /**
      * 新增上报事件管理
+     *
      * @param eventInfo 上报事件管理
      * @return 结果
      */
@@ -35,6 +38,7 @@ public interface EventInfoMapper
 
     /**
      * 修改上报事件管理
+     *
      * @param eventInfo 上报事件管理
      * @return 结果
      */
@@ -42,6 +46,7 @@ public interface EventInfoMapper
 
     /**
      * 删除上报事件管理
+     *
      * @param id 上报事件管理主键
      * @return 结果
      */
@@ -49,6 +54,7 @@ public interface EventInfoMapper
 
     /**
      * 批量删除上报事件管理
+     *
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
@@ -56,6 +62,7 @@ public interface EventInfoMapper
 
     /**
      * 批量删除${subTable.functionName}
+     *
      * @param ids 需要删除的数据主键集合
      * @return 结果
      */
@@ -63,10 +70,12 @@ public interface EventInfoMapper
 
     /**
      * 批量新增${subTable.functionName}
+     *
      * @param eventUserAllocatedList ${subTable.functionName}列表
      * @return 结果
      */
     public int batchEventUserAllocated(List<EventUserAllocated> eventUserAllocatedList);
+
 
     /**
      * 通过上报事件管理主键删除${subTable.functionName}信息
@@ -75,6 +84,7 @@ public interface EventInfoMapper
      * @return 结果
      */
     public int deleteEventUserAllocatedByUserId(Long id);
+
 
     public Long selectSuperiorDeptIdById(Long userId);
 }

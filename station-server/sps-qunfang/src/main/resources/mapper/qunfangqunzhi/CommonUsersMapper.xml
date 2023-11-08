@@ -82,7 +82,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <include refid="selectCommonUsersVo"/>
         where user_id = #{userId}
     </select>
-
     <select id="selectCommonUsersByPhoneNumber" parameterType="String" resultMap="CommonUsersResult">
         <include refid="selectCommonUsersVo"/>
         where phonenumber = #{phoneNumber} and del_flag = "0"
