@@ -36,7 +36,7 @@
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column prop="channelCount" label="通道数" min-width="120" >
+      <el-table-column prop="channelCount" label="通道数" min-width="60" >
       </el-table-column>
       <el-table-column label="状态" min-width="120">
         <template slot-scope="scope">
@@ -55,7 +55,7 @@
 <!--      <el-table-column prop="createTime" label="创建时间"  width="140">-->
 <!--      </el-table-column>-->
 
-      <el-table-column label="操作" min-width="450" fixed="right">
+      <el-table-column label="操作" min-width="400" fixed="right">
         <template slot-scope="scope">
           <el-button type="text" size="medium" v-bind:disabled="scope.row.online==0" icon="el-icon-refresh" @click="refDevice(scope.row)"
                      @mouseover="getTooltipContent(scope.row.deviceId)">刷新

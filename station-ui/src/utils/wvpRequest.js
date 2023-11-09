@@ -1,6 +1,6 @@
 import axios from 'axios';
 import userService from "@/utils/service/UserService";
-window.baseUrl = "http://localhost:18080"
+window.baseUrl = "http://http://111.21.60.130/18082"
 
 axios.defaults.baseURL = window.baseUrl
 axios.defaults.withCredentials = true;
